@@ -10,8 +10,8 @@
 ## What?
 
 ```shell
-> ./yamkix.py -h
-usage: yamkix.py [-h] -i INPUT [-t TYP] [-o OUTPUT] [-n] [-e] [-q] [-f] [-d]
+> ./yamkix -h
+usage: yamkix [-h] -i INPUT [-t TYP] [-o OUTPUT] [-n] [-e] [-q] [-f] [-d]
 
 Format yaml input file. By default, explicit_start is `On`, explicit_end is
 `Off` and array elements are pushed inwards the start of the matching
@@ -56,7 +56,7 @@ optional arguments:
 
 ## Usage
 
-- Put the `yamkix.py` file somewhere in the path
+- Put the `yamkix` file somewhere in the path
 - Sample **vscode** task here:
 
 ```json

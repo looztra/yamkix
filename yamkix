@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """Load a yaml file and save it formatted according to some rules"""
 import argparse
 from ruamel.yaml import YAML

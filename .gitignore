@@ -1,1 +1,4 @@
 samples/
+build/
+dist/
+yamkix.egg-info/
