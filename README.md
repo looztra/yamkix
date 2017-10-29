@@ -56,7 +56,7 @@ optional arguments:
 
 ## Usage
 
-- Put the `yamkix` file somewhere in the path
+- Install the package with `pip install yamkix`
 - Sample **vscode** task here:
 
 ```json
