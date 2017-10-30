@@ -2,8 +2,8 @@
 
 ## Why?
 
-- Because I like my yaml file to be nicely formatted
-- Because <https://marketplace.visualstudio.com/items?itemName=adamvoss.yaml> creates (valid) yaml not compatible for kubernetes (and I mainly edit yaml file for kubernetes)
+- Because I like my yaml file to be nicely formatted and I'm opinionated about how it should look like
+- Because <https://marketplace.visualstudio.com/items?itemName=adamvoss.yaml> creates (valid) yaml not compatible for kubernetes (and I mainly edit yaml files for kubernetes)
 - Because <https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml> does not add explicit start of documents and I don't like it this way
 - Because I'm not a js/typescript dev so I don't want to go into a VSCode extension with client and server language
 
@@ -50,20 +50,20 @@ optional arguments:
 - Output file is input file by default
 - Comments preserved by default thanks to [ruamel.yaml](https://pypi.python.org/pypi/ruamel.yaml) `round_trip` mode (you can disable it with `--typ safe`)
 
-## Where does the name 'yamkix' comes from?
+## Where does the name 'yamkix' come from?
 
 - Thanks to <http://online-generator.com/name-generator/product-name-generator.php> that suggested me `zamkix`. Just switched the starting `z` for the `y` of `yaml`
 
 ## Usage
 
 - Install the package with `pip install yamkix`
-- Sample **vscode** task here:
+- Sample **vscode** task :
 
 ```json
     {
       "taskName": "format yaml with yamkix",
       "type": "shell",
-      "command": "yamkix.py --input ${file}",
+      "command": "yamkix --input ${file}",
       "group": "build",
       "presentation": {
         "reveal": "always",
