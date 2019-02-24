@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 """Load a yaml file and save it formatted according to some rules"""
 import argparse
+import copy
 from ruamel.yaml import YAML
+from ruamel.yaml.scanner import ScannerError
 
 
 def parse_cli():
@@ -109,9 +111,18 @@ def format_yaml(input_file,
 
     with open(input_file, 'rt') as f_input:
         parsed = yaml.load_all(f_input.read())
+    ready_for_dump = []
+    try:
+        # Read the parsed content to force the scanner to issue errors if any
+        for data in parsed:
+            ready_for_dump.append(data)
+    except ScannerError as e:
+        print("Something is wrong in the input file, got error from Scanner")
+        print(e)
+        return
 
     with open(output_file, 'wt') as out:
-        yaml.dump_all(parsed, out)
+        yaml.dump_all(ready_for_dump, out)
 
 
 def main():
