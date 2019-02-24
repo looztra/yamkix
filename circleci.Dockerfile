@@ -20,11 +20,8 @@ RUN apt-get update \
     tar \
     gzip \
     ca-certificates
-COPY requirements.txt ./
-RUN pip install -r requirements.txt
-COPY yamkix /
 
-ENTRYPOINT ["/yamkix"]
+ENTRYPOINT ["yamkix"]
 CMD ["--help"]
 
 ARG GIT_SHA1
@@ -33,5 +30,6 @@ ARG CI_BUILD_NUMBER
 ARG YAMKIX_VERSION
 LABEL org.label-schema.version ${YAMKIX_VERSION}
 LABEL org.label-schema.vcs-ref ${GIT_SHA1}
-LABEL com.qima.git-branch ${GIT_BRANCH}
-LABEL com.qima.ci-build-number ${CI_BUILD_NUMBER}
+LABEL io.nodevops.git-branch ${GIT_BRANCH}
+LABEL io.nodevops.ci-build-number ${CI_BUILD_NUMBER}
+RUN pip install yamkix==${YAMKIX_VERSION}

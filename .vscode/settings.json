@@ -1,3 +1,4 @@
 {
-  "yaml.format.enable": false
+  "yaml.format.enable": false,
+  "restructuredtext.confPath": ""
 }
