@@ -1,0 +1,145 @@
+---
+version: 2.1
+orbs:
+  docker-publish: circleci/docker-publish@0.1.4
+jobs:
+  eclint:
+    working_directory: ~/yamlix/
+    docker:
+      - image: qima/eclint:circleci-2.8.1-7c65341
+    steps:
+      - checkout
+      - run:
+          name: Validate Editor Config rules
+          command: |
+            set -x
+            ls -l
+            git ls-files
+            eclint check $(git ls-files)
+  python-checks:
+    working_directory: ~/yamlix/
+    docker:
+      - image: circleci/python:2.7.15-stretch-node
+    steps:
+      - checkout
+      - run:
+          name: Install requirements
+          command: |
+            set -x
+      - run:
+          name: Check python style
+          command: |
+            set -x
+            make python-checks
+  docker-build:
+    docker:
+      - image: circleci/golang:1.11.5-stretch-node
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Create workspace directory
+          command: |
+            mkdir -p workspace
+            echo "$CIRCLE_BRANCH" > workspace/circle_branch.txt
+      - run:
+          name: Build Exec Image
+          command: |
+            set -x
+            docker version
+            make build
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
+              echo "Save exec docker image for potential further push"
+              docker image save $(make print-img-name):$(make print-exec-version) \
+                -o workspace/$(make print-img-safe-name)--$(make print-exec-version)
+              docker image save $(make print-img-name):$(make print-exec-latest) \
+                -o workspace/$(make print-img-safe-name)--$(make print-exec-latest)
+            else
+              echo "Not saving image to workspace as we are not on 'master'"
+            fi
+      - run:
+          name: Build CircleCI compatible image
+          command: |
+            set -x
+            docker version
+            make build-circleci
+            if [ "$CIRCLE_BRANCH" == "master" ]; then
+              echo "Save circleci docker image for potential further push"
+              docker image save $(make print-img-name):$(make print-circleci-version) \
+                -o workspace/$(make print-img-safe-name)--$(make print-circleci-version)
+              docker image save $(make print-img-name):$(make print-circleci-latest) \
+                -o workspace/$(make print-img-safe-name)--$(make print-circleci-latest)
+            else
+              echo "Not saving image to workspace as we are not on 'master'"
+            fi
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - "*"
+  docker-push-exec:
+    docker:
+      - image: circleci/golang:1.11.5-stretch-node
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - attach_workspace:
+          at: /tmp/workspace
+      - docker-publish/check
+      - run:
+          name: Push Exec Image
+          command: |
+            set -x
+            echo "Loading images from workspace"
+            docker load -i /tmp/workspace/$(make print-img-safe-name)--$(make print-exec-version)
+            docker load -i /tmp/workspace/$(make print-img-safe-name)--$(make print-exec-latest)
+            docker image ls
+            echo "Push to registry"
+            make push push-latest
+  docker-push-circleci:
+    docker:
+      - image: circleci/golang:1.11.5-stretch-node
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - attach_workspace:
+          at: /tmp/workspace
+      - docker-publish/check
+      - run:
+          name: Push CircleCI compatible image
+          command: |
+            set -x
+            echo "Loading images from workspace"
+            docker load -i /tmp/workspace/$(make print-img-safe-name)--$(make print-circleci-version)
+            docker load -i /tmp/workspace/$(make print-img-safe-name)--$(make print-circleci-latest)
+            docker image ls
+            echo "Push to registry"
+            make push-circleci push-circleci-latest
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - eclint
+      - python-checks:
+          requires:
+            - eclint
+      - docker-build:
+          requires:
+            - python-checks
+      - docker-push-exec:
+          requires:
+            - docker-build
+          filters:
+            branches:
+              only:
+                - master
+      - docker-push-circleci:
+          requires:
+            - docker-push-exec
+          filters:
+            branches:
+              only:
+                - master
