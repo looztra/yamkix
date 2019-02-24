@@ -23,7 +23,8 @@ endif
 .PHONY: build
 
 python-checks:
-	pycodestyle yamkix setup.py
+	pylama
+	isort --check-only
 
 build:
 	docker image build \
