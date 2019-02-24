@@ -49,7 +49,7 @@ jobs:
             set -x
             export PATH=$PATH:/home/circleci/.local/bin
             echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
-            make clean dist dist-check dist-publish
+            make clean dist dist-check dist-upload
             rm ~/.pypirc
 
   docker-build-and-push:
