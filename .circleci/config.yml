@@ -26,7 +26,8 @@ jobs:
           name: Install requirements
           command: |
             set -x
-            pip install --user pycodestyle
+            pip install --user pylama
+            pip install --user isort
       - run:
           name: Check python style
           command: |
