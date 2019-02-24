@@ -8,12 +8,15 @@ except ImportError:
 
 setup(
     name='yamkix',
-    description='An opinionated yaml formatter based on ruamel.yaml, that works fine for k8s descriptors',
+    description='''
+        An opinionated yaml formatter based on ruamel.yaml,
+        that works fine for k8s descriptors
+        ''',
     long_description=long_description,
     url='https://github.com/looztra/yamkix',
     author='Christophe Furmaniak',
     author_email='christophe.furmaniak@gmail.com',
-    version='0.1.0',
+    version='0.1.1',
     scripts=['yamkix'],
     license='[Apache License 2.0](http: // www.apache.org / licenses /)',
     install_requires=['ruamel.yaml>0.15'],
