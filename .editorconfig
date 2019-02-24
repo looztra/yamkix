@@ -1,0 +1,52 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+max_line_length = 120
+trim_trailing_whitespace = true
+
+# Matches multiple files with brace expansion notation
+# Set default charset
+[*.{js,py}]
+charset = utf-8
+
+# 4 space indentation
+[*.py]
+indent_style = space
+indent_size = 4
+max_line_length = 79
+
+# Tab indentation (no size specified)
+[Makefile]
+indent_style = tab
+
+[*.{tf,tfvars}]
+indent_size = 2
+indent_style = space
+
+[*.{yml,yaml}]
+indent_size = 2
+indent_style = space
+
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off
+
+# Matches the exact files either package.json or .travis.yml
+[{package.json,.travis.yml}]
+indent_style = space
+indent_size = 2
+
+[{Dockerfile,.Dockerfile}]
+indent_size = none
+
+[LICENSE]
+indent_size = none
