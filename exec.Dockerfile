@@ -16,6 +16,7 @@ RUN pip install -r requirements.txt
 COPY yamkix /
 
 ENTRYPOINT ["/yamkix"]
+CMD ["--help"]
 
 ARG GIT_SHA1
 ARG GIT_BRANCH
