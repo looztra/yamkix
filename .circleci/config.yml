@@ -26,10 +26,12 @@ jobs:
           name: Install requirements
           command: |
             set -x
+            pip install --user pycodestyle
       - run:
           name: Check python style
           command: |
             set -x
+            export PATH=$PATH:/home/circleci/.local/bin
             make python-checks
   docker-build:
     docker:
