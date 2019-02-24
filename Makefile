@@ -20,11 +20,27 @@ else
 	CI_BUILD_NUMBER := "N/A"
 endif
 
-.PHONY: build
+.PHONY: build dist clean
+
+eclint:
+	docker run --rm -v $(pwd):/app/code qima/eclint check $(git ls-files)
 
 python-checks:
 	pylama
-	isort --check-only
+
+clean:
+	rm -rf dist
+
+dist:
+	python setup.py bdist_wheel
+	python setup.py bdist_egg
+
+dist-check:
+	twine check dist/yamkix-${YAMKIX_VERSION}-py2-none-any.whl
+	twine check dist/yamkix-${YAMKIX_VERSION}-py2.7.egg
+
+dist-upload:
+	twine upload dist/*
 
 build:
 	docker image build \
@@ -33,8 +49,10 @@ build:
 		--build-arg GIT_SHA1=${GIT_SHA1_DIRTY_MAYBE} \
 		--build-arg GIT_BRANCH=${GIT_BRANCH} \
 		--build-arg CI_BUILD_NUMBER=${CI_BUILD_NUMBER} \
-		-t ${IMG} -f exec.Dockerfile .
+		-t ${IMG} -f exec${GIT_DIRTY}.Dockerfile .
+ifndef GIT_DIRTY
 	docker image tag ${IMG} ${IMG_LATEST}
+endif
 
 build-circleci:
 	docker image build \

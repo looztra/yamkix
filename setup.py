@@ -1,17 +1,10 @@
 from setuptools import setup
 
-try:
-    import pypandoc
-    long_description = pypandoc.convert('README.md', 'rst')
-except ImportError:
-    long_description = open('README.md').read()
+long_description = open('README.rst').read()
 
 setup(
     name='yamkix',
-    description='''
-        An opinionated yaml formatter based on ruamel.yaml,
-        that works fine for k8s descriptors
-        ''',
+    description='An opinionated yaml formatter based on ruamel.yaml',
     long_description=long_description,
     url='https://github.com/looztra/yamkix',
     author='Christophe Furmaniak',

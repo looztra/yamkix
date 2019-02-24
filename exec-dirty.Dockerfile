@@ -11,15 +11,18 @@ LABEL org.label-schema.docker.cmd.help "docker run --rm -v $(pwd):/app/code looz
 LABEL org.label-schema.docker.cmd "docker run --rm -v $(pwd):/app/code looztra/yamkix:TAG -i input"
 
 WORKDIR /app/code
-ENTRYPOINT ["yamkix"]
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+COPY yamkix /
+
+ENTRYPOINT ["/yamkix"]
 CMD ["--help"]
+
 ARG GIT_SHA1
 ARG GIT_BRANCH
 ARG CI_BUILD_NUMBER
-LABEL org.label-schema.version ${YAMKIX_VERSION}
+ARG YAMKIX_VERSION
+LABEL org.label-schema.version ${YAMKIX_VERSION}}
 LABEL org.label-schema.vcs-ref ${GIT_SHA1}
 LABEL io.nodevops.git-branch ${GIT_BRANCH}
 LABEL io.nodevops.ci-build-number ${CI_BUILD_NUMBER}
-
-ARG YAMKIX_VERSION
-RUN pip install yamkix==${YAMKIX_VERSION}
