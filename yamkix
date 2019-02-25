@@ -83,7 +83,6 @@ def parse_cli():
             "'%s' is not a valid value for option --typ. "
             "Allowed values are 'safe' and 'rt'" % args.type)
     my_args['typ'] = args.typ
-    # my_args['input'] = args.input
     my_args['explicit_start'] = not args.no_explicit_start
     my_args['explicit_end'] = args.explicit_end
     my_args['default_flow_style'] = args.default_flow_style
