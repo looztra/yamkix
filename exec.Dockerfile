@@ -22,4 +22,4 @@ LABEL io.nodevops.git-branch ${GIT_BRANCH}
 LABEL io.nodevops.ci-build-number ${CI_BUILD_NUMBER}
 
 ARG YAMKIX_VERSION
-RUN pip install yamkix==${YAMKIX_VERSION}
+RUN pip install --no-cache-dir yamkix==${YAMKIX_VERSION}

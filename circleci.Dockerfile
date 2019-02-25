@@ -32,4 +32,4 @@ LABEL org.label-schema.version ${YAMKIX_VERSION}
 LABEL org.label-schema.vcs-ref ${GIT_SHA1}
 LABEL io.nodevops.git-branch ${GIT_BRANCH}
 LABEL io.nodevops.ci-build-number ${CI_BUILD_NUMBER}
-RUN pip install yamkix==${YAMKIX_VERSION}
+RUN pip install --no-cache-dir yamkix==${YAMKIX_VERSION}
