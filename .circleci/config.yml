@@ -64,6 +64,8 @@ jobs:
           command: |
             set -x
             docker version
+            echo "Sleep for 30s to let pypi update its cache"
+            sleep 30s
             make build
       - run:
           name: Build CircleCI compatible image
