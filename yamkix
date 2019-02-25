@@ -20,7 +20,7 @@ def parse_cli():
     parser.add_argument('-i',
                         '--input',
                         required=False,
-                        help='the file to parse')
+                        help='the file to parse, or STDIN if not specified')
     parser.add_argument('-t',
                         '--typ',
                         required=False,
@@ -29,7 +29,8 @@ def parse_cli():
     parser.add_argument('-o', '--output',
                         required=False,
                         help='the name of the file to generate \
-                              (same as input file if not specied)')
+                              (same as input file if not specied, \
+                                hence STDOUT if STDIN as input)')
     parser.add_argument('-n', '--no-explicit-start',
                         action='store_true',
                         help='by default, explicit start of the yaml doc \
@@ -53,6 +54,10 @@ def parse_cli():
                         help='by default, dash are pushed inwards \
                                 use `--no-dash-inwards` to have the dash \
                                 start at the sequence level')
+    parser.add_argument('-s', '--stdout',
+                        action='store_true',
+                        help='output is STDOUT whatever the value for \
+                          input (-i) and output (-o)')
 
     args = parser.parse_args()
 
@@ -60,20 +65,25 @@ def parse_cli():
     if args.input is None:
         my_args['input'] = None
     else:
+        my_args['input'] = args.input
         input_display_name = my_args['input']
-    if args.output is not None:
-        my_args['output'] = args.output
+    if args.stdout:
+        my_args['output'] = None
     else:
-        if my_args['input']:
-            my_args['output'] = None
+        if args.output is not None:
+            my_args['output'] = args.output
         else:
-            my_args['output'] = args.input
+            if my_args['input'] is None:
+                my_args['output'] = None
+            else:
+                my_args['output'] = args.input
+
     if args.typ not in ["safe", "rt"]:
         raise ValueError(
             "'%s' is not a valid value for option --typ. "
             "Allowed values are 'safe' and 'rt'" % args.type)
     my_args['typ'] = args.typ
-    my_args['input'] = args.input
+    # my_args['input'] = args.input
     my_args['explicit_start'] = not args.no_explicit_start
     my_args['explicit_end'] = args.explicit_end
     my_args['default_flow_style'] = args.default_flow_style
