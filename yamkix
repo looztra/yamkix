@@ -2,6 +2,7 @@
 """Load a yaml file and save it formatted according to some rules"""
 import argparse
 import copy
+import sys
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
 
@@ -18,7 +19,7 @@ def parse_cli():
         ''')
     parser.add_argument('-i',
                         '--input',
-                        required=True,
+                        required=False,
                         help='the file to parse')
     parser.add_argument('-t',
                         '--typ',
@@ -55,10 +56,18 @@ def parse_cli():
 
     args = parser.parse_args()
 
+    input_display_name = "STDIN"
+    if args.input is None:
+        my_args['input'] = None
+    else:
+        input_display_name = my_args['input']
     if args.output is not None:
         my_args['output'] = args.output
     else:
-        my_args['output'] = args.input
+        if my_args['input']:
+            my_args['output'] = None
+        else:
+            my_args['output'] = args.input
     if args.typ not in ["safe", "rt"]:
         raise ValueError(
             "'%s' is not a valid value for option --typ. "
@@ -70,14 +79,15 @@ def parse_cli():
     my_args['default_flow_style'] = args.default_flow_style
     my_args['dash_inwards'] = not args.no_dash_inwards
     my_args['quotes_preserved'] = not args.no_quotes_preserved
-    print("Processing: file=" + my_args['input'] +
-          ", output=" + my_args['output'] +
-          ", typ=" + my_args['typ'] +
-          ", explicit_start=" + str(my_args['explicit_start']) +
-          ", explicit_end=" + str(my_args['explicit_end']) +
-          ", default_flow_style=" + str(my_args['default_flow_style']) +
-          ", quotes_preserved=" + str(my_args['quotes_preserved']) +
-          ", dash_inwards=" + str(my_args['dash_inwards']))
+    if my_args['output'] is not None:
+        print("Processing: input=" + input_display_name +
+              ", output=" + my_args['output'] +
+              ", typ=" + my_args['typ'] +
+              ", explicit_start=" + str(my_args['explicit_start']) +
+              ", explicit_end=" + str(my_args['explicit_end']) +
+              ", default_flow_style=" + str(my_args['default_flow_style']) +
+              ", quotes_preserved=" + str(my_args['quotes_preserved']) +
+              ", dash_inwards=" + str(my_args['dash_inwards']))
     return my_args
 
 
@@ -109,8 +119,11 @@ def format_yaml(input_file,
     if dash_inwards:
         yaml.indent(mapping=2, sequence=4, offset=2)
 
-    with open(input_file, 'rt') as f_input:
-        parsed = yaml.load_all(f_input.read())
+    if input_file is not None:
+        with open(input_file, 'rt') as f_input:
+            parsed = yaml.load_all(f_input.read())
+    else:
+        parsed = yaml.load_all(sys.stdin.read())
     ready_for_dump = []
     try:
         # Read the parsed content to force the scanner to issue errors if any
@@ -120,9 +133,11 @@ def format_yaml(input_file,
         print("Something is wrong in the input file, got error from Scanner")
         print(e)
         return
-
-    with open(output_file, 'wt') as out:
-        yaml.dump_all(ready_for_dump, out)
+    if output_file is not None:
+        with open(output_file, 'wt') as out:
+            yaml.dump_all(ready_for_dump, out)
+    else:
+        yaml.dump_all(ready_for_dump, sys.stdout)
 
 
 def main():
