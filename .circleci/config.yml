@@ -81,7 +81,7 @@ jobs:
             set -x
             yamkix_version=$(make print-version)
             while true; do
-              pip search yamkix | grep $yamkix_version
+              pip install yamkix==$yamkix_version
               if [ $? -eq "0" ]; then
                 echo "Found expected version [$yamkix_version]"
                 break;
