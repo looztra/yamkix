@@ -17,7 +17,7 @@ jobs:
             eclint check $(git ls-files)
   python-checks:
     docker:
-      - image: circleci/python:2.7.15-stretch-node
+      - image: circleci/python:3.7.2-stretch-node
     steps:
       - checkout
       - run:
@@ -32,7 +32,7 @@ jobs:
             export PATH=$PATH:/home/circleci/.local/bin
             make python-checks
 
-  python-publish:
+  python2-publish:
     docker:
       - image: circleci/python:2.7.15-stretch-node
     steps:
@@ -49,8 +49,49 @@ jobs:
             set -x
             export PATH=$PATH:/home/circleci/.local/bin
             echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
-            make clean dist dist-check dist-upload
+            make clean dist dist-check-py2 dist-upload
             rm ~/.pypirc
+
+  python3-publish:
+    docker:
+      - image: circleci/python:3.7.2-stretch-node
+    steps:
+      - checkout
+      - run:
+          name: Install requirements
+          command: |
+            set -x
+            pip install --user requests-toolbelt
+            pip install --user twine
+      - run:
+          name: Publish
+          command: |
+            set -x
+            export PATH=$PATH:/home/circleci/.local/bin
+            echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
+            make clean dist dist-check-py3 dist-upload
+            rm ~/.pypirc
+
+  wait-for-pypi-cache-update:
+    docker:
+      - image: circleci/python:3.7.2-stretch-node
+    steps:
+      - checkout
+      - run:
+          name: Check if package is available
+          command: |
+            set -x
+            yamkix_version=$(make print-version)
+            while true; do
+              pip search yamkix | grep $yamkix_version
+              if [ $? -eq "0" ]; then
+                echo "Found expected version [$yamkix_version]"
+                break;
+              else
+                echo "Did not find the expected version [$yamkix_version], sleeping"
+                sleep 15s
+              fi
+            done
 
   docker-build-and-push:
     docker:
@@ -93,16 +134,31 @@ workflows:
       - python-checks:
           requires:
             - eclint
-      - python-publish:
+      - python3-publish:
           requires:
             - python-checks
           filters:
             branches:
               only:
                 - master
+      - python2-publish:
+          requires:
+            - python-checks
+          filters:
+            branches:
+              only:
+                - master
+      - wait-for-pypi-cache-update:
+          requires:
+            - python3-publish
+            - python2-publish
+          filters:
+            branches:
+              only:
+                - master
       - docker-build-and-push:
           requires:
-            - python-publish
+            - wait-for-pypi-cache-update
           filters:
             branches:
               only:

@@ -1,4 +1,4 @@
-FROM python:2.7.15-slim-stretch
+FROM python:3.7.2-slim-stretch
 
 ARG CI_PLATFORM=
 LABEL io.nodevops.ci-platform ${CI_PLATFORM}
@@ -14,12 +14,12 @@ WORKDIR /app/code
 
 RUN apt-get update \
   && apt-get install -y \
-    netcat \
-    git \
-    ssh \
-    tar \
-    gzip \
-    ca-certificates
+  netcat \
+  git \
+  ssh \
+  tar \
+  gzip \
+  ca-certificates
 
 ENTRYPOINT ["yamkix"]
 CMD ["--help"]

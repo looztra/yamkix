@@ -33,11 +33,15 @@ clean:
 
 dist:
 	python setup.py bdist_wheel
-	python setup.py bdist_egg
+	python setup.py sdist
 
-dist-check:
+dist-check-py2:
 	twine check dist/yamkix-${YAMKIX_VERSION}-py2-none-any.whl
-	twine check dist/yamkix-${YAMKIX_VERSION}-py2.7.egg
+	twine check dist/yamkix-${YAMKIX_VERSION}.tar.gz
+
+dist-check-py3:
+	twine check dist/yamkix-${YAMKIX_VERSION}-py3-none-any.whl
+	twine check dist/yamkix-${YAMKIX_VERSION}.tar.gz
 
 dist-upload:
 	twine upload dist/*
@@ -99,6 +103,9 @@ else
 	@echo "Let's push ${IMG_LATEST_CIRCLECI} (please check that you are logged in)"
 	@docker image push ${IMG_LATEST_CIRCLECI}
 endif
+
+print-version:
+	@echo ${YAMKIX_VERSION}
 
 print-exec-version:
 	@echo ${TAG}
