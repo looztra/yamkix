@@ -41,8 +41,7 @@ jobs:
           name: Install requirements
           command: |
             set -x
-            pip install --user requests-toolbelt
-            pip install --user twine
+            pip install --user -r requirements_dev.txt
       - run:
           name: Publish
           command: |
@@ -61,8 +60,7 @@ jobs:
           name: Install requirements
           command: |
             set -x
-            pip install --user requests-toolbelt
-            pip install --user twine
+            pip install --user -r requirements_dev.txt
       - run:
           name: Publish
           command: |
