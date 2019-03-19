@@ -48,7 +48,7 @@ jobs:
             set -x
             export PATH=$PATH:/home/circleci/.local/bin
             echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
-            make clean dist dist-check-py2 dist-upload
+            make clean dist-py2 dist-check-py2 dist-upload
             rm ~/.pypirc
 
   python3-publish:
@@ -67,7 +67,7 @@ jobs:
             set -x
             export PATH=$PATH:/home/circleci/.local/bin
             echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
-            make clean dist dist-check-py3 dist-upload
+            make clean dist-py3 dist-check-py3 dist-upload
             rm ~/.pypirc
 
   wait-for-pypi-cache-update:

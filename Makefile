@@ -31,13 +31,15 @@ python-checks:
 clean:
 	rm -rf dist
 
-dist:
+dist-py3:
 	python setup.py bdist_wheel
 	python setup.py sdist
 
+dist-py2:
+	python setup.py bdist_wheel
+
 dist-check-py2:
 	twine check dist/yamkix-${YAMKIX_VERSION}-py2-none-any.whl
-	twine check dist/yamkix-${YAMKIX_VERSION}.tar.gz
 
 dist-check-py3:
 	twine check dist/yamkix-${YAMKIX_VERSION}-py3-none-any.whl
