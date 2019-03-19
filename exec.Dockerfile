@@ -11,6 +11,7 @@ LABEL org.label-schema.docker.cmd.help "docker run --rm -v $(pwd):/app/code looz
 LABEL org.label-schema.docker.cmd "docker run --rm -v $(pwd):/app/code looztra/yamkix:TAG -i input"
 
 WORKDIR /app/code
+COPY wait-for-pypi.sh /app/code
 ENTRYPOINT ["yamkix"]
 CMD ["--help"]
 ARG GIT_SHA1
@@ -22,4 +23,6 @@ LABEL io.nodevops.git-branch ${GIT_BRANCH}
 LABEL io.nodevops.ci-build-number ${CI_BUILD_NUMBER}
 
 ARG YAMKIX_VERSION
-RUN pip install --no-cache-dir yamkix==${YAMKIX_VERSION}
+RUN chmod +x /app/code/wait-for-pypi.sh && \
+  /app/code/wait-for-pypi.sh ${YAMKIX_VERSION} && \
+  pip install --no-cache-dir yamkix==${YAMKIX_VERSION}

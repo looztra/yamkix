@@ -70,41 +70,18 @@ jobs:
             make clean dist-py3 dist-check-py3 dist-upload
             rm ~/.pypirc
 
-  wait-for-pypi-cache-update:
+  docker-build-and-push:
     docker:
       - image: circleci/python:3.7.2-stretch-node
     steps:
-      - checkout
-      - run:
-          name: Check if package is available
-          command: |
-            set -x
-            yamkix_version=$(make print-version)
-            while true; do
-              pip install --user yamkix==$yamkix_version
-              if [ $? -eq "0" ]; then
-                echo "Found expected version [$yamkix_version]"
-                break;
-              else
-                echo "Did not find the expected version [$yamkix_version], sleeping"
-                sleep 15s
-              fi
-            done
-
-  docker-build-and-push:
-    docker:
-      - image: circleci/golang:1.11.5-stretch-node
-    steps:
-      - checkout
       - setup_remote_docker:
           docker_layer_caching: true
+      - checkout
       - run:
           name: Build Exec Image
           command: |
             set -x
             docker version
-            echo "Sleep for 30s to let pypi update its cache"
-            sleep 30s
             make build
       - run:
           name: Build CircleCI compatible image
@@ -146,17 +123,10 @@ workflows:
             branches:
               only:
                 - master
-      - wait-for-pypi-cache-update:
+      - docker-build-and-push:
           requires:
             - python3-publish
             - python2-publish
-          filters:
-            branches:
-              only:
-                - master
-      - docker-build-and-push:
-          requires:
-            - wait-for-pypi-cache-update
           filters:
             branches:
               only:
