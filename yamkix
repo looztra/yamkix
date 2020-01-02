@@ -41,7 +41,7 @@ def parse_cli():
                                 is `Off`, you can enable it with this option')
     parser.add_argument('-q', '--no-quotes-preserved',
                         action='store_true',
-                        help='by default, quotes are conserved \
+                        help='by default, quotes are preserved \
                                 you can disable this with this option')
     parser.add_argument('-f', '--default-flow-style',
                         action='store_true',
