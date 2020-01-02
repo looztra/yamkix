@@ -121,6 +121,7 @@ def format_yaml(input_file,
     :param parsing_typ: safe or roundtrip (rt) more
     """
     yaml = YAML(typ=parsing_mode)
+    yaml.width = 2048
     yaml.explicit_start = explicit_start
     yaml.explicit_end = explicit_end
     yaml.default_flow_style = default_flow_style
