@@ -55,3 +55,6 @@ indent_size = none
 
 [LICENSE]
 indent_size = none
+
+[test-*.py]
+indent_size = none
