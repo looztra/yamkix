@@ -9,7 +9,7 @@ setup(
     url='https://github.com/looztra/yamkix',
     author='Christophe Furmaniak',
     author_email='christophe.furmaniak@gmail.com',
-    version='0.4.1',
+    version='0.5.0',
     scripts=['yamkix'],
     license='[Apache License 2.0](http: // www.apache.org / licenses /)',
     install_requires=['ruamel.yaml>0.15'],
