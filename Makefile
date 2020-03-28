@@ -31,6 +31,9 @@ python-checks:
 clean:
 	rm -rf dist
 
+tests:
+	bats tests.bats
+
 dist-py3:
 	python setup.py bdist_wheel
 	python setup.py sdist

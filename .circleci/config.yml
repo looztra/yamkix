@@ -25,12 +25,20 @@ jobs:
           command: |
             set -x
             pip install --user pylama
+            sudo apt-get update
+            sudo apt-get install bats
       - run:
           name: Check python style
           command: |
             set -x
             export PATH=$PATH:/home/circleci/.local/bin
             make python-checks
+      - run:
+          name: Run integration tests
+          command: |
+            set -x
+            pip install --user -r requirements.txt
+            make tests
 
   python2-publish:
     docker:
