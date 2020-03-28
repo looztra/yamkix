@@ -54,3 +54,11 @@ function yamkix_no_quotes_preserved() {
     --no-quotes-preserved
   diff_result_vs_expected no-quotes-preserved
 }
+
+function yamkix_to_stdout() {
+  local f_input=$1
+  ./yamkix \
+    --input "$BATS_TEST_DIRNAME/test-assets/source/${f_input}.yml" \
+    --output STDOUT >"$BATS_TMPDIR/result.yml"
+  diff_result_vs_expected default
+}

@@ -41,3 +41,7 @@ load test-assets/test_yamkix
 @test "no-start-no-end, no-quotes-preserved" {
   yamkix_no_quotes_preserved no-start-no-end
 }
+
+@test "check that output to stdout is not f* by a debug print statement that should not be there" {
+  yamkix_to_stdout no-start-no-end
+}
