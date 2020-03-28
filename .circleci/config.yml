@@ -39,6 +39,15 @@ jobs:
             set -x
             pip install --user -r requirements.txt
             make tests
+      - run:
+          name: Check we can build a package
+          command: |
+            set -x
+            export PATH=$PATH:/home/circleci/.local/bin
+            pip install --user -r requirements_dev.txt
+            echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
+            make clean dist-py3 dist-check-py3
+            rm ~/.pypirc
 
   python3-publish:
     docker:
