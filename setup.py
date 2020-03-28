@@ -1,13 +1,10 @@
 """Setup."""
 
-import sys
 from setuptools import setup
 
 long_description = open("README.rst").read()
 
 install_requires = ["ruamel.yaml>0.15"]
-if sys.version_info[:2] < (3, 4):
-    install_requires.append("pathlib")
 
 setup(
     name="yamkix",
@@ -23,7 +20,6 @@ setup(
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: Apache Software License",
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Topic :: Utilities",
     ],

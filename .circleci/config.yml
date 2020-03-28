@@ -40,25 +40,6 @@ jobs:
             pip install --user -r requirements.txt
             make tests
 
-  python2-publish:
-    docker:
-      - image: circleci/python:2.7.15-stretch-node
-    steps:
-      - checkout
-      - run:
-          name: Install requirements
-          command: |
-            set -x
-            pip install --user -r requirements_dev.txt
-      - run:
-          name: Publish
-          command: |
-            set -x
-            export PATH=$PATH:/home/circleci/.local/bin
-            echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
-            make clean dist-py2 dist-check-py2 dist-upload
-            rm ~/.pypirc
-
   python3-publish:
     docker:
       - image: circleci/python:3.7.2-stretch-node
@@ -123,17 +104,9 @@ workflows:
             branches:
               only:
                 - master
-      - python2-publish:
-          requires:
-            - python-checks
-          filters:
-            branches:
-              only:
-                - master
       - docker-build-and-push:
           requires:
             - python3-publish
-            - python2-publish
           filters:
             branches:
               only:
