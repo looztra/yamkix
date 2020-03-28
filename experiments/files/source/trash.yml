@@ -1,9 +1,0 @@
-- op: replace
-  path: /x/y/z
-  value:
-    - name: dummy
-      property: fake
-
-- op: replace
-  path: /a/b/c
-  value: roger

@@ -178,6 +178,7 @@ def format_yaml(
     yaml.explicit_end = explicit_end
     yaml.default_flow_style = default_flow_style
     yaml.preserve_quotes = quotes_preserved
+
     if dash_inwards:
         yaml.indent(mapping=2, sequence=4, offset=2)
 
@@ -216,6 +217,7 @@ def yamkix_dump_all(dump_me, yaml, dash_inwards, output_file):
 
 
 def yamkix_dump_one(single_item, yaml, dash_inwards, out):
+    print("default_flow_style="+str(yaml.default_flow_style))
     if dash_inwards and type(single_item).__name__ == "CommentedSeq":
         yaml.dump(single_item, out, transform=strip_leading_double_space)
     else:

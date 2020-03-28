@@ -5,5 +5,5 @@
   "python.linting.pylintEnabled": false,
   "python.linting.pydocstyleEnabled": true,
   "python.linting.enabled": true,
-  "python.pythonPath": ".venv-py3/bin/python3"
+  "python.pythonPath": ".venv/bin/python3.7"
 }

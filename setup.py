@@ -1,3 +1,6 @@
+"""Setup."""
+
+import sys
 from setuptools import setup
 
 long_description = open("README.rst").read()
@@ -13,7 +16,7 @@ setup(
     url="https://github.com/looztra/yamkix",
     author="Christophe Furmaniak",
     author_email="christophe.furmaniak@gmail.com",
-    version="0.5.0",
+    version="0.5.1",
     scripts=["yamkix"],
     license="[Apache License 2.0](http: // www.apache.org / licenses /)",
     install_requires=install_requires,
