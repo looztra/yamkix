@@ -11,6 +11,6 @@ twine==1.13.0
 ruamel.yaml>0.15
 
 pytest==3.8.2
-pytest-runner==4.2
+pytest-runner==5.2
 
 -r requirements.txt
