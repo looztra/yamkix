@@ -1,0 +1,7 @@
+---
+this is a list:
+- This is an item
+- # This comment belongs to a dict
+  This is: that dict
+- # This comment belongs to another dict
+  This is: that other dict
