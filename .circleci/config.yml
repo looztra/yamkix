@@ -24,7 +24,7 @@ jobs:
           name: Install requirements
           command: |
             set -x
-            pip install --user pylama
+            pip install --user -r requirements_dev.txt
             sudo apt-get update
             sudo apt-get install bats
       - run:
@@ -37,14 +37,12 @@ jobs:
           name: Run integration tests
           command: |
             set -x
-            pip install --user -r requirements.txt
             make tests
       - run:
-          name: Check we can build a package
+          name: Check that we can build a package
           command: |
             set -x
             export PATH=$PATH:/home/circleci/.local/bin
-            pip install --user -r requirements_dev.txt
             echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
             make clean dist-py3 dist-check-py3
             rm ~/.pypirc
