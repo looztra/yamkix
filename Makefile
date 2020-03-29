@@ -26,7 +26,7 @@ eclint:
 	docker run --rm -v $(pwd):/app/code qima/eclint check $(git ls-files)
 
 python-checks:
-	pylama
+	pylint yamkix
 
 clean:
 	rm -rf dist
