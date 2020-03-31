@@ -62,3 +62,24 @@ function yamkix_to_stdout() {
     --output STDOUT >"$BATS_TMPDIR/result.yml"
   diff_result_vs_expected default
 }
+
+function yamkix_spaces_before_comment() {
+  local f_input=$1
+  local spaces_before_comment=$2
+  ./yamkix \
+    --input "$BATS_TEST_DIRNAME/test-assets/source/${f_input}.yml" \
+    --output "$BATS_TMPDIR/result.yml" \
+    --spaces-before-comment "${spaces_before_comment}"
+  diff_result_vs_expected "spaces-before-comment-${spaces_before_comment}"
+}
+
+function yamkix_spaces_before_comment_and_no_dash_inwards() {
+  local f_input=$1
+  local spaces_before_comment=$2
+  ./yamkix \
+    --input "$BATS_TEST_DIRNAME/test-assets/source/${f_input}.yml" \
+    --output "$BATS_TMPDIR/result.yml" \
+    --spaces-before-comment "${spaces_before_comment}" \
+    --no-dash-inwards
+  diff_result_vs_expected "spaces-before-comment-${spaces_before_comment}--no-dash-inwards"
+}
