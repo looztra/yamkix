@@ -4,11 +4,14 @@ from __future__ import print_function
 import argparse
 import sys
 import os
+import pkg_resources
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
 from ruamel.yaml.comments import NoComment, CommentedBase
 from ruamel.yaml.tokens import CommentToken
 from ruamel.yaml.error import CommentMark
+
+YAMKIX_VERSION = pkg_resources.require("yamkix")[0].version
 
 
 def parse_cli():
@@ -97,49 +100,60 @@ def parse_cli():
                           If not specified, comments are left as is.",
     )
 
+    parser.add_argument(
+        "-v", "--version", action="store_true", help="show yamkix version",
+    )
+
     args = parser.parse_args()
 
-    my_args = get_input_output(args)
-    if args.typ not in ["safe", "rt"]:
-        raise ValueError(
-            "'%s' is not a valid value for option --typ. "
-            "Allowed values are 'safe' and 'rt'" % args.type
-        )
-    my_args["typ"] = args.typ
-    my_args["explicit_start"] = not args.no_explicit_start
-    my_args["explicit_end"] = args.explicit_end
-    my_args["default_flow_style"] = args.default_flow_style
-    my_args["dash_inwards"] = not args.no_dash_inwards
-    my_args["quotes_preserved"] = not args.no_quotes_preserved
-    if args.spaces_before_comment is None:
-        my_args["spaces_before_comment"] = None
+    if args.version:
+        my_args = dict()
+        my_args["version"] = True
     else:
-        try:
-            my_args["spaces_before_comment"] = int(args.spaces_before_comment)
-        except ValueError:
+        my_args = get_input_output(args)
+        if args.typ not in ["safe", "rt"]:
+            raise ValueError(
+                "'%s' is not a valid value for option --typ. "
+                "Allowed values are 'safe' and 'rt'" % args.type
+            )
+        my_args["typ"] = args.typ
+        my_args["explicit_start"] = not args.no_explicit_start
+        my_args["explicit_end"] = args.explicit_end
+        my_args["default_flow_style"] = args.default_flow_style
+        my_args["dash_inwards"] = not args.no_dash_inwards
+        my_args["quotes_preserved"] = not args.no_quotes_preserved
+        if args.spaces_before_comment is None:
             my_args["spaces_before_comment"] = None
-
-    print(
-        "[yamkix] Processing: input="
-        + my_args["input_display_name"]
-        + ", output="
-        + my_args["output_display_name"]
-        + ", typ="
-        + my_args["typ"]
-        + ", explicit_start="
-        + str(my_args["explicit_start"])
-        + ", explicit_end="
-        + str(my_args["explicit_end"])
-        + ", default_flow_style="
-        + str(my_args["default_flow_style"])
-        + ", quotes_preserved="
-        + str(my_args["quotes_preserved"])
-        + ", dash_inwards="
-        + str(my_args["dash_inwards"])
-        + ", spaces_before_comment="
-        + str(my_args["spaces_before_comment"]),
-        file=sys.stderr,
-    )
+        else:
+            try:
+                my_args["spaces_before_comment"] = int(
+                    args.spaces_before_comment
+                )
+            except ValueError:
+                my_args["spaces_before_comment"] = None
+        print(
+            "[yamkix("
+            + YAMKIX_VERSION
+            + ")] Processing: input="
+            + my_args["input_display_name"]
+            + ", output="
+            + my_args["output_display_name"]
+            + ", typ="
+            + my_args["typ"]
+            + ", explicit_start="
+            + str(my_args["explicit_start"])
+            + ", explicit_end="
+            + str(my_args["explicit_end"])
+            + ", default_flow_style="
+            + str(my_args["default_flow_style"])
+            + ", quotes_preserved="
+            + str(my_args["quotes_preserved"])
+            + ", dash_inwards="
+            + str(my_args["dash_inwards"])
+            + ", spaces_before_comment="
+            + str(my_args["spaces_before_comment"]),
+            file=sys.stderr,
+        )
     return my_args
 
 
@@ -343,10 +357,18 @@ def process_comments(data, column=None):
             process_comments(elem, column=column)
 
 
+def print_version():
+    """Print version."""
+    print("yamkix v" + YAMKIX_VERSION)
+
+
 def main():
     """(re)format yaml"""
     parsed_args = parse_cli()
-    format_yaml(parsed_args)
+    if "version" in parsed_args and parsed_args["version"]:
+        print_version()
+    else:
+        format_yaml(parsed_args)
 
 
 if __name__ == "__main__":
