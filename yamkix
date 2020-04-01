@@ -18,12 +18,15 @@ def parse_cli():
     """Parse the cli args"""
 
     parser = argparse.ArgumentParser(
-        description="""Format yaml input file.
-            By default, explicit_start is `On`, explicit_end is `Off`\
-            and array elements are pushed inwards the start of the \
-            matching sequence. Comments are preserved thanks to default \
+        description="""Yamkix v{}.
+            Format yaml input file.
+            By default, explicit_start is `On`, explicit_end is `Off`
+            and array elements are pushed inwards the start of the
+            matching sequence. Comments are preserved thanks to default
             parsing mode `rt`.
-        """
+        """.format(
+            YAMKIX_VERSION
+        )
     )
     parser.add_argument(
         "-i",
