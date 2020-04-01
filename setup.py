@@ -13,7 +13,7 @@ setup(
     url="https://github.com/looztra/yamkix",
     author="Christophe Furmaniak",
     author_email="christophe.furmaniak@gmail.com",
-    version="0.6.0",
+    version="0.6.1",
     scripts=["yamkix"],
     license="[Apache License 2.0](http: // www.apache.org / licenses /)",
     install_requires=INSTALL_REQUIRES,

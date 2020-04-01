@@ -311,8 +311,8 @@ def yamkix_add_eol_comment(self, comment, key=NoComment, column=None):
             comment = " " * additional_spaces + comment
             column = 0
     start_mark = CommentMark(column)
-    comment_token = [CommentToken(comment, start_mark, None), None]
-    self._yaml_add_eol_comment(comment_token, key=key)
+    comment_as_list = [CommentToken(comment, start_mark, None), None]
+    self._yaml_add_eol_comment(comment_as_list, key=key)
 
 
 CommentedBase.yaml_add_eol_comment = yamkix_add_eol_comment
@@ -331,19 +331,28 @@ def remove_trailing_linebreak(comment):
 def process_single_comment(data, comment, key, column):
     """Process a single comment."""
     comment = remove_trailing_linebreak(comment)
-    #    print(
-    #        "key : " + str(key) + ", comment : " + comment, file=sys.stderr,
-    #    )
     data.yaml_add_eol_comment(comment, key, column=column)
+
+
+def fix_for_issue29(data, key):
+    """Fix issue#29."""
+    if data.ca.items[key][3] is not None:
+        data.ca.items[key][3] = None
 
 
 def process_comments(data, column=None):
     """Reposition comments."""
     if isinstance(data, dict):
         if data.ca and data.ca.items:
+            # print("CommentedMap " + str(data.ca.items), file=sys.stderr)
             for key in data.ca.items.keys():
                 if data.ca.items[key][2]:
                     comment = data.ca.items[key][2].value
+                    #
+                    # Issue #29
+                    # list: # this is a comment that kills it
+                    #   - a
+                    fix_for_issue29(data, key)
                     if string_is_comment(comment):
                         process_single_comment(data, comment, key, column)
         for key, val in data.items():
@@ -351,6 +360,7 @@ def process_comments(data, column=None):
             process_comments(val, column=column)
     elif isinstance(data, list):
         if data.ca and data.ca.items:
+            # print("CommentedSeq " + str(data.ca.items), file=sys.stderr)
             for key in data.ca.items.keys():
                 if data.ca.items[key][0]:
                     comment = data.ca.items[key][0].value

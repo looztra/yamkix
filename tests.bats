@@ -97,3 +97,19 @@ load test-assets/test_yamkix
 @test "k8s-deployment-with-comments-shifted-1, spaces-before-comment=1" {
   yamkix_spaces_before_comment k8s-deployment-with-comments-shifted-1 1
 }
+
+@test "issue-29, spaces-before-comment=1" {
+  yamkix_spaces_before_comment issue-29 1
+}
+
+@test "issue-29, spaces-before-comment=2" {
+  yamkix_spaces_before_comment issue-29 2
+}
+
+@test "issue-29, spaces-before-comment=1, no-dash-inwards" {
+  yamkix_spaces_before_comment_and_no_dash_inwards issue-29 1
+}
+
+@test "issue-29, spaces-before-comment=2, no-dash-inwards" {
+  yamkix_spaces_before_comment_and_no_dash_inwards issue-29 2
+}
