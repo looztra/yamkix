@@ -39,8 +39,8 @@ dist-py3:
 	python setup.py sdist
 
 dist-check-py3:
-	twine dist/yamkix-${YAMKIX_VERSION}-py3-none-any.whl
-	twine dist/yamkix-${YAMKIX_VERSION}.tar.gz
+	twine check dist/yamkix-${YAMKIX_VERSION}-py2.py3-none-any.whl
+	twine check dist/yamkix-${YAMKIX_VERSION}.tar.gz
 
 dist-upload:
 	twine upload dist/*

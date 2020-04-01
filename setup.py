@@ -12,11 +12,12 @@ TEST_REQUIREMENTS = ["pytest"]
 
 setup(
     name="yamkix",
-    version="0.6.1",
+    version="0.7.0",
     author="Christophe Furmaniak",
     author_email="christophe.furmaniak@gmail.com",
     description="An opinionated yaml formatter based on ruamel.yaml",
     long_description=README,
+    long_description_content_type="text/x-rst",
     url="https://github.com/looztra/yamkix",
     license="[Apache License 2.0](http: // www.apache.org / licenses /)",
     install_requires=INSTALL_REQUIRES,
