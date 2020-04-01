@@ -26,7 +26,7 @@ eclint:
 	docker run --rm -v $(pwd):/app/code qima/eclint check $(git ls-files)
 
 python-checks:
-	pylint yamkix setup.py
+	pylint setup.py yamkix
 
 clean:
 	rm -rf dist
@@ -39,8 +39,8 @@ dist-py3:
 	python setup.py sdist
 
 dist-check-py3:
-	twine check dist/yamkix-${YAMKIX_VERSION}-py3-none-any.whl
-	twine check dist/yamkix-${YAMKIX_VERSION}.tar.gz
+	twine dist/yamkix-${YAMKIX_VERSION}-py3-none-any.whl
+	twine dist/yamkix-${YAMKIX_VERSION}.tar.gz
 
 dist-upload:
 	twine upload dist/*

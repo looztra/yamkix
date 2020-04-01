@@ -10,6 +10,7 @@ from ruamel.yaml.scanner import ScannerError
 from ruamel.yaml.comments import NoComment, CommentedBase
 from ruamel.yaml.tokens import CommentToken
 from ruamel.yaml.error import CommentMark
+from yamkix import __version__
 
 YAMKIX_VERSION = pkg_resources.require("yamkix")[0].version
 
@@ -46,7 +47,7 @@ def parse_cli():
         "--output",
         required=False,
         help="the name of the file to generate \
-                              (same as input file if not specied, \
+                            (same as input file if not specied, \
                                 hence STDOUT if STDIN as input)",
     )
     parser.add_argument(
@@ -92,7 +93,7 @@ def parse_cli():
         "--stdout",
         action="store_true",
         help="output is STDOUT whatever the value for \
-                          input (-i) and output (-o)",
+                        input (-i) and output (-o)",
     )
 
     parser.add_argument(
@@ -100,7 +101,7 @@ def parse_cli():
         "--spaces-before-comment",
         default=None,
         help="specify the number of spaces between comments and content. \
-                          If not specified, comments are left as is.",
+                        If not specified, comments are left as is.",
     )
 
     parser.add_argument(
@@ -211,8 +212,6 @@ def strip_leading_double_space(stream):
     if stream.startswith("  "):
         stream = stream[2:]
     return stream.replace("\n  ", "\n")
-    # you could also do that on a line by line basis
-    # return "".join([s[2:] if s.startswith("  ") else s for s in stream.splitlines(True)])
 
 
 def format_yaml(parsed_args):
@@ -223,7 +222,7 @@ def format_yaml(parsed_args):
     :param explicit_start: write the start of the yaml doc even when there is \
                             only one done in the file
     :param default_flow_style: if False, block style will be used for nested \
-                              arrays/maps
+                            arrays/maps
     :param dash_inwards: push dash inwards if True
     :param quotes_preserved: preserve quotes if True
     :param parsing_typ: safe or roundtrip (rt) more
@@ -290,9 +289,9 @@ def yamkix_dump_one(
 def yamkix_add_eol_comment(self, comment, key=NoComment, column=None):
     """Custom add_eol_comment function.
 
-      We need to be able to tune the number of spaces between
-      the content and the comment for CommentedSeqs and CommentedMaps
-      see https://stackoverflow.com/q/60915926
+    We need to be able to tune the number of spaces between
+    the content and the comment for CommentedSeqs and CommentedMaps
+    see https://stackoverflow.com/q/60915926
     """
     # pylint: disable=protected-access
     org_col = column
@@ -372,7 +371,7 @@ def process_comments(data, column=None):
 
 def print_version():
     """Print version."""
-    print("yamkix v" + YAMKIX_VERSION)
+    print("yamkix v" + __version__)
 
 
 def main():
