@@ -1,7 +1,4 @@
 """Setup."""
-import os
-import codecs
-import re
 from setuptools import setup, find_packages
 
 with open("README.rst") as readme_file:
@@ -13,29 +10,9 @@ SETUP_REQUIREMENTS = ["pytest-runner"]
 
 TEST_REQUIREMENTS = ["pytest"]
 
-HERE = os.path.abspath(os.path.dirname(__file__))
-
-
-def read(*parts):
-    """Read a file and returns its content."""
-    with codecs.open(os.path.join(HERE, *parts), "r") as file_pointer:
-        return file_pointer.read()
-
-
-def find_version(*file_paths):
-    """Get the version value from the input path."""
-    version_file = read(*file_paths)
-    version_match = re.search(
-        r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M
-    )
-    if version_match:
-        return version_match.group(1)
-    raise RuntimeError("Unable to find version string.")
-
-
 setup(
     name="yamkix",
-    version=find_version("yamkix", "__init__.py"),
+    version="0.6.1",
     author="Christophe Furmaniak",
     author_email="christophe.furmaniak@gmail.com",
     description="An opinionated yaml formatter based on ruamel.yaml",
