@@ -1,3 +1,4 @@
+.DEFAULT_GOAL := help
 NAME := looztra/yamkix
 CI_PLATFORM := circleci
 GIT_SHA1 := $(shell git rev-parse --short HEAD)
@@ -22,30 +23,37 @@ endif
 
 .PHONY: build dist clean
 
-eclint:
+eclint: ## Run eclint on files tracked by git
 	docker run --rm -v $(pwd):/app/code qima/eclint check $(git ls-files)
 
-python-checks:
-	pylint setup.py yamkix
-
-clean:
+clean: ## Clean the dist directory
 	rm -rf dist
 
-tests:
+lint: ## Run all linters
+	tox -e linters
+
+tests: unit-tests
+
+unit-tests: ## Run unit tests
+	tox -e py37
+
+integration-tests: ## Run integration tests
 	bats tests.bats
 
-dist-py3:
+all-tests: unit-tests integration-tests ## Tests all
+
+dist-py3: ## Build python3 package
 	python setup.py bdist_wheel
 	python setup.py sdist
 
-dist-check-py3:
+dist-check-py3: ## Check the python3 package
 	twine check dist/yamkix-${YAMKIX_VERSION}-py2.py3-none-any.whl
 	twine check dist/yamkix-${YAMKIX_VERSION}.tar.gz
 
-dist-upload:
+dist-upload: ## Upload the python3 package to pypi
 	twine upload dist/*
 
-build:
+build: ## Build the docker image
 	docker image build \
 		--build-arg CI_PLATFORM=${CI_PLATFORM} \
 		--build-arg YAMKIX_VERSION=${YAMKIX_VERSION} \
@@ -57,7 +65,7 @@ ifndef GIT_DIRTY
 	docker image tag ${IMG} ${IMG_LATEST}
 endif
 
-build-circleci:
+build-circleci: ## Build the circleci docker image
 	docker image build \
 		--build-arg CI_PLATFORM=${CI_PLATFORM} \
 		--build-arg YAMKIX_VERSION=${YAMKIX_VERSION} \
@@ -67,7 +75,7 @@ build-circleci:
 		-t ${IMG_CIRCLECI} -f circleci.Dockerfile .
 	docker image tag ${IMG_CIRCLECI} ${IMG_LATEST_CIRCLECI}
 
-push:
+push: ## Push the docker image with the sha1 tag
 	@echo "Tag ${TAG}"
 ifdef GIT_DIRTY
 	@echo "Cannot push a dirty image"
@@ -76,7 +84,7 @@ else
 	@docker image push ${IMG}
 endif
 
-push-latest:
+push-latest: ## Push the docker image with tag latest
 	@echo "Tag ${TAG}"
 ifdef GIT_DIRTY
 	@echo "Cannot push a dirty image"
@@ -85,7 +93,7 @@ else
 	@docker image push ${IMG_LATEST}
 endif
 
-push-circleci:
+push-circleci: ## Push the circleci docker image with the sha1 tag
 	@echo "Tag ${TAG}"
 ifdef GIT_DIRTY
 	@echo "Cannot push a dirty image"
@@ -94,7 +102,7 @@ else
 	@docker image push ${IMG_CIRCLECI}
 endif
 
-push-circleci-latest:
+push-circleci-latest: ## Push the circleci docker image with tag latest
 	@echo "Tag ${TAG}"
 ifdef GIT_DIRTY
 	@echo "Cannot push a dirty image"
@@ -123,3 +131,8 @@ print-img-name:
 
 print-img-safe-name:
 	@echo ${NAME} | tr "/" "-"
+
+.PHONY: help
+help: ## Print help message
+	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort \
+			| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-45s\033[0m %s\n", $$1, $$2}'

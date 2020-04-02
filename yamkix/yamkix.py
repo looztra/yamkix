@@ -1,13 +1,14 @@
-#!/usr/bin/env python
-"""Load a yaml file and save it formatted according to some rules"""
+"""Load a yaml file and save it formatted according to some rules."""
 from __future__ import print_function
+
 import argparse
 import sys
 import os
+
 import pkg_resources
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
-from ruamel.yaml.comments import NoComment, CommentedBase
+from ruamel.yaml.comments import CommentedBase, NoComment
 from ruamel.yaml.tokens import CommentToken
 from ruamel.yaml.error import CommentMark
 from yamkix import __version__
@@ -16,8 +17,7 @@ YAMKIX_VERSION = pkg_resources.require("yamkix")[0].version
 
 
 def parse_cli():
-    """Parse the cli args"""
-
+    """Parse the cli args."""
     parser = argparse.ArgumentParser(
         description="""Yamkix v{}.
             Format yaml input file.
@@ -215,8 +215,8 @@ def strip_leading_double_space(stream):
 
 
 def format_yaml(parsed_args):
-    """
-    Load a file and save it formated :
+    """Load a file and save it formated.
+
     :param input_file: the input file
     :param output_file: the output file
     :param explicit_start: write the start of the yaml doc even when there is \
@@ -318,7 +318,7 @@ CommentedBase.yaml_add_eol_comment = yamkix_add_eol_comment
 
 
 def string_is_comment(a_string):
-    """Is it a comment starting with a #?"""
+    """Is it a comment starting with a #."""
     return a_string[0] == "#"
 
 
@@ -347,10 +347,6 @@ def process_comments(data, column=None):
             for key in data.ca.items.keys():
                 if data.ca.items[key][2]:
                     comment = data.ca.items[key][2].value
-                    #
-                    # Issue #29
-                    # list: # this is a comment that kills it
-                    #   - a
                     fix_for_issue29(data, key)
                     if string_is_comment(comment):
                         process_single_comment(data, comment, key, column)
@@ -375,7 +371,7 @@ def print_version():
 
 
 def main():
-    """(re)format yaml"""
+    """(re)format yaml."""
     parsed_args = parse_cli()
     if "version" in parsed_args and parsed_args["version"]:
         print_version()

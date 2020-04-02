@@ -28,16 +28,22 @@ jobs:
             sudo apt-get update
             sudo apt-get install bats
       - run:
-          name: Check python style
+          name: Run linters
           command: |
             set -x
             export PATH=$PATH:/home/circleci/.local/bin
-            make python-checks
+            make lint
+      - run:
+          name: Run unit tests
+          command: |
+            set -x
+            export PATH=$PATH:/home/circleci/.local/bin
+            make unit-tests
       - run:
           name: Run integration tests
           command: |
             set -x
-            make tests
+            make integration-tests
       - run:
           name: Check that we can build a package
           command: |
