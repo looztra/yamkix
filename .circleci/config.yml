@@ -17,7 +17,7 @@ jobs:
             eclint check $(git ls-files)
   python-checks:
     docker:
-      - image: circleci/python:3.7.2-stretch-node
+      - image: circleci/python:3.7-stretch-node
     steps:
       - checkout
       - run:
