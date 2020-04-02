@@ -1,210 +1,17 @@
 """Load a yaml file and save it formatted according to some rules."""
 from __future__ import print_function
 
-import argparse
 import sys
 import os
 
-import pkg_resources
-from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
 from ruamel.yaml.comments import CommentedBase, NoComment
 from ruamel.yaml.tokens import CommentToken
 from ruamel.yaml.error import CommentMark
 from yamkix import __version__
-
-YAMKIX_VERSION = pkg_resources.require("yamkix")[0].version
-
-
-def parse_cli():
-    """Parse the cli args."""
-    parser = argparse.ArgumentParser(
-        description="""Yamkix v{}.
-            Format yaml input file.
-            By default, explicit_start is `On`, explicit_end is `Off`
-            and array elements are pushed inwards the start of the
-            matching sequence. Comments are preserved thanks to default
-            parsing mode `rt`.
-        """.format(
-            YAMKIX_VERSION
-        )
-    )
-    parser.add_argument(
-        "-i",
-        "--input",
-        required=False,
-        help="the file to parse, or STDIN if not specified",
-    )
-    parser.add_argument(
-        "-t",
-        "--typ",
-        required=False,
-        default="rt",
-        help="the yaml parser mode. Can be `safe` or `rt`",
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        required=False,
-        help="the name of the file to generate \
-                            (same as input file if not specied, \
-                                hence STDOUT if STDIN as input)",
-    )
-    parser.add_argument(
-        "-n",
-        "--no-explicit-start",
-        action="store_true",
-        help="by default, explicit start of the yaml doc \
-                                is `On`, you can disable it with this option",
-    )
-    parser.add_argument(
-        "-e",
-        "--explicit-end",
-        action="store_true",
-        help="by default, explicit end of the yaml doc \
-                                is `Off`, you can enable it with this option",
-    )
-    parser.add_argument(
-        "-q",
-        "--no-quotes-preserved",
-        action="store_true",
-        help="by default, quotes are preserved \
-                                you can disable this with this option",
-    )
-    parser.add_argument(
-        "-f",
-        "--default-flow-style",
-        action="store_true",
-        help="enable the default flow style \
-                                `Off` by default. In default flow style \
-                                (with typ=`rt`), maps and lists are written \
-                                like json",
-    )
-    parser.add_argument(
-        "-d",
-        "--no-dash-inwards",
-        action="store_true",
-        help="by default, dash are pushed inwards \
-                                use `--no-dash-inwards` to have the dash \
-                                start at the sequence level",
-    )
-    parser.add_argument(
-        "-s",
-        "--stdout",
-        action="store_true",
-        help="output is STDOUT whatever the value for \
-                        input (-i) and output (-o)",
-    )
-
-    parser.add_argument(
-        "-c",
-        "--spaces-before-comment",
-        default=None,
-        help="specify the number of spaces between comments and content. \
-                        If not specified, comments are left as is.",
-    )
-
-    parser.add_argument(
-        "-v", "--version", action="store_true", help="show yamkix version",
-    )
-
-    args = parser.parse_args()
-
-    if args.version:
-        my_args = dict()
-        my_args["version"] = True
-    else:
-        my_args = get_input_output(args)
-        if args.typ not in ["safe", "rt"]:
-            raise ValueError(
-                "'%s' is not a valid value for option --typ. "
-                "Allowed values are 'safe' and 'rt'" % args.type
-            )
-        my_args["typ"] = args.typ
-        my_args["explicit_start"] = not args.no_explicit_start
-        my_args["explicit_end"] = args.explicit_end
-        my_args["default_flow_style"] = args.default_flow_style
-        my_args["dash_inwards"] = not args.no_dash_inwards
-        my_args["quotes_preserved"] = not args.no_quotes_preserved
-        if args.spaces_before_comment is None:
-            my_args["spaces_before_comment"] = None
-        else:
-            try:
-                my_args["spaces_before_comment"] = int(
-                    args.spaces_before_comment
-                )
-            except ValueError:
-                my_args["spaces_before_comment"] = None
-        print(
-            "[yamkix("
-            + YAMKIX_VERSION
-            + ")] Processing: input="
-            + my_args["input_display_name"]
-            + ", output="
-            + my_args["output_display_name"]
-            + ", typ="
-            + my_args["typ"]
-            + ", explicit_start="
-            + str(my_args["explicit_start"])
-            + ", explicit_end="
-            + str(my_args["explicit_end"])
-            + ", default_flow_style="
-            + str(my_args["default_flow_style"])
-            + ", quotes_preserved="
-            + str(my_args["quotes_preserved"])
-            + ", dash_inwards="
-            + str(my_args["dash_inwards"])
-            + ", spaces_before_comment="
-            + str(my_args["spaces_before_comment"]),
-            file=sys.stderr,
-        )
-    return my_args
-
-
-def get_input_output(argparse_args):
-    """Get input, output and associated labels."""
-    my_args = dict()
-    my_args["input_display_name"] = "STDIN"
-    if argparse_args.input is None:
-        my_args["input"] = None
-    else:
-        my_args["input"] = argparse_args.input
-        my_args["input_display_name"] = my_args["input"]
-    if argparse_args.stdout:
-        my_args["output"] = None
-    else:
-        if (
-            argparse_args.output is not None
-            and argparse_args.output != "STDOUT"
-        ):
-            my_args["output"] = argparse_args.output
-        else:
-            if argparse_args.output == "STDOUT":
-                my_args["output"] = None
-            else:
-                if my_args["input"] is None:
-                    my_args["output"] = None
-                else:
-                    my_args["output"] = argparse_args.input
-    if my_args["output"] is None:
-        my_args["output_display_name"] = "STDOUT"
-    else:
-        my_args["output_display_name"] = my_args["output"]
-    return my_args
-
-
-def get_opinionated_yaml_parser(parser_args):
-    """Configure a yaml parser/formatter the yamkix way."""
-    yaml = YAML(typ=parser_args["typ"])
-    yaml.width = 2048
-    yaml.explicit_start = parser_args["explicit_start"]
-    yaml.explicit_end = parser_args["explicit_end"]
-    yaml.default_flow_style = parser_args["default_flow_style"]
-    yaml.preserve_quotes = parser_args["quotes_preserved"]
-
-    if parser_args["dash_inwards"]:
-        yaml.indent(mapping=2, sequence=4, offset=2)
-    return yaml
+from yamkix.config import print_yamkix_config, YamkixConfig
+from yamkix.yaml_writer import get_opinionated_yaml_writer
+from yamkix.args import parse_cli
 
 
 def strip_leading_double_space(stream):
@@ -214,7 +21,7 @@ def strip_leading_double_space(stream):
     return stream.replace("\n  ", "\n")
 
 
-def format_yaml(parsed_args):
+def format_yaml(yamkix_config: YamkixConfig):
     """Load a file and save it formated.
 
     :param input_file: the input file
@@ -227,11 +34,12 @@ def format_yaml(parsed_args):
     :param quotes_preserved: preserve quotes if True
     :param parsing_typ: safe or roundtrip (rt) more
     """
-    yaml = get_opinionated_yaml_parser(parsed_args)
-    input_file = parsed_args["input"]
-    output_file = parsed_args["output"]
-    dash_inwards = parsed_args["dash_inwards"]
-    spaces_before_comment = parsed_args["spaces_before_comment"]
+    yaml = get_opinionated_yaml_writer(yamkix_config)
+    yamkix_io_config = yamkix_config.io_config
+    input_file = yamkix_io_config.input
+    output_file = yamkix_io_config.output
+    dash_inwards = yamkix_config.dash_inwards
+    spaces_before_comment = yamkix_config.spaces_before_comment
     if input_file is not None:
         with open(input_file, "rt") as f_input:
             parsed = yaml.load_all(f_input.read())
@@ -372,11 +180,12 @@ def print_version():
 
 def main():
     """(re)format yaml."""
-    parsed_args = parse_cli()
-    if "version" in parsed_args and parsed_args["version"]:
+    yamkix_config = parse_cli(sys.argv[1:])
+    if yamkix_config.version:
         print_version()
     else:
-        format_yaml(parsed_args)
+        print_yamkix_config(yamkix_config)
+        format_yaml(yamkix_config)
 
 
 if __name__ == "__main__":
