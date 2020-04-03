@@ -7,6 +7,7 @@ def test_defaults():
     """Test when no input is provided."""
     sut: YamkixConfig = parse_cli(dict())
     yamkix_default_config = get_default_yamkix_config()
+
     assert sut.parsing_mode == yamkix_default_config.parsing_mode
     assert sut.explicit_start == yamkix_default_config.explicit_start
     assert sut.explicit_end == yamkix_default_config.explicit_end

@@ -2,7 +2,7 @@
 import collections
 import sys
 
-from typing import Dict
+from argparse import Namespace
 
 from yamkix import __version__
 
@@ -83,31 +83,28 @@ def print_yamkix_config(yamkix_config: YamkixConfig):
 
 
 def get_input_output_config_from_args(
-    argparse_args: Dict[str, any]
+    args: Namespace,
 ) -> YamkixInputOutputConfig:
     """Get input, output and associated labels as YamkixInputOutputConfig."""
     input_display_name = "STDIN"
-    if argparse_args.input is None:
+    if args.input is None:
         f_input = None
     else:
-        f_input = argparse_args.input
+        f_input = args.input
         input_display_name = f_input
-    if argparse_args.stdout:
+    if args.stdout:
         f_output = None
     else:
-        if (
-            argparse_args.output is not None
-            and argparse_args.output != "STDOUT"
-        ):
-            f_output = argparse_args.output
+        if args.output is not None and args.output != "STDOUT":
+            f_output = args.output
         else:
-            if argparse_args.output == "STDOUT":
+            if args.output == "STDOUT":
                 f_output = None
             else:
                 if f_input is None:
                     f_output = None
                 else:
-                    f_output = argparse_args.input
+                    f_output = args.input
     if f_output is None:
         output_display_name = "STDOUT"
     else:
@@ -120,30 +117,34 @@ def get_input_output_config_from_args(
     )
 
 
-def get_config_from_args(args: Dict[str, any]) -> YamkixConfig:
+def get_config_from_args(args: Namespace) -> YamkixConfig:
     """Build a YamkixConfig object from parsed args."""
-    yamkix_input_output_config = get_input_output_config_from_args(args)
     if args.typ not in ["safe", "rt"]:
         raise ValueError(
             "'%s' is not a valid value for option --typ. "
-            "Allowed values are 'safe' and 'rt'" % args.type
+            "Allowed values are 'safe' and 'rt'" % args.typ
         )
+    yamkix_input_output_config = get_input_output_config_from_args(args)
     default_yamkix_config = get_default_yamkix_config()
     return YamkixConfig(
         explicit_start=not args.no_explicit_start,
-        explicit_end=args.explicit_end,
-        default_flow_style=args.default_flow_style,
+        explicit_end=args.explicit_end
+        if args.explicit_end is not None
+        else False,
+        default_flow_style=args.default_flow_style
+        if args.default_flow_style is not None
+        else False,
         dash_inwards=not args.no_dash_inwards,
         quotes_preserved=not args.no_quotes_preserved,
         parsing_mode=args.typ,
-        version=args.version,
+        version=args.version if args.version is not None else False,
         spaces_before_comment=get_spaces_before_comment_from_args(args),
         io_config=yamkix_input_output_config,
         line_width=default_yamkix_config.line_width,
     )
 
 
-def get_spaces_before_comment_from_args(args: Dict[str, any]):
+def get_spaces_before_comment_from_args(args: Namespace):
     """Extract a valid value for spaces_before_comment from args."""
     if args.spaces_before_comment is None:
         spaces_before_comment = None
