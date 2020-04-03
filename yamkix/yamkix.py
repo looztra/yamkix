@@ -18,15 +18,7 @@ from yamkix.helpers import (
 def format_yaml(yamkix_config: YamkixConfig):
     """Load a file and save it formated.
 
-    :param input_file: the input file
-    :param output_file: the output file
-    :param explicit_start: write the start of the yaml doc even when there is \
-                            only one done in the file
-    :param default_flow_style: if False, block style will be used for nested \
-                            arrays/maps
-    :param dash_inwards: push dash inwards if True
-    :param quotes_preserved: preserve quotes if True
-    :param parsing_typ: safe or roundtrip (rt) more
+    FIXME
     """
     yaml = get_opinionated_yaml_writer(yamkix_config)
     yamkix_io_config = yamkix_config.io_config

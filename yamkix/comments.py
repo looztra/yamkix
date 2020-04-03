@@ -26,7 +26,7 @@ def yamkix_add_eol_comment(self, comment, key=NoComment, column=None):
         comment = "# " + comment
     if (
         org_col != 0
-    ):  # only do this if the specified colunn is not the beginning of the line
+    ):  # only do this if the specified column is not the beginning of the line
         if comment[0] == "#":
             additional_spaces = 1 if org_col is None else org_col - 1
             comment = " " * additional_spaces + comment
