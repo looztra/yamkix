@@ -12,7 +12,7 @@ from yamkix.config import (
 )
 
 
-class TestIt(unittest.TestCase):
+class TestConfig(unittest.TestCase):
     """Provide unit tests for the config package."""
 
     def test_default_values(self):

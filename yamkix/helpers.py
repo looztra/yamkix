@@ -2,12 +2,17 @@
 from yamkix import __version__
 
 
+def get_version_string():
+    """Return the version string."""
+    return "yamkix v" + __version__
+
+
 def print_version():
     """Print version."""
-    print("yamkix v" + __version__)
+    print(get_version_string())
 
 
-def remove_trailing_linebreak(comment):
+def remove_all_linebreaks(comment):
     """Remove trailing linebreak."""
     return comment.replace("\n", "")
 

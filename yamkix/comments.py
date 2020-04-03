@@ -3,7 +3,7 @@ from ruamel.yaml.comments import CommentedBase, NoComment
 from ruamel.yaml.tokens import CommentToken
 from ruamel.yaml.error import CommentMark
 from yamkix.helpers import (
-    remove_trailing_linebreak,
+    remove_all_linebreaks,
     string_is_comment,
 )
 
@@ -41,7 +41,7 @@ CommentedBase.yaml_add_eol_comment = yamkix_add_eol_comment
 
 def process_single_comment(data, comment, key, column):
     """Process a single comment."""
-    comment = remove_trailing_linebreak(comment)
+    comment = remove_all_linebreaks(comment)
     data.yaml_add_eol_comment(comment, key, column=column)
 
 
