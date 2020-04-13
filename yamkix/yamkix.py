@@ -15,7 +15,7 @@ from yamkix.helpers import (
 )
 
 
-def format_yaml(yamkix_config: YamkixConfig):
+def round_trip_and_format(yamkix_config: YamkixConfig):
     """Load a file and save it formated.
 
     FIXME
@@ -87,7 +87,7 @@ def main():
         print_version()
     else:
         print_yamkix_config(yamkix_config)
-        format_yaml(yamkix_config)
+        round_trip_and_format(yamkix_config)
 
 
 if __name__ == "__main__":
