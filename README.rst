@@ -91,3 +91,8 @@ Usage
           },
           "problemMatcher": []
         }
+
+Acknowledgements
+----------------
+
+[ ~ Dependencies scanned by PyUp.io ~ ]
