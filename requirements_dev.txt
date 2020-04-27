@@ -9,7 +9,7 @@ rope==0.16.0
 Sphinx==3.0.1
 twine==3.1.1
 black==19.10b0
-pylint==2.4.4
+pylint==2.5.0
 pytest==5.4.1
 pytest-runner==5.2
 
