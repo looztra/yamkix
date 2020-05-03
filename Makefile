@@ -1,5 +1,6 @@
 .DEFAULT_GOAL := help
-NAME := looztra/yamkix
+PROG_NAME ?= yamkix
+NAME := looztra/$(PROG_NAME)
 CI_PLATFORM := circleci
 GIT_SHA1 := $(shell git rev-parse --short HEAD)
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
@@ -52,15 +53,15 @@ all-tests: unit-tests integration-tests ## Tests all
 all: lint all-tests ## lint and all tests
 	@echo "+ $@"
 
-dist-py3: ## Build python3 package
+dist: ## Build python3 package
 	@echo "+ $@"
 	python setup.py bdist_wheel
 	python setup.py sdist
 
-dist-check-py3: ## Check the python3 package
+dist-check: ## Check the python3 package
 	@echo "+ $@"
-	twine check dist/yamkix-${YAMKIX_VERSION}-py2.py3-none-any.whl
-	twine check dist/yamkix-${YAMKIX_VERSION}.tar.gz
+	twine check dist/$(PROG_NAME)-${YAMKIX_VERSION}-py2.py3-none-any.whl
+	twine check dist/$(PROG_NAME)-${YAMKIX_VERSION}.tar.gz
 
 dist-upload: ## Upload the python3 package to pypi
 	twine upload dist/*
