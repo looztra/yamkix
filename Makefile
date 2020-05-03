@@ -24,29 +24,41 @@ endif
 .PHONY: build dist clean
 
 eclint: ## Run eclint on files tracked by git
+	@echo "+ $@"
 	docker run --rm -v $(pwd):/app/code qima/eclint check $(git ls-files)
 
 clean: ## Clean the dist directory
+	@echo "+ $@"
 	rm -rf dist
 
 lint: ## Run all linters
+	@echo "+ $@"
 	tox -e linters
 
 tests: unit-tests
+	@echo "+ $@"
 
 unit-tests: ## Run unit tests
-	tox -e py37
+	@echo "+ $@"
+	tox -e py3
 
 integration-tests: ## Run integration tests
+	@echo "+ $@"
 	bats tests.bats
 
 all-tests: unit-tests integration-tests ## Tests all
+	@echo "+ $@"
+
+all: lint all-tests ## lint and all tests
+	@echo "+ $@"
 
 dist-py3: ## Build python3 package
+	@echo "+ $@"
 	python setup.py bdist_wheel
 	python setup.py sdist
 
 dist-check-py3: ## Check the python3 package
+	@echo "+ $@"
 	twine check dist/yamkix-${YAMKIX_VERSION}-py2.py3-none-any.whl
 	twine check dist/yamkix-${YAMKIX_VERSION}.tar.gz
 
@@ -54,6 +66,7 @@ dist-upload: ## Upload the python3 package to pypi
 	twine upload dist/*
 
 build: ## Build the docker image
+	@echo "+ $@"
 	docker image build \
 		--build-arg CI_PLATFORM=${CI_PLATFORM} \
 		--build-arg YAMKIX_VERSION=${YAMKIX_VERSION} \
@@ -66,6 +79,7 @@ ifndef GIT_DIRTY
 endif
 
 build-circleci: ## Build the circleci docker image
+	@echo "+ $@"
 	docker image build \
 		--build-arg CI_PLATFORM=${CI_PLATFORM} \
 		--build-arg YAMKIX_VERSION=${YAMKIX_VERSION} \
@@ -76,6 +90,7 @@ build-circleci: ## Build the circleci docker image
 	docker image tag ${IMG_CIRCLECI} ${IMG_LATEST_CIRCLECI}
 
 push: ## Push the docker image with the sha1 tag
+	@echo "+ $@"
 	@echo "Tag ${TAG}"
 ifdef GIT_DIRTY
 	@echo "Cannot push a dirty image"
@@ -85,6 +100,7 @@ else
 endif
 
 push-latest: ## Push the docker image with tag latest
+	@echo "+ $@"
 	@echo "Tag ${TAG}"
 ifdef GIT_DIRTY
 	@echo "Cannot push a dirty image"
@@ -94,6 +110,7 @@ else
 endif
 
 push-circleci: ## Push the circleci docker image with the sha1 tag
+	@echo "+ $@"
 	@echo "Tag ${TAG}"
 ifdef GIT_DIRTY
 	@echo "Cannot push a dirty image"
@@ -103,6 +120,7 @@ else
 endif
 
 push-circleci-latest: ## Push the circleci docker image with tag latest
+	@echo "+ $@"
 	@echo "Tag ${TAG}"
 ifdef GIT_DIRTY
 	@echo "Cannot push a dirty image"

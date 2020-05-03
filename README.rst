@@ -92,6 +92,16 @@ Usage
           "problemMatcher": []
         }
 
+Hack
+----
+
+.. code:: bash
+
+   python3 -m virtualenv .venv
+   source .venv/bin/activate
+   pip install -r requirements_dev.txt
+   make all-38
+
 Acknowledgements
 ----------------
 
