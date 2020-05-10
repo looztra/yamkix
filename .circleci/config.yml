@@ -8,6 +8,7 @@ jobs:
       - image: qima/eclint:circleci-2.8.1-7c65341
     steps:
       - checkout
+      - run: if git log -1 --pretty=%B | grep SKIP_DEPLOY; then circleci-agent step halt; fi
       - run:
           name: Validate Editor Config rules
           command: |
@@ -52,6 +53,7 @@ jobs:
       - image: circleci/python:3.7.2-stretch-node
     steps:
       - checkout
+      - run: if git log -1 --pretty=%B | grep SKIP_DEPLOY; then circleci-agent step halt; fi
       - run:
           name: Install requirements
           command: |
@@ -72,6 +74,7 @@ jobs:
     steps:
       - setup_remote_docker
       - checkout
+      - run: if git log -1 --pretty=%B | grep SKIP_DEPLOY; then circleci-agent step halt; fi
       - run:
           name: Build Exec Image
           command: |
