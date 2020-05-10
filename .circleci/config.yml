@@ -8,7 +8,6 @@ jobs:
       - image: qima/eclint:circleci-2.8.1-7c65341
     steps:
       - checkout
-      - run: if git log -1 --pretty=%B | grep SKIP_DEPLOY; then circleci-agent step halt; fi
       - run:
           name: Validate Editor Config rules
           command: |
