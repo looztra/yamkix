@@ -22,50 +22,89 @@ else
 	CI_BUILD_NUMBER := "N/A"
 endif
 
-.PHONY: build dist clean
-
+.PHONY: eclint
 eclint: ## Run eclint on files tracked by git
 	@echo "+ $@"
 	docker run --rm -v $(pwd):/app/code qima/eclint check $(git ls-files)
 
-clean: ## Clean the dist directory
+.PHONY: clean
+clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 	@echo "+ $@"
-	rm -rf dist
 
+.PHONY: clean-build
+clean-build: ## remove build artifacts
+	@echo "+ $@"
+	rm -fr build/
+	rm -fr dist/
+	rm -fr .eggs/
+	find . -name '*.egg-info' -exec rm -fr {} +
+	find . -name '*.egg' -exec rm -f {} +
+
+.PHONY: clean-pyc
+clean-pyc: ## remove Python file artifacts
+	@echo "+ $@"
+	find . -name '*.pyc' -exec rm -f {} +
+	find . -name '*.pyo' -exec rm -f {} +
+	find . -name '*~' -exec rm -f {} +
+	find . -name '__pycache__' -exec rm -fr {} +
+
+.PHONY: clean-test
+clean-test: ## remove test and coverage artifacts
+	@echo "+ $@"
+	rm -fr .tox/
+	rm -f .coverage
+	rm -fr htmlcov/
+	rm -fr .pytest_cache
+
+.PHONY: style
+style: ## force style with black
+	@echo "+ $@"
+	black --line-length 79 tests $(PROG_NAME)
+
+.PHONY: lint
 lint: ## Run all linters
 	@echo "+ $@"
 	tox -e linters
 
+.PHONY: tests
 tests: unit-tests
 	@echo "+ $@"
 
+.PHONY: unit-tests
 unit-tests: ## Run unit tests
 	@echo "+ $@"
 	tox -e py3
 
+.PHONY: integration-tests
 integration-tests: ## Run integration tests
 	@echo "+ $@"
 	bats tests.bats
 
+.PHONY: all-tests
 all-tests: unit-tests integration-tests ## Tests all
 	@echo "+ $@"
 
+.PHONY: all
 all: lint all-tests ## lint and all tests
 	@echo "+ $@"
 
+.PHONY: dist
 dist: ## Build python3 package
 	@echo "+ $@"
 	python setup.py bdist_wheel
 	python setup.py sdist
 
+.PHONY: dist-check
 dist-check: ## Check the python3 package
 	@echo "+ $@"
 	twine check dist/$(PROG_NAME)-${YAMKIX_VERSION}-py2.py3-none-any.whl
 	twine check dist/$(PROG_NAME)-${YAMKIX_VERSION}.tar.gz
 
+.PHONY: dist-upload
 dist-upload: ## Upload the python3 package to pypi
 	twine upload dist/*
 
+.PHONY: build
 build: ## Build the docker image
 	@echo "+ $@"
 	docker image build \
@@ -79,6 +118,7 @@ ifndef GIT_DIRTY
 	docker image tag ${IMG} ${IMG_LATEST}
 endif
 
+.PHONY: build-circleci
 build-circleci: ## Build the circleci docker image
 	@echo "+ $@"
 	docker image build \
@@ -90,6 +130,7 @@ build-circleci: ## Build the circleci docker image
 		-t ${IMG_CIRCLECI} -f circleci.Dockerfile .
 	docker image tag ${IMG_CIRCLECI} ${IMG_LATEST_CIRCLECI}
 
+.PHONY: push
 push: ## Push the docker image with the sha1 tag
 	@echo "+ $@"
 	@echo "Tag ${TAG}"
@@ -100,6 +141,7 @@ else
 	@docker image push ${IMG}
 endif
 
+.PHONY: push-latest
 push-latest: ## Push the docker image with tag latest
 	@echo "+ $@"
 	@echo "Tag ${TAG}"
@@ -110,6 +152,7 @@ else
 	@docker image push ${IMG_LATEST}
 endif
 
+.PHONY: push-circleci
 push-circleci: ## Push the circleci docker image with the sha1 tag
 	@echo "+ $@"
 	@echo "Tag ${TAG}"
@@ -120,6 +163,7 @@ else
 	@docker image push ${IMG_CIRCLECI}
 endif
 
+.PHONY: push-circleci-latest
 push-circleci-latest: ## Push the circleci docker image with tag latest
 	@echo "+ $@"
 	@echo "Tag ${TAG}"
@@ -130,24 +174,31 @@ else
 	@docker image push ${IMG_LATEST_CIRCLECI}
 endif
 
+.PHONY: print-version
 print-version:
 	@echo ${YAMKIX_VERSION}
 
+.PHONY: print-exec-version
 print-exec-version:
 	@echo ${TAG}
 
+.PHONY: print-circleci-version
 print-circleci-version:
 	@echo ${TAG_CIRCLECI}
 
+.PHONY: print-exec-latest
 print-exec-latest:
 	@echo ${TAG_LATEST}
 
+.PHONY: print-circleci-latest
 print-circleci-latest:
 	@echo ${TAG_CIRCLECI_LATEST}
 
+.PHONY: print-img-name
 print-img-name:
 	@echo ${NAME}
 
+.PHONY: print-img-safe-name
 print-img-safe-name:
 	@echo ${NAME} | tr "/" "-"
 
