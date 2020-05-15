@@ -2,8 +2,8 @@
 import unittest
 
 from yamkix.args import (
-    parse_cli,
     get_override_or_default,
+    parse_cli,
 )
 from yamkix.config import (
     get_default_yamkix_config,
