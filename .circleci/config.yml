@@ -2,6 +2,43 @@
 version: 2.1
 orbs:
   docker-publish: circleci/docker-publish@0.1.4
+commands:
+  python-checks-version:
+    description: Run python checks
+    steps:
+      - run:
+          name: Install requirements
+          command: |
+            set -x
+            pip install --user -r requirements_dev.txt
+            sudo apt-get update
+            sudo apt-get install bats
+      - run:
+          name: Run linters
+          command: |
+            set -x
+            export PATH=$PATH:/home/circleci/.local/bin
+            make lint
+      - run:
+          name: Run unit tests
+          command: |
+            set -x
+            export PATH=$PATH:/home/circleci/.local/bin
+            make unit-tests
+      - run:
+          name: Run integration tests
+          command: |
+            set -x
+            make integration-tests
+      - run:
+          name: Check that we can build a package
+          command: |
+            set -x
+            export PATH=$PATH:/home/circleci/.local/bin
+            echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
+            make clean dist dist-check
+            rm ~/.pypirc
+
 jobs:
   eclint:
     docker:
@@ -15,41 +52,31 @@ jobs:
             ls -l
             git ls-files
             eclint check $(git ls-files)
-  python-checks:
+
+  python36-checks:
     docker:
-      - image: circleci/python:3.7.2-stretch-node
+      - image: circleci/python:3.6
     steps:
       - checkout
-      - run:
-          name: Install requirements
-          command: |
-            set -x
-            pip install --user -r requirements_dev.txt
-            sudo apt-get update
-            sudo apt-get install bats
-      - run:
-          name: Check python style
-          command: |
-            set -x
-            export PATH=$PATH:/home/circleci/.local/bin
-            make python-checks
-      - run:
-          name: Run integration tests
-          command: |
-            set -x
-            make tests
-      - run:
-          name: Check that we can build a package
-          command: |
-            set -x
-            export PATH=$PATH:/home/circleci/.local/bin
-            echo -n $PYPIRC_B64 | base64 --decode > ~/.pypirc
-            make clean dist-py3 dist-check-py3
-            rm ~/.pypirc
+      - python-checks-version
 
-  python3-publish:
+  python37-checks:
     docker:
-      - image: circleci/python:3.7.2-stretch-node
+      - image: circleci/python:3.7
+    steps:
+      - checkout
+      - python-checks-version
+
+  python38-checks:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - python-checks-version
+
+  python-publish:
+    docker:
+      - image: circleci/python:3.8-stretch-node
     steps:
       - checkout
       - run: if git log -1 --pretty=%B | grep SKIP_DEPLOY; then circleci-agent step halt; fi
@@ -69,11 +96,11 @@ jobs:
 
   docker-build-and-push:
     docker:
-      - image: circleci/python:3.7.2-stretch-node
+      - image: circleci/python:3.8-stretch-node
     steps:
-      - setup_remote_docker
       - checkout
       - run: if git log -1 --pretty=%B | grep SKIP_DEPLOY; then circleci-agent step halt; fi
+      - setup_remote_docker
       - run:
           name: Build Exec Image
           command: |
@@ -100,22 +127,30 @@ jobs:
 
 workflows:
   version: 2
-  workflow:
+  build_it:
     jobs:
       - eclint
-      - python-checks:
+      - python36-checks:
           requires:
             - eclint
-      - python3-publish:
+      - python37-checks:
           requires:
-            - python-checks
+            - eclint
+      - python38-checks:
+          requires:
+            - eclint
+      - python-publish:
+          requires:
+            - python36-checks
+            - python37-checks
+            - python38-checks
           filters:
             branches:
               only:
                 - master
       - docker-build-and-push:
           requires:
-            - python3-publish
+            - python-publish
           filters:
             branches:
               only:

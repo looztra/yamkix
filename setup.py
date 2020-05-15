@@ -1,20 +1,24 @@
 """Setup."""
+from setuptools import find_packages, setup
 
-from setuptools import setup
-
-LONG_DESCRIPTION = open("README.rst").read()
+with open("README.rst") as readme_file:
+    README = readme_file.read()
 
 INSTALL_REQUIRES = ["ruamel.yaml>0.16"]
 
+SETUP_REQUIREMENTS = ["pytest-runner"]
+
+TEST_REQUIREMENTS = ["pytest"]
+
 setup(
     name="yamkix",
-    description="An opinionated yaml formatter based on ruamel.yaml",
-    long_description=LONG_DESCRIPTION,
-    url="https://github.com/looztra/yamkix",
+    version="0.7.0",
     author="Christophe Furmaniak",
     author_email="christophe.furmaniak@gmail.com",
-    version="0.6.1",
-    scripts=["yamkix"],
+    description="An opinionated yaml formatter based on ruamel.yaml",
+    long_description=README,
+    long_description_content_type="text/x-rst",
+    url="https://github.com/looztra/yamkix",
     license="[Apache License 2.0](http: // www.apache.org / licenses /)",
     install_requires=INSTALL_REQUIRES,
     classifiers=[
@@ -24,4 +28,11 @@ setup(
         "Topic :: Utilities",
     ],
     keywords="yaml format",
+    packages=find_packages(include=["yamkix"]),
+    include_package_data=True,
+    python_requires=">=3.6",
+    entry_points={"console_scripts": ["yamkix = yamkix.__main__:main"]},
+    setup_requires=SETUP_REQUIREMENTS,
+    test_suite="tests",
+    tests_require=TEST_REQUIREMENTS,
 )

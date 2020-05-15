@@ -53,7 +53,7 @@ What?
 Config
 ------
 
-- Explicit start of yaml docs by defaut
+- Explicit start of yaml docs by default
   (you can disable it with ``--no-explicit-start``)
 - Quotes preserved by default
   (you can disable it with ``--no-quotes-preserved``)
@@ -63,6 +63,116 @@ Config
 - Comments preserved by default thanks to
   `ruamel.yaml <https://pypi.python.org/pypi/ruamel.yaml>`__ ``round_trip``
   mode (you can disable it with ``--typ safe``)
+
+
+To preserve or not to preserve quotes?
+--------------------------------------
+
+- *Quotes preserved* means : if there were quotes in the input, they will also be present in the output, and it will be the same type (single/double) of quotes
+- *Quotes not preserved* means :
+
+  - if quotes are not necessary (around *pure* strings), they will be removed
+  - if quotes are present around booleans and numbers, they will be converted to default (single quotes)
+  - if quotes are not present around booleans and numbers, there will be no quotes in the output too
+
+**Note**: there is no option for the moment to force the usage of double quotes when `-q`/`--no-quotes-preserved` is used.
+
+Quotes preserved (default behavior)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+With input :
+
+.. code-block:: yaml
+
+  ---
+  apiVersion: extensions/v1beta1 # with comment
+  kind: ReplicaSet
+  metadata:
+    name: tname
+    namespace: tns
+    annotations:
+      string_no_quotes: frontend
+      string_single_quotes: 'frontend'
+      string_double_quotes: "frontend"
+      boolean_no_quotes: true
+      boolean_single_quotes: 'true'
+      boolean_double_quotes: "true"
+      number_no_quotes: 1
+      number_single_quotes: '1'
+      number_double_quotes: "1"
+
+
+the output will be the same as the input :
+
+
+.. code-block:: yaml
+
+  ---
+  apiVersion: extensions/v1beta1 # with comment
+  kind: ReplicaSet
+  metadata:
+    name: tname
+    namespace: tns
+    annotations:
+      string_no_quotes: frontend
+      string_single_quotes: 'frontend'
+      string_double_quotes: "frontend"
+      boolean_no_quotes: true
+      boolean_single_quotes: 'true'
+      boolean_double_quotes: "true"
+      number_no_quotes: 1
+      number_single_quotes: '1'
+      number_double_quotes: "1"
+
+
+Quotes not preserved (using `-q/--no-quotes-preserved`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+With input :
+
+.. code-block:: yaml
+
+  ---
+  apiVersion: extensions/v1beta1 # with comment
+  kind: ReplicaSet
+  metadata:
+    name: tname
+    namespace: tns
+    annotations:
+      string_no_quotes: frontend
+      string_single_quotes: 'frontend'
+      string_double_quotes: "frontend"
+      boolean_no_quotes: true
+      boolean_single_quotes: 'true'
+      boolean_double_quotes: "true"
+      number_no_quotes: 1
+      number_single_quotes: '1'
+      number_double_quotes: "1"
+
+the output will be :
+
+.. code-block:: yaml
+
+  ---
+  apiVersion: extensions/v1beta1 # with comment
+  kind: ReplicaSet
+  metadata:
+    name: tname
+    namespace: tns
+    annotations:
+      string_no_quotes: frontend
+      string_single_quotes: frontend
+      string_double_quotes: frontend
+      boolean_no_quotes: true
+      boolean_single_quotes: 'true'
+      boolean_double_quotes: 'true'
+      number_no_quotes: 1
+      number_single_quotes: '1'
+      number_double_quotes: '1'
+
+
+**Note** : `kubesplit` is not fully _Kubernetes_ aware for the moment, so it does not try to enforce this behaviour only on string sensible _kubernetes_ resource fields (`.metadata.annotations` and `.spec.containers.environment` values)
+
 
 Where does the name 'yamkix' come from?
 ----------------------------------------
@@ -78,7 +188,7 @@ Usage
 - Install the package with ``pip install --user yamkix``
 - Sample **vscode** task :
 
-.. code:: json
+.. code-block:: json
 
         {
           "taskName": "format yaml with yamkix",
@@ -91,3 +201,18 @@ Usage
           },
           "problemMatcher": []
         }
+
+Hack
+----
+
+.. code:: bash
+
+   python3 -m virtualenv .venv
+   source .venv/bin/activate
+   pip install -r requirements_dev.txt
+   make all
+
+Acknowledgements
+----------------
+
+- Dependencies scanned by `PyUp.io <https://pyup.io/>`_
