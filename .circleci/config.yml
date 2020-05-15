@@ -76,7 +76,7 @@ jobs:
 
   python-publish:
     docker:
-      - image: circleci/python:3.8-stretch-node
+      - image: circleci/python:3.8
     steps:
       - checkout
       - run: if git log -1 --pretty=%B | grep SKIP_DEPLOY; then circleci-agent step halt; fi
@@ -96,7 +96,7 @@ jobs:
 
   docker-build-and-push:
     docker:
-      - image: circleci/python:3.8-stretch-node
+      - image: circleci/python:3.8
     steps:
       - checkout
       - run: if git log -1 --pretty=%B | grep SKIP_DEPLOY; then circleci-agent step halt; fi
