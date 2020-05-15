@@ -66,6 +66,10 @@ lint: ## Run all linters
 	@echo "+ $@"
 	tox -e linters
 
+.PHONY: test
+test: tests ## Run unit tests
+	@echo "+ $@"
+
 .PHONY: tests
 tests: unit-tests
 	@echo "+ $@"
