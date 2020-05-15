@@ -204,6 +204,39 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.line_width, yamkix_default_config.line_width)
         self.assertEqual(sut.version, yamkix_default_config.version)
 
+    def test_get_config_from_args_with_no_io(self):
+        """Test get_config_from_args.
+
+        input=None
+        output=None
+        stdout=None
+        typ="rt"
+        no_explicit_start=None
+        explicit_end=None
+        no_quotes_preserved=None
+        default_flow_style=None
+        no_dash_inwards=None
+        stdout=None
+        spaces_before_comment=None
+        version=None
+        inc_io_config=False
+        """
+        parsed = Namespace(
+            input=None,
+            output=None,
+            stdout=None,
+            typ="rt",
+            no_explicit_start=None,
+            explicit_end=None,
+            no_quotes_preserved=None,
+            default_flow_style=None,
+            no_dash_inwards=None,
+            spaces_before_comment=None,
+            version=None,
+        )
+        sut: YamkixConfig = get_config_from_args(parsed, inc_io_config=False)
+        self.assertIsNone(sut.io_config)
+
     def test_get_spaces_before_comment_from_args_when_none(self):
         """Test get_spaces_before_comment_from_args.
 

@@ -117,14 +117,19 @@ def get_input_output_config_from_args(
     )
 
 
-def get_config_from_args(args: Namespace) -> YamkixConfig:
+def get_config_from_args(
+    args: Namespace, inc_io_config: bool = True
+) -> YamkixConfig:
     """Build a YamkixConfig object from parsed args."""
     if args.typ not in ["safe", "rt"]:
         raise ValueError(
             "'%s' is not a valid value for option --typ. "
             "Allowed values are 'safe' and 'rt'" % args.typ
         )
-    yamkix_input_output_config = get_input_output_config_from_args(args)
+    if inc_io_config:
+        yamkix_input_output_config = get_input_output_config_from_args(args)
+    else:
+        yamkix_input_output_config = None
     default_yamkix_config = get_default_yamkix_config()
     return YamkixConfig(
         explicit_start=not args.no_explicit_start,

@@ -9,39 +9,14 @@ from yamkix.config import (
 )
 
 
-def build_parser():
-    """Build the cli args parser."""
-    parser = argparse.ArgumentParser(
-        description="""Yamkix v{}.
-            Format yaml input file.
-            By default, explicit_start is `On`, explicit_end is `Off`
-            and array elements are pushed inwards the start of the
-            matching sequence. Comments are preserved thanks to default
-            parsing mode `rt`.
-        """.format(
-            __version__
-        )
-    )
-    parser.add_argument(
-        "-i",
-        "--input",
-        required=False,
-        help="the file to parse, or STDIN if not specified",
-    )
+def add_yamkix_options_to_parser(parser):
+    """Add yamkix reusable options to a parser object."""
     parser.add_argument(
         "-t",
         "--typ",
         required=False,
         default="rt",
         help="the yaml parser mode. Can be `safe` or `rt`",
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        required=False,
-        help="the name of the file to generate \
-                            (same as input file if not specied, \
-                                hence STDOUT if STDIN as input)",
     )
     parser.add_argument(
         "-n",
@@ -82,14 +57,6 @@ def build_parser():
                                 start at the sequence level",
     )
     parser.add_argument(
-        "-s",
-        "--stdout",
-        action="store_true",
-        help="output is STDOUT whatever the value for \
-                        input (-i) and output (-o)",
-    )
-
-    parser.add_argument(
         "-c",
         "--spaces-before-comment",
         default=None,
@@ -97,6 +64,44 @@ def build_parser():
                         If not specified, comments are left as is.",
     )
 
+
+def build_parser():
+    """Build the cli args parser."""
+    parser = argparse.ArgumentParser(
+        description="""Yamkix v{}.
+            Format yaml input file.
+            By default, explicit_start is `On`, explicit_end is `Off`
+            and array elements are pushed inwards the start of the
+            matching sequence. Comments are preserved thanks to default
+            parsing mode `rt`.
+        """.format(
+            __version__
+        )
+    )
+    parser.add_argument(
+        "-i",
+        "--input",
+        required=False,
+        help="""the file to parse or 'STDIN'.
+            Defaults to 'STDIN' if not specified
+        """,
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        required=False,
+        help="the name of the file to generate (can be 'STDOUT') \
+                            (same as input file if not specified, \
+                                hence 'STDOUT' if 'STDIN' as input)",
+    )
+    parser.add_argument(
+        "-s",
+        "--stdout",
+        action="store_true",
+        help="output is STDOUT whatever the value for \
+                        input (-i) and output (-o)",
+    )
+    add_yamkix_options_to_parser(parser)
     parser.add_argument(
         "-v", "--version", action="store_true", help="show yamkix version",
     )
@@ -107,5 +112,5 @@ def parse_cli(args) -> YamkixConfig:
     """Parse the cli args."""
     parser = build_parser()
     args = parser.parse_args(args)
-    yamkix_config = get_config_from_args(args)
+    yamkix_config = get_config_from_args(args, inc_io_config=True)
     return yamkix_config
