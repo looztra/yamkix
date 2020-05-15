@@ -1,8 +1,14 @@
 """Tests the args parsing."""
 import unittest
 
-from yamkix.args import parse_cli
-from yamkix.config import get_default_yamkix_config, YamkixConfig
+from yamkix.args import (
+    get_override_or_default,
+    parse_cli,
+)
+from yamkix.config import (
+    get_default_yamkix_config,
+    YamkixConfig,
+)
 
 
 class TestArgs(unittest.TestCase):
@@ -31,3 +37,29 @@ class TestArgs(unittest.TestCase):
         )
         self.assertEqual(sut.line_width, yamkix_default_config.line_width)
         self.assertEqual(sut.version, yamkix_default_config.version)
+
+    def test_get_override_or_default_when_key_doesnt_exist(self):
+        """Test get_override_or_default when key doesn't exist."""
+        sut = dict()
+        key = "any"
+        default_value = "yolo"
+        result = get_override_or_default(sut, key, default_value)
+        self.assertEqual(result, default_value)
+
+    def test_get_override_or_default_when_key_exists(self):
+        """Test get_override_or_default when key exists."""
+        sut = dict()
+        key = "i_m_the_one"
+        value_for_key = "yamkix_rulez"
+        default_value = "yolo"
+        sut[key] = value_for_key
+        result = get_override_or_default(sut, key, default_value)
+        self.assertEqual(result, value_for_key)
+
+    def test_get_override_or_default_when_override_is_none(self):
+        """Test get_override_or_default when override is none."""
+        sut = None
+        key = "any"
+        default_value = "yolo"
+        result = get_override_or_default(sut, key, default_value)
+        self.assertEqual(result, default_value)
