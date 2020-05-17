@@ -9,6 +9,7 @@ from yamkix.config import (
     get_default_yamkix_config,
     get_input_output_config_from_args,
     get_spaces_before_comment_from_args,
+    get_yamkix_config_from_default,
 )
 
 
@@ -263,3 +264,181 @@ class TestConfig(unittest.TestCase):
         parsed = Namespace(spaces_before_comment="yolo")
         sut = get_spaces_before_comment_from_args(parsed)
         self.assertIsNone(sut)
+
+    def test_get_yamkix_config_from_default_parsing_mode(self):
+        """Test get_yamkix_config_from_default.
+
+        change parsing_mode
+        """
+        reference = get_yamkix_config_from_default()
+        new_val = "zoro"
+        sut = get_yamkix_config_from_default(parsing_mode=new_val)
+        self.assertEqual(sut.parsing_mode, new_val)
+        self.assertEqual(sut.explicit_start, reference.explicit_start)
+        self.assertEqual(sut.explicit_end, reference.explicit_end)
+        self.assertEqual(sut.default_flow_style, reference.default_flow_style)
+        self.assertEqual(sut.dash_inwards, reference.dash_inwards)
+        self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
+        self.assertEqual(
+            sut.spaces_before_comment, reference.spaces_before_comment
+        )
+        self.assertEqual(sut.line_width, reference.line_width)
+        self.assertEqual(sut.io_config, reference.io_config)
+
+    def test_get_yamkix_config_from_default_explicit_start(self):
+        """Test get_yamkix_config_from_default.
+
+        change explicit_start
+        """
+        reference = get_yamkix_config_from_default()
+        new_val = not reference.explicit_start
+        sut = get_yamkix_config_from_default(explicit_start=new_val)
+        self.assertEqual(sut.parsing_mode, reference.parsing_mode)
+        self.assertEqual(sut.explicit_start, new_val)
+        self.assertEqual(sut.explicit_end, reference.explicit_end)
+        self.assertEqual(sut.default_flow_style, reference.default_flow_style)
+        self.assertEqual(sut.dash_inwards, reference.dash_inwards)
+        self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
+        self.assertEqual(
+            sut.spaces_before_comment, reference.spaces_before_comment
+        )
+        self.assertEqual(sut.line_width, reference.line_width)
+        self.assertEqual(sut.io_config, reference.io_config)
+
+    def test_get_yamkix_config_from_default_explicit_end(self):
+        """Test get_yamkix_config_from_default.
+
+        change explicit_end
+        """
+        reference = get_yamkix_config_from_default()
+        new_val = not reference.explicit_end
+        sut = get_yamkix_config_from_default(explicit_end=new_val)
+        self.assertEqual(sut.parsing_mode, reference.parsing_mode)
+        self.assertEqual(sut.explicit_start, reference.explicit_start)
+        self.assertEqual(sut.explicit_end, new_val)
+        self.assertEqual(sut.default_flow_style, reference.default_flow_style)
+        self.assertEqual(sut.dash_inwards, reference.dash_inwards)
+        self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
+        self.assertEqual(
+            sut.spaces_before_comment, reference.spaces_before_comment
+        )
+        self.assertEqual(sut.line_width, reference.line_width)
+        self.assertEqual(sut.io_config, reference.io_config)
+
+    def test_get_yamkix_config_from_default_default_flow_style(self):
+        """Test get_yamkix_config_from_default.
+
+        change default_flow_style
+        """
+        reference = get_yamkix_config_from_default()
+        new_val = not reference.default_flow_style
+        sut = get_yamkix_config_from_default(default_flow_style=new_val)
+        self.assertEqual(sut.parsing_mode, reference.parsing_mode)
+        self.assertEqual(sut.explicit_start, reference.explicit_start)
+        self.assertEqual(sut.explicit_end, reference.explicit_end)
+        self.assertEqual(sut.default_flow_style, new_val)
+        self.assertEqual(sut.dash_inwards, reference.dash_inwards)
+        self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
+        self.assertEqual(
+            sut.spaces_before_comment, reference.spaces_before_comment
+        )
+        self.assertEqual(sut.line_width, reference.line_width)
+        self.assertEqual(sut.io_config, reference.io_config)
+
+    def test_get_yamkix_config_from_default_dash_inwards(self):
+        """Test get_yamkix_config_from_default.
+
+        change dash_inwards
+        """
+        reference = get_yamkix_config_from_default()
+        new_val = not reference.dash_inwards
+        sut = get_yamkix_config_from_default(dash_inwards=new_val)
+        self.assertEqual(sut.parsing_mode, reference.parsing_mode)
+        self.assertEqual(sut.explicit_start, reference.explicit_start)
+        self.assertEqual(sut.explicit_end, reference.explicit_end)
+        self.assertEqual(sut.default_flow_style, reference.default_flow_style)
+        self.assertEqual(sut.dash_inwards, new_val)
+        self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
+        self.assertEqual(
+            sut.spaces_before_comment, reference.spaces_before_comment
+        )
+        self.assertEqual(sut.line_width, reference.line_width)
+        self.assertEqual(sut.io_config, reference.io_config)
+
+    def test_get_yamkix_config_from_default_quotes_preserved(self):
+        """Test get_yamkix_config_from_default.
+
+        change quotes_preserved
+        """
+        reference = get_yamkix_config_from_default()
+        new_val = not reference.quotes_preserved
+        sut = get_yamkix_config_from_default(quotes_preserved=new_val)
+        self.assertEqual(sut.parsing_mode, reference.parsing_mode)
+        self.assertEqual(sut.explicit_start, reference.explicit_start)
+        self.assertEqual(sut.explicit_end, reference.explicit_end)
+        self.assertEqual(sut.default_flow_style, reference.default_flow_style)
+        self.assertEqual(sut.dash_inwards, reference.dash_inwards)
+        self.assertEqual(sut.quotes_preserved, new_val)
+        self.assertEqual(
+            sut.spaces_before_comment, reference.spaces_before_comment
+        )
+        self.assertEqual(sut.line_width, reference.line_width)
+        self.assertEqual(sut.io_config, reference.io_config)
+
+    def test_get_yamkix_config_from_default_spaces_before_comment(self):
+        """Test get_yamkix_config_from_default.
+
+        change spaces_before_comment
+        """
+        reference = get_yamkix_config_from_default()
+        new_val = 722
+        sut = get_yamkix_config_from_default(spaces_before_comment=new_val)
+        self.assertEqual(sut.parsing_mode, reference.parsing_mode)
+        self.assertEqual(sut.explicit_start, reference.explicit_start)
+        self.assertEqual(sut.explicit_end, reference.explicit_end)
+        self.assertEqual(sut.default_flow_style, reference.default_flow_style)
+        self.assertEqual(sut.dash_inwards, reference.dash_inwards)
+        self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
+        self.assertEqual(sut.spaces_before_comment, new_val)
+        self.assertEqual(sut.line_width, reference.line_width)
+        self.assertEqual(sut.io_config, reference.io_config)
+
+    def test_get_yamkix_config_from_default_line_width(self):
+        """Test get_yamkix_config_from_default.
+
+        change line_width
+        """
+        reference = get_yamkix_config_from_default()
+        new_val = 722
+        sut = get_yamkix_config_from_default(line_width=new_val)
+        self.assertEqual(sut.parsing_mode, reference.parsing_mode)
+        self.assertEqual(sut.explicit_start, reference.explicit_start)
+        self.assertEqual(sut.explicit_end, reference.explicit_end)
+        self.assertEqual(sut.default_flow_style, reference.default_flow_style)
+        self.assertEqual(sut.dash_inwards, reference.dash_inwards)
+        self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
+        self.assertEqual(
+            sut.spaces_before_comment, reference.spaces_before_comment
+        )
+        self.assertEqual(sut.line_width, new_val)
+        self.assertEqual(sut.io_config, reference.io_config)
+
+    def test_get_yamkix_config_from_default_io_config(self):
+        """Test get_yamkix_config_from_default.
+
+        change io_config
+        """
+        reference = get_yamkix_config_from_default()
+        new_val = 722
+        sut = get_yamkix_config_from_default(io_config=new_val)
+        self.assertEqual(sut.parsing_mode, reference.parsing_mode)
+        self.assertEqual(sut.explicit_start, reference.explicit_start)
+        self.assertEqual(sut.explicit_end, reference.explicit_end)
+        self.assertEqual(sut.default_flow_style, reference.default_flow_style)
+        self.assertEqual(sut.dash_inwards, reference.dash_inwards)
+        self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
+        self.assertEqual(
+            sut.spaces_before_comment, reference.spaces_before_comment
+        )
+        self.assertEqual(sut.line_width, reference.line_width)
+        self.assertEqual(sut.io_config, new_val)
