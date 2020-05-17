@@ -42,6 +42,50 @@ def get_default_yamkix_config() -> YamkixConfig:
     )
 
 
+# pylint: disable=too-many-arguments
+def get_yamkix_config_from_default(
+    parsing_mode=None,
+    explicit_start=None,
+    explicit_end=None,
+    default_flow_style=None,
+    dash_inwards=None,
+    quotes_preserved=None,
+    spaces_before_comment=None,
+    line_width=None,
+    io_config=None,
+) -> YamkixConfig:
+    """Return a Yamkix config based on default."""
+    default_config = get_default_yamkix_config()
+    return YamkixConfig(
+        parsing_mode=parsing_mode
+        if parsing_mode is not None
+        else default_config.parsing_mode,
+        explicit_start=explicit_start
+        if explicit_start is not None
+        else default_config.explicit_start,
+        explicit_end=explicit_end
+        if explicit_end is not None
+        else default_config.explicit_end,
+        default_flow_style=default_flow_style
+        if default_flow_style is not None
+        else default_config.default_flow_style,
+        dash_inwards=dash_inwards
+        if dash_inwards is not None
+        else default_config.dash_inwards,
+        quotes_preserved=quotes_preserved
+        if quotes_preserved is not None
+        else default_config.quotes_preserved,
+        spaces_before_comment=spaces_before_comment
+        if spaces_before_comment is not None
+        else default_config.spaces_before_comment,
+        line_width=line_width
+        if line_width is not None
+        else default_config.line_width,
+        version=None,
+        io_config=io_config,
+    )
+
+
 def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
     """Return a default input / output config."""
     return YamkixInputOutputConfig(
