@@ -1,6 +1,14 @@
 yamkix
 ======
 
+.. image:: https://pyup.io/repos/github/looztra/yamkix/shield.svg
+     :target: https://pyup.io/repos/github/looztra/yamkix/
+     :alt: Updates
+
+.. image:: https://pyup.io/repos/github/looztra/yamkix/python-3-shield.svg
+     :target: https://pyup.io/repos/github/looztra/yamkix/
+     :alt: Python 3
+
 Why?
 ----
 
