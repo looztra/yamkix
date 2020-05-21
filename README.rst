@@ -1,6 +1,10 @@
 yamkix
 ======
 
+.. image:: https://img.shields.io/pypi/v/yamkix.svg
+     :target: https://pypi.python.org/pypi/yamkix
+     :alt: Pypi
+
 .. image:: https://pyup.io/repos/github/looztra/yamkix/shield.svg
      :target: https://pyup.io/repos/github/looztra/yamkix/
      :alt: Updates
