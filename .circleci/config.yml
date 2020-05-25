@@ -140,6 +140,7 @@ workflows:
           requires:
             - eclint
       - python-publish:
+          context: python-pypi
           requires:
             - python36-checks
             - python37-checks
@@ -149,6 +150,7 @@ workflows:
               only:
                 - master
       - docker-build-and-push:
+          context: docker-hub-nobot
           requires:
             - python-publish
           filters:
