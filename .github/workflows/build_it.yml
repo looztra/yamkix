@@ -119,11 +119,6 @@ jobs:
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
-      - name: Docker build
-        run: |
-          make docker-build
-          echo "Checking built image"
-          docker image ls
 
       - name: Do we need to release?
         run: |
@@ -132,13 +127,6 @@ jobs:
             NEED_RELEASE=yes
           fi
           echo "NEED_RELEASE=${NEED_RELEASE}" >> $GITHUB_ENV
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        if: "${{ env.NEED_RELEASE == 'yes' }}"
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Setup Python
         if: "${{ env.NEED_RELEASE == 'yes' }}"
@@ -164,6 +152,20 @@ jobs:
           echo -n "${{ secrets.PYPIRC_B64 }}" | base64 --decode > ~/.pypirc
           make clean dist dist-check dist-upload
           rm ~/.pypirc
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker build
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        run: |
+          make docker-build
+          echo "Checking built image"
+          docker image ls
 
       - name: Push docker images
         if: "${{ env.NEED_RELEASE == 'yes' }}"
