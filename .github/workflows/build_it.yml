@@ -170,4 +170,4 @@ jobs:
       - name: Push docker images
         if: "${{ env.NEED_RELEASE == 'yes' }}"
         run: |
-          make push push-latest
+          make docker-push docker-push-latest
