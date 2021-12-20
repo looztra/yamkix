@@ -4,7 +4,9 @@ from ruamel.yaml import YAML
 from yamkix.config import YamkixConfig
 
 
-def get_opinionated_yaml_writer(yamkix_config: YamkixConfig,) -> YAML:
+def get_opinionated_yaml_writer(
+    yamkix_config: YamkixConfig,
+) -> YAML:
     """Configure a yaml parser/formatter the yamkix way.
 
     Args:

@@ -27,7 +27,7 @@ def round_trip_and_format(yamkix_config: YamkixConfig):
     dash_inwards = yamkix_config.dash_inwards
     spaces_before_comment = yamkix_config.spaces_before_comment
     if input_file is not None:
-        with open(input_file, "rt") as f_input:
+        with open(input_file, mode="rt", encoding="UTF-8") as f_input:
             parsed = yaml.load_all(f_input.read())
     else:
         parsed = yaml.load_all(sys.stdin.read())
@@ -55,14 +55,15 @@ def yamkix_dump_all(
 
     # Clear the output file if it is a file and it exists
     if output_file is not None and os.path.isfile(output_file):
-        open(output_file, "w").close()
+        with open(output_file, mode="w", encoding="UTF-8") as _:
+            pass
     for doc in one_or_more_items:
         if output_file is None:
             yamkix_dump_one(
                 doc, yaml, dash_inwards, out, spaces_before_comment
             )
         else:
-            with open(output_file, "a") as out:
+            with open(output_file, mode="a", encoding="UTF-8") as out:
                 yamkix_dump_one(
                     doc, yaml, dash_inwards, out, spaces_before_comment
                 )

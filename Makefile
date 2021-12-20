@@ -1,23 +1,19 @@
 .DEFAULT_GOAL := help
 PROG_NAME ?= yamkix
 NAME := looztra/$(PROG_NAME)
-CI_PLATFORM := circleci
+CI_PLATFORM := github_actions
 GIT_SHA1 := $(shell git rev-parse --short HEAD)
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 GIT_DIRTY := $(shell git diff --quiet || echo '-dirty')
 GIT_SHA1_DIRTY_MAYBE := ${GIT_SHA1}${GIT_DIRTY}
-YAMKIX_VERSION := $(shell cat setup.py | grep version | cut -d "=" -f2 | cut -d "," -f 1 | cut -d"'" -f2)
+YAMKIX_VERSION := $(shell cat setup.py | grep version | cut -d "\"" -f2)
 TAG := ${YAMKIX_VERSION}-${GIT_SHA1_DIRTY_MAYBE}
 TAG_LATEST := "latest"
-TAG_CIRCLECI := circleci-${YAMKIX_VERSION}-${GIT_SHA1_DIRTY_MAYBE}
-TAG_CIRCLECI_LATEST := "circleci-latest"
 IMG := ${NAME}:${TAG}
-IMG_CIRCLECI := ${NAME}:${TAG_CIRCLECI}
 IMG_LATEST := ${NAME}:${TAG_LATEST}
-IMG_LATEST_CIRCLECI := ${NAME}:${TAG_CIRCLECI_LATEST}
 
-ifdef CIRCLE_BUILD_NUM
-	CI_BUILD_NUMBER := "${CIRCLE_BUILD_NUM}"
+ifdef GITHUB_RUN_NUMBER
+	CI_BUILD_NUMBER := "${GITHUB_RUN_NUMBER}"
 else
 	CI_BUILD_NUMBER := "N/A"
 endif
@@ -108,8 +104,8 @@ dist-check: ## Check the python3 package
 dist-upload: ## Upload the python3 package to pypi
 	twine upload dist/*
 
-.PHONY: build
-build: ## Build the docker image
+.PHONY: docker-build
+docker-build: ## Build the docker image
 	@echo "+ $@"
 	docker image build \
 		--build-arg CI_PLATFORM=${CI_PLATFORM} \
@@ -117,25 +113,13 @@ build: ## Build the docker image
 		--build-arg GIT_SHA1=${GIT_SHA1_DIRTY_MAYBE} \
 		--build-arg GIT_BRANCH=${GIT_BRANCH} \
 		--build-arg CI_BUILD_NUMBER=${CI_BUILD_NUMBER} \
-		-t ${IMG} -f exec${GIT_DIRTY}.Dockerfile .
+		-t ${IMG} -f exec.Dockerfile .
 ifndef GIT_DIRTY
 	docker image tag ${IMG} ${IMG_LATEST}
 endif
 
-.PHONY: build-circleci
-build-circleci: ## Build the circleci docker image
-	@echo "+ $@"
-	docker image build \
-		--build-arg CI_PLATFORM=${CI_PLATFORM} \
-		--build-arg YAMKIX_VERSION=${YAMKIX_VERSION} \
-		--build-arg GIT_SHA1=${GIT_SHA1_DIRTY_MAYBE} \
-		--build-arg GIT_BRANCH=${GIT_BRANCH} \
-		--build-arg CI_BUILD_NUMBER=${CI_BUILD_NUMBER} \
-		-t ${IMG_CIRCLECI} -f circleci.Dockerfile .
-	docker image tag ${IMG_CIRCLECI} ${IMG_LATEST_CIRCLECI}
-
-.PHONY: push
-push: ## Push the docker image with the sha1 tag
+.PHONY: docker-push
+docker-push: ## Push the docker image with the sha1 tag
 	@echo "+ $@"
 	@echo "Tag ${TAG}"
 ifdef GIT_DIRTY
@@ -145,8 +129,8 @@ else
 	@docker image push ${IMG}
 endif
 
-.PHONY: push-latest
-push-latest: ## Push the docker image with tag latest
+.PHONY: docker-push-latest
+docker-push-latest: ## Push the docker image with tag latest
 	@echo "+ $@"
 	@echo "Tag ${TAG}"
 ifdef GIT_DIRTY
@@ -154,28 +138,6 @@ ifdef GIT_DIRTY
 else
 	@echo "Let's push ${IMG_LATEST} (please check that you are logged in)"
 	@docker image push ${IMG_LATEST}
-endif
-
-.PHONY: push-circleci
-push-circleci: ## Push the circleci docker image with the sha1 tag
-	@echo "+ $@"
-	@echo "Tag ${TAG}"
-ifdef GIT_DIRTY
-	@echo "Cannot push a dirty image"
-else
-	@echo "Let's push ${IMG_CIRCLECI} (please check that you are logged in)"
-	@docker image push ${IMG_CIRCLECI}
-endif
-
-.PHONY: push-circleci-latest
-push-circleci-latest: ## Push the circleci docker image with tag latest
-	@echo "+ $@"
-	@echo "Tag ${TAG}"
-ifdef GIT_DIRTY
-	@echo "Cannot push a dirty image"
-else
-	@echo "Let's push ${IMG_LATEST_CIRCLECI} (please check that you are logged in)"
-	@docker image push ${IMG_LATEST_CIRCLECI}
 endif
 
 .PHONY: print-version
@@ -186,17 +148,9 @@ print-version:
 print-exec-version:
 	@echo ${TAG}
 
-.PHONY: print-circleci-version
-print-circleci-version:
-	@echo ${TAG_CIRCLECI}
-
 .PHONY: print-exec-latest
 print-exec-latest:
 	@echo ${TAG_LATEST}
-
-.PHONY: print-circleci-latest
-print-circleci-latest:
-	@echo ${TAG_CIRCLECI_LATEST}
 
 .PHONY: print-img-name
 print-img-name:
