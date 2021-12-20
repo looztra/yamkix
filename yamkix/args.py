@@ -83,15 +83,13 @@ def add_yamkix_options_to_parser(parser, short_opt_override=None):
 def build_parser():
     """Build the cli args parser."""
     parser = argparse.ArgumentParser(
-        description="""Yamkix v{}.
+        description=f"""Yamkix v{__version__}.
             Format yaml input file.
             By default, explicit_start is `On`, explicit_end is `Off`
             and array elements are pushed inwards the start of the
             matching sequence. Comments are preserved thanks to default
             parsing mode `rt`.
-        """.format(
-            __version__
-        )
+        """
     )
     parser.add_argument(
         "-i",
@@ -118,7 +116,10 @@ def build_parser():
     )
     add_yamkix_options_to_parser(parser)
     parser.add_argument(
-        "-v", "--version", action="store_true", help="show yamkix version",
+        "-v",
+        "--version",
+        action="store_true",
+        help="show yamkix version",
     )
     return parser
 

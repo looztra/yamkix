@@ -167,8 +167,8 @@ def get_config_from_args(
     """Build a YamkixConfig object from parsed args."""
     if args.typ not in ["safe", "rt"]:
         raise ValueError(
-            "'%s' is not a valid value for option --typ. "
-            "Allowed values are 'safe' and 'rt'" % args.typ
+            f"'{args.typ}' is not a valid value for option --typ. "
+            "Allowed values are 'safe' and 'rt'"
         )
     if inc_io_config:
         yamkix_input_output_config = get_input_output_config_from_args(args)

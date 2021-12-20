@@ -1,7 +1,7 @@
 """Setup."""
 from setuptools import find_packages, setup
 
-with open("README.rst") as readme_file:
+with open("README.rst", encoding="UTF-8") as readme_file:
     README = readme_file.read()
 
 INSTALL_REQUIRES = ["ruamel.yaml>0.16"]
