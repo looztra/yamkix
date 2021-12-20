@@ -12,7 +12,7 @@ TEST_REQUIREMENTS = ["pytest"]
 
 setup(
     name="yamkix",
-    version="0.9.0",
+    version="0.9.1-rc1",
     author="Christophe Furmaniak",
     author_email="christophe.furmaniak@gmail.com",
     description="An opinionated yaml formatter based on ruamel.yaml",
