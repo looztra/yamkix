@@ -1,14 +1,14 @@
-FROM python:3.7.2-slim-stretch
+FROM python:3.9-slim-buster
 
 ARG CI_PLATFORM
-LABEL io.nodevops.ci-platform ${CI_PLATFORM}
-LABEL org.label-schema.schema-version "1.0"
-LABEL org.label-schema.name "yamkix"
-LABEL org.label-schema.description "yamkix packaged as a docker image"
-LABEL org.label-schema.vcs-url "https://github.com/looztra/yamkix"
-LABEL org.label-schema.vendor "looztra"
-LABEL org.label-schema.docker.cmd.help "docker run --rm -v $(pwd):/app/code looztra/yamkix:TAG help"
-LABEL org.label-schema.docker.cmd "docker run --rm -v $(pwd):/app/code looztra/yamkix:TAG -i input"
+LABEL io.nodevops.ci-platform=${CI_PLATFORM} \
+  org.label-schema.schema-version="1.0" \
+  org.label-schema.name="yamkix" \
+  org.label-schema.description="yamkix packaged as a docker image" \
+  org.label-schema.vcs-url="https://github.com/looztra/yamkix" \
+  org.label-schema.vendor="looztra" \
+  org.label-schema.docker.cmd.help="docker run --rm -v $(pwd):/app/code looztra/yamkix:TAG help" \
+  org.label-schema.docker.cmd="docker run --rm -v $(pwd):/app/code looztra/yamkix:TAG -i input"
 
 WORKDIR /app/code
 COPY wait-for-pypi.sh /app/code

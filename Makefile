@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 PROG_NAME ?= yamkix
 NAME := looztra/$(PROG_NAME)
-CI_PLATFORM := circleci
+CI_PLATFORM := github_actions
 GIT_SHA1 := $(shell git rev-parse --short HEAD)
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 GIT_DIRTY := $(shell git diff --quiet || echo '-dirty')
@@ -9,15 +9,11 @@ GIT_SHA1_DIRTY_MAYBE := ${GIT_SHA1}${GIT_DIRTY}
 YAMKIX_VERSION := $(shell cat setup.py | grep version | cut -d "=" -f2 | cut -d "," -f 1 | cut -d"'" -f2)
 TAG := ${YAMKIX_VERSION}-${GIT_SHA1_DIRTY_MAYBE}
 TAG_LATEST := "latest"
-TAG_CIRCLECI := circleci-${YAMKIX_VERSION}-${GIT_SHA1_DIRTY_MAYBE}
-TAG_CIRCLECI_LATEST := "circleci-latest"
 IMG := ${NAME}:${TAG}
-IMG_CIRCLECI := ${NAME}:${TAG_CIRCLECI}
 IMG_LATEST := ${NAME}:${TAG_LATEST}
-IMG_LATEST_CIRCLECI := ${NAME}:${TAG_CIRCLECI_LATEST}
 
-ifdef CIRCLE_BUILD_NUM
-	CI_BUILD_NUMBER := "${CIRCLE_BUILD_NUM}"
+ifdef GITHUB_RUN_NUMBER
+	CI_BUILD_NUMBER := "${GITHUB_RUN_NUMBER}"
 else
 	CI_BUILD_NUMBER := "N/A"
 endif
