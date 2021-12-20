@@ -6,7 +6,7 @@ GIT_SHA1 := $(shell git rev-parse --short HEAD)
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 GIT_DIRTY := $(shell git diff --quiet || echo '-dirty')
 GIT_SHA1_DIRTY_MAYBE := ${GIT_SHA1}${GIT_DIRTY}
-YAMKIX_VERSION := $(shell cat setup.py | grep version | cut -d "=" -f2 | cut -d "," -f 1 | cut -d"'" -f2)
+YAMKIX_VERSION := $(shell cat setup.py | grep version | cut -d "\"" -f2)
 TAG := ${YAMKIX_VERSION}-${GIT_SHA1_DIRTY_MAYBE}
 TAG_LATEST := "latest"
 IMG := ${NAME}:${TAG}
