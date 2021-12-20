@@ -107,18 +107,23 @@ jobs:
           make clean dist dist-check
           rm ~/.pypirc
 
-
   release:
     name: Release
     runs-on: ubuntu-latest
     needs: build-python
     timeout-minutes: 20
     steps:
+
       - name: Checkout current branch
-        uses: actions/checkout@master
+        uses: actions/checkout@v2.3.4
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
+      - name: Docker build
+        run: |
+          make docker-build
+          echo "Checking built image"
+          docker image ls
 
       - name: Do we need to release?
         run: |
@@ -128,7 +133,10 @@ jobs:
           fi
           echo "NEED_RELEASE=${NEED_RELEASE}" >> $GITHUB_ENV
 
-      - name: Dumb for now
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         if: "${{ env.NEED_RELEASE == 'yes' }}"
-        run: |
-          echo "go"
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
