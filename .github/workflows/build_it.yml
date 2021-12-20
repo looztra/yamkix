@@ -69,7 +69,7 @@ jobs:
           which python
           echo "Upgrade pip"
           pip install --upgrade pip
-          echo "Install dev requirements"
+          echo "Install ci requirements"
           pip install -r requirements_ci.txt
 
       - name: Run linters
@@ -135,8 +135,37 @@ jobs:
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
-        #if: "${{ env.NEED_RELEASE == 'yes' }}"
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Setup Python
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Publish python artifact
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        run: |
+          echo "Cleaning previous venv if any"
+          rm -rf .venv || true
+          echo "Create a new venv"
+          python3 -m venv .venv
+          echo "Activate venv"
+          source .venv/bin/activate
+          which python
+          echo "Upgrade pip"
+          pip install --upgrade pip
+          echo "Install ci requirements"
+          pip install -r requirements_ci.txt
+          echo "Publish artifacts"
+          echo -n "${{ secrets.PYPIRC_B64 }}" | base64 --decode > ~/.pypirc
+          make clean dist dist-check dist-upload
+          rm ~/.pypirc
+
+      - name: Push docker images
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        run: |
+          make push push-latest
