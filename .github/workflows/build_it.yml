@@ -70,7 +70,7 @@ jobs:
           echo "Upgrade pip"
           pip install --upgrade pip
           echo "Install dev requirements"
-          pip install -r requirements_dev.txt
+          pip install -r requirements_ci.txt
 
       - name: Run linters
         run: |
