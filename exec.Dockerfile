@@ -17,10 +17,10 @@ CMD ["--help"]
 ARG GIT_SHA1
 ARG GIT_BRANCH
 ARG CI_BUILD_NUMBER
-LABEL org.label-schema.version ${YAMKIX_VERSION}
-LABEL org.label-schema.vcs-ref ${GIT_SHA1}
-LABEL io.nodevops.git-branch ${GIT_BRANCH}
-LABEL io.nodevops.ci-build-number ${CI_BUILD_NUMBER}
+LABEL org.label-schema.version=${YAMKIX_VERSION} \
+  org.label-schema.vcs-ref=${GIT_SHA1} \
+  io.nodevops.git-branch=${GIT_BRANCH} \
+  io.nodevops.ci-build-number=${CI_BUILD_NUMBER}
 
 ARG YAMKIX_VERSION
 RUN chmod +x /app/code/wait-for-pypi.sh && \

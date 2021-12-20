@@ -113,7 +113,7 @@ docker-build: ## Build the docker image
 		--build-arg GIT_SHA1=${GIT_SHA1_DIRTY_MAYBE} \
 		--build-arg GIT_BRANCH=${GIT_BRANCH} \
 		--build-arg CI_BUILD_NUMBER=${CI_BUILD_NUMBER} \
-		-t ${IMG} -f exec${GIT_DIRTY}.Dockerfile .
+		-t ${IMG} -f exec.Dockerfile .
 ifndef GIT_DIRTY
 	docker image tag ${IMG} ${IMG_LATEST}
 endif
