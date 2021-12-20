@@ -18,13 +18,14 @@ on:
       - "**.svg"
       - "**.jpeg"
 
+env:
+      PIP_CONFIG_FILE: /dev/null
+
 jobs:
   root_checks:
     name: Root checks
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    env:
-      PIP_CONFIG_FILE: /dev/null
     steps:
       - name: Checkout current branch
         uses: actions/checkout@v2.3.4
@@ -33,3 +34,64 @@ jobs:
         uses: snow-actions/eclint@v1.0.1
         with:
           args: "check"
+
+  build-python:
+    name: Build python artifacts
+    runs-on: ubuntu-latest
+    needs: root_checks
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        python_version:
+          - 3.9
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@master
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Prepare venv
+        run: |
+          echo "Cleaning previous venv if any"
+          rm -rf .venv || true
+          echo "Create a new venv"
+          python3 -m venv .venv
+          echo "Activate venv"
+          source .venv/bin/activate
+          which python
+          echo "Upgrade pip"
+          pip install --upgrade pip
+          echo "Install dev requirements"
+          pip install -r requirements_dev.txt
+
+      - name: Run linters
+        run: |
+          echo "Activate venv"
+          source .venv/bin/activate
+          echo "Run linters"
+          make lint
+
+      - name: Run unit tests
+        run: |
+          echo "Activate venv"
+          source .venv/bin/activate
+          echo "Run unit tests"
+          make unit-tests
+
+      - name: Setup BATS
+        uses: mig4/setup-bats@v1.2.0
+        with:
+          bats-version: 1.5.0
+
+      - name: Run integration tests
+        run: |
+          echo "Activate venv"
+          source .venv/bin/activate
+          echo "Run integration tests"
+          make integration-tests
