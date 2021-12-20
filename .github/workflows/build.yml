@@ -1,0 +1,35 @@
+---
+name: "Build"
+on:
+  push:
+    branches:
+      - main
+      - maintenance/*
+    tags:
+      - "v*.*.*"
+  pull_request:
+    branches:
+      - main
+      - maintenance/*
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths-ignore:
+      - "**.png"
+      - "**.gif"
+      - "**.svg"
+      - "**.jpeg"
+
+jobs:
+  root_checks:
+    name: Root checks
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    env:
+      PIP_CONFIG_FILE: /dev/null
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v2.3.4
+
+      - name: Check Eclint status
+        uses: snow-actions/eclint@v1.0.1
+        with:
+          args: "check"
