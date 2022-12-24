@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "yamkix"
+version = "0.9.1rc3"
+description = "An opinionated yaml formatter based on ruamel.yaml"
+authors = ["Christophe Furmaniak <christophe.furmaniak@decathlon.com>"]
+license = "[Apache License 2.0](http: // www.apache.org / licenses /)"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">3.8.1"
+ruamel-yaml = ">0.16"
+
+[tool.poetry.group.dev.dependencies]
+tox = "^3.27"
+pylint = "^2.15"
+black = "^22.10"
+isort = "^5.10"
+coverage = "^6.5"
+pytest = "^7.2"
+pytest-mock = "^3.10"
+freezegun = "^1.2"
+flake8 = "^6.0.0"
+flake8-bugbear = "^22.12"
+flake8-colors = "^0.1"
+flake8-docstrings = "^1.6"
+flake8-typing-imports = "^1.14"
+pep8-naming = "^0.13"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
