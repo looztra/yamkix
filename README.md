@@ -73,12 +73,12 @@ optional arguments:
   will also be present in the output, and it will be the same type
   (single/double) of quotes
 - *Quotes not preserved* means :
-    - if quotes are not necessary (around *pure* strings), they will
-      be removed
-    - if quotes are present around booleans and numbers, they will be
-      converted to default (single quotes)
-    - if quotes are not present around booleans and numbers, there
-      will be no quotes in the output too
+  - if quotes are not necessary (around *pure* strings), they will
+    be removed
+  - if quotes are present around booleans and numbers, they will be
+    converted to default (single quotes)
+  - if quotes are not present around booleans and numbers, there
+    will be no quotes in the output too
 
 **Note**: there is no option for the moment to force the usage of double
 quotes when
@@ -174,17 +174,17 @@ metadata:
 ```
 
 **Note** : <span class="title-ref">kubesplit</span> is not fully
-\_[Kubernetes]() aware for the moment, so it does not try to enforce
-this behaviour only on string sensible \_[kubernetes]() resource fields
+*Kubernetes* aware for the moment, so it does not try to enforce
+this behaviour only on string sensible *kubernetes* resource fields
 (<span class="title-ref">.metadata.annotations</span> and
 <span class="title-ref">.spec.containers.environment</span> values)
 
 ## Where does the name 'yamkix' come from?
 
-  - Thanks to
-    <http://online-generator.com/name-generator/product-name-generator.php>
-    that suggested me `zamkix`. Just switched the starting `z` for the
-    `y` of `yaml`
+- Thanks to
+  <http://online-generator.com/name-generator/product-name-generator.php>
+  that suggested me `zamkix`. Just switched the starting `z` for the
+  `y` of `yaml`
 
 ## Usage
 

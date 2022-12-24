@@ -74,3 +74,9 @@ max_line_length = off
 [*.skip-ec]
 indent_style = unset
 max_line_length = unset
+
+[poetry.lock]
+max_line_length = unset
+
+[requirements.txt]
+max_line_length = unset
