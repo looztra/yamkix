@@ -1,5 +1,6 @@
 
 include tooling/mk/common.mk
+include tooling/mk/actionlint.mk
 include tooling/mk/pre-commit.mk
 
 # include shared mk

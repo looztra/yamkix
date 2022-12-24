@@ -17,9 +17,14 @@ on:
       - "**.gif"
       - "**.svg"
       - "**.jpeg"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}-checks
+  cancel-in-progress: true
 
 env:
-      PIP_CONFIG_FILE: /dev/null
+  PIP_CONFIG_FILE: /dev/null
 
 jobs:
   root_checks:
@@ -28,12 +33,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current branch
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3
 
-      - name: Check Eclint status
-        uses: snow-actions/eclint@v1.0.1
+      - name: Install Tools with asdf
+        uses: asdf-vm/actions/install@v1.1.0
+
+      - name: Run pre-commit checks
+        uses: pre-commit/action@v3.0.0
+
+      # We only check docs for now
+      - uses: dorny/paths-filter@v2
+        id: filter
         with:
-          args: "check"
+          filters: |
+            can_apply:
+              - '**/*.md'
+
+      - name: Lint Docs
+        if: steps.filter.outputs.can_apply == 'true'
+        uses: github/super-linter@v4
+        env:
+          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_MARKDOWN: true
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MARKDOWN_CONFIG_FILE: .markdownlint.yaml
+          LINTER_RULES_PATH: "."
 
   build-python:
     name: Build python artifacts
@@ -114,7 +139,6 @@ jobs:
     needs: build-python
     timeout-minutes: 20
     steps:
-
       - name: Checkout current branch
         uses: actions/checkout@v2.3.4
 
@@ -127,7 +151,7 @@ jobs:
           if [[ "$GITHUB_REF_SLUG" == v* ]]; then
             NEED_RELEASE=yes
           fi
-          echo "NEED_RELEASE=${NEED_RELEASE}" >> $GITHUB_ENV
+          echo "NEED_RELEASE=${NEED_RELEASE}" >> "${GITHUB_ENV}"
 
       - name: Setup Python
         if: "${{ env.NEED_RELEASE == 'yes' }}"
