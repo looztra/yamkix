@@ -6,6 +6,11 @@ repos:
     hooks:
       - id: trailing-whitespace # Trims trailing whitespace
       - id: check-yaml # Validates YAML files
+        exclude: |
+          (?x)^(
+              test-assets/source/multi-doc.*\.yml |
+              test-assets/expected/multi-doc.*\.yml
+          )$
       - id: check-json # Validates JSON files
       - id: check-added-large-files # Checks for files that are added to the repository that are larger than a threshold
       - id: check-case-conflict # Checks for files that would conflict in case-insensitive filesystems

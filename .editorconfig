@@ -27,6 +27,11 @@ max_line_length = 79
 # Tab indentation (no size specified)
 [Makefile]
 indent_style = tab
+max_line_length = unset
+
+[*.mk]
+indent_style = tab
+max_line_length = unset
 
 [setup.cfg]
 indent_style = tab
@@ -65,3 +70,7 @@ indent_size = none
 
 [tox.ini]
 max_line_length = off
+
+[*.skip-ec]
+indent_style = unset
+max_line_length = unset
