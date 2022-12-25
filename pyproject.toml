@@ -1,10 +1,12 @@
 [tool.poetry]
 name = "yamkix"
-version = "0.9.1rc3"
+version = "0.0.0-dev"
 description = "An opinionated yaml formatter based on ruamel.yaml"
-authors = ["Christophe Furmaniak <christophe.furmaniak@decathlon.com>"]
-license = "[Apache License 2.0](http: // www.apache.org / licenses /)"
+authors = ["Christophe Furmaniak <christophe.furmaniak@gmail.com>"]
+license = "Apache-2.0"
 readme = "README.md"
+repository = "https://github.com/looztra/yamkix"
+classifiers = ["Topic :: Utilities"]
 
 [tool.poetry.dependencies]
 python = ">3.8.1"
@@ -26,6 +28,20 @@ flake8-docstrings = "^1.6"
 flake8-typing-imports = "^1.14"
 pep8-naming = "^0.13"
 
+[tool.poetry.scripts]
+yamkix = "yamkix.__main__:main"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "pep440"
+metadata = true
+dirty = true
+bump = true
+
+[tool.poetry-dynamic-versioning.substitution]
+files = ["yamkix/__init__.py"]
+
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
