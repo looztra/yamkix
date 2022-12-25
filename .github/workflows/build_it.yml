@@ -139,12 +139,8 @@ jobs:
 
       - name: Check that we can build a package
         run: |
-          echo "Activate venv"
-          # source .venv/bin/activate
-          # echo "Check that we can build a package"
-          # echo -n "${{ secrets.PYPIRC_B64 }}" | base64 --decode > ~/.pypirc
-          # make clean dist dist-check
-          # rm ~/.pypirc
+          poetry build
+          ls dist
 
   release:
     name: Release
@@ -194,6 +190,7 @@ jobs:
         run: |
           echo "Publish artifacts"
           poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+          poetry self add "poetry-dynamic-versioning[plugin]"
           poetry build
           poetry publish
 
