@@ -82,6 +82,10 @@ tests: check-venv-is-ready ## ▶ Run tests quickly with the default Python
 test: tests ## Wrapper, same as the 'tests' target
 	@echo "+ $@"
 
+.PHONY: unit-tests
+unit-tests: tests ## Wrapper, same as the 'tests' target
+	@echo "+ $@"
+
 .PHONY: integration-tests
 integration-tests: check-venv-is-ready ## ▶ Run integration tests (if any)
 	@echo "+ $@"

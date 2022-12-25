@@ -195,7 +195,7 @@ this behaviour only on string sensible *kubernetes* resource fields
 
 ``` json
 {
-  "taskName": "format yaml with yamkix",
+  "label": "format yaml with yamkix",
   "type": "shell",
   "command": "yamkix --input ${file}",
   "group": "build",

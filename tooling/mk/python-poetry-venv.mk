@@ -81,7 +81,7 @@ echo-venv-activate-cmd: ## ▶ Echo the command to use to activate the venv
 	fi
 
 .PHONY: check-venv-is-ready
-check-venv-is-ready: check-gcloud-adc
+check-venv-is-ready: ## Check if venv is ready
 	echo "+ $@"
 
 .PHONY: check-venv-is-activated

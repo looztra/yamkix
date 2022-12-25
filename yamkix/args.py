@@ -3,14 +3,11 @@
 import argparse
 
 from yamkix import __version__
-from yamkix.config import (
-    get_config_from_args,
-    YamkixConfig,
-)
+from yamkix.config import get_config_from_args, YamkixConfig
 
 
 def get_override_or_default(short_opt_override, key, default_value):
-    """Returns the override to apply or the default value."""
+    """Return the override to apply or the default value."""
     if short_opt_override and key in short_opt_override:
         return short_opt_override[key]
     return default_value

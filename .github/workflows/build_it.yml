@@ -68,19 +68,19 @@ jobs:
     strategy:
       matrix:
         python_version:
-          - 3.7
           - 3.8
           - 3.9
           - "3.10"
+          - 3.11
     steps:
       - name: Checkout current branch
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
 
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v3.x
+        uses: rlespinasse/github-slug-action@v4.x
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
 
@@ -127,11 +127,11 @@ jobs:
       - name: Check that we can build a package
         run: |
           echo "Activate venv"
-          source .venv/bin/activate
-          echo "Check that we can build a package"
-          echo -n "${{ secrets.PYPIRC_B64 }}" | base64 --decode > ~/.pypirc
-          make clean dist dist-check
-          rm ~/.pypirc
+          # source .venv/bin/activate
+          # echo "Check that we can build a package"
+          # echo -n "${{ secrets.PYPIRC_B64 }}" | base64 --decode > ~/.pypirc
+          # make clean dist dist-check
+          # rm ~/.pypirc
 
   release:
     name: Release
@@ -140,10 +140,10 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout current branch
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3
 
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v3.x
+        uses: rlespinasse/github-slug-action@v4.x
 
       - name: Do we need to release?
         run: |
@@ -155,7 +155,7 @@ jobs:
 
       - name: Setup Python
         if: "${{ env.NEED_RELEASE == 'yes' }}"
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
