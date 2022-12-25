@@ -97,31 +97,31 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
 
+      - name: Get poetry version from .tool-versions
+        id: get-poetry-version
+        run: |
+          echo "POETRY_VERSION=$(grep poetry .tool-versions | cut -d " " -f2)" >> "${GITHUB_OUTPUT}"
+
+      - name: Run image
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ steps.get-poetry-version.outputs.POETRY_VERSION }}
+
       - name: Prepare venv
         run: |
-          echo "Cleaning previous venv if any"
-          rm -rf .venv || true
-          echo "Create a new venv"
-          python3 -m venv .venv
-          echo "Activate venv"
-          source .venv/bin/activate
-          which python
-          echo "Upgrade pip"
-          pip install --upgrade pip
-          echo "Install ci requirements"
-          pip install -r requirements.txt
+          poetry install
 
       - name: Run linters
         run: |
           echo "Activate venv"
-          source .venv/bin/activate
+          eval "$(make echo-venv-activate-cmd)"
           echo "Run linters"
           make lint
 
       - name: Run unit tests
         run: |
           echo "Activate venv"
-          source .venv/bin/activate
+          eval "$(make echo-venv-activate-cmd)"
           echo "Run unit tests"
           make unit-tests
 
