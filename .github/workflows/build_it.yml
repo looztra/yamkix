@@ -60,6 +60,19 @@ jobs:
           MARKDOWN_CONFIG_FILE: .markdownlint.yaml
           LINTER_RULES_PATH: "."
 
+      - name: Check requirements.txt is up to date with poetry.lock
+        run: |
+          make update-requirements-file
+          changes_count=$(git status --porcelain --untracked-files requirements.txt | wc -l)
+          if [[ "$changes_count" -ne 0 ]] ; then
+            echo "You failed to keep requirements.txt synchronized with poetry.lock"
+            git status --porcelain --untracked-files requirements.txt
+            git diff requirements.txt
+            exit 1
+          else
+            echo "Nothing to say, requirements.txt seems OK"
+          fi
+
   build-python:
     name: Build python artifacts
     runs-on: ubuntu-latest

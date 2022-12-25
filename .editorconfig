@@ -80,3 +80,6 @@ max_line_length = unset
 
 [requirements.txt]
 max_line_length = unset
+
+[.pylintrc]
+max_line_length = unset
