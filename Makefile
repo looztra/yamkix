@@ -6,4 +6,4 @@ include tooling/mk/pre-commit.mk
 
 # include shared mk
 include tooling/mk/python-poetry-venv.mk
-include tooling/mk/python-app.mk
+include tooling/mk/python-poetry-app.mk

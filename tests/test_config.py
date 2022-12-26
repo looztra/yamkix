@@ -1,15 +1,15 @@
 """Tests the YamkixConfig stuff."""
 import unittest
-
 from argparse import Namespace
 
-from yamkix.config import YamkixConfig, YamkixInputOutputConfig
 from yamkix.config import (
     get_config_from_args,
     get_default_yamkix_config,
     get_input_output_config_from_args,
     get_spaces_before_comment_from_args,
     get_yamkix_config_from_default,
+    YamkixConfig,
+    YamkixInputOutputConfig,
 )
 
 
@@ -35,9 +35,7 @@ class TestConfig(unittest.TestCase):
         input=None, output=None, stdout=None
         """
         parsed = Namespace(input=None, output=None, stdout=None)
-        sut: YamkixInputOutputConfig = get_input_output_config_from_args(
-            parsed
-        )
+        sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
         self.assertIsNone(sut.input)
         self.assertEqual(sut.input_display_name, "STDIN")
         self.assertIsNone(sut.output)
@@ -50,9 +48,7 @@ class TestConfig(unittest.TestCase):
         """
         f_input = "path/to/input"
         parsed = Namespace(input=f_input, output=None, stdout=None)
-        sut: YamkixInputOutputConfig = get_input_output_config_from_args(
-            parsed
-        )
+        sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
         self.assertEqual(sut.input, f_input)
         self.assertEqual(sut.input_display_name, f_input)
         self.assertEqual(sut.output, f_input)
@@ -66,9 +62,7 @@ class TestConfig(unittest.TestCase):
         f_input = "path/to/input"
         f_output = "path/to/output"
         parsed = Namespace(input=f_input, output=f_output, stdout=None)
-        sut: YamkixInputOutputConfig = get_input_output_config_from_args(
-            parsed
-        )
+        sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
         self.assertEqual(sut.input, f_input)
         self.assertEqual(sut.input_display_name, f_input)
         self.assertEqual(sut.output, f_output)
@@ -81,9 +75,7 @@ class TestConfig(unittest.TestCase):
         """
         f_input = "path/to/input"
         parsed = Namespace(input=f_input, output=None, stdout=True)
-        sut: YamkixInputOutputConfig = get_input_output_config_from_args(
-            parsed
-        )
+        sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
 
         self.assertEqual(sut.input, f_input)
         self.assertEqual(sut.input_display_name, f_input)
@@ -100,9 +92,7 @@ class TestConfig(unittest.TestCase):
         f_input = "path/to/input"
         f_output = "path/to/output"
         parsed = Namespace(input=f_input, output=f_output, stdout=True)
-        sut: YamkixInputOutputConfig = get_input_output_config_from_args(
-            parsed
-        )
+        sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
         self.assertEqual(sut.input, f_input)
         self.assertEqual(sut.input_display_name, f_input)
         self.assertIsNone(sut.output)
@@ -116,9 +106,7 @@ class TestConfig(unittest.TestCase):
         f_input = "path/to/input"
         f_output = "STDOUT"
         parsed = Namespace(input=f_input, output=f_output, stdout=None)
-        sut: YamkixInputOutputConfig = get_input_output_config_from_args(
-            parsed
-        )
+        sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
         self.assertEqual(sut.input, f_input)
         self.assertEqual(sut.input_display_name, f_input)
         self.assertIsNone(sut.output)
@@ -131,9 +119,7 @@ class TestConfig(unittest.TestCase):
         """
         f_output = "path/to/output"
         parsed = Namespace(input=None, output=f_output, stdout=None)
-        sut: YamkixInputOutputConfig = get_input_output_config_from_args(
-            parsed
-        )
+        sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
 
         self.assertIsNone(sut.input)
         self.assertEqual(sut.input_display_name, "STDIN")
@@ -187,17 +173,11 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut_io.output_display_name, "STDOUT")
 
         self.assertEqual(sut.parsing_mode, yamkix_default_config.parsing_mode)
-        self.assertEqual(
-            sut.explicit_start, yamkix_default_config.explicit_start
-        )
+        self.assertEqual(sut.explicit_start, yamkix_default_config.explicit_start)
         self.assertEqual(sut.explicit_end, yamkix_default_config.explicit_end)
-        self.assertEqual(
-            sut.default_flow_style, yamkix_default_config.default_flow_style
-        )
+        self.assertEqual(sut.default_flow_style, yamkix_default_config.default_flow_style)
         self.assertEqual(sut.dash_inwards, yamkix_default_config.dash_inwards)
-        self.assertEqual(
-            sut.quotes_preserved, yamkix_default_config.quotes_preserved
-        )
+        self.assertEqual(sut.quotes_preserved, yamkix_default_config.quotes_preserved)
         self.assertEqual(
             sut.spaces_before_comment,
             yamkix_default_config.spaces_before_comment,
@@ -279,9 +259,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.default_flow_style, reference.default_flow_style)
         self.assertEqual(sut.dash_inwards, reference.dash_inwards)
         self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
-        self.assertEqual(
-            sut.spaces_before_comment, reference.spaces_before_comment
-        )
+        self.assertEqual(sut.spaces_before_comment, reference.spaces_before_comment)
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
@@ -299,9 +277,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.default_flow_style, reference.default_flow_style)
         self.assertEqual(sut.dash_inwards, reference.dash_inwards)
         self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
-        self.assertEqual(
-            sut.spaces_before_comment, reference.spaces_before_comment
-        )
+        self.assertEqual(sut.spaces_before_comment, reference.spaces_before_comment)
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
@@ -319,9 +295,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.default_flow_style, reference.default_flow_style)
         self.assertEqual(sut.dash_inwards, reference.dash_inwards)
         self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
-        self.assertEqual(
-            sut.spaces_before_comment, reference.spaces_before_comment
-        )
+        self.assertEqual(sut.spaces_before_comment, reference.spaces_before_comment)
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
@@ -339,9 +313,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.default_flow_style, new_val)
         self.assertEqual(sut.dash_inwards, reference.dash_inwards)
         self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
-        self.assertEqual(
-            sut.spaces_before_comment, reference.spaces_before_comment
-        )
+        self.assertEqual(sut.spaces_before_comment, reference.spaces_before_comment)
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
@@ -359,9 +331,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.default_flow_style, reference.default_flow_style)
         self.assertEqual(sut.dash_inwards, new_val)
         self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
-        self.assertEqual(
-            sut.spaces_before_comment, reference.spaces_before_comment
-        )
+        self.assertEqual(sut.spaces_before_comment, reference.spaces_before_comment)
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
@@ -379,9 +349,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.default_flow_style, reference.default_flow_style)
         self.assertEqual(sut.dash_inwards, reference.dash_inwards)
         self.assertEqual(sut.quotes_preserved, new_val)
-        self.assertEqual(
-            sut.spaces_before_comment, reference.spaces_before_comment
-        )
+        self.assertEqual(sut.spaces_before_comment, reference.spaces_before_comment)
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
@@ -417,9 +385,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.default_flow_style, reference.default_flow_style)
         self.assertEqual(sut.dash_inwards, reference.dash_inwards)
         self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
-        self.assertEqual(
-            sut.spaces_before_comment, reference.spaces_before_comment
-        )
+        self.assertEqual(sut.spaces_before_comment, reference.spaces_before_comment)
         self.assertEqual(sut.line_width, new_val)
         self.assertEqual(sut.io_config, reference.io_config)
 
@@ -437,8 +403,6 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.default_flow_style, reference.default_flow_style)
         self.assertEqual(sut.dash_inwards, reference.dash_inwards)
         self.assertEqual(sut.quotes_preserved, reference.quotes_preserved)
-        self.assertEqual(
-            sut.spaces_before_comment, reference.spaces_before_comment
-        )
+        self.assertEqual(sut.spaces_before_comment, reference.spaces_before_comment)
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, new_val)

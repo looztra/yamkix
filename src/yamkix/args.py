@@ -23,9 +23,7 @@ def add_yamkix_options_to_parser(parser, short_opt_override=None):
         help="the yaml parser mode. Can be `safe` or `rt`",
     )
     parser.add_argument(
-        get_override_or_default(
-            short_opt_override, "--no-explicit-start", "-n"
-        ),
+        get_override_or_default(short_opt_override, "--no-explicit-start", "-n"),
         "--no-explicit-start",
         action="store_true",
         help="by default, explicit start of the yaml doc \
@@ -39,18 +37,14 @@ def add_yamkix_options_to_parser(parser, short_opt_override=None):
                                 is `Off`, you can enable it with this option",
     )
     parser.add_argument(
-        get_override_or_default(
-            short_opt_override, "--no-quotes-preserved", "-q"
-        ),
+        get_override_or_default(short_opt_override, "--no-quotes-preserved", "-q"),
         "--no-quotes-preserved",
         action="store_true",
         help="by default, quotes are preserved \
                                 you can disable this with this option",
     )
     parser.add_argument(
-        get_override_or_default(
-            short_opt_override, "--default-flow-style", "-f"
-        ),
+        get_override_or_default(short_opt_override, "--default-flow-style", "-f"),
         "--default-flow-style",
         action="store_true",
         help="enable the default flow style \
@@ -67,9 +61,7 @@ def add_yamkix_options_to_parser(parser, short_opt_override=None):
                                 start at the sequence level",
     )
     parser.add_argument(
-        get_override_or_default(
-            short_opt_override, "--spaces-before-comment", "-c"
-        ),
+        get_override_or_default(short_opt_override, "--spaces-before-comment", "-c"),
         "--spaces-before-comment",
         default=None,
         help="specify the number of spaces between comments and content. \
