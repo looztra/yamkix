@@ -54,17 +54,11 @@ else
 	FIND_CMD := find
 endif
 #
-GAR_PYTHON_URL ?= https://europe-python.pkg.dev/cpe-common-xix9/python
-#
-DOCKER_BINARY ?= docker
-#
 PWD           := $(shell pwd)
-DOCKER_GUARD  := $(shell command -v ${DOCKER_BINARY} 2> /dev/null)
 FZF_GUARD     := $(shell command -v fzf 2> /dev/null)
 WHICH_BASH    ?= $(shell which bash)
 CURRENT_SHELL ?= $(shell echo $$SHELL | rev | cut -d "/" -f 1 | rev)
 FIND_GUARD    := $(shell command -v ${FIND_CMD} 2> /dev/null)
-BYPASS_GAR    ?=
 
 .PHONY: git-status-extended
 git-status-extended:
@@ -74,14 +68,6 @@ git-status-extended:
 .PHONY: is-git-dirty
 is-git-dirty: ## Echo dirty if git repo is dirty 🚽
 	@echo ${GIT_IS_DIRTY}
-
-.PHONY: check-docker
-check-docker: ## Check if docker is installed 🐳
-	@echo "+ $@"
-ifndef DOCKER_GUARD
-	$(error "docker (binary=${DOCKER_BINARY}) is not available please install it")
-endif
-	@echo "Found docker (binary=${DOCKER_BINARY}) (and that's a good news) 🐳"
 
 .PHONY: check-fzf
 check-fzf: ## Check if fzf is installed
@@ -98,10 +84,6 @@ ifndef FIND_GUARD
 	$(error "$(FIND_CMD) is not available please install it (brew install findutils on macOS).")
 endif
 	@echo "Found $(FIND_CMD) 👌"
-
-.PHONY: echo-gar-python-url
-echo-gar-python-url: ## Echo GAR_PYTHON_URL value (used in CI)
-	@echo $(GAR_PYTHON_URL)
 
 print-%: ## Print the current value of a variable
 	@echo '$($*)'
