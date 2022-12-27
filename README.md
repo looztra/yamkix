@@ -2,10 +2,6 @@
 
 [![Pypi](https://img.shields.io/pypi/v/yamkix.svg)](https://pypi.python.org/pypi/yamkix)
 
-[![Updates](https://pyup.io/repos/github/looztra/yamkix/shield.svg)](https://pyup.io/repos/github/looztra/yamkix/)
-
-[![Python 3](https://pyup.io/repos/github/looztra/yamkix/python-3-shield.svg)](https://pyup.io/repos/github/looztra/yamkix/)
-
 ## Why?
 
 - Because I like my yaml file to be nicely formatted
@@ -209,13 +205,4 @@ this behaviour only on string sensible *kubernetes* resource fields
 
 ## Hack
 
-``` bash
-python3 -m virtualenv .venv
-source .venv/bin/activate
-pip install -r requirements_dev.txt
-make all
-```
-
-## Acknowledgements
-
-- Dependencies scanned by [PyUp.io](https://pyup.io/)
+See our [CONTRIBUTING](CONTRIBUTING.md) guide.
