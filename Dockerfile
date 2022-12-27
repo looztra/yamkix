@@ -14,11 +14,11 @@ ENTRYPOINT ["yamkix"]
 CMD ["--help"]
 ARG GIT_SHA1
 ARG GIT_REF
-LABEL org.label-schema.version=${YAMKIX_VERSION} \
+LABEL org.label-schema.version=${APP_VERSION} \
   org.label-schema.vcs-ref=${GIT_SHA1} \
   io.nodevops.git-ref=${GIT_REF}
 
-ARG YAMKIX_VERSION
+ARG APP_VERSION
 RUN chmod +x /app/code/wait-for-pypi.sh && \
-  /app/code/wait-for-pypi.sh ${YAMKIX_VERSION} && \
-  pip install --no-cache-dir yamkix==${YAMKIX_VERSION}
+  /app/code/wait-for-pypi.sh ${APP_VERSION} && \
+  pip install --no-cache-dir yamkix==${APP_VERSION}
