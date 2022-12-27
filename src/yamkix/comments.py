@@ -1,15 +1,13 @@
 """Deal with comments."""
 from ruamel.yaml.comments import CommentedBase, NoComment
-from ruamel.yaml.tokens import CommentToken
 from ruamel.yaml.error import CommentMark
-from yamkix.helpers import (
-    remove_all_linebreaks,
-    string_is_comment,
-)
+from ruamel.yaml.tokens import CommentToken
+
+from yamkix.helpers import remove_all_linebreaks, string_is_comment
 
 
 def yamkix_add_eol_comment(self, comment, key=NoComment, column=None):
-    """Custom add_eol_comment function.
+    """Provide a custom add_eol_comment function.
 
     We need to be able to tune the number of spaces between
     the content and the comment for CommentedSeqs and CommentedMaps
@@ -24,9 +22,7 @@ def yamkix_add_eol_comment(self, comment, key=NoComment, column=None):
             column = 0
     if comment[0] != "#":
         comment = "# " + comment
-    if (
-        org_col != 0
-    ):  # only do this if the specified column is not the beginning of the line
+    if org_col != 0:  # only do this if the specified column is not the beginning of the line
         if comment[0] == "#":
             additional_spaces = 1 if org_col is None else org_col - 1
             comment = " " * additional_spaces + comment

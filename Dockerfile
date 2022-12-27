@@ -1,8 +1,6 @@
-FROM python:3.9-slim-buster
+FROM python:3.11-slim-bullseye
 
-ARG CI_PLATFORM
-LABEL io.nodevops.ci-platform=${CI_PLATFORM} \
-  org.label-schema.schema-version="1.0" \
+LABEL org.label-schema.schema-version="1.0" \
   org.label-schema.name="yamkix" \
   org.label-schema.description="yamkix packaged as a docker image" \
   org.label-schema.vcs-url="https://github.com/looztra/yamkix" \
@@ -15,14 +13,12 @@ COPY wait-for-pypi.sh /app/code
 ENTRYPOINT ["yamkix"]
 CMD ["--help"]
 ARG GIT_SHA1
-ARG GIT_BRANCH
-ARG CI_BUILD_NUMBER
-LABEL org.label-schema.version=${YAMKIX_VERSION} \
+ARG GIT_REF
+LABEL org.label-schema.version=${APP_VERSION} \
   org.label-schema.vcs-ref=${GIT_SHA1} \
-  io.nodevops.git-branch=${GIT_BRANCH} \
-  io.nodevops.ci-build-number=${CI_BUILD_NUMBER}
+  io.nodevops.git-ref=${GIT_REF}
 
-ARG YAMKIX_VERSION
+ARG APP_VERSION
 RUN chmod +x /app/code/wait-for-pypi.sh && \
-  /app/code/wait-for-pypi.sh ${YAMKIX_VERSION} && \
-  pip install --no-cache-dir yamkix==${YAMKIX_VERSION}
+  /app/code/wait-for-pypi.sh ${APP_VERSION} && \
+  pip install --no-cache-dir yamkix==${APP_VERSION}

@@ -2,12 +2,7 @@
 import unittest
 
 from yamkix import __version__
-from yamkix.helpers import (
-    get_version_string,
-    remove_all_linebreaks,
-    string_is_comment,
-    strip_leading_double_space,
-)
+from yamkix.helpers import get_version_string, remove_all_linebreaks, string_is_comment, strip_leading_double_space
 
 
 class TestHelpers(unittest.TestCase):

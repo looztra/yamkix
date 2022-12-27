@@ -1,6 +1,8 @@
 """Play with comments."""
 from __future__ import print_function
+
 import sys
+
 import ruamel.yaml
 
 yaml = ruamel.yaml.YAML()
@@ -31,9 +33,7 @@ map-of-maps:
 data = yaml.load(inp)
 
 
-def my_add_eol_comment(
-    self, comment, key=ruamel.yaml.comments.NoComment, column=None
-):
+def my_add_eol_comment(self, comment, key=ruamel.yaml.comments.NoComment, column=None):
     org_col = column
     if column is None:
         try:
@@ -42,9 +42,7 @@ def my_add_eol_comment(
             column = 0
     if comment[0] != "#":
         comment = "# " + comment
-    if (
-        org_col != 0
-    ):  # only do this if the specified colunn is not the beginning of the line
+    if org_col != 0:  # only do this if the specified colunn is not the beginning of the line
         if comment[0] == "#":
             if org_col is None:
                 comment = " " + comment

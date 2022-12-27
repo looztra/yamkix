@@ -1,18 +1,16 @@
 """Load a yaml file and save it formatted according to some rules."""
 from __future__ import print_function
 
-import sys
 import os
+import sys
 
 from ruamel.yaml.scanner import ScannerError
-from yamkix.config import print_yamkix_config, YamkixConfig
-from yamkix.yaml_writer import get_opinionated_yaml_writer
+
 from yamkix.args import parse_cli
 from yamkix.comments import process_comments
-from yamkix.helpers import (
-    print_version,
-    strip_leading_double_space,
-)
+from yamkix.config import print_yamkix_config, YamkixConfig
+from yamkix.helpers import print_version, strip_leading_double_space
+from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 
 def round_trip_and_format(yamkix_config: YamkixConfig):
@@ -41,14 +39,10 @@ def round_trip_and_format(yamkix_config: YamkixConfig):
         print("Something is wrong in the input file, got error from Scanner")
         print(scanner_error)
         return
-    yamkix_dump_all(
-        ready_for_dump, yaml, dash_inwards, output_file, spaces_before_comment
-    )
+    yamkix_dump_all(ready_for_dump, yaml, dash_inwards, output_file, spaces_before_comment)
 
 
-def yamkix_dump_all(
-    one_or_more_items, yaml, dash_inwards, output_file, spaces_before_comment
-):
+def yamkix_dump_all(one_or_more_items, yaml, dash_inwards, output_file, spaces_before_comment):
     """Dump all the documents from the input structure."""
     if output_file is None:
         out = sys.stdout
@@ -59,19 +53,13 @@ def yamkix_dump_all(
             pass
     for doc in one_or_more_items:
         if output_file is None:
-            yamkix_dump_one(
-                doc, yaml, dash_inwards, out, spaces_before_comment
-            )
+            yamkix_dump_one(doc, yaml, dash_inwards, out, spaces_before_comment)
         else:
             with open(output_file, mode="a", encoding="UTF-8") as out:
-                yamkix_dump_one(
-                    doc, yaml, dash_inwards, out, spaces_before_comment
-                )
+                yamkix_dump_one(doc, yaml, dash_inwards, out, spaces_before_comment)
 
 
-def yamkix_dump_one(
-    single_item, yaml, dash_inwards, out, spaces_before_comment
-):
+def yamkix_dump_one(single_item, yaml, dash_inwards, out, spaces_before_comment):
     """Dump a single document."""
     if spaces_before_comment is not None:
         process_comments(single_item, column=spaces_before_comment)

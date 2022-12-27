@@ -1,6 +1,5 @@
 """Test the comments management."""
 import unittest
-
 from types import SimpleNamespace
 
 from ruamel.yaml import YAML

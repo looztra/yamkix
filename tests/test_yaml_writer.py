@@ -2,8 +2,9 @@
 import unittest
 
 from ruamel.yaml import YAML
-from yamkix.yaml_writer import get_opinionated_yaml_writer
+
 from yamkix.config import get_default_yamkix_config
+from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 
 class TestYamlWriter(unittest.TestCase):

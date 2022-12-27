@@ -1,7 +1,6 @@
 """Yamkix configuration helpers."""
 import collections
 import sys
-
 from argparse import Namespace
 
 from yamkix import __version__
@@ -57,30 +56,16 @@ def get_yamkix_config_from_default(
     """Return a Yamkix config based on default."""
     default_config = get_default_yamkix_config()
     return YamkixConfig(
-        parsing_mode=parsing_mode
-        if parsing_mode is not None
-        else default_config.parsing_mode,
-        explicit_start=explicit_start
-        if explicit_start is not None
-        else default_config.explicit_start,
-        explicit_end=explicit_end
-        if explicit_end is not None
-        else default_config.explicit_end,
-        default_flow_style=default_flow_style
-        if default_flow_style is not None
-        else default_config.default_flow_style,
-        dash_inwards=dash_inwards
-        if dash_inwards is not None
-        else default_config.dash_inwards,
-        quotes_preserved=quotes_preserved
-        if quotes_preserved is not None
-        else default_config.quotes_preserved,
+        parsing_mode=parsing_mode if parsing_mode is not None else default_config.parsing_mode,
+        explicit_start=explicit_start if explicit_start is not None else default_config.explicit_start,
+        explicit_end=explicit_end if explicit_end is not None else default_config.explicit_end,
+        default_flow_style=default_flow_style if default_flow_style is not None else default_config.default_flow_style,
+        dash_inwards=dash_inwards if dash_inwards is not None else default_config.dash_inwards,
+        quotes_preserved=quotes_preserved if quotes_preserved is not None else default_config.quotes_preserved,
         spaces_before_comment=spaces_before_comment
         if spaces_before_comment is not None
         else default_config.spaces_before_comment,
-        line_width=line_width
-        if line_width is not None
-        else default_config.line_width,
+        line_width=line_width if line_width is not None else default_config.line_width,
         version=None,
         io_config=io_config,
     )
@@ -161,15 +146,10 @@ def get_input_output_config_from_args(
     )
 
 
-def get_config_from_args(
-    args: Namespace, inc_io_config: bool = True
-) -> YamkixConfig:
+def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixConfig:
     """Build a YamkixConfig object from parsed args."""
     if args.typ not in ["safe", "rt"]:
-        raise ValueError(
-            f"'{args.typ}' is not a valid value for option --typ. "
-            "Allowed values are 'safe' and 'rt'"
-        )
+        raise ValueError(f"'{args.typ}' is not a valid value for option --typ. " "Allowed values are 'safe' and 'rt'")
     if inc_io_config:
         yamkix_input_output_config = get_input_output_config_from_args(args)
     else:
@@ -177,12 +157,8 @@ def get_config_from_args(
     default_yamkix_config = get_default_yamkix_config()
     return YamkixConfig(
         explicit_start=not args.no_explicit_start,
-        explicit_end=args.explicit_end
-        if args.explicit_end is not None
-        else False,
-        default_flow_style=args.default_flow_style
-        if args.default_flow_style is not None
-        else False,
+        explicit_end=args.explicit_end if args.explicit_end is not None else False,
+        default_flow_style=args.default_flow_style if args.default_flow_style is not None else False,
         dash_inwards=not args.no_dash_inwards,
         quotes_preserved=not args.no_quotes_preserved,
         parsing_mode=args.typ,
