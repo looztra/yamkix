@@ -39,7 +39,7 @@ style: check-venv-is-ready ## ▶ force style with black and isort
 	@echo "Enforce code format with black"
 	@black --line-length 119 .
 	@echo "Ordering import with isort..."
-	@isort --line-width 119 --dt --profile black .
+	@isort --line-width 119 --dont-order-by-type --profile black .
 	@echo "🦾 Done!"
 
 .PHONY: lint

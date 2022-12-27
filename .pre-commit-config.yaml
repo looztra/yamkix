@@ -31,7 +31,9 @@ repos:
     rev: 5.11.2
     hooks:
       - id: isort
-        name: isort (python)
+        name: isort
+        args:
+          - --dont-order-by-type
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
     rev: 2.6.1
     hooks:
