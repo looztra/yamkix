@@ -13,10 +13,10 @@ COPY wait-for-pypi.sh /app/code
 ENTRYPOINT ["yamkix"]
 CMD ["--help"]
 ARG GIT_SHA1
-ARG GIT_BRANCH
+ARG GIT_REF
 LABEL org.label-schema.version=${YAMKIX_VERSION} \
   org.label-schema.vcs-ref=${GIT_SHA1} \
-  io.nodevops.git-branch=${GIT_BRANCH}
+  io.nodevops.git-ref=${GIT_REF}
 
 ARG YAMKIX_VERSION
 RUN chmod +x /app/code/wait-for-pypi.sh && \

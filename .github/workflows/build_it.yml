@@ -204,7 +204,7 @@ jobs:
       - name: Docker build
         if: "${{ env.NEED_RELEASE == 'yes' }}"
         run: |
-          make docker-build
+          make docker-build "YAMKIX_VERSION=${GITHUB_REF_SLUG:1}"
           echo "Checking built image"
           docker image ls
 
