@@ -31,9 +31,6 @@ repos:
     rev: stable
     hooks:
       - id: black
-        args:
-          - --line-length=119
-          - --extend-exclude=.venv
   - repo: https://github.com/pycqa/isort
     rev: 5.11.2
     hooks:
