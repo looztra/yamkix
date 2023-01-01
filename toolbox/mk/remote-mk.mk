@@ -1,6 +1,8 @@
 WHICH_BASH_     ?= $(shell which bash)
 SHA256SUM_GUARD := $(shell command -v sha256sum 2> /dev/null)
 LOCAL_MK_CACHE  ?= generated/mk
+REMOTE_MK_REPO  ?= looztra/toolbox
+REMOTE_MK_DIR   ?= toolbox/mk
 
 # $1: mk file without .mk extension
 # $2: mk file sha256 signature
@@ -16,7 +18,7 @@ define get_remote_mk
 	fi; \
 	curl \
 		-o $(LOCAL_MK_CACHE)/$(1).fetched.mk \
-		-L "https://whatever:$(GITHUB_API_TOKEN)@raw.githubusercontent.com/dktunited/cpe-tools/$(3)/shared/mk/$(1).mk"
+		-L "https://whatever:$(GITHUB_API_TOKEN)@raw.githubusercontent.com/$(REMOTE_MK_REPO)/$(3)/$(REMOTE_MK_DIR)/$(1).mk"
 	@echo "$(2) *$(LOCAL_MK_CACHE)/$(1).fetched.mk" \
 		| sha256sum --check - && \
 		mv $(LOCAL_MK_CACHE)/$(1).fetched.mk $(LOCAL_MK_CACHE)/$(1).mk
