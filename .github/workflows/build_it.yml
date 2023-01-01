@@ -35,6 +35,12 @@ jobs:
       - name: Checkout current branch
         uses: actions/checkout@v3
 
+      - name: Ensure remote mk targets are present
+        run: |
+          make init-mk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Install Tools with asdf
         uses: asdf-vm/actions/install@v1.1.0
 
@@ -96,6 +102,12 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
+
+      - name: Ensure remote mk targets are present
+        run: |
+          make init-mk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get poetry version from .tool-versions
         id: get-poetry-version
@@ -167,6 +179,13 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
+
+      - name: Ensure remote mk targets are present
+        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        run: |
+          make init-mk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get poetry version from .tool-versions
         id: get-poetry-version
