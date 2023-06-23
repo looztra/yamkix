@@ -1,12 +1,12 @@
 """Deal with comments."""
-from ruamel.yaml.comments import CommentedBase, NoComment
+from ruamel.yaml.comments import CommentedBase, NotNone
 from ruamel.yaml.error import CommentMark
 from ruamel.yaml.tokens import CommentToken
 
 from yamkix.helpers import remove_all_linebreaks, string_is_comment
 
 
-def yamkix_add_eol_comment(self, comment, key=NoComment, column=None):
+def yamkix_add_eol_comment(self, comment, key=NotNone, column=None):
     """Provide a custom add_eol_comment function.
 
     We need to be able to tune the number of spaces between

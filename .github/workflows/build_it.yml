@@ -42,10 +42,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Tools with asdf
-        uses: asdf-vm/actions/install@v1.1.0
+        uses: asdf-vm/actions/install@v2.2.0
 
       - name: Run pre-commit checks
-        uses: pre-commit/action@v3.0.0
+        run: |
+          poetry install --only=dev
+          pre-commit run -a
+
 
       # We only check docs for now
       - uses: dorny/paths-filter@v2
