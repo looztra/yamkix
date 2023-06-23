@@ -11,7 +11,7 @@ packages = [{ include = "yamkix", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">3.8.1"
-ruamel-yaml = ">0.16"
+ruamel-yaml = ">0.17.27"
 
 [tool.poetry.group.dev.dependencies]
 tox = "^3.27"
