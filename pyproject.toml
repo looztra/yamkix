@@ -37,7 +37,7 @@ yamkix = "yamkix.__main__:main"
 enable = true
 vcs = "git"
 style = "semver"
-metadata = true
+metadata = false
 dirty = true
 bump = true
 
