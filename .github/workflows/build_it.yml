@@ -47,6 +47,7 @@ jobs:
       - name: Run pre-commit checks
         run: |
           poetry install --only=dev
+          source .venv/bin/activate
           pre-commit run -a
 
 
@@ -60,14 +61,10 @@ jobs:
 
       - name: Lint Docs
         if: steps.filter.outputs.can_apply == 'true'
-        uses: github/super-linter@v4
-        env:
-          VALIDATE_ALL_CODEBASE: true
-          VALIDATE_MARKDOWN: true
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MARKDOWN_CONFIG_FILE: .markdownlint.yaml
-          LINTER_RULES_PATH: "."
+        uses: DavidAnson/markdownlint-cli2-action@v9
+        with:
+          globs: |
+            **/*.md
 
       - name: Check requirements.txt is up to date with poetry.lock
         run: |
