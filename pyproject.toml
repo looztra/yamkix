@@ -11,7 +11,7 @@ packages = [{ include = "yamkix", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">3.8.1"
-ruamel-yaml = ">0.16"
+ruamel-yaml = ">0.17.27"
 
 [tool.poetry.group.dev.dependencies]
 tox = "^3.27"
@@ -28,6 +28,7 @@ flake8-colors = "^0.1"
 flake8-docstrings = "^1.6"
 flake8-typing-imports = "^1.14"
 pep8-naming = "^0.13"
+pre-commit = "^3.3.3"
 
 [tool.poetry.scripts]
 yamkix = "yamkix.__main__:main"

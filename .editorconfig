@@ -78,7 +78,7 @@ max_line_length = unset
 [poetry.lock]
 max_line_length = unset
 
-[requirements.txt]
+[requirements*.txt]
 max_line_length = unset
 
 [.pylintrc]
