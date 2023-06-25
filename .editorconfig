@@ -86,3 +86,6 @@ max_line_length = unset
 
 [*.bats]
 max_line_length = unset
+
+[.github/workflows/*.yml]
+max_line_length = unset
