@@ -4,13 +4,13 @@ import unittest
 from argparse import Namespace
 
 from yamkix.config import (
+    YamkixConfig,
+    YamkixInputOutputConfig,
     get_config_from_args,
     get_default_yamkix_config,
     get_input_output_config_from_args,
     get_spaces_before_comment_from_args,
     get_yamkix_config_from_default,
-    YamkixConfig,
-    YamkixInputOutputConfig,
 )
 
 

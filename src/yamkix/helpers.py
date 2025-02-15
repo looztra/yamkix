@@ -25,6 +25,5 @@ def string_is_comment(a_string):
 
 def strip_leading_double_space(stream):
     """Strip the potential leading double spaces in CommentedSeq."""
-    if stream.startswith("  "):
-        stream = stream[2:]
+    stream = stream.removeprefix("  ")
     return stream.replace("\n  ", "\n")

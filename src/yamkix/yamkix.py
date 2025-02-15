@@ -1,6 +1,5 @@
 """Load a yaml file and save it formatted according to some rules."""
 
-from __future__ import print_function
 
 import os
 import sys
@@ -9,7 +8,7 @@ from ruamel.yaml.scanner import ScannerError
 
 from yamkix.args import parse_cli
 from yamkix.comments import process_comments
-from yamkix.config import print_yamkix_config, YamkixConfig
+from yamkix.config import YamkixConfig, print_yamkix_config
 from yamkix.helpers import print_version, strip_leading_double_space
 from yamkix.yaml_writer import get_opinionated_yaml_writer
 
@@ -26,7 +25,7 @@ def round_trip_and_format(yamkix_config: YamkixConfig):
     dash_inwards = yamkix_config.dash_inwards
     spaces_before_comment = yamkix_config.spaces_before_comment
     if input_file is not None:
-        with open(input_file, mode="rt", encoding="UTF-8") as f_input:
+        with open(input_file, encoding="UTF-8") as f_input:
             parsed = yaml.load_all(f_input.read())
     else:
         parsed = yaml.load_all(sys.stdin.read())

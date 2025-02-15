@@ -1,26 +1,26 @@
 [build-system]
 build-backend = "hatchling.build"
 requires = [
-  "hatchling",
-  "versioningit>=3.1.2",
+    "hatchling",
+    "versioningit>=3.1.2",
 ]
 
 [project]
-name = "yamkix"
-version = "0.0.0-dev"
-description = "An opinionated yaml formatter based on ruamel.yaml"
 authors = [
-  { name = "Christophe Furmaniak", email = "christophe.furmaniak@gmail.com" },
+    { name = "Christophe Furmaniak", email = "christophe.furmaniak@gmail.com" },
 ]
-requires-python = ">=3.10"
-readme = "README.md"
-license = "Apache-2.0"
 classifiers = [
-  "Topic :: Utilities",
+    "Topic :: Utilities",
 ]
 dependencies = [
-  "ruamel-yaml>0.17.27",
+    "ruamel-yaml>0.17.27",
 ]
+description = "An opinionated yaml formatter based on ruamel.yaml"
+license = "Apache-2.0"
+name = "yamkix"
+readme = "README.md"
+requires-python = ">=3.10"
+version = "0.0.0-dev"
 
 [project.urls]
 Repository = "https://github.com/looztra/yamkix"
@@ -30,16 +30,16 @@ yamkix = "yamkix.__main__:main"
 
 [dependency-groups]
 dev = [
-  "tox~=3.27",
-  "faker>=30.8.0",
-  "poethepoet>=0.29.0",
-  "pylint>=3.3.1",
-  "pyright>=1.1.384",
-  "pytest-coverage>=0.0",
-  "pytest-mock>=3.14.0",
-  "pytest-unordered>=0.6.1",
-  "pytest>=8.3.3",
-  "ruff>=0.9.6",
+    "tox~=3.27",
+    "faker>=30.8.0",
+    "poethepoet>=0.29.0",
+    "pylint>=3.3.1",
+    "pyright>=1.1.384",
+    "pytest-coverage>=0.0",
+    "pytest-mock>=3.14.0",
+    "pytest-unordered>=0.6.1",
+    "pytest>=8.3.3",
+    "ruff>=0.9.6",
 ]
 
 [tool.hatch.build.hooks.versioningit-onbuild]
@@ -51,12 +51,11 @@ source = "versioningit"
 
 [tool.hatch.build.targets.wheel]
 include = [
-  "src/yamkix",
+    "src/yamkix",
 ]
 
 [tool.hatch.build.targets.wheel.sources]
 "src/yamkix" = "yamkix"
-
 
 [tool.versioningit]
 default-version = "0.0.0.dev0+0"

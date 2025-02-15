@@ -7,7 +7,7 @@
 pylint = [
     "pylint:run",
 ]
-"pylint:run" = "pylint manage_gh_repo tests"
+"pylint:run" = "pylint yamkix tests"
 pyright = [
     "pyright:run",
 ]
@@ -16,6 +16,7 @@ pyright = [
 "ruff:fmt:check" = "ruff format --check"
 "ruff:fmt:run" = "ruff format"
 "ruff:lint" = "ruff check"
+"ruff:lint:fix" = "ruff check --fix"
 style = [
     "ruff:fmt:run",
 ]

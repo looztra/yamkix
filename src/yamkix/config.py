@@ -124,17 +124,12 @@ def get_input_output_config_from_args(
         input_display_name = f_input
     if args.stdout:
         f_output = None
+    elif args.output is not None and args.output != "STDOUT":
+        f_output = args.output
+    elif args.output == "STDOUT" or f_input is None:
+        f_output = None
     else:
-        if args.output is not None and args.output != "STDOUT":
-            f_output = args.output
-        else:
-            if args.output == "STDOUT":
-                f_output = None
-            else:
-                if f_input is None:
-                    f_output = None
-                else:
-                    f_output = args.input
+        f_output = args.input
     if f_output is None:
         output_display_name = "STDOUT"
     else:
