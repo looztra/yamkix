@@ -1,4 +1,5 @@
 """Tests the args parsing."""
+
 import unittest
 
 from yamkix.args import get_override_or_default, parse_cli

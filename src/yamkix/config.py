@@ -1,4 +1,5 @@
 """Yamkix configuration helpers."""
+
 import collections
 import sys
 from argparse import Namespace
@@ -149,7 +150,7 @@ def get_input_output_config_from_args(
 def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixConfig:
     """Build a YamkixConfig object from parsed args."""
     if args.typ not in ["safe", "rt"]:
-        raise ValueError(f"'{args.typ}' is not a valid value for option --typ. " "Allowed values are 'safe' and 'rt'")
+        raise ValueError(f"'{args.typ}' is not a valid value for option --typ. Allowed values are 'safe' and 'rt'")
     if inc_io_config:
         yamkix_input_output_config = get_input_output_config_from_args(args)
     else:

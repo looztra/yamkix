@@ -1,4 +1,5 @@
 """Load a yaml file and save it formatted according to some rules."""
+
 from __future__ import print_function
 
 import os

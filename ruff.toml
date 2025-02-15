@@ -1,0 +1,7 @@
+extend = "ruff_defaults.toml"
+# you can change this file, you should NOT remove the extend directive
+
+[lint]
+
+ignore = [
+]

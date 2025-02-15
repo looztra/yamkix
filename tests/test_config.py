@@ -1,4 +1,5 @@
 """Tests the YamkixConfig stuff."""
+
 import unittest
 from argparse import Namespace
 

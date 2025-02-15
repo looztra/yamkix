@@ -1,4 +1,5 @@
 """Helper to deal with Yamkix configuration of the YAML instance."""
+
 from ruamel.yaml import YAML
 
 from yamkix.config import YamkixConfig
