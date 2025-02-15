@@ -43,7 +43,7 @@ def get_default_yamkix_config() -> YamkixConfig:
 
 
 # pylint: disable=too-many-arguments
-def get_yamkix_config_from_default(
+def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-arguments
     parsing_mode=None,
     explicit_start=None,
     explicit_end=None,
