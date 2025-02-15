@@ -1,20 +1,20 @@
 ---
-name: "Build"
+name: Build
 on:
   push:
     branches:
       - main
     tags:
-      - "v*.*.*"
+      - v*.*.*
   pull_request:
     branches:
       - main
     types: [opened, synchronize, reopened, ready_for_review]
     paths-ignore:
-      - "**.png"
-      - "**.gif"
-      - "**.svg"
-      - "**.jpeg"
+      - '**.png'
+      - '**.gif'
+      - '**.svg'
+      - '**.jpeg'
   workflow_dispatch:
 
 concurrency:
@@ -94,7 +94,7 @@ jobs:
         python_version:
           - 3.8
           - 3.9
-          - "3.10"
+          - '3.10'
           - 3.11
     steps:
       - name: Checkout current branch
@@ -202,13 +202,13 @@ jobs:
           echo "NEED_RELEASE=${NEED_RELEASE}" >> "${GITHUB_ENV}"
 
       - name: Setup Python
-        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        if: ${{ env.NEED_RELEASE == 'yes' }}
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: '3.10'
 
       - name: Ensure remote mk targets are present
-        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        if: ${{ env.NEED_RELEASE == 'yes' }}
         run: |
           make init-mk
         env:
@@ -216,23 +216,23 @@ jobs:
 
       - name: Get poetry version from .tool-versions
         id: get-poetry-version
-        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        if: ${{ env.NEED_RELEASE == 'yes' }}
         run: |
           echo "POETRY_VERSION=$(grep poetry .tool-versions | cut -d " " -f2)" >> "${GITHUB_OUTPUT}"
 
       - name: Install poetry ${{ steps.get-poetry-version.outputs.POETRY_VERSION }}
-        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        if: ${{ env.NEED_RELEASE == 'yes' }}
         uses: abatilo/actions-poetry@v2
         with:
           poetry-version: ${{ steps.get-poetry-version.outputs.POETRY_VERSION }}
 
       - name: Prepare venv
-        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        if: ${{ env.NEED_RELEASE == 'yes' }}
         run: |
           poetry install
 
       - name: Publish python artifact
-        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        if: ${{ env.NEED_RELEASE == 'yes' }}
         run: |
           echo "Publish artifacts"
           poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
@@ -242,19 +242,19 @@ jobs:
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
-        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        if: ${{ env.NEED_RELEASE == 'yes' }}
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Docker build
-        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        if: ${{ env.NEED_RELEASE == 'yes' }}
         run: |
           make docker-build APP_VERSION="${GITHUB_REF_SLUG:1}"
           echo "Checking built image"
           docker image ls
 
       - name: Push docker images
-        if: "${{ env.NEED_RELEASE == 'yes' }}"
+        if: ${{ env.NEED_RELEASE == 'yes' }}
         run: |
           make docker-push docker-push-latest

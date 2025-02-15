@@ -1,6 +1,5 @@
 """Load a yaml file and save it formatted according to some rules."""
 
-
 import os
 import sys
 

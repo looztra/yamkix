@@ -1,6 +1,5 @@
 """Play with comments."""
 
-
 import sys
 
 import ruamel.yaml
