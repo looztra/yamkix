@@ -20,7 +20,6 @@ env:
   UV_LINK_MODE: copy
   UV_PYTHON_PREFERENCE: only-managed
   UV_CACHE_DIR: /tmp/.uv-cache
-  UV_PYTHON_INSTALL_DIR: /tmp/.uv-python
 
 jobs:
   pre-commit:
@@ -49,24 +48,6 @@ jobs:
           restore-keys: |
             uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
             uv-${{ runner.os }}
-
-      - name: Compute available python versions list
-        run: |
-          echo "::group::Compute available python versions list"
-          mkdir -p generated
-          uv python list --output-format json | jq -r '.[] | select(.implementation=="cpython") | select(.variant=="default") | select(.version_parts.minor >= 10)| .version' | sort -u > "generated/python-versions.txt"
-          echo "======"
-          cat generated/python-versions.txt
-          echo "::endgroup::"
-
-      - name: Restore uv python installs cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.UV_PYTHON_INSTALL_DIR }}
-          key: uv-python-${{ runner.os }}-${{ hashFiles('generated/python-versions.txt') }}
-          restore-keys: |
-            uv-python-${{ runner.os }}-${{ hashFiles('generated/python-versions.txt') }}
-            uv-python-${{ runner.os }}
 
       - name: Setup venv
         run: |
@@ -135,24 +116,6 @@ jobs:
           restore-keys: |
             uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
             uv-${{ runner.os }}
-
-      - name: Compute available python versions list
-        run: |
-          echo "::group::Compute available python versions list"
-          mkdir -p generated
-          uv python list --output-format json | jq -r '.[] | select(.implementation=="cpython") | select(.variant=="default") | select(.version_parts.minor >= 10)| .version' | sort -u > "generated/python-versions.txt"
-          echo "======"
-          cat generated/python-versions.txt
-          echo "::endgroup::"
-
-      - name: Restore uv python installs cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.UV_PYTHON_INSTALL_DIR }}
-          key: uv-python-${{ runner.os }}-${{ hashFiles('generated/python-versions.txt') }}
-          restore-keys: |
-            uv-python-${{ runner.os }}-${{ hashFiles('generated/python-versions.txt') }}
-            uv-python-${{ runner.os }}
 
       - name: Setup venv
         run: |
