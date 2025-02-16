@@ -1,0 +1,104 @@
+---
+name: Code checks
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*.*.*
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}-checks
+  cancel-in-progress: true
+
+env:
+  UV_LINK_MODE: copy
+  UV_PYTHON_PREFERENCE: only-managed
+  PYTHON_CHECKS_MAKE_TARGETS: lint tests
+
+jobs:
+  pre-commit:
+    name: Pre-commit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: jdx/mise-action@v2
+#        env:
+#          GITHUB_TOKEN: ${{ inputs.github_token }}
+        with:
+          install: true
+          cache: true
+
+      - name: Setup venv
+        run: |
+          uv python install
+          make setup-venv
+
+      - name: Check if uv lock file is up to date
+        env:
+          UV_KEYRING_PROVIDER: subprocess
+        run: |
+          echo "::group::Check if uv lock file is up to date"
+          echo "Detect files that could affect the dynamic versioning if any (git dirty state)"
+          git status --porcelain --untracked-files
+          echo "Performing 'uv lock' in dry-run mode"
+          uv lock --dry-run
+          echo "Performing 'uv lock'"
+          if ! uv lock --locked ; then
+            echo "::error title=uv lock file::The lockfile at 'uv.lock' needs to be updated. To update the lockfile, run 'uv lock'"
+            exit 1
+          fi
+          echo "::endgroup::"
+
+      - name: Detect Python version
+        id: detect-python-version
+        run: |
+          echo "python_version=$(python --version | cut -d " " -f2 | cut -d . -f1-2)" >> "${GITHUB_ENV}"
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-3|${{ steps.detect-python-version.outputs.python_version }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Run pre-commit checks
+        run: |
+          echo "::group::Run pre-commit checks"
+          pre-commit run --all-files --show-diff-on-failure
+          echo "::endgroup::"
+
+  python-checks:
+    name: Python checks
+    runs-on: ubuntu-latest
+    needs:
+      - pre-commit
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: jdx/mise-action@v2
+#        env:
+#          GITHUB_TOKEN: ${{ inputs.github_token }}
+        with:
+          install: true
+          cache: true
+
+      - name: Setup venv
+        run: |
+          uv python install
+          make setup-venv
+
+      - name: Python checks (${{ env.PYTHON_CHECKS_MAKE_TARGETS }})
+        run: |
+          make ${{ env.PYTHON_CHECKS_MAKE_TARGETS }}

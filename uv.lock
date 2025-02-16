@@ -544,7 +544,6 @@ wheels = [
 
 [[package]]
 name = "yamkix"
-version = "0.0.0.dev0"
 source = { editable = "." }
 dependencies = [
     { name = "ruamel-yaml" },
