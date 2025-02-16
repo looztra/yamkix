@@ -175,8 +175,13 @@ jobs:
     needs:
       - python-checks
     steps:
-      - name: Download all the distribution packages
+      - name: Download the distribution packages
         uses: actions/download-artifact@v4
         with:
           name: python-package-distributions
           path: dist/
+
+      - name: Publish package distributions to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://upload.pypi.org/legacy/' || 'https://test.pypi.org/legacy/' }}
