@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
-
 """Top-level package for yamkix."""
-__version__ = "0.0.0-dev"
+
+from importlib.metadata import version
+
+__version__ = version(distribution_name="yamkix")  # pragma: no cover

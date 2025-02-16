@@ -1,4 +1,5 @@
 """Yamkix configuration helpers."""
+
 import collections
 import sys
 from argparse import Namespace
@@ -42,7 +43,7 @@ def get_default_yamkix_config() -> YamkixConfig:
 
 
 # pylint: disable=too-many-arguments
-def get_yamkix_config_from_default(
+def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-arguments
     parsing_mode=None,
     explicit_start=None,
     explicit_end=None,
@@ -123,17 +124,12 @@ def get_input_output_config_from_args(
         input_display_name = f_input
     if args.stdout:
         f_output = None
+    elif args.output is not None and args.output != "STDOUT":
+        f_output = args.output
+    elif args.output == "STDOUT" or f_input is None:
+        f_output = None
     else:
-        if args.output is not None and args.output != "STDOUT":
-            f_output = args.output
-        else:
-            if args.output == "STDOUT":
-                f_output = None
-            else:
-                if f_input is None:
-                    f_output = None
-                else:
-                    f_output = args.input
+        f_output = args.input
     if f_output is None:
         output_display_name = "STDOUT"
     else:
@@ -149,7 +145,7 @@ def get_input_output_config_from_args(
 def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixConfig:
     """Build a YamkixConfig object from parsed args."""
     if args.typ not in ["safe", "rt"]:
-        raise ValueError(f"'{args.typ}' is not a valid value for option --typ. " "Allowed values are 'safe' and 'rt'")
+        raise ValueError(f"'{args.typ}' is not a valid value for option --typ. Allowed values are 'safe' and 'rt'")
     if inc_io_config:
         yamkix_input_output_config = get_input_output_config_from_args(args)
     else:

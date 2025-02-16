@@ -4,8 +4,7 @@ import ruamel.yaml
 
 
 def strip_leading_double_space(stream):
-    if stream.startswith("  "):
-        stream = stream[2:]
+    stream = stream.removeprefix("  ")
     return stream.replace("\n  ", "\n")
 
 

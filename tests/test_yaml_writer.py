@@ -1,4 +1,5 @@
 """Test the yaml_writer init stuff."""
+
 import unittest
 
 from ruamel.yaml import YAML

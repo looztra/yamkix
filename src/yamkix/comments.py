@@ -1,4 +1,5 @@
 """Deal with comments."""
+
 from ruamel.yaml.comments import CommentedBase, NotNone
 from ruamel.yaml.error import CommentMark
 from ruamel.yaml.tokens import CommentToken

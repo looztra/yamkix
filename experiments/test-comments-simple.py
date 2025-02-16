@@ -1,4 +1,5 @@
 """Test comments on a very simple CommentedMap."""
+
 import sys
 
 import ruamel.yaml

@@ -1,4 +1,5 @@
 """Test helpers."""
+
 import unittest
 
 from yamkix import __version__
