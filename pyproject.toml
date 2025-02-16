@@ -73,7 +73,7 @@ default-tag = "v0.0.0"
 
 [tool.versioningit.format]
 # Format used when there have been commits since the most recent tag:
-distance = "{next_version}.dev{distance}+local.{vcs}{rev}"
+distance = "{next_version}.dev{distance}"
 # Example formatted version: 1.2.3.post42+ge174a1f
 
 # Format used when there are uncommitted changes:
