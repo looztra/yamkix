@@ -20,7 +20,6 @@ env:
   UV_LINK_MODE: copy
   UV_PYTHON_PREFERENCE: only-managed
   UV_CACHE_DIR: /tmp/.uv-cache
-  PYTHON_CHECKS_MAKE_TARGETS: lint tests
 
 jobs:
   pre-commit:
@@ -77,12 +76,13 @@ jobs:
       - name: Detect Python version
         id: detect-python-version
         run: |
-          echo "python_version=$(python --version | cut -d " " -f2 | cut -d . -f1-2)" >> "${GITHUB_ENV}"
+          echo "python_version=$(python --version | cut -d " " -f2 | cut -d . -f1-2)" >> "${GITHUB_OUTPUT}"
 
-      - uses: actions/cache@v4
+      - name: Restore pre-commit cache
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pre-commit
-          key: pre-commit-3|${{ steps.detect-python-version.outputs.python_version }}|${{ hashFiles('.pre-commit-config.yaml') }}
+          key: pre-commit|${{ steps.detect-python-version.outputs.python_version }}|${{ hashFiles('.pre-commit-config.yaml') }}
 
       - name: Run pre-commit checks
         run: |
@@ -122,9 +122,20 @@ jobs:
           uv python install
           make setup-venv
 
-      - name: Python checks (${{ env.PYTHON_CHECKS_MAKE_TARGETS }})
+      - name: Python checks
         run: |
-          make ${{ env.PYTHON_CHECKS_MAKE_TARGETS }}
+          echo "::group::make lint"
+          make lint
+          echo "::endgroup::"
+          echo "::group::make test"
+          make test
+          echo "::endgroup::"
+
+      - name: Run Integration tests
+        run: |
+          echo "::group::make integration-tests"
+          make integration-tests
+          echo "::endgroup::"
 
       - name: Minimize uv cache
         run: uv cache prune --ci

@@ -38,7 +38,7 @@ test: tests ## Wrapper, same as the 'tests' target
 unit-tests: tests ## Wrapper, same as the 'tests' target
 
 .PHONY: integration-tests
-integration-tests: check-venv-is-ready ## ▶ Run integration tests (if any)
+integration-tests: ## ▶ Run integration tests (if any)
 	@echo "+ $@"
 	cd $(IT_TESTS_TARGET); bats .
 
