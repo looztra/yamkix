@@ -136,10 +136,7 @@ def get_input_output_config_from_args(
         f_output = None
     else:
         f_output = args.input
-    if f_output is None:
-        output_display_name = "STDOUT"
-    else:
-        output_display_name = f_output
+    output_display_name = "STDOUT" if f_output is None else f_output
     return YamkixInputOutputConfig(
         input=f_input,
         input_display_name=input_display_name,

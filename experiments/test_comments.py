@@ -42,14 +42,13 @@ def my_add_eol_comment(self, comment, key=ruamel.yaml.comments.NoComment, column
             column = 0
     if comment[0] != "#":
         comment = "# " + comment
-    if org_col != 0:  # only do this if the specified colunn is not the beginning of the line
-        if comment[0] == "#":
-            if org_col is None:
-                comment = " " + comment
-                column = 0
-            else:
-                comment = " " * (org_col - 1) + comment
-                column = 0
+    if org_col != 0 and comment[0] == "#":  # only do this if the specified colunn is not the beginning of the line
+        if org_col is None:
+            comment = " " + comment
+            column = 0
+        else:
+            comment = " " * (org_col - 1) + comment
+            column = 0
     start_mark = ruamel.yaml.error.CommentMark(column)
     ct = [ruamel.yaml.tokens.CommentToken(comment, start_mark, None), None]
     self._yaml_add_eol_comment(ct, key=key)
@@ -58,44 +57,42 @@ def my_add_eol_comment(self, comment, key=ruamel.yaml.comments.NoComment, column
 ruamel.yaml.comments.CommentedBase.yaml_add_eol_comment = my_add_eol_comment
 
 
-def process_comments(data, column=None):  # noqa: C901, PLR0912
+def process_comments(data, column=None):  # noqa: C901
     """Process comments."""
     if isinstance(data, dict):
-        if data.ca:
-            if data.ca.items:
-                print(
-                    "CommentedMap with ca with items : " + str(data.ca.items),
-                    file=sys.stderr,
-                )
-                for key in data.ca.items.keys():
-                    if data.ca.items[key][2]:
-                        comment = data.ca.items[key][2].value.replace("\n", "")
-                        try:
-                            col = data._yaml_get_column(key)  # noqa: SLF001
-                            print(
-                                "key [" + key + "] at col [" + str(col) + "]",
-                                file=sys.stderr,
-                            )
-                        except AttributeError:
-                            print(
-                                "key [" + key + "] at col [EXCEPTION]",
-                                file=sys.stderr,
-                            )
-                        data.yaml_add_eol_comment(comment, key, column=column)
+        if data.ca and data.ca.items:
+            print(
+                "CommentedMap with ca with items : " + str(data.ca.items),
+                file=sys.stderr,
+            )
+            for key in data.ca.items:
+                if data.ca.items[key][2]:
+                    comment = data.ca.items[key][2].value.replace("\n", "")
+                    try:
+                        col = data._yaml_get_column(key)  # noqa: SLF001
+                        print(
+                            "key [" + key + "] at col [" + str(col) + "]",
+                            file=sys.stderr,
+                        )
+                    except AttributeError:
+                        print(
+                            "key [" + key + "] at col [EXCEPTION]",
+                            file=sys.stderr,
+                        )
+                    data.yaml_add_eol_comment(comment, key, column=column)
         for k, v in data.items():
             process_comments(k, column=column)
             process_comments(v, column=column)
     elif isinstance(data, list):
-        if data.ca:
-            if data.ca.items:
-                print(
-                    "CommentedSeq with ca with items : " + str(data.ca.items),
-                    file=sys.stderr,
-                )
-                for key in data.ca.items.keys():
-                    if data.ca.items[key][0]:
-                        comment = data.ca.items[key][0].value.replace("\n", "")
-                        data.yaml_add_eol_comment(comment, key, column=column)
+        if data.ca and data.ca.items:
+            print(
+                "CommentedSeq with ca with items : " + str(data.ca.items),
+                file=sys.stderr,
+            )
+            for key in data.ca.items:
+                if data.ca.items[key][0]:
+                    comment = data.ca.items[key][0].value.replace("\n", "")
+                    data.yaml_add_eol_comment(comment, key, column=column)
         for elem in data:
             process_comments(elem, column=column)
 

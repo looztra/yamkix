@@ -23,11 +23,10 @@ def yamkix_add_eol_comment(self, comment, key=NotNone, column=None):
             column = 0
     if comment[0] != "#":
         comment = "# " + comment
-    if org_col != 0:  # only do this if the specified column is not the beginning of the line
-        if comment[0] == "#":
-            additional_spaces = 1 if org_col is None else org_col - 1
-            comment = " " * additional_spaces + comment
-            column = 0
+    if org_col != 0 and comment[0] == "#":  # only do this if the specified column is not the beginning of the line
+        additional_spaces = 1 if org_col is None else org_col - 1
+        comment = " " * additional_spaces + comment
+        column = 0
     start_mark = CommentMark(column)
     comment_as_list = [CommentToken(comment, start_mark, None), None]
     self._yaml_add_eol_comment(comment_as_list, key=key)
@@ -51,7 +50,7 @@ def fix_for_issue29(data, key):
 def process_comments_for_dict(data, column=None):
     """Reposition comments when data is a dict."""
     if data.ca and data.ca.items:
-        for key in data.ca.items.keys():
+        for key in data.ca.items:
             if data.ca.items[key][2]:
                 comment = data.ca.items[key][2].value
                 fix_for_issue29(data, key)
@@ -65,7 +64,7 @@ def process_comments_for_dict(data, column=None):
 def process_comments_for_list(data, column=None):
     """Reposition  when data is a list."""
     if data.ca and data.ca.items:
-        for key in data.ca.items.keys():
+        for key in data.ca.items:
             if data.ca.items[key][0]:
                 comment = data.ca.items[key][0].value
                 if string_is_comment(comment):
