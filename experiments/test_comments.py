@@ -69,7 +69,7 @@ def process_comments(data, column=None):
                     if data.ca.items[key][2]:
                         comment = data.ca.items[key][2].value.replace("\n", "")
                         try:
-                            col = data._yaml_get_column(key)
+                            col = data._yaml_get_column(key)  # noqa: SLF001
                             print(
                                 "key [" + key + "] at col [" + str(col) + "]",
                                 file=sys.stderr,
