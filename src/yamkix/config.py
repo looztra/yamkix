@@ -60,14 +60,14 @@ def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
 
 # pylint: disable=too-many-arguments
 def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-arguments  # noqa: PLR0913
-    parsing_mode=None,
-    explicit_start=None,
-    explicit_end=None,
-    default_flow_style=None,
-    dash_inwards=None,
-    quotes_preserved=None,
-    spaces_before_comment=None,
-    line_width=None,
+    parsing_mode: str | None = None,
+    explicit_start: bool | None = None,
+    explicit_end: bool | None = None,
+    default_flow_style: bool | None = None,
+    dash_inwards: bool | None = None,
+    quotes_preserved: bool | None = None,
+    spaces_before_comment: int | None = None,
+    line_width: int | None = None,
     io_config: YamkixInputOutputConfig | None = None,
 ) -> YamkixConfig:
     """Return a Yamkix config based on default."""

@@ -3,6 +3,9 @@
 import sys
 
 import ruamel.yaml
+from ruamel.yaml.comments import CommentedBase, CommentedMap, NotNone
+from ruamel.yaml.error import CommentMark
+from ruamel.yaml.tokens import CommentToken
 
 yaml = ruamel.yaml.YAML()
 yaml.indent(mapping=2, sequence=4, offset=2)
@@ -32,7 +35,7 @@ map-of-maps:
 data = yaml.load(inp)
 
 
-def my_add_eol_comment(self, comment, key=ruamel.yaml.comments.NoComment, column=None) -> None:
+def my_add_eol_comment(self, comment, key=NotNone, column=None) -> None:  # noqa: ANN001
     """Provide a custom eol comment function."""
     org_col = column
     if column is None:
@@ -49,15 +52,15 @@ def my_add_eol_comment(self, comment, key=ruamel.yaml.comments.NoComment, column
         else:
             comment = " " * (org_col - 1) + comment
             column = 0
-    start_mark = ruamel.yaml.error.CommentMark(column)
-    ct = [ruamel.yaml.tokens.CommentToken(comment, start_mark, None), None]
+    start_mark = CommentMark(column)
+    ct = [CommentToken(comment, start_mark, None), None]
     self._yaml_add_eol_comment(ct, key=key)
 
 
-ruamel.yaml.comments.CommentedBase.yaml_add_eol_comment = my_add_eol_comment
+CommentedBase.yaml_add_eol_comment = my_add_eol_comment  # pyright: ignore [ reportAttributeAccessIssue]
 
 
-def process_comments(data, column=None) -> None:  # noqa: C901
+def process_comments(data: CommentedMap, column: int | None = None) -> None:  # noqa: C901
     """Process comments."""
     if isinstance(data, dict):
         if data.ca and data.ca.items:

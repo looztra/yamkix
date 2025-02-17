@@ -2,7 +2,9 @@
 
 import sys
 from pathlib import Path
+from typing import TextIO
 
+from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
 
 from yamkix.args import parse_cli
@@ -40,7 +42,9 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> None:
     yamkix_dump_all(ready_for_dump, yaml, dash_inwards, output_file, spaces_before_comment)
 
 
-def yamkix_dump_all(one_or_more_items, yaml, dash_inwards, output_file, spaces_before_comment) -> None:
+def yamkix_dump_all(
+    one_or_more_items: list, yaml: YAML, dash_inwards: bool, output_file: str | None, spaces_before_comment: int | None
+) -> None:
     """Dump all the documents from the input structure."""
     if output_file is None:
         out = sys.stdout
@@ -57,7 +61,9 @@ def yamkix_dump_all(one_or_more_items, yaml, dash_inwards, output_file, spaces_b
                 yamkix_dump_one(doc, yaml, dash_inwards, out, spaces_before_comment)
 
 
-def yamkix_dump_one(single_item, yaml, dash_inwards, out, spaces_before_comment) -> None:
+def yamkix_dump_one(
+    single_item: dict, yaml: YAML, dash_inwards: bool, out: TextIO, spaces_before_comment: int | None
+) -> None:
     """Dump a single document."""
     if spaces_before_comment is not None:
         process_comments(single_item, column=spaces_before_comment)

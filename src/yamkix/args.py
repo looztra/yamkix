@@ -13,7 +13,9 @@ def get_override_or_default(short_opt_override: dict[str, str] | None, key: str,
     return default_value
 
 
-def add_yamkix_options_to_parser(parser, short_opt_override=None) -> None:
+def add_yamkix_options_to_parser(
+    parser: argparse.ArgumentParser, short_opt_override: dict[str, str] | None = None
+) -> None:
     """Add yamkix reusable options to a parser object."""
     parser.add_argument(
         get_override_or_default(short_opt_override, "--typ", "-t"),
@@ -113,8 +115,8 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def parse_cli(args) -> YamkixConfig:
+def parse_cli(args: list[str]) -> YamkixConfig:
     """Parse the cli args."""
     parser = build_parser()
-    args = parser.parse_args(args)
-    return get_config_from_args(args, inc_io_config=True)
+    args_namespace = parser.parse_args(args=args)
+    return get_config_from_args(args_namespace, inc_io_config=True)
