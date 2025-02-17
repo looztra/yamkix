@@ -1,3 +1,5 @@
+"""Play  with flow style."""
+
 import sys
 
 from ruamel.yaml import YAML

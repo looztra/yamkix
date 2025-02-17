@@ -1,9 +1,12 @@
+"""Test dash behavior."""
+
 import sys
 
 import ruamel.yaml
 
 
 def strip_leading_double_space(stream):
+    """Strip leading double space."""
     stream = stream.removeprefix("  ")
     return stream.replace("\n  ", "\n")
 

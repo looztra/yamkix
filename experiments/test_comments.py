@@ -33,6 +33,7 @@ data = yaml.load(inp)
 
 
 def my_add_eol_comment(self, comment, key=ruamel.yaml.comments.NoComment, column=None):
+    """Provide a custom eol comment function."""
     org_col = column
     if column is None:
         try:
@@ -58,6 +59,7 @@ ruamel.yaml.comments.CommentedBase.yaml_add_eol_comment = my_add_eol_comment
 
 
 def process_comments(data, column=None):
+    """Process comments."""
     if isinstance(data, dict):
         if data.ca:
             if data.ca.items:
