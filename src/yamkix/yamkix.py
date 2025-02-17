@@ -1,7 +1,7 @@
 """Load a yaml file and save it formatted according to some rules."""
 
-import os
 import sys
+from pathlib import Path
 
 from ruamel.yaml.scanner import ScannerError
 
@@ -24,7 +24,7 @@ def round_trip_and_format(yamkix_config: YamkixConfig):
     dash_inwards = yamkix_config.dash_inwards
     spaces_before_comment = yamkix_config.spaces_before_comment
     if input_file is not None:
-        with open(input_file, encoding="UTF-8") as f_input:
+        with Path(input_file).open(encoding="UTF-8") as f_input:
             parsed = yaml.load_all(f_input.read())
     else:
         parsed = yaml.load_all(sys.stdin.read())
@@ -46,14 +46,14 @@ def yamkix_dump_all(one_or_more_items, yaml, dash_inwards, output_file, spaces_b
         out = sys.stdout
 
     # Clear the output file if it is a file and it exists
-    if output_file is not None and os.path.isfile(output_file):
-        with open(output_file, mode="w", encoding="UTF-8") as _:
+    if output_file is not None and (output_file_path := Path(output_file)).is_file:  # Walrus baby
+        with output_file_path.open(mode="w", encoding="UTF-8") as _:
             pass
     for doc in one_or_more_items:
         if output_file is None:
             yamkix_dump_one(doc, yaml, dash_inwards, out, spaces_before_comment)
         else:
-            with open(output_file, mode="a", encoding="UTF-8") as out:
+            with Path(output_file).open(mode="a", encoding="UTF-8") as out:
                 yamkix_dump_one(doc, yaml, dash_inwards, out, spaces_before_comment)
 
 
