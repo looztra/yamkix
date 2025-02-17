@@ -6,14 +6,16 @@ from yamkix import __version__
 from yamkix.config import YamkixConfig, get_config_from_args
 
 
-def get_override_or_default(short_opt_override, key, default_value):
+def get_override_or_default(short_opt_override: dict[str, str] | None, key: str, default_value: str) -> str:
     """Return the override to apply or the default value."""
     if short_opt_override and key in short_opt_override:
         return short_opt_override[key]
     return default_value
 
 
-def add_yamkix_options_to_parser(parser, short_opt_override=None):
+def add_yamkix_options_to_parser(
+    parser: argparse.ArgumentParser, short_opt_override: dict[str, str] | None = None
+) -> None:
     """Add yamkix reusable options to a parser object."""
     parser.add_argument(
         get_override_or_default(short_opt_override, "--typ", "-t"),
@@ -69,7 +71,7 @@ def add_yamkix_options_to_parser(parser, short_opt_override=None):
     )
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     """Build the cli args parser."""
     parser = argparse.ArgumentParser(
         description=f"""Yamkix v{__version__}.
@@ -113,9 +115,8 @@ def build_parser():
     return parser
 
 
-def parse_cli(args) -> YamkixConfig:
+def parse_cli(args: list[str]) -> YamkixConfig:
     """Parse the cli args."""
     parser = build_parser()
-    args = parser.parse_args(args)
-    yamkix_config = get_config_from_args(args, inc_io_config=True)
-    return yamkix_config
+    args_namespace = parser.parse_args(args=args)
+    return get_config_from_args(args_namespace, inc_io_config=True)

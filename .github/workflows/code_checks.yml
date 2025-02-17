@@ -134,6 +134,9 @@ jobs:
           echo "::group::make test"
           make test
           echo "::endgroup::"
+          echo "::group::make test-python-versions"
+          make test-python-versions
+          echo "::endgroup::"
 
       - name: Run Integration tests
         run: |

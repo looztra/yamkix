@@ -4,30 +4,11 @@ extend = "ruff_defaults.toml"
 [lint]
 
 ignore = [
-    "PT009",
-    "PT027",
-    "ANN001",
-    "ANN201",
-    "TC002",
-    "T201",
-    "C408",
-    "PTH113",
-    "PTH123",
-    "PERF402",
-    "SIM102",
-    "SIM108",
-    "SIM118",
-    "EM102",
-    "PLR0912",
-    "PLR0913",
-    "TRY003",
-    "PTH123",
-    "PYI024",
-    "ERA001",
-    "C901",
-    "RET504",
-    "D100",
-    "D103",
-    "INP001",
-    "SLF001",
+]
+per-file-ignores."**/tests/*" = [
+    "INP001", # INP001: File {filename} is part of an implicit namespace package. Add an __init__.py.
+    "S101",   # S101: Use of assert detected. Hey man, we do need asserts in pytest tests.
+]
+per-file-ignores."experiments/*" = [
+    "T201", # Print statements
 ]

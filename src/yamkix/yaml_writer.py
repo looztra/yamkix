@@ -4,6 +4,10 @@ from ruamel.yaml import YAML
 
 from yamkix.config import YamkixConfig
 
+OPINIONATED_MAPPING_VALUE = 2
+OPINIONATED_SEQUENCE_VALUE = 4
+OPINIONATED_OFFSET_VALUE = 2
+
 
 def get_opinionated_yaml_writer(
     yamkix_config: YamkixConfig,
@@ -22,5 +26,7 @@ def get_opinionated_yaml_writer(
     yaml.preserve_quotes = yamkix_config.quotes_preserved
     yaml.width = yamkix_config.line_width
     if yamkix_config.dash_inwards:
-        yaml.indent(mapping=2, sequence=4, offset=2)
+        yaml.indent(
+            mapping=OPINIONATED_MAPPING_VALUE, sequence=OPINIONATED_SEQUENCE_VALUE, offset=OPINIONATED_OFFSET_VALUE
+        )
     return yaml
