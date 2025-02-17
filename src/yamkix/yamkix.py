@@ -13,7 +13,7 @@ from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 
 def round_trip_and_format(yamkix_config: YamkixConfig):
-    """Load a file and save it formated.
+    """Load a file and save it formatted.
 
     FIXME
     """
@@ -31,8 +31,7 @@ def round_trip_and_format(yamkix_config: YamkixConfig):
     ready_for_dump = []
     try:
         # Read the parsed content to force the scanner to issue errors if any
-        for data in parsed:
-            ready_for_dump.append(data)
+        ready_for_dump = list(parsed)
 
     except ScannerError as scanner_error:
         print("Something is wrong in the input file, got error from Scanner")
