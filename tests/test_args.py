@@ -11,7 +11,7 @@ class TestArgs(unittest.TestCase):
 
     def test_defaults(self) -> None:
         """Test when no input is provided."""
-        sut: YamkixConfig = parse_cli({})
+        sut: YamkixConfig = parse_cli([])
         yamkix_default_config = get_default_yamkix_config()
 
         assert sut.parsing_mode == yamkix_default_config.parsing_mode

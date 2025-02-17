@@ -46,15 +46,13 @@ def yamkix_dump_all(
     one_or_more_items: list, yaml: YAML, dash_inwards: bool, output_file: str | None, spaces_before_comment: int | None
 ) -> None:
     """Dump all the documents from the input structure."""
-    if output_file is None:
-        out = sys.stdout
-
     # Clear the output file if it is a file and it exists
     if output_file is not None and (output_file_path := Path(output_file)).is_file:  # Walrus baby
         with output_file_path.open(mode="w", encoding="UTF-8") as _:
             pass
     for doc in one_or_more_items:
         if output_file is None:
+            out = sys.stdout
             yamkix_dump_one(doc, yaml, dash_inwards, out, spaces_before_comment)
         else:
             with Path(output_file).open(mode="a", encoding="UTF-8") as out:
@@ -66,7 +64,7 @@ def yamkix_dump_one(
 ) -> None:
     """Dump a single document."""
     if spaces_before_comment is not None:
-        process_comments(single_item, column=spaces_before_comment)
+        process_comments(single_item, column=spaces_before_comment)  # pyright: ignore[reportArgumentType]
     if dash_inwards and type(single_item).__name__ == "CommentedSeq":
         yaml.dump(single_item, out, transform=strip_leading_double_space)
     else:

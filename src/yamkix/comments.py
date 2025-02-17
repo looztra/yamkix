@@ -1,6 +1,6 @@
 """Deal with comments."""
 
-from ruamel.yaml.comments import CommentedBase, CommentedMap, NotNone
+from ruamel.yaml.comments import CommentedBase, CommentedMap, CommentedSeq, NotNone
 from ruamel.yaml.error import CommentMark
 from ruamel.yaml.tokens import CommentToken
 
@@ -32,7 +32,7 @@ def yamkix_add_eol_comment(self, comment: str, key=NotNone, column=None) -> None
     self._yaml_add_eol_comment(comment_as_list, key=key)
 
 
-CommentedBase.yaml_add_eol_comment = yamkix_add_eol_comment  # pyright: ignore [ reportAttributeAccessIssue]
+CommentedBase.yaml_add_eol_comment = yamkix_add_eol_comment  # pyright: ignore[reportAttributeAccessIssue]
 
 
 def process_single_comment(data: CommentedBase, comment: str, key: str, column: int | None) -> None:
@@ -47,7 +47,7 @@ def fix_for_issue29(data: CommentedMap, key: str) -> None:
         data.ca.items[key][3] = None
 
 
-def process_comments_for_dict(data: CommentedMap, column: int | None = None) -> None:
+def process_comments_for_map(data: CommentedMap, column: int | None = None) -> None:
     """Reposition comments when data is a dict."""
     if data.ca and data.ca.items:
         for key in data.ca.items:
@@ -61,7 +61,7 @@ def process_comments_for_dict(data: CommentedMap, column: int | None = None) -> 
         process_comments(val, column=column)
 
 
-def process_comments_for_list(data: CommentedMap, column: int | None = None) -> None:
+def process_comments_for_seq(data: CommentedSeq, column: int | None = None) -> None:
     """Reposition  when data is a list."""
     if data.ca and data.ca.items:
         for key in data.ca.items:
@@ -73,9 +73,9 @@ def process_comments_for_list(data: CommentedMap, column: int | None = None) -> 
         process_comments(elem, column=column)
 
 
-def process_comments(data: CommentedMap, column: int | None = None) -> None:
+def process_comments(data: CommentedBase, column: int | None = None) -> None:
     """Reposition comments."""
-    if isinstance(data, dict):
-        process_comments_for_dict(data, column=column)
-    elif isinstance(data, list):
-        process_comments_for_list(data, column=column)
+    if isinstance(data, CommentedMap):
+        process_comments_for_map(data, column=column)
+    elif isinstance(data, CommentedSeq):
+        process_comments_for_seq(data, column=column)

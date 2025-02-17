@@ -239,22 +239,22 @@ class TestConfig:
         sut = get_spaces_before_comment_from_args(parsed)
         assert sut == space_before_comments
 
-    def test_get_spaces_before_comment_from_args_when_invalid(self) -> None:
+    def test_get_spaces_before_comment_from_args_when_invalid(self, faker: Faker) -> None:
         """Test get_spaces_before_comment_from_args.
 
         spaces_before_comment=yolo
         """
-        parsed = Namespace(spaces_before_comment="yolo")
+        parsed = Namespace(spaces_before_comment=faker.word())
         sut = get_spaces_before_comment_from_args(parsed)
         assert sut is None
 
-    def test_get_yamkix_config_from_default_parsing_mode(self) -> None:
+    def test_get_yamkix_config_from_default_parsing_mode(self, faker: Faker) -> None:
         """Test get_yamkix_config_from_default.
 
         change parsing_mode
         """
         reference = get_yamkix_config_from_default()
-        new_val = "zoro"
+        new_val = faker.word()
         sut = get_yamkix_config_from_default(parsing_mode=new_val)
         assert sut.parsing_mode == new_val
         assert sut.explicit_start == reference.explicit_start

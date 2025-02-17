@@ -3,9 +3,10 @@
 import sys
 
 import ruamel.yaml
+from ruamel.yaml.comments import CommentedMap
 
 comment_column = None
-insert = ruamel.yaml.comments.CommentedMap()
+insert = CommentedMap()
 insert["test"] = "asdf"
 insert.yaml_add_eol_comment("Test Comment!", "test", column=comment_column)
 insert["second-key"] = "yop"
