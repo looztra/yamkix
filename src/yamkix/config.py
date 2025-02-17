@@ -5,6 +5,7 @@ from argparse import Namespace
 from typing import NamedTuple
 
 from yamkix import __version__
+from yamkix.errors import InvalidTypValueError
 
 
 class YamkixInputOutputConfig(NamedTuple):
@@ -58,7 +59,7 @@ def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
 
 
 # pylint: disable=too-many-arguments
-def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-arguments
+def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-arguments  # noqa: PLR0913
     parsing_mode=None,
     explicit_start=None,
     explicit_end=None,
@@ -150,7 +151,7 @@ def get_input_output_config_from_args(
 def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixConfig:
     """Build a YamkixConfig object from parsed args."""
     if args.typ not in ["safe", "rt"]:
-        raise ValueError(f"'{args.typ}' is not a valid value for option --typ. Allowed values are 'safe' and 'rt'")
+        raise InvalidTypValueError(args.typ)
     if inc_io_config:
         yamkix_input_output_config = get_input_output_config_from_args(args)
     else:
