@@ -58,7 +58,7 @@ def my_add_eol_comment(self, comment, key=ruamel.yaml.comments.NoComment, column
 ruamel.yaml.comments.CommentedBase.yaml_add_eol_comment = my_add_eol_comment
 
 
-def process_comments(data, column=None):
+def process_comments(data, column=None):  # noqa: C901
     """Process comments."""
     if isinstance(data, dict):
         if data.ca:
@@ -100,6 +100,5 @@ def process_comments(data, column=None):
             process_comments(elem, column=column)
 
 
-# process_comments(data, column=0)
 process_comments(data, column=2)
 yaml.dump(data, sys.stdout)

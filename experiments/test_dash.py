@@ -12,8 +12,6 @@ def strip_leading_double_space(stream):
 
 
 yaml = ruamel.yaml.YAML()
-#
-# yaml.indent(mapping=2, sequence=2, offset=0)
 yaml.indent(mapping=2, sequence=4, offset=2)
 inp = """\
 - op: replace

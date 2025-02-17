@@ -48,27 +48,35 @@ def fix_for_issue29(data, key):
         data.ca.items[key][3] = None
 
 
+def process_comments_for_dict(data, column=None):
+    """Reposition comments when data is a dict."""
+    if data.ca and data.ca.items:
+        for key in data.ca.items.keys():
+            if data.ca.items[key][2]:
+                comment = data.ca.items[key][2].value
+                fix_for_issue29(data, key)
+                if string_is_comment(comment):
+                    process_single_comment(data, comment, key, column)
+    for key, val in data.items():
+        process_comments(key, column=column)
+        process_comments(val, column=column)
+
+
+def process_comments_for_list(data, column=None):
+    """Reposition  when data is a list."""
+    if data.ca and data.ca.items:
+        for key in data.ca.items.keys():
+            if data.ca.items[key][0]:
+                comment = data.ca.items[key][0].value
+                if string_is_comment(comment):
+                    process_single_comment(data, comment, key, column)
+    for elem in data:
+        process_comments(elem, column=column)
+
+
 def process_comments(data, column=None):
     """Reposition comments."""
     if isinstance(data, dict):
-        if data.ca and data.ca.items:
-            # print("CommentedMap " + str(data.ca.items), file=sys.stderr)
-            for key in data.ca.items.keys():
-                if data.ca.items[key][2]:
-                    comment = data.ca.items[key][2].value
-                    fix_for_issue29(data, key)
-                    if string_is_comment(comment):
-                        process_single_comment(data, comment, key, column)
-        for key, val in data.items():
-            process_comments(key, column=column)
-            process_comments(val, column=column)
+        process_comments_for_dict(data, column=column)
     elif isinstance(data, list):
-        if data.ca and data.ca.items:
-            # print("CommentedSeq " + str(data.ca.items), file=sys.stderr)
-            for key in data.ca.items.keys():
-                if data.ca.items[key][0]:
-                    comment = data.ca.items[key][0].value
-                    if string_is_comment(comment):
-                        process_single_comment(data, comment, key, column)
-        for elem in data:
-            process_comments(elem, column=column)
+        process_comments_for_list(data, column=column)

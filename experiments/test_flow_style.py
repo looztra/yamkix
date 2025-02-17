@@ -6,7 +6,6 @@ from ruamel.yaml import YAML
 
 yaml = YAML()
 yaml.default_flow_style = False
-# yaml.dump({'a': [1, 2]}, sys.stdout)
 
 inp = """\
 - op: replace

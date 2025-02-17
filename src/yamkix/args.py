@@ -117,5 +117,4 @@ def parse_cli(args) -> YamkixConfig:
     """Parse the cli args."""
     parser = build_parser()
     args = parser.parse_args(args)
-    yamkix_config = get_config_from_args(args, inc_io_config=True)
-    return yamkix_config
+    return get_config_from_args(args, inc_io_config=True)
