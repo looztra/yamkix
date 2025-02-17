@@ -1,29 +1,34 @@
 """Yamkix configuration helpers."""
 
-import collections
 import sys
 from argparse import Namespace
+from typing import NamedTuple
 
 from yamkix import __version__
 
-YamkixConfig = collections.namedtuple(
-    "YamkixConfig",
-    "explicit_start \
-        explicit_end \
-        default_flow_style \
-        dash_inwards \
-        quotes_preserved \
-        parsing_mode \
-        spaces_before_comment \
-        line_width \
-        version \
-        io_config",
-)
 
-YamkixInputOutputConfig = collections.namedtuple(
-    "YamkixInputOutputConfig",
-    "input input_display_name output output_display_name",
-)
+class YamkixInputOutputConfig(NamedTuple):
+    """Yamkix input/output configuration."""
+
+    input: str | None
+    input_display_name: str
+    output: str | None
+    output_display_name: str
+
+
+class YamkixConfig(NamedTuple):
+    """Yamkix configuration."""
+
+    explicit_start: bool
+    explicit_end: bool
+    default_flow_style: bool
+    dash_inwards: bool
+    quotes_preserved: bool
+    parsing_mode: str
+    spaces_before_comment: int | None
+    line_width: int
+    version: bool | None
+    io_config: YamkixInputOutputConfig
 
 
 def get_default_yamkix_config() -> YamkixConfig:
@@ -42,6 +47,16 @@ def get_default_yamkix_config() -> YamkixConfig:
     )
 
 
+def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
+    """Return a default input / output config."""
+    return YamkixInputOutputConfig(
+        input=None,
+        output=None,
+        input_display_name="STDIN",
+        output_display_name="STDOUT",
+    )
+
+
 # pylint: disable=too-many-arguments
 def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-arguments
     parsing_mode=None,
@@ -52,7 +67,7 @@ def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-argum
     quotes_preserved=None,
     spaces_before_comment=None,
     line_width=None,
-    io_config=None,
+    io_config: YamkixInputOutputConfig | None = None,
 ) -> YamkixConfig:
     """Return a Yamkix config based on default."""
     default_config = get_default_yamkix_config()
@@ -68,21 +83,11 @@ def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-argum
         else default_config.spaces_before_comment,
         line_width=line_width if line_width is not None else default_config.line_width,
         version=None,
-        io_config=io_config,
+        io_config=io_config if io_config is not None else get_default_yamkix_input_output_config(),
     )
 
 
-def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
-    """Return a default input / output config."""
-    return YamkixInputOutputConfig(
-        input=None,
-        output=None,
-        input_display_name="STDIN",
-        output_display_name="STDOUT",
-    )
-
-
-def print_yamkix_config(yamkix_config: YamkixConfig):
+def print_yamkix_config(yamkix_config: YamkixConfig) -> None:
     """Print a human readable Yamkix config on stderr."""
     yamkix_input_output_config = yamkix_config.io_config
     print(
@@ -149,7 +154,7 @@ def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixC
     if inc_io_config:
         yamkix_input_output_config = get_input_output_config_from_args(args)
     else:
-        yamkix_input_output_config = None
+        yamkix_input_output_config = get_default_yamkix_input_output_config()
     default_yamkix_config = get_default_yamkix_config()
     return YamkixConfig(
         explicit_start=not args.no_explicit_start,
@@ -165,7 +170,7 @@ def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixC
     )
 
 
-def get_spaces_before_comment_from_args(args: Namespace):
+def get_spaces_before_comment_from_args(args: Namespace) -> None | int:
     """Extract a valid value for spaces_before_comment from args."""
     if args.spaces_before_comment is None:
         spaces_before_comment = None

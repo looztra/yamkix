@@ -217,7 +217,7 @@ class TestConfig(unittest.TestCase):
             version=None,
         )
         sut: YamkixConfig = get_config_from_args(parsed, inc_io_config=False)
-        self.assertIsNone(sut.io_config)
+        self.assertIsNotNone(sut.io_config)
 
     def test_get_spaces_before_comment_from_args_when_none(self):
         """Test get_spaces_before_comment_from_args.
