@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class TestYamlWriter(unittest.TestCase):
     """Provide unit tests for the yaml_writer package."""
 
-    def test_get_opinionated_yaml_writer_with_defaults(self):
+    def test_get_opinionated_yaml_writer_with_defaults(self) -> None:
         """Test get_opinionated_yaml_writer default values."""
         sut: YAML = get_opinionated_yaml_writer(get_default_yamkix_config())
         self.assertEqual(sut.typ, ["rt"])

@@ -7,7 +7,7 @@ from ruamel.yaml.tokens import CommentToken
 from yamkix.helpers import remove_all_linebreaks, string_is_comment
 
 
-def yamkix_add_eol_comment(self, comment, key=NotNone, column=None):
+def yamkix_add_eol_comment(self, comment, key=NotNone, column=None) -> None:
     """Provide a custom add_eol_comment function.
 
     We need to be able to tune the number of spaces between
@@ -35,19 +35,19 @@ def yamkix_add_eol_comment(self, comment, key=NotNone, column=None):
 CommentedBase.yaml_add_eol_comment = yamkix_add_eol_comment
 
 
-def process_single_comment(data, comment, key, column):
+def process_single_comment(data, comment, key, column) -> None:
     """Process a single comment."""
     comment = remove_all_linebreaks(comment)
     data.yaml_add_eol_comment(comment, key, column=column)
 
 
-def fix_for_issue29(data, key):
+def fix_for_issue29(data, key) -> None:
     """Fix issue#29."""
     if data.ca.items[key][3] is not None:
         data.ca.items[key][3] = None
 
 
-def process_comments_for_dict(data, column=None):
+def process_comments_for_dict(data, column=None) -> None:
     """Reposition comments when data is a dict."""
     if data.ca and data.ca.items:
         for key in data.ca.items:
@@ -61,7 +61,7 @@ def process_comments_for_dict(data, column=None):
         process_comments(val, column=column)
 
 
-def process_comments_for_list(data, column=None):
+def process_comments_for_list(data, column=None) -> None:
     """Reposition  when data is a list."""
     if data.ca and data.ca.items:
         for key in data.ca.items:
@@ -73,7 +73,7 @@ def process_comments_for_list(data, column=None):
         process_comments(elem, column=column)
 
 
-def process_comments(data, column=None):
+def process_comments(data, column=None) -> None:
     """Reposition comments."""
     if isinstance(data, dict):
         process_comments_for_dict(data, column=column)

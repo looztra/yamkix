@@ -9,7 +9,7 @@ from yamkix.config import YamkixConfig, get_default_yamkix_config
 class TestArgs(unittest.TestCase):
     """Provide unit tests for the args package."""
 
-    def test_defaults(self):
+    def test_defaults(self) -> None:
         """Test when no input is provided."""
         sut: YamkixConfig = parse_cli({})
         yamkix_default_config = get_default_yamkix_config()
@@ -27,7 +27,7 @@ class TestArgs(unittest.TestCase):
         self.assertEqual(sut.line_width, yamkix_default_config.line_width)
         self.assertEqual(sut.version, yamkix_default_config.version)
 
-    def test_get_override_or_default_when_key_doesnt_exist(self):
+    def test_get_override_or_default_when_key_doesnt_exist(self) -> None:
         """Test get_override_or_default when key doesn't exist."""
         sut = {}
         key = "any"
@@ -35,7 +35,7 @@ class TestArgs(unittest.TestCase):
         result = get_override_or_default(sut, key, default_value)
         self.assertEqual(result, default_value)
 
-    def test_get_override_or_default_when_key_exists(self):
+    def test_get_override_or_default_when_key_exists(self) -> None:
         """Test get_override_or_default when key exists."""
         sut = {}
         key = "i_m_the_one"
@@ -45,7 +45,7 @@ class TestArgs(unittest.TestCase):
         result = get_override_or_default(sut, key, default_value)
         self.assertEqual(result, value_for_key)
 
-    def test_get_override_or_default_when_override_is_none(self):
+    def test_get_override_or_default_when_override_is_none(self) -> None:
         """Test get_override_or_default when override is none."""
         sut = None
         key = "any"

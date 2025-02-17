@@ -6,14 +6,14 @@ from yamkix import __version__
 from yamkix.config import YamkixConfig, get_config_from_args
 
 
-def get_override_or_default(short_opt_override, key, default_value):
+def get_override_or_default(short_opt_override: dict[str, str] | None, key: str, default_value: str) -> str:
     """Return the override to apply or the default value."""
     if short_opt_override and key in short_opt_override:
         return short_opt_override[key]
     return default_value
 
 
-def add_yamkix_options_to_parser(parser, short_opt_override=None):
+def add_yamkix_options_to_parser(parser, short_opt_override=None) -> None:
     """Add yamkix reusable options to a parser object."""
     parser.add_argument(
         get_override_or_default(short_opt_override, "--typ", "-t"),
@@ -69,7 +69,7 @@ def add_yamkix_options_to_parser(parser, short_opt_override=None):
     )
 
 
-def build_parser():
+def build_parser() -> argparse.ArgumentParser:
     """Build the cli args parser."""
     parser = argparse.ArgumentParser(
         description=f"""Yamkix v{__version__}.

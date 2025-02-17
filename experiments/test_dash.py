@@ -1,11 +1,14 @@
 """Test dash behavior."""
 
 import sys
+from typing import Any
 
 import ruamel.yaml
 
+StreamType = Any
 
-def strip_leading_double_space(stream):
+
+def strip_leading_double_space(stream: StreamType) -> StreamType:
     """Strip leading double space."""
     stream = stream.removeprefix("  ")
     return stream.replace("\n  ", "\n")

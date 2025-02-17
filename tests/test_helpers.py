@@ -9,12 +9,12 @@ from yamkix.helpers import get_version_string, remove_all_linebreaks, string_is_
 class TestHelpers(unittest.TestCase):
     """Provide unit tests for the helpers package."""
 
-    def test_get_version_string(self):
+    def test_get_version_string(self) -> None:
         """Test get_version_string."""
         sut = get_version_string()
         self.assertEqual(sut, "yamkix v" + __version__)
 
-    def test_remove_all_linebreaks(self):
+    def test_remove_all_linebreaks(self) -> None:
         """Test remove_all_linebreaks.
 
         when there is a trailing linebreak
@@ -23,7 +23,7 @@ class TestHelpers(unittest.TestCase):
         sut = remove_all_linebreaks(s_input)
         self.assertEqual(sut, "yolo")
 
-    def test_remove_all_linebreaks_no_linebreak(self):
+    def test_remove_all_linebreaks_no_linebreak(self) -> None:
         """Test remove_all_linebreaks.
 
         when there is no trailing linebreak
@@ -32,7 +32,7 @@ class TestHelpers(unittest.TestCase):
         sut = remove_all_linebreaks(s_input)
         self.assertEqual(sut, "yolo")
 
-    def test_remove_all_linebreaks_more_than_one(self):
+    def test_remove_all_linebreaks_more_than_one(self) -> None:
         """Test remove_all_linebreaks.
 
         when there is more than one linebreak
@@ -41,7 +41,7 @@ class TestHelpers(unittest.TestCase):
         sut = remove_all_linebreaks(s_input)
         self.assertEqual(sut, "line1line2")
 
-    def test_string_is_comment(self):
+    def test_string_is_comment(self) -> None:
         """Test string_is_comment.
 
         When it is a comment
@@ -49,7 +49,7 @@ class TestHelpers(unittest.TestCase):
         s_input = "# I am a comment"
         self.assertTrue(string_is_comment(s_input))
 
-    def test_string_is_comment_when_not(self):
+    def test_string_is_comment_when_not(self) -> None:
         """Test string_is_comment.
 
         When it is not a comment
@@ -57,7 +57,7 @@ class TestHelpers(unittest.TestCase):
         s_input = "I am not a comment"
         self.assertFalse(string_is_comment(s_input))
 
-    def test_string_is_comment_with_two_following_comment_tokens(self):
+    def test_string_is_comment_with_two_following_comment_tokens(self) -> None:
         """Test string_is_comment.
 
         When it is a comment with another #
@@ -65,7 +65,7 @@ class TestHelpers(unittest.TestCase):
         s_input = "## I am a comment"
         self.assertTrue(string_is_comment(s_input))
 
-    def test_string_is_comment_with_two_comment_tokens(self):
+    def test_string_is_comment_with_two_comment_tokens(self) -> None:
         """Test string_is_comment.
 
         When it is a comment with another #
@@ -73,7 +73,7 @@ class TestHelpers(unittest.TestCase):
         s_input = "# I am a comment #"
         self.assertTrue(string_is_comment(s_input))
 
-    def test_string_is_comment_when_not_because_not_leading(self):
+    def test_string_is_comment_when_not_because_not_leading(self) -> None:
         """Test string_is_comment.
 
         When it is not a comment
@@ -81,7 +81,7 @@ class TestHelpers(unittest.TestCase):
         s_input = " # I am not a comment"
         self.assertFalse(string_is_comment(s_input))
 
-    def test_string_is_comment_when_not_because_ending(self):
+    def test_string_is_comment_when_not_because_ending(self) -> None:
         """Test string_is_comment.
 
         When it is not a comment
@@ -89,7 +89,7 @@ class TestHelpers(unittest.TestCase):
         s_input = "I am not a comment #"
         self.assertFalse(string_is_comment(s_input))
 
-    def test_strip_leading_double_space(self):
+    def test_strip_leading_double_space(self) -> None:
         """Test strip_leading_double_space.
 
         when there are
@@ -100,7 +100,7 @@ class TestHelpers(unittest.TestCase):
         expected = "text1\ntext2"
         self.assertEqual(actual, expected)
 
-    def test_strip_leading_double_space_mixed(self):
+    def test_strip_leading_double_space_mixed(self) -> None:
         """Test strip_leading_double_space.
 
         when there are but not everywhere
@@ -111,7 +111,7 @@ class TestHelpers(unittest.TestCase):
         expected = "text1\ntext2\ntext3\n"
         self.assertEqual(actual, expected)
 
-    def test_strip_leading_double_space_when_none(self):
+    def test_strip_leading_double_space_when_none(self) -> None:
         """Test strip_leading_double_space.
 
         when there are none

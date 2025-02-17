@@ -11,7 +11,7 @@ from yamkix.comments import fix_for_issue29
 class TestComments(unittest.TestCase):
     """Provide unit tests for the comments package."""
 
-    def test_fix_for_issue29_when_not_none(self):
+    def test_fix_for_issue29_when_not_none(self) -> None:
         """Test fix_for_issue29.
 
         When the data.ca.items[key][3] is not None
@@ -26,7 +26,7 @@ class TestComments(unittest.TestCase):
         fix_for_issue29(sut_data, sut_key)
         self.assertIsNone(sut_data.ca.items[sut_key][3])
 
-    def test_fix_for_issue29_when_none(self):
+    def test_fix_for_issue29_when_none(self) -> None:
         """Test fix_for_issue29.
 
         When the data.ca.items[key][3] is None
@@ -41,7 +41,7 @@ class TestComments(unittest.TestCase):
         fix_for_issue29(sut_data, sut_key)
         self.assertIsNone(sut_data.ca.items[sut_key][3])
 
-    def test_yamkix_add_eol_comment(self):
+    def test_yamkix_add_eol_comment(self) -> None:
         """Test yamkix_add_eol_comment."""
         inp = """\
         # example

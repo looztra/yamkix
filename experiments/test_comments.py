@@ -32,7 +32,7 @@ map-of-maps:
 data = yaml.load(inp)
 
 
-def my_add_eol_comment(self, comment, key=ruamel.yaml.comments.NoComment, column=None):
+def my_add_eol_comment(self, comment, key=ruamel.yaml.comments.NoComment, column=None) -> None:
     """Provide a custom eol comment function."""
     org_col = column
     if column is None:
@@ -57,7 +57,7 @@ def my_add_eol_comment(self, comment, key=ruamel.yaml.comments.NoComment, column
 ruamel.yaml.comments.CommentedBase.yaml_add_eol_comment = my_add_eol_comment
 
 
-def process_comments(data, column=None):  # noqa: C901
+def process_comments(data, column=None) -> None:  # noqa: C901
     """Process comments."""
     if isinstance(data, dict):
         if data.ca and data.ca.items:

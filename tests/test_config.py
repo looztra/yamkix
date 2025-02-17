@@ -17,7 +17,7 @@ from yamkix.config import (
 class TestConfig(unittest.TestCase):
     """Provide unit tests for the config package."""
 
-    def test_default_values(self):
+    def test_default_values(self) -> None:
         """Test YamkixConfig default values."""
         sut: YamkixConfig = get_default_yamkix_config()
         self.assertEqual(sut.parsing_mode, "rt")
@@ -30,7 +30,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.line_width, 2048)
         self.assertFalse(sut.version)
 
-    def test_get_io_config_when_defaults(self):
+    def test_get_io_config_when_defaults(self) -> None:
         """Test get_input_output_config_from_args.
 
         input=None, output=None, stdout=None
@@ -42,7 +42,7 @@ class TestConfig(unittest.TestCase):
         self.assertIsNone(sut.output)
         self.assertEqual(sut.output_display_name, "STDOUT")
 
-    def test_get_io_config_when_file_input_provided(self):
+    def test_get_io_config_when_file_input_provided(self) -> None:
         """Test get_input_output_config_from_args.
 
         input=f_input, output=None, stdout=None
@@ -55,7 +55,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.output, f_input)
         self.assertEqual(sut.output_display_name, f_input)
 
-    def test_get_io_config_when_file_input_and_output_provided(self):
+    def test_get_io_config_when_file_input_and_output_provided(self) -> None:
         """Test get_input_output_config_from_args.
 
         input=f_input, output=f_output, stdout=None
@@ -69,7 +69,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.output, f_output)
         self.assertEqual(sut.output_display_name, f_output)
 
-    def test_get_io_config_when_file_input_provided_and_stdout(self):
+    def test_get_io_config_when_file_input_provided_and_stdout(self) -> None:
         """Test get_input_output_config_from_args.
 
         input=f_input, output=None, stdout=True
@@ -85,7 +85,7 @@ class TestConfig(unittest.TestCase):
 
     def test_get_io_config_when_file_input_and_output_provided_and_stdout(
         self,
-    ):
+    ) -> None:
         """Test get_input_output_config_from_args.
 
         input=f_input, output=f_output, stdout=True
@@ -99,7 +99,7 @@ class TestConfig(unittest.TestCase):
         self.assertIsNone(sut.output)
         self.assertEqual(sut.output_display_name, "STDOUT")
 
-    def test_get_io_config_when_output_stdout(self):
+    def test_get_io_config_when_output_stdout(self) -> None:
         """Test get_input_output_config_from_args.
 
         input=f_input, output=f_output, stdout=None
@@ -113,7 +113,7 @@ class TestConfig(unittest.TestCase):
         self.assertIsNone(sut.output)
         self.assertEqual(sut.output_display_name, "STDOUT")
 
-    def test_get_io_config_when_file_output_provided(self):
+    def test_get_io_config_when_file_output_provided(self) -> None:
         """Test get_input_output_config_from_args.
 
         input=None, output=f_output, stdout=None
@@ -127,7 +127,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.output, f_output)
         self.assertEqual(sut.output_display_name, f_output)
 
-    def test_get_config_from_args_with_invalid_typ(self):
+    def test_get_config_from_args_with_invalid_typ(self) -> None:
         """Test get_config_from_args.
 
         typ=yolo
@@ -136,7 +136,7 @@ class TestConfig(unittest.TestCase):
         with self.assertRaises(ValueError):
             get_config_from_args(parsed)
 
-    def test_get_config_from_args_with_no_args(self):
+    def test_get_config_from_args_with_no_args(self) -> None:
         """Test get_config_from_args.
 
         input=None
@@ -186,7 +186,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.line_width, yamkix_default_config.line_width)
         self.assertEqual(sut.version, yamkix_default_config.version)
 
-    def test_get_config_from_args_with_no_io(self):
+    def test_get_config_from_args_with_no_io(self) -> None:
         """Test get_config_from_args.
 
         input=None
@@ -219,7 +219,7 @@ class TestConfig(unittest.TestCase):
         sut: YamkixConfig = get_config_from_args(parsed, inc_io_config=False)
         self.assertIsNotNone(sut.io_config)
 
-    def test_get_spaces_before_comment_from_args_when_none(self):
+    def test_get_spaces_before_comment_from_args_when_none(self) -> None:
         """Test get_spaces_before_comment_from_args.
 
         spaces_before_comment=None
@@ -228,7 +228,7 @@ class TestConfig(unittest.TestCase):
         sut = get_spaces_before_comment_from_args(parsed)
         self.assertIsNone(sut)
 
-    def test_get_spaces_before_comment_from_args_when_int(self):
+    def test_get_spaces_before_comment_from_args_when_int(self) -> None:
         """Test get_spaces_before_comment_from_args.
 
         spaces_before_comment=722
@@ -237,7 +237,7 @@ class TestConfig(unittest.TestCase):
         sut = get_spaces_before_comment_from_args(parsed)
         self.assertEqual(sut, 722)
 
-    def test_get_spaces_before_comment_from_args_when_invalid(self):
+    def test_get_spaces_before_comment_from_args_when_invalid(self) -> None:
         """Test get_spaces_before_comment_from_args.
 
         spaces_before_comment=yolo
@@ -246,7 +246,7 @@ class TestConfig(unittest.TestCase):
         sut = get_spaces_before_comment_from_args(parsed)
         self.assertIsNone(sut)
 
-    def test_get_yamkix_config_from_default_parsing_mode(self):
+    def test_get_yamkix_config_from_default_parsing_mode(self) -> None:
         """Test get_yamkix_config_from_default.
 
         change parsing_mode
@@ -264,7 +264,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
-    def test_get_yamkix_config_from_default_explicit_start(self):
+    def test_get_yamkix_config_from_default_explicit_start(self) -> None:
         """Test get_yamkix_config_from_default.
 
         change explicit_start
@@ -282,7 +282,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
-    def test_get_yamkix_config_from_default_explicit_end(self):
+    def test_get_yamkix_config_from_default_explicit_end(self) -> None:
         """Test get_yamkix_config_from_default.
 
         change explicit_end
@@ -300,7 +300,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
-    def test_get_yamkix_config_from_default_default_flow_style(self):
+    def test_get_yamkix_config_from_default_default_flow_style(self) -> None:
         """Test get_yamkix_config_from_default.
 
         change default_flow_style
@@ -318,7 +318,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
-    def test_get_yamkix_config_from_default_dash_inwards(self):
+    def test_get_yamkix_config_from_default_dash_inwards(self) -> None:
         """Test get_yamkix_config_from_default.
 
         change dash_inwards
@@ -336,7 +336,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
-    def test_get_yamkix_config_from_default_quotes_preserved(self):
+    def test_get_yamkix_config_from_default_quotes_preserved(self) -> None:
         """Test get_yamkix_config_from_default.
 
         change quotes_preserved
@@ -354,7 +354,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
-    def test_get_yamkix_config_from_default_spaces_before_comment(self):
+    def test_get_yamkix_config_from_default_spaces_before_comment(self) -> None:
         """Test get_yamkix_config_from_default.
 
         change spaces_before_comment
@@ -372,7 +372,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.line_width, reference.line_width)
         self.assertEqual(sut.io_config, reference.io_config)
 
-    def test_get_yamkix_config_from_default_line_width(self):
+    def test_get_yamkix_config_from_default_line_width(self) -> None:
         """Test get_yamkix_config_from_default.
 
         change line_width
@@ -390,7 +390,7 @@ class TestConfig(unittest.TestCase):
         self.assertEqual(sut.line_width, new_val)
         self.assertEqual(sut.io_config, reference.io_config)
 
-    def test_get_yamkix_config_from_default_io_config(self):
+    def test_get_yamkix_config_from_default_io_config(self) -> None:
         """Test get_yamkix_config_from_default.
 
         change io_config
