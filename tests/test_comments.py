@@ -22,9 +22,9 @@ class TestComments(unittest.TestCase):
         sut_ca = SimpleNamespace(items=items)
         sut_data = SimpleNamespace(dont="care", ca=sut_ca)
 
-        self.assertIsNotNone(sut_data.ca.items[sut_key][3])
+        assert sut_data.ca.items[sut_key][3] is not None
         fix_for_issue29(sut_data, sut_key)
-        self.assertIsNone(sut_data.ca.items[sut_key][3])
+        assert sut_data.ca.items[sut_key][3] is None
 
     def test_fix_for_issue29_when_none(self) -> None:
         """Test fix_for_issue29.
@@ -37,9 +37,9 @@ class TestComments(unittest.TestCase):
         sut_ca = SimpleNamespace(items=items)
         sut_data = SimpleNamespace(dont="care", ca=sut_ca)
 
-        self.assertIsNone(sut_data.ca.items[sut_key][3])
+        assert sut_data.ca.items[sut_key][3] is None
         fix_for_issue29(sut_data, sut_key)
-        self.assertIsNone(sut_data.ca.items[sut_key][3])
+        assert sut_data.ca.items[sut_key][3] is None
 
     def test_yamkix_add_eol_comment(self) -> None:
         """Test yamkix_add_eol_comment."""
@@ -52,4 +52,4 @@ class TestComments(unittest.TestCase):
         """
         yaml = YAML()
         code = yaml.load(inp)
-        self.assertEqual(code["family"], "Smith")
+        assert code["family"] == "Smith"

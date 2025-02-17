@@ -7,6 +7,8 @@ from typing import NamedTuple
 from yamkix import __version__
 from yamkix.errors import InvalidTypValueError
 
+DEFAULT_LINE_WIDTH = 2048
+
 
 class YamkixInputOutputConfig(NamedTuple):
     """Yamkix input/output configuration."""
@@ -42,7 +44,7 @@ def get_default_yamkix_config() -> YamkixConfig:
         dash_inwards=True,
         quotes_preserved=True,
         spaces_before_comment=None,
-        line_width=2048,
+        line_width=DEFAULT_LINE_WIDTH,
         version=False,
         io_config=get_default_yamkix_input_output_config(),
     )
