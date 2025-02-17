@@ -11,7 +11,7 @@ class TestArgs(unittest.TestCase):
 
     def test_defaults(self):
         """Test when no input is provided."""
-        sut: YamkixConfig = parse_cli(dict())
+        sut: YamkixConfig = parse_cli({})
         yamkix_default_config = get_default_yamkix_config()
 
         self.assertEqual(sut.parsing_mode, yamkix_default_config.parsing_mode)
@@ -29,7 +29,7 @@ class TestArgs(unittest.TestCase):
 
     def test_get_override_or_default_when_key_doesnt_exist(self):
         """Test get_override_or_default when key doesn't exist."""
-        sut = dict()
+        sut = {}
         key = "any"
         default_value = "yolo"
         result = get_override_or_default(sut, key, default_value)
@@ -37,7 +37,7 @@ class TestArgs(unittest.TestCase):
 
     def test_get_override_or_default_when_key_exists(self):
         """Test get_override_or_default when key exists."""
-        sut = dict()
+        sut = {}
         key = "i_m_the_one"
         value_for_key = "yamkix_rulez"
         default_value = "yolo"

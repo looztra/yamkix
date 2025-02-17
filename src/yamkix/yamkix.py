@@ -34,8 +34,8 @@ def round_trip_and_format(yamkix_config: YamkixConfig):
         ready_for_dump = list(parsed)
 
     except ScannerError as scanner_error:
-        print("Something is wrong in the input file, got error from Scanner")
-        print(scanner_error)
+        print("Something is wrong in the input file, got error from Scanner")  # noqa: T201
+        print(scanner_error)  # noqa: T201
         return
     yamkix_dump_all(ready_for_dump, yaml, dash_inwards, output_file, spaces_before_comment)
 

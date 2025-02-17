@@ -8,7 +8,11 @@ ignore = [
     "PT027",
     "ANN001",
     "ANN201",
-    "TC002",
-    "T201",
-    "C408",
+]
+per-file-ignores."**/tests/*" = [
+    "INP001", # INP001: File {filename} is part of an implicit namespace package. Add an __init__.py.
+    "S101",   # S101: Use of assert detected. Hey man, we do need asserts in pytest tests.
+]
+per-file-ignores."experiments/*" = [
+    "T201", # Print statements
 ]

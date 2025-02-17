@@ -1,11 +1,13 @@
 """Test the yaml_writer init stuff."""
 
 import unittest
-
-from ruamel.yaml import YAML
+from typing import TYPE_CHECKING
 
 from yamkix.config import get_default_yamkix_config
 from yamkix.yaml_writer import get_opinionated_yaml_writer
+
+if TYPE_CHECKING:
+    from ruamel.yaml import YAML
 
 
 class TestYamlWriter(unittest.TestCase):

@@ -10,7 +10,7 @@ def get_version_string():
 
 def print_version():
     """Print version."""
-    print(get_version_string())
+    print(get_version_string())  # noqa: T201
 
 
 def remove_all_linebreaks(comment):

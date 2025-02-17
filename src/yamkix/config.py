@@ -91,7 +91,7 @@ def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-argum
 def print_yamkix_config(yamkix_config: YamkixConfig) -> None:
     """Print a human readable Yamkix config on stderr."""
     yamkix_input_output_config = yamkix_config.io_config
-    print(
+    print(  # noqa: T201
         "[yamkix("
         + __version__
         + ")] Processing: input="
