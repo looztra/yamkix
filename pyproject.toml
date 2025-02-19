@@ -18,7 +18,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "ruamel-yaml>0.17.27,<0.19",
+    "ruamel-yaml>0.17.27",
 ]
 description = "An opinionated yaml formatter based on ruamel.yaml"
 dynamic = [
