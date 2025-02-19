@@ -633,7 +633,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "ruamel-yaml", specifier = "~=0.18" }]
+requires-dist = [{ name = "ruamel-yaml", specifier = ">0.17.27,<0.19" }]
 
 [package.metadata.requires-dev]
 dev = [
