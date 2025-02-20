@@ -2,24 +2,30 @@
 
 import sys
 from argparse import Namespace
-from typing import NamedTuple
+from dataclasses import dataclass
 
 from yamkix import __version__
 from yamkix.errors import InvalidTypValueError
 
 DEFAULT_LINE_WIDTH = 2048
+STDIN_DISPLAY_NAME = "STDIN"
+STDOUT_DISPLAY_NAME = "STDOUT"
 
-
-class YamkixInputOutputConfig(NamedTuple):
+@dataclass
+class YamkixInputOutputConfig:
     """Yamkix input/output configuration."""
 
     input: str | None
-    input_display_name: str
     output: str | None
-    output_display_name: str
+
+    def __post_init__(self) -> None:
+        """Post init method."""
+        self.input_display_name = STDIN_DISPLAY_NAME if self.input is None else self.input
+        self.output_display_name = STDOUT_DISPLAY_NAME if self.output is None else self.output
 
 
-class YamkixConfig(NamedTuple):
+@dataclass
+class YamkixConfig:  # pylint: disable=too-many-instance-attributes
     """Yamkix configuration."""
 
     explicit_start: bool
@@ -55,8 +61,6 @@ def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
     return YamkixInputOutputConfig(
         input=None,
         output=None,
-        input_display_name="STDIN",
-        output_display_name="STDOUT",
     )
 
 
@@ -124,26 +128,18 @@ def get_input_output_config_from_args(
     args: Namespace,
 ) -> YamkixInputOutputConfig:
     """Get input, output and associated labels as YamkixInputOutputConfig."""
-    input_display_name = "STDIN"
-    if args.input is None:
-        f_input = None
-    else:
-        f_input = args.input
-        input_display_name = f_input
+    f_input = None if args.input is None else args.input
     if args.stdout:
         f_output = None
-    elif args.output is not None and args.output != "STDOUT":
+    elif args.output is not None and args.output != STDOUT_DISPLAY_NAME:
         f_output = args.output
-    elif args.output == "STDOUT" or f_input is None:
+    elif args.output == STDOUT_DISPLAY_NAME or f_input is None:
         f_output = None
     else:
         f_output = args.input
-    output_display_name = "STDOUT" if f_output is None else f_output
     return YamkixInputOutputConfig(
         input=f_input,
-        input_display_name=input_display_name,
         output=f_output,
-        output_display_name=output_display_name,
     )
 
 
