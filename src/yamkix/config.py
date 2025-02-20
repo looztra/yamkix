@@ -11,6 +11,7 @@ DEFAULT_LINE_WIDTH = 2048
 STDIN_DISPLAY_NAME = "STDIN"
 STDOUT_DISPLAY_NAME = "STDOUT"
 
+
 @dataclass
 class YamkixInputOutputConfig:
     """Yamkix input/output configuration."""
