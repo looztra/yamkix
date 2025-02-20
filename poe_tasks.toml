@@ -1,6 +1,7 @@
 [tasks]
 "lint:all" = [
     "ruff:lint",
+    "ruff:fmt:check",
     "pylint",
     "pyright",
 ]

@@ -398,9 +398,7 @@ class TestConfig:
         change io_config
         """
         reference = get_yamkix_config_from_default()
-        new_val = YamkixInputOutputConfig(
-            input="f_input", output="f_output", input_display_name="f_input", output_display_name="f_output"
-        )
+        new_val = YamkixInputOutputConfig(input="f_input", output="f_output")
 
         sut = get_yamkix_config_from_default(io_config=new_val)
         assert sut.parsing_mode == reference.parsing_mode
