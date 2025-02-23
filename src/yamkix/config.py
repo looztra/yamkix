@@ -4,7 +4,7 @@ import sys
 from argparse import Namespace
 from dataclasses import dataclass
 
-from yamkix import __version__
+from yamkix.__version__ import __version__
 from yamkix.errors import InvalidTypValueError
 
 DEFAULT_LINE_WIDTH = 2048

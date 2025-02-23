@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from yamkix import __version__
+from yamkix.__version__ import __version__
 
 StreamType = Any  # Copied from ruamel.yaml compat.py line 58
 

@@ -2,7 +2,7 @@
 
 import argparse
 
-from yamkix import __version__
+from yamkix.__version__ import __version__
 from yamkix.config import YamkixConfig, get_config_from_args
 
 
