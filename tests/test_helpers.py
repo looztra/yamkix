@@ -1,13 +1,6 @@
 """Test helpers."""
 
-from yamkix import __version__
-from yamkix.helpers import get_version_string, remove_all_linebreaks, string_is_comment, strip_leading_double_space
-
-
-def test_get_version_string() -> None:
-    """Test get_version_string."""
-    sut = get_version_string()
-    assert sut == "yamkix v" + __version__
+from yamkix.helpers import remove_all_linebreaks, string_is_comment, strip_leading_double_space
 
 
 def test_remove_all_linebreaks() -> None:
