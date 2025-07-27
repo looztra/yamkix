@@ -163,6 +163,14 @@ def main(  # noqa: PLR0913
             help="show yamkix version",
         ),
     ] = False,
+    silent_mode: Annotated[
+        bool,
+        typer.Option(
+            "-S",
+            "--silent",
+            help="silent mode, don't print config when processing file(s)",
+        ),
+    ] = False,
 ) -> None:
     """Format yaml input file.
 
@@ -191,8 +199,8 @@ def main(  # noqa: PLR0913
         spaces_before_comment=spaces_before_comment,
         version=version,
     )
-
-    print_yamkix_config(yamkix_config)
+    if not silent_mode:
+        print_yamkix_config(yamkix_config)
     round_trip_and_format(yamkix_config)
 
 

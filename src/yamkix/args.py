@@ -120,15 +120,3 @@ def parse_cli(args: list[str]) -> YamkixConfig:
     parser = build_parser()
     args_namespace = parser.parse_args(args=args)
     return get_config_from_args(args_namespace, inc_io_config=True)
-
-
-def parse_cli_typer(args: list[str]) -> YamkixConfig:
-    """Parse CLI args using Typer (new implementation).
-
-    This function provides a bridge between the Typer CLI and the existing
-    config system, allowing for gradual migration while preserving API compatibility.
-    """
-    # For now, fall back to the original argparse implementation
-    # This ensures backward compatibility during migration
-    # In the future, this could be implemented to use Typer directly
-    return parse_cli(args)
