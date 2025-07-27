@@ -5,6 +5,7 @@ from pytest_mock import MockerFixture
 from typer.testing import CliRunner
 
 from yamkix._cli import app, echo_version
+from yamkix.config import get_default_yamkix_config
 
 runner = CliRunner()
 
@@ -74,17 +75,18 @@ class TestCli:
 
         # THEN
         assert result.exit_code == 0
+        default_config = get_default_yamkix_config()
         mock_create_config.assert_called_once_with(
-            input_file=None,
-            output_file=None,
+            input_file=default_config.io_config.input,
+            output_file=default_config.io_config.output,
             stdout=False,
-            typ="rt",
-            no_explicit_start=False,
-            explicit_end=False,
-            no_quotes_preserved=False,
-            default_flow_style=False,
-            no_dash_inwards=False,
-            spaces_before_comment=None,
+            typ=default_config.parsing_mode,
+            no_explicit_start=not default_config.explicit_start,
+            explicit_end=default_config.explicit_end,
+            no_quotes_preserved=not default_config.quotes_preserved,
+            default_flow_style=default_config.default_flow_style,
+            no_dash_inwards=not default_config.dash_inwards,
+            spaces_before_comment=default_config.spaces_before_comment,
             version=None,  # Typer passes None when callback option is not used
         )
         mock_print_config.assert_called_once()
