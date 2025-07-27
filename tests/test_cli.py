@@ -47,3 +47,45 @@ def test_echo_version(
     # THEN
     captured = capsys.readouterr()
     assert "1.0.0" in captured.out
+
+
+class TestCli:
+    """Provide unit tests for the CLI."""
+
+    def test_invalid_typ(self) -> None:
+        """Test running the CLI with an invalid typ."""
+        # WHEN
+        result = runner.invoke(app, ["--typ", "invalid"])
+
+        # THEN
+        assert result.exit_code != 0
+        assert "Invalid value 'invalid'" in result.output
+        assert "Must be 'safe' or 'rt'" in result.output
+
+    def test_default_values(self, mocker: MockerFixture) -> None:
+        """Test running the CLI without any parameters uses default values."""
+        # GIVEN
+        mock_create_config = mocker.patch("yamkix._cli.create_yamkix_config_from_typer_args")
+        mock_print_config = mocker.patch("yamkix._cli.print_yamkix_config")
+        mock_round_trip = mocker.patch("yamkix._cli.round_trip_and_format")
+
+        # WHEN
+        result = runner.invoke(app, [])
+
+        # THEN
+        assert result.exit_code == 0
+        mock_create_config.assert_called_once_with(
+            input_file=None,
+            output_file=None,
+            stdout=False,
+            typ="rt",
+            no_explicit_start=False,
+            explicit_end=False,
+            no_quotes_preserved=False,
+            default_flow_style=False,
+            no_dash_inwards=False,
+            spaces_before_comment=None,
+            version=None,  # Typer passes None when callback option is not used
+        )
+        mock_print_config.assert_called_once()
+        mock_round_trip.assert_called_once()
