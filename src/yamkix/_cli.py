@@ -3,55 +3,20 @@
 from typing import Annotated
 
 import typer
+from typer import echo as typer_echo
 
 from yamkix import __version__
-from yamkix.config import YamkixConfig, YamkixInputOutputConfig, print_yamkix_config
-from yamkix.helpers import print_version
+from yamkix.config import create_yamkix_config_from_typer_args, print_yamkix_config
 from yamkix.yamkix import round_trip_and_format
 
-
-def create_yamkix_config_from_typer_args(  # noqa: PLR0913
-    input_file: str | None,
-    output_file: str | None,
-    stdout: bool,
-    typ: str,
-    no_explicit_start: bool,
-    explicit_end: bool,
-    no_quotes_preserved: bool,
-    default_flow_style: bool,
-    no_dash_inwards: bool,
-    spaces_before_comment: int | None,
-    version: bool,
-) -> YamkixConfig:
-    """Create YamkixConfig from Typer arguments."""
-    # Handle I/O configuration - match the original logic exactly
-    f_input = None if input_file is None else input_file
-    if stdout:
-        f_output = None
-    elif output_file is not None and output_file != "STDOUT":
-        f_output = output_file
-    elif output_file == "STDOUT" or f_input is None:
-        f_output = None
-    else:
-        f_output = f_input
-
-    io_config = YamkixInputOutputConfig(
-        input=f_input,
-        output=f_output,
-    )
-
-    return YamkixConfig(
-        explicit_start=not no_explicit_start,
-        explicit_end=explicit_end,
-        default_flow_style=default_flow_style,
-        dash_inwards=not no_dash_inwards,
-        quotes_preserved=not no_quotes_preserved,
-        parsing_mode=typ,
-        spaces_before_comment=spaces_before_comment,
-        line_width=2048,  # DEFAULT_LINE_WIDTH from config.py
-        version=version,
-        io_config=io_config,
-    )
+# Create the Typer app
+app = typer.Typer(
+    name="yamkix",
+    help=f"Yamkix v{__version__}. Format yaml input file.",
+    context_settings={"help_option_names": ["-h", "--help"]},
+    add_completion=False,
+    no_args_is_help=False,  # Allow running without arguments (uses defaults)
+)
 
 
 def validate_typ(value: str) -> str:
@@ -62,6 +27,19 @@ def validate_typ(value: str) -> str:
     return value
 
 
+def echo_version() -> None:
+    """Print version."""
+    typer_echo("yamkix v" + __version__)
+
+
+def version_callback(value: bool) -> None:
+    """Provide a version callback."""
+    if value:
+        echo_version()
+        raise typer.Exit(code=0)
+
+
+@app.command()
 def main(  # noqa: PLR0913
     input_file: Annotated[
         str | None,
@@ -157,11 +135,7 @@ def main(  # noqa: PLR0913
     ] = None,
     version: Annotated[
         bool,
-        typer.Option(
-            "-v",
-            "--version",
-            help="show yamkix version",
-        ),
+        typer.Option("-v", "--version", help="show yamkix version", callback=version_callback),
     ] = False,
     silent_mode: Annotated[
         bool,
@@ -180,11 +154,6 @@ def main(  # noqa: PLR0913
     matching sequence. Comments are preserved thanks to default
     parsing mode 'rt'.
     """
-    # Handle version display
-    if version:
-        print_version()
-        return
-
     # Create configuration
     yamkix_config = create_yamkix_config_from_typer_args(
         input_file=input_file,
@@ -202,18 +171,6 @@ def main(  # noqa: PLR0913
     if not silent_mode:
         print_yamkix_config(yamkix_config)
     round_trip_and_format(yamkix_config)
-
-
-# Create the Typer app
-app = typer.Typer(
-    name="yamkix",
-    help=f"Yamkix v{__version__}. Format yaml input file.",
-    add_completion=False,
-    no_args_is_help=False,  # Allow running without arguments (uses defaults)
-)
-
-# Register the main function as the default command
-app.command()(main)
 
 
 if __name__ == "__main__":

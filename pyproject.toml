@@ -34,7 +34,7 @@ requires-python = ">=3.10"
 Repository = "https://github.com/looztra/yamkix"
 
 [project.scripts]
-yamkix = "yamkix.typer_cli:app"
+yamkix = "yamkix._cli:app"
 
 [dependency-groups]
 dev = [
