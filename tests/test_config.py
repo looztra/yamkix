@@ -4,6 +4,7 @@ from argparse import Namespace
 
 import pytest
 from faker import Faker
+from pytest_mock import MockerFixture
 
 from yamkix.config import (
     DEFAULT_LINE_WIDTH,
@@ -15,6 +16,7 @@ from yamkix.config import (
     get_input_output_config_from_args,
     get_spaces_before_comment_from_args,
     get_yamkix_config_from_default,
+    print_yamkix_config,
 )
 from yamkix.errors import InvalidTypValueError
 
@@ -578,3 +580,38 @@ class TestCreateYamkixConfigFromTyperArgs:
         )
         assert config.io_config.input == "input.yaml"
         assert config.io_config.output is None
+
+
+class TestPrintYamkixConfig:
+    """Provide unit tests for print_yamkix_config function."""
+
+    def test_print_yamkix_config_calls_typer_echo(self, mocker: MockerFixture) -> None:
+        """Test that print_yamkix_config calls typer_echo with correct message."""
+        # GIVEN
+        mock_typer_echo = mocker.patch("yamkix.config.typer_echo")
+        config = get_default_yamkix_config()
+
+        # WHEN
+        print_yamkix_config(config)
+
+        # THEN
+        mock_typer_echo.assert_called_once()
+        args, kwargs = mock_typer_echo.call_args
+
+        # Verify the message contains expected content
+        message = args[0]
+        assert "yamkix" in message
+        assert "Processing:" in message
+        assert "input=STDIN" in message
+        assert "output=STDOUT" in message
+        assert "typ=rt" in message
+        assert "explicit_start=True" in message
+        assert "explicit_end=False" in message
+        assert "default_flow_style=False" in message
+        assert "quotes_preserved=True" in message
+        assert "dash_inwards=True" in message
+        assert "spaces_before_comment=None" in message
+        assert "show_version=False" in message
+
+        # Verify stderr output
+        assert kwargs.get("file") is not None

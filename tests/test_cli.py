@@ -91,3 +91,19 @@ class TestCli:
         )
         mock_print_config.assert_called_once()
         mock_round_trip.assert_called_once()
+
+    def test_silent_mode(self, mocker: MockerFixture) -> None:
+        """Test running the CLI without any parameters uses default values."""
+        # GIVEN
+        mock_create_config = mocker.patch("yamkix._cli.create_yamkix_config_from_typer_args")
+        mock_print_config = mocker.patch("yamkix._cli.print_yamkix_config")
+        mock_round_trip = mocker.patch("yamkix._cli.round_trip_and_format")
+
+        # WHEN
+        result = runner.invoke(app, ["--silent"])
+
+        # THEN
+        assert result.exit_code == 0
+        mock_create_config.assert_called_once()
+        mock_print_config.assert_not_called()
+        mock_round_trip.assert_called_once()
