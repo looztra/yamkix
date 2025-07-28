@@ -5,7 +5,7 @@ from typing import Annotated
 import typer
 from typer import echo as typer_echo
 
-from yamkix import __version__
+from yamkix.__version__ import __version__
 from yamkix.config import create_yamkix_config_from_typer_args, print_yamkix_config
 from yamkix.yamkix import round_trip_and_format
 

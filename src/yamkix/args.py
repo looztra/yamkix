@@ -2,9 +2,6 @@
 
 import argparse
 
-from yamkix import __version__
-from yamkix.config import YamkixConfig, get_config_from_args
-
 
 def get_override_or_default(short_opt_override: dict[str, str] | None, key: str, default_value: str) -> str:
     """Return the override to apply or the default value."""
@@ -69,54 +66,3 @@ def add_yamkix_options_to_parser(
         help="specify the number of spaces between comments and content. \
                         If not specified, comments are left as is.",
     )
-
-
-def build_parser() -> argparse.ArgumentParser:
-    """Build the cli args parser."""
-    parser = argparse.ArgumentParser(
-        description=f"""Yamkix v{__version__}.
-            Format yaml input file.
-            By default, explicit_start is `On`, explicit_end is `Off`
-            and array elements are pushed inwards the start of the
-            matching sequence. Comments are preserved thanks to default
-            parsing mode `rt`.
-        """
-    )
-    parser.add_argument(
-        "-i",
-        "--input",
-        required=False,
-        help="""the file to parse or 'STDIN'.
-            Defaults to 'STDIN' if not specified
-        """,
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        required=False,
-        help="the name of the file to generate (can be 'STDOUT') \
-                            (same as input file if not specified, \
-                                hence 'STDOUT' if 'STDIN' as input)",
-    )
-    parser.add_argument(
-        "-s",
-        "--stdout",
-        action="store_true",
-        help="output is STDOUT whatever the value for \
-                        input (-i) and output (-o)",
-    )
-    add_yamkix_options_to_parser(parser)
-    parser.add_argument(
-        "-v",
-        "--version",
-        action="store_true",
-        help="show yamkix version",
-    )
-    return parser
-
-
-def parse_cli(args: list[str]) -> YamkixConfig:
-    """Parse the cli args."""
-    parser = build_parser()
-    args_namespace = parser.parse_args(args=args)
-    return get_config_from_args(args_namespace, inc_io_config=True)

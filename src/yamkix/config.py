@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 from typer import echo as typer_echo
 
-from yamkix import __version__
+from yamkix.__version__ import __version__
 from yamkix.errors import InvalidTypValueError
 
 DEFAULT_LINE_WIDTH = 2048
@@ -67,8 +67,7 @@ def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
     )
 
 
-# pylint: disable=too-many-arguments
-def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-arguments  # noqa: PLR0913
+def get_yamkix_config_from_default(  # noqa: PLR0913
     parsing_mode: str | None = None,
     explicit_start: bool | None = None,
     explicit_end: bool | None = None,
