@@ -78,7 +78,12 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
     line_width: int | None = None,
     io_config: YamkixInputOutputConfig | None = None,
 ) -> YamkixConfig:
-    """Return a Yamkix config based on default."""
+    """Return a Yamkix config based on the default one.
+
+    Use this function when you want to create a custom config that just overrides
+    some of the default values.
+    If you want to create a config from scratch, use YamkixConfig directly.
+    """
     default_config = get_default_yamkix_config()
     return YamkixConfig(
         parsing_mode=parsing_mode if parsing_mode is not None else default_config.parsing_mode,
