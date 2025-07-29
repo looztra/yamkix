@@ -7,10 +7,9 @@ from typing import TextIO
 from ruamel.yaml import YAML
 from ruamel.yaml.scanner import ScannerError
 
-from yamkix.args import parse_cli
 from yamkix.comments import process_comments
-from yamkix.config import YamkixConfig, print_yamkix_config
-from yamkix.helpers import print_version, strip_leading_double_space
+from yamkix.config import YamkixConfig
+from yamkix.helpers import strip_leading_double_space
 from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 
@@ -69,17 +68,3 @@ def yamkix_dump_one(
         yaml.dump(single_item, out, transform=strip_leading_double_space)
     else:
         yaml.dump(single_item, out)
-
-
-def main() -> None:
-    """(re)format yaml."""
-    yamkix_config = parse_cli(sys.argv[1:])
-    if yamkix_config.version:
-        print_version()
-    else:
-        print_yamkix_config(yamkix_config)
-        round_trip_and_format(yamkix_config)
-
-
-if __name__ == "__main__":
-    main()

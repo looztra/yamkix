@@ -4,7 +4,9 @@ import sys
 from argparse import Namespace
 from dataclasses import dataclass
 
-from yamkix import __version__
+from typer import echo as typer_echo
+
+from yamkix.__version__ import __version__
 from yamkix.errors import InvalidTypValueError
 
 DEFAULT_LINE_WIDTH = 2048
@@ -65,8 +67,7 @@ def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
     )
 
 
-# pylint: disable=too-many-arguments
-def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-arguments  # noqa: PLR0913
+def get_yamkix_config_from_default(  # noqa: PLR0913
     parsing_mode: str | None = None,
     explicit_start: bool | None = None,
     explicit_end: bool | None = None,
@@ -77,7 +78,12 @@ def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-argum
     line_width: int | None = None,
     io_config: YamkixInputOutputConfig | None = None,
 ) -> YamkixConfig:
-    """Return a Yamkix config based on default."""
+    """Return a Yamkix config based on the default one.
+
+    Use this function when you want to create a custom config that just overrides
+    some of the default values.
+    If you want to create a config from scratch, use YamkixConfig directly.
+    """
     default_config = get_default_yamkix_config()
     return YamkixConfig(
         parsing_mode=parsing_mode if parsing_mode is not None else default_config.parsing_mode,
@@ -98,7 +104,7 @@ def get_yamkix_config_from_default(  # pylint: disable=too-many-positional-argum
 def print_yamkix_config(yamkix_config: YamkixConfig) -> None:
     """Print a human readable Yamkix config on stderr."""
     yamkix_input_output_config = yamkix_config.io_config
-    print(  # noqa: T201
+    typer_echo(
         "[yamkix("
         + __version__
         + ")] Processing: input="
@@ -177,3 +183,47 @@ def get_spaces_before_comment_from_args(args: Namespace) -> None | int:
         except ValueError:
             spaces_before_comment = None
     return spaces_before_comment
+
+
+def create_yamkix_config_from_typer_args(  # noqa: PLR0913
+    input_file: str | None,
+    output_file: str | None,
+    stdout: bool,
+    typ: str,
+    no_explicit_start: bool,
+    explicit_end: bool,
+    no_quotes_preserved: bool,
+    default_flow_style: bool,
+    no_dash_inwards: bool,
+    spaces_before_comment: int | None,
+    version: bool,
+) -> YamkixConfig:
+    """Create YamkixConfig from Typer arguments."""
+    # Handle I/O configuration - match the original logic exactly
+    f_input = None if input_file is None else input_file
+    if stdout:
+        f_output = None
+    elif output_file is not None and output_file != "STDOUT":
+        f_output = output_file
+    elif output_file == "STDOUT" or f_input is None:
+        f_output = None
+    else:
+        f_output = f_input
+
+    io_config = YamkixInputOutputConfig(
+        input=f_input,
+        output=f_output,
+    )
+
+    return YamkixConfig(
+        explicit_start=not no_explicit_start,
+        explicit_end=explicit_end,
+        default_flow_style=default_flow_style,
+        dash_inwards=not no_dash_inwards,
+        quotes_preserved=not no_quotes_preserved,
+        parsing_mode=typ,
+        spaces_before_comment=spaces_before_comment,
+        line_width=DEFAULT_LINE_WIDTH,
+        version=version,
+        io_config=io_config,
+    )

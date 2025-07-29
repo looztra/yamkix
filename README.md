@@ -1,6 +1,7 @@
 # yamkix
 
 [![Pypi](https://img.shields.io/pypi/v/yamkix.svg)](https://pypi.python.org/pypi/yamkix)
+[![codecov](https://codecov.io/github/looztra/yamkix/graph/badge.svg?token=GRN3Z5B0NP)](https://codecov.io/github/looztra/yamkix)
 
 ## Why?
 
