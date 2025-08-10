@@ -16,20 +16,46 @@ STDOUT_DISPLAY_NAME = "STDOUT"
 
 @dataclass
 class YamkixInputOutputConfig:
-    """Yamkix input/output configuration."""
+    """`Yamkix` input/output configuration.
+
+    Part of the config that manages `input` and `output`.
+
+    Attributes:
+        input (str | None): The input file to parse or `STDIN` or `None`. Defaults to `STDIN` if not specified
+        output (str | None): The name of the file to generate (can be `STDOUT`). Will be the same as input file
+            if not specified (`None`), or `STDOUT` if `STDIN` was specified as input
+    """
 
     input: str | None
     output: str | None
 
     def __post_init__(self) -> None:
-        """Post init method."""
+        """Set display names for `input` and `output`."""
         self.input_display_name = STDIN_DISPLAY_NAME if self.input is None else self.input
         self.output_display_name = STDOUT_DISPLAY_NAME if self.output is None else self.output
 
 
 @dataclass
 class YamkixConfig:  # pylint: disable=too-many-instance-attributes
-    """Yamkix configuration."""
+    """Defines the available `Yamkix` configuration.
+
+    Attributes:
+        explicit_start (bool): Whether to include explicit start markers (`---`).
+        explicit_end (bool): Whether to include explicit end markers (`...`).
+        default_flow_style (bool): Whether to use default flow style. Setting `default_flow_style = False` ensures
+            that all collections are dumped in block style by default, which is the typical YAML format where sequences
+            and mappings are presented with indentation and newlines. Conversely, setting `default_flow_style = True`
+            forces all collections to be dumped in flow style, meaning they are written on
+            a single line using square brackets [] for sequences and curly braces {} for mappings.
+        dash_inwards (bool): Whether to use dash inwards, i.e. whether to indent the dash in front of a sequence.
+        quotes_preserved (bool): Whether to preserve quotes, i.e. preserve the original quotes
+            used in the input in the output.
+        spaces_before_comment (int | None): Number of spaces before comments.
+        line_width (int): Maximum line width.
+        version (bool | None): Whether to include version information (deprecated)
+        io_config (YamkixInputOutputConfig): Input/Output configuration.
+
+    """
 
     explicit_start: bool
     explicit_end: bool
@@ -44,7 +70,21 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
 
 
 def get_default_yamkix_config() -> YamkixConfig:
-    """Return Yamkix default config."""
+    """Return `Yamkix` default configuration.
+
+    Get what `Yamkix` considers to be the default configuration:<br/>
+        - `parsing_mode`: "rt"<br/>
+        - `explicit_start`: True<br/>
+        - `explicit_end`: False<br/>
+        - `default_flow_style`: False<br/>
+        - `dash_inwards`: True<br/>
+        - `quotes_preserved`: True<br/>
+        - `spaces_before_comment`: None<br/>
+        - `line_width`: 2048<br/>
+        - `io_config`:<br/>
+            - `input`: None<br/>
+            - `output`: None
+    """
     return YamkixConfig(
         parsing_mode="rt",
         explicit_start=True,
@@ -60,7 +100,7 @@ def get_default_yamkix_config() -> YamkixConfig:
 
 
 def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
-    """Return a default input / output config."""
+    """Return a default `input` / `output` configuration."""
     return YamkixInputOutputConfig(
         input=None,
         output=None,
@@ -78,11 +118,14 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
     line_width: int | None = None,
     io_config: YamkixInputOutputConfig | None = None,
 ) -> YamkixConfig:
-    """Return a Yamkix config based on the default one.
+    """Return a `Yamkix` configuration, based on the default one.
 
-    Use this function when you want to create a custom config that just overrides
-    some of the default values.
-    If you want to create a config from scratch, use YamkixConfig directly.
+    Tip:
+        Use this function when you want to create a custom configuration that just overrides
+        some of the default values.
+
+    Note:
+        If you want to create a configuration from scratch, build a `YamkixConfig` object directly.
     """
     default_config = get_default_yamkix_config()
     return YamkixConfig(

@@ -12,12 +12,15 @@ OPINIONATED_OFFSET_VALUE = 2
 def get_opinionated_yaml_writer(
     yamkix_config: YamkixConfig,
 ) -> YAML:
-    """Configure a yaml parser/formatter the yamkix way.
+    """Configure a yaml parser/formatter the `yamkix` way.
 
     Args:
         yamkix_config: a YamkixConfig instance
     Returns:
-        a ruamel.yaml YAML instance
+        a ruamel.yaml YAML instance, configured according to the YamkixConfig you provided and:<br/>
+            - mapping = 2 (map indent)<br/>
+            - sequence = 4 (sequence indent)<br/>
+            - offset = 2 (sequence dash offset)
     """
     yaml = YAML(typ=yamkix_config.parsing_mode)
     yaml.explicit_start = yamkix_config.explicit_start

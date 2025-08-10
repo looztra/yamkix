@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.10"
 resolution-markers = [
     "python_full_version >= '3.12'",
@@ -326,6 +326,43 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/22/01/4897bb317b347070b73a2f795e38a897ab3b022e020ff2f3ea6bc6a5994b/griffe-1.11.0.tar.gz", hash = "sha256:c153b5bc63ca521f059e9451533a67e44a9d06cf9bf1756e4298bda5bd3262e8", size = 410774, upload-time = "2025-08-07T18:23:36.784Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a7/55/588425bdbe8097b621db813e9b33f0a8a7257771683e0f5369c6c8eb66ab/griffe-1.11.0-py3-none-any.whl", hash = "sha256:dc56cc6af8d322807ecdb484b39838c7a51ca750cf21ccccf890500c4d6389d8", size = 137576, upload-time = "2025-08-07T18:23:34.859Z" },
+]
+
+[[package]]
+name = "griffe-pydantic"
+version = "1.1.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "griffe" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ff/0a/61b2fa8abe04208682bcdb9fba3ae61b1ba879fd17be9e523622f1aa9afb/griffe_pydantic-1.1.6.tar.gz", hash = "sha256:d33413bf44b01b2f9348ea3328fdfe34ad7b2aabb4005a18d36cc0ca0ade908e", size = 42613, upload-time = "2025-08-06T09:30:57.796Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7b/03/699f059a54b7873a11bf53389236c06640bf47be590aa87a521d7c4bb044/griffe_pydantic-1.1.6-py3-none-any.whl", hash = "sha256:57a838dd1c3b5842a7ebada8fd80f2585a25b69c37f73ede19ca20fa9af055e6", size = 12671, upload-time = "2025-08-06T09:30:56.616Z" },
+]
+
+[[package]]
+name = "griffe-typingdoc"
+version = "0.2.8"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "griffe" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/97/5d/5b64411883042f49fa715fdd8085cc39f7378b934d3b35aa479dc9b37f3a/griffe_typingdoc-0.2.8.tar.gz", hash = "sha256:36f2c2f2568240a5d0ab462153d1f3cfec01a9cc56b2291f16ce7869f0f7af05", size = 30472, upload-time = "2025-02-18T00:25:51.741Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8e/50/0b1e5e81027d5664903236b44fee18cd0e1e5f046e02c0b3ebebd6b9e3d3/griffe_typingdoc-0.2.8-py3-none-any.whl", hash = "sha256:a4ed3dd73b9d48311b138d8b317916a0589325a73c525236bf5969a8fe2626b1", size = 9607, upload-time = "2025-02-18T00:25:49.489Z" },
+]
+
+[[package]]
+name = "griffe-warnings-deprecated"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "griffe" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7e/0e/f034e1714eb2c694d6196c75f77a02f9c69d19f9961c4804a016397bf3e5/griffe_warnings_deprecated-1.1.0.tar.gz", hash = "sha256:7bf21de327d59c66c7ce08d0166aa4292ce0577ff113de5878f428d102b6f7c5", size = 33260, upload-time = "2024-12-10T21:02:18.395Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/43/4c/b7241f03ad1f22ec2eed33b0f90c4f8c949e3395c4b7488670b07225a20b/griffe_warnings_deprecated-1.1.0-py3-none-any.whl", hash = "sha256:e7b0e8bfd6e5add3945d4d9805b2a41c72409e456733965be276d55f01e8a7a2", size = 5854, upload-time = "2024-12-10T21:02:16.96Z" },
 ]
 
 [[package]]
@@ -1336,6 +1373,9 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "faker" },
+    { name = "griffe-pydantic" },
+    { name = "griffe-typingdoc" },
+    { name = "griffe-warnings-deprecated" },
     { name = "mkdocs" },
     { name = "mkdocs-material" },
     { name = "mkdocstrings", extra = ["python"] },
@@ -1361,6 +1401,9 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "faker", specifier = ">=36.0" },
+    { name = "griffe-pydantic", specifier = ">=1.1.6" },
+    { name = "griffe-typingdoc", specifier = ">=0.2.8" },
+    { name = "griffe-warnings-deprecated", specifier = ">=1.1.0" },
     { name = "mkdocs", specifier = ">=1.6.1" },
     { name = "mkdocs-material", specifier = ">=9.6.16" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=0.30.0" },
