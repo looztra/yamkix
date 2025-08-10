@@ -50,6 +50,9 @@ dev = [
     "ruff>=0.9.6",
     "tox-uv>=1.23.2",
     "pylint-pydantic>=0.3.5",
+    "mkdocs>=1.6.1",
+    "mkdocstrings[python]>=0.30.0",
+    "mkdocs-material>=9.6.16",
 ]
 
 [tool.hatch.version]
