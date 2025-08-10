@@ -21,8 +21,8 @@ class YamkixInputOutputConfig:
     Part of the config that manages `input` and `output`.
 
     Attributes:
-        input (str | None): The input file to parse or `STDIN` or `None`. Defaults to `STDIN` if not specified
-        output (str | None): The name of the file to generate (can be `STDOUT`). Will be the same as input file
+        input: The input file to parse or `STDIN` or `None`. Defaults to `STDIN` if not specified
+        output: The name of the file to generate (can be `STDOUT`). Will be the same as input file
             if not specified (`None`), or `STDOUT` if `STDIN` was specified as input
     """
 
@@ -40,20 +40,20 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
     """Defines the available `Yamkix` configuration.
 
     Attributes:
-        explicit_start (bool): Whether to include explicit start markers (`---`).
-        explicit_end (bool): Whether to include explicit end markers (`...`).
-        default_flow_style (bool): Whether to use default flow style. Setting `default_flow_style = False` ensures
+        explicit_start: Whether to include explicit start markers (`---`).
+        explicit_end: Whether to include explicit end markers (`...`).
+        default_flow_style: Whether to use default flow style. Setting `default_flow_style = False` ensures
             that all collections are dumped in block style by default, which is the typical YAML format where sequences
             and mappings are presented with indentation and newlines. Conversely, setting `default_flow_style = True`
             forces all collections to be dumped in flow style, meaning they are written on
             a single line using square brackets [] for sequences and curly braces {} for mappings.
-        dash_inwards (bool): Whether to use dash inwards, i.e. whether to indent the dash in front of a sequence.
-        quotes_preserved (bool): Whether to preserve quotes, i.e. preserve the original quotes
+        dash_inwards: Whether to use dash inwards, i.e. whether to indent the dash in front of a sequence.
+        quotes_preserved: Whether to preserve quotes, i.e. preserve the original quotes
             used in the input in the output.
-        spaces_before_comment (int | None): Number of spaces before comments.
-        line_width (int): Maximum line width.
-        version (bool | None): Whether to include version information (deprecated)
-        io_config (YamkixInputOutputConfig): Input/Output configuration.
+        spaces_before_comment: Number of spaces before comments.
+        line_width: Maximum line width.
+        version: Whether to include version information (deprecated)
+        io_config: Input/Output configuration.
 
     """
 
@@ -72,18 +72,24 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
 def get_default_yamkix_config() -> YamkixConfig:
     """Return `Yamkix` default configuration.
 
-    Get what `Yamkix` considers to be the default configuration:<br/>
-        - `parsing_mode`: "rt"<br/>
-        - `explicit_start`: True<br/>
-        - `explicit_end`: False<br/>
-        - `default_flow_style`: False<br/>
-        - `dash_inwards`: True<br/>
-        - `quotes_preserved`: True<br/>
-        - `spaces_before_comment`: None<br/>
-        - `line_width`: 2048<br/>
-        - `io_config`:<br/>
-            - `input`: None<br/>
-            - `output`: None
+    Returns:
+        yamkix_config: The default configuration provided by `Yamkix`:
+            <ul>
+                <li><i>parsing_mode = rt</i></li>
+                <li><i>explicit_start = True</i></li>
+                <li><i>explicit_end = False</i></li>
+                <li><i>default_flow_style = False</i></li>
+                <li><i>dash_inwards = True</i></li>
+                <li><i>quotes_preserved = True</i></li>
+                <li><i>spaces_before_comment = None</i></li>
+                <li><i>line_width = 2048</i></li>
+                <li><i>io_config</i>:
+                    <ul>
+                        <li><i>input = None</i></li>
+                        <li><i>output = None</i></li>
+                    </ul>
+                </li>
+            </ul>
     """
     return YamkixConfig(
         parsing_mode="rt",
@@ -100,7 +106,11 @@ def get_default_yamkix_config() -> YamkixConfig:
 
 
 def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
-    """Return a default `input` / `output` configuration."""
+    """Return a default `input` / `output` configuration.
+
+    Returns:
+        yamkix_input_output_config: A default `YamkixInputOutputConfig` object.
+    """
     return YamkixInputOutputConfig(
         input=None,
         output=None,
@@ -119,6 +129,30 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
     io_config: YamkixInputOutputConfig | None = None,
 ) -> YamkixConfig:
     """Return a `Yamkix` configuration, based on the default one.
+
+    Parameters:
+        parsing_mode: `rt`/`None` -> RoundTripLoader/RoundTripDumper, (default)
+            `safe` -> SafeLoader/SafeDumper,
+            `unsafe` -> normal/unsafe Loader/Dumper (pending deprecation)
+            `full` -> full Dumper only, including python built-ins that are
+                potentially unsafe to load
+            `base` -> baseloader
+                explicit_start: Whether to include explicit start markers (`---`).
+        explicit_end: Whether to include explicit end markers (`...`).
+        default_flow_style: Whether to use default flow style. Setting `default_flow_style = False` ensures
+            that all collections are dumped in block style by default, which is the typical YAML format where sequences
+            and mappings are presented with indentation and newlines. Conversely, setting `default_flow_style = True`
+            forces all collections to be dumped in flow style, meaning they are written on
+            a single line using square brackets [] for sequences and curly braces {} for mappings.
+        dash_inwards: Whether to use dash inwards, i.e. whether to indent the dash in front of a sequence.
+        quotes_preserved: Whether to preserve quotes, i.e. preserve the original quotes
+            used in the input in the output.
+        spaces_before_comment: Number of spaces before comments.
+        line_width: Maximum line width.
+        io_config: Input/Output configuration.
+
+    Returns:
+        yamkix_config: A `YamkixConfig` object with the specified overrides.
 
     Tip:
         Use this function when you want to create a custom configuration that just overrides

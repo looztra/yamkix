@@ -14,13 +14,15 @@ def get_opinionated_yaml_writer(
 ) -> YAML:
     """Configure a yaml parser/formatter the `yamkix` way.
 
-    Args:
+    Parameters:
         yamkix_config: a YamkixConfig instance
     Returns:
         a ruamel.yaml YAML instance, configured according to the YamkixConfig you provided and:<br/>
-            - mapping = 2 (map indent)<br/>
-            - sequence = 4 (sequence indent)<br/>
-            - offset = 2 (sequence dash offset)
+        <ul>
+            <li>`mapping = 2` (map indent)</li>
+            <li>`sequence = 4` (sequence indent)</li>
+            <li>`offset = 2` (sequence dash offset)</li>
+        </ul>
     """
     yaml = YAML(typ=yamkix_config.parsing_mode)
     yaml.explicit_start = yamkix_config.explicit_start
