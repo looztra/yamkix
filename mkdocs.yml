@@ -19,4 +19,6 @@ plugins:
 
 nav:
   - Yamkix?: index.md
-  - reference.md
+  - Configuration: configuration.md
+  - Public API Reference: reference.md
+  - Pointers: pointers.md
