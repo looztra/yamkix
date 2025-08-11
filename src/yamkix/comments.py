@@ -7,14 +7,13 @@ from ruamel.yaml.tokens import CommentToken
 from yamkix.helpers import remove_all_linebreaks, string_is_comment
 
 
-def yamkix_add_eol_comment(self, comment: str, key=NotNone, column=None) -> None:  # noqa: ANN001
+def yamkix_add_eol_comment(self, comment: str, key=NotNone, column: int | None = None) -> None:  # noqa: ANN001
     """Provide a custom add_eol_comment function.
 
     We need to be able to tune the number of spaces between
     the content and the comment for CommentedSeqs and CommentedMaps
     see https://stackoverflow.com/q/60915926
     """
-    # pylint: disable=protected-access
     org_col = column
     if column is None:
         try:

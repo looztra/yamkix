@@ -19,6 +19,7 @@ classifiers = [
 ]
 dependencies = [
     "ruamel-yaml>0.17.27",
+    "typer>=0.9.0",
 ]
 description = "An opinionated yaml formatter based on ruamel.yaml"
 dynamic = [
@@ -33,7 +34,7 @@ requires-python = ">=3.10"
 Repository = "https://github.com/looztra/yamkix"
 
 [project.scripts]
-yamkix = "yamkix.__main__:main"
+yamkix = "yamkix._cli:app"
 
 [dependency-groups]
 dev = [
@@ -48,6 +49,14 @@ dev = [
     "pytest>=8.3.3",
     "ruff>=0.9.6",
     "tox-uv>=1.23.2",
+    "pylint-pydantic>=0.3.5",
+    "mkdocs>=1.6.1",
+    "mkdocstrings[python]>=0.30.0",
+    "mkdocs-material>=9.6.16",
+    "griffe-pydantic>=1.1.6",
+    "griffe-warnings-deprecated>=1.1.0",
+    "griffe-typingdoc>=0.2.8",
+    "taplo>=0.9.3",
 ]
 
 [tool.hatch.version]

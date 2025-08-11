@@ -1,0 +1,24 @@
+---
+site_name: Yamkix
+
+theme:
+  name: material
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            separate_signature: true
+            show_signature_annotations: true
+            extensions:
+              - griffe_pydantic: {schema: true}
+              - griffe_typingdoc
+              - griffe_warnings_deprecated
+
+nav:
+  - Yamkix?: index.md
+  - Configuration: configuration.md
+  - Public API Reference: reference.md
+  - Pointers: pointers.md

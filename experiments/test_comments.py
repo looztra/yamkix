@@ -3,6 +3,7 @@
 import sys
 
 import ruamel.yaml
+from rich import print as pprint
 from ruamel.yaml.comments import CommentedBase, CommentedMap, NotNone
 from ruamel.yaml.error import CommentMark
 from ruamel.yaml.tokens import CommentToken
@@ -64,7 +65,7 @@ def process_comments(data: CommentedMap, column: int | None = None) -> None:  # 
     """Process comments."""
     if isinstance(data, dict):
         if data.ca and data.ca.items:
-            print(
+            pprint(
                 "CommentedMap with ca with items : " + str(data.ca.items),
                 file=sys.stderr,
             )
@@ -73,12 +74,12 @@ def process_comments(data: CommentedMap, column: int | None = None) -> None:  # 
                     comment = data.ca.items[key][2].value.replace("\n", "")
                     try:
                         col = data._yaml_get_column(key)  # noqa: SLF001
-                        print(
+                        pprint(
                             "key [" + key + "] at col [" + str(col) + "]",
                             file=sys.stderr,
                         )
                     except AttributeError:
-                        print(
+                        pprint(
                             "key [" + key + "] at col [EXCEPTION]",
                             file=sys.stderr,
                         )
@@ -88,7 +89,7 @@ def process_comments(data: CommentedMap, column: int | None = None) -> None:  # 
             process_comments(v, column=column)
     elif isinstance(data, list):
         if data.ca and data.ca.items:
-            print(
+            pprint(
                 "CommentedSeq with ca with items : " + str(data.ca.items),
                 file=sys.stderr,
             )

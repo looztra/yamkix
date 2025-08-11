@@ -2,19 +2,7 @@
 
 from typing import Any
 
-from yamkix import __version__
-
 StreamType = Any  # Copied from ruamel.yaml compat.py line 58
-
-
-def get_version_string() -> str:
-    """Return the version string."""
-    return "yamkix v" + __version__
-
-
-def print_version() -> None:
-    """Print version."""
-    print(get_version_string())  # noqa: T201
 
 
 def remove_all_linebreaks(comment: StreamType) -> StreamType:
