@@ -2,7 +2,7 @@
 site_name: Yamkix
 
 theme:
-  name: 'material'
+  name: material
 
 plugins:
   - mkdocstrings:
@@ -13,7 +13,7 @@ plugins:
             separate_signature: true
             show_signature_annotations: true
             extensions:
-              - griffe_pydantic: { schema: true }
+              - griffe_pydantic: {schema: true}
               - griffe_typingdoc
               - griffe_warnings_deprecated
 

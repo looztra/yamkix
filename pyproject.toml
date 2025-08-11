@@ -56,6 +56,7 @@ dev = [
     "griffe-pydantic>=1.1.6",
     "griffe-warnings-deprecated>=1.1.0",
     "griffe-typingdoc>=0.2.8",
+    "taplo>=0.9.3",
 ]
 
 [tool.hatch.version]
