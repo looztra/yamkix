@@ -1,0 +1,554 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../reference/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>Configuration - Yamkix</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e37652d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#configuration" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Yamkix" class="md-header__button md-logo" aria-label="Yamkix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Yamkix
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Configuration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Yamkix" class="md-nav__button md-logo" aria-label="Yamkix" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Yamkix
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Yamkix?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Configuration
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#to-preserve-or-not-to-preserve-quotes" class="md-nav__link">
+    <span class="md-ellipsis">
+      To preserve or not to preserve quotes?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="To preserve or not to preserve quotes?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quotes-preserved-default-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quotes preserved (default behavior)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quotes-not-preserved-using-q-no-quotes-preserved" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quotes not preserved (using -q/--no-quotes-preserved)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Public API Reference
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pointers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pointers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#to-preserve-or-not-to-preserve-quotes" class="md-nav__link">
+    <span class="md-ellipsis">
+      To preserve or not to preserve quotes?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="To preserve or not to preserve quotes?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quotes-preserved-default-behavior" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quotes preserved (default behavior)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quotes-not-preserved-using-q-no-quotes-preserved" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quotes not preserved (using -q/--no-quotes-preserved)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="configuration">Configuration</h1>
+<ul>
+<li>Explicit start of yaml docs by default (you can disable it with
+  <code>--no-explicit-start</code>)</li>
+<li>Quotes preserved by default (you can disable it with
+  <code>--no-quotes-preserved</code>)</li>
+<li>Arrays elements pushed inwards by default (you can disable it with
+  <code>--no-dash-inwards</code>)</li>
+<li>Output file is input file by default</li>
+<li>Comments preserved by default thanks to
+  <a href="https://pypi.python.org/pypi/ruamel.yaml">ruamel.yaml</a> <code>round_trip</code>
+  mode (you can disable it with <code>--typ safe</code>)</li>
+</ul>
+<h2 id="to-preserve-or-not-to-preserve-quotes">To preserve or not to preserve quotes?</h2>
+<ul>
+<li><em>Quotes preserved</em> means : if there were quotes in the input, they
+  will also be present in the output, and it will be the same type
+  (single/double) of quotes</li>
+<li><em>Quotes not preserved</em> means :</li>
+<li>if quotes are not necessary (around <em>pure</em> strings), they will
+    be removed</li>
+<li>if quotes are present around booleans and numbers, they will be
+    converted to default (single quotes)</li>
+<li>if quotes are not present around booleans and numbers, there
+    will be no quotes in the output too</li>
+</ul>
+<p><strong>Note</strong>: there is no option for the moment to force the usage of double
+quotes when
+<span class="title-ref">-q</span>/<span class="title-ref">--no-quotes-preserved</span>
+is used.</p>
+<h3 id="quotes-preserved-default-behavior">Quotes preserved (default behavior)</h3>
+<p>With input :</p>
+<pre><code class="language-yaml">---
+apiVersion: extensions/v1beta1 # with comment
+kind: ReplicaSet
+metadata:
+  name: tname
+  namespace: tns
+  annotations:
+    string_no_quotes: frontend
+    string_single_quotes: 'frontend'
+    string_double_quotes: &quot;frontend&quot;
+    boolean_no_quotes: true
+    boolean_single_quotes: 'true'
+    boolean_double_quotes: &quot;true&quot;
+    number_no_quotes: 1
+    number_single_quotes: '1'
+    number_double_quotes: &quot;1&quot;
+</code></pre>
+<p>the output will be the same as the input :</p>
+<pre><code class="language-yaml">---
+apiVersion: extensions/v1beta1 # with comment
+kind: ReplicaSet
+metadata:
+  name: tname
+  namespace: tns
+  annotations:
+    string_no_quotes: frontend
+    string_single_quotes: 'frontend'
+    string_double_quotes: &quot;frontend&quot;
+    boolean_no_quotes: true
+    boolean_single_quotes: 'true'
+    boolean_double_quotes: &quot;true&quot;
+    number_no_quotes: 1
+    number_single_quotes: '1'
+    number_double_quotes: &quot;1&quot;
+</code></pre>
+<h3 id="quotes-not-preserved-using-q-no-quotes-preserved">Quotes not preserved (using <span class="title-ref">-q/--no-quotes-preserved</span>)</h3>
+<p>With input :</p>
+<pre><code class="language-yaml">---
+apiVersion: extensions/v1beta1 # with comment
+kind: ReplicaSet
+metadata:
+  name: tname
+  namespace: tns
+  annotations:
+    string_no_quotes: frontend
+    string_single_quotes: 'frontend'
+    string_double_quotes: &quot;frontend&quot;
+    boolean_no_quotes: true
+    boolean_single_quotes: 'true'
+    boolean_double_quotes: &quot;true&quot;
+    number_no_quotes: 1
+    number_single_quotes: '1'
+    number_double_quotes: &quot;1&quot;
+</code></pre>
+<p>the output will be :</p>
+<pre><code class="language-yaml">---
+apiVersion: extensions/v1beta1 # with comment
+kind: ReplicaSet
+metadata:
+  name: tname
+  namespace: tns
+  annotations:
+    string_no_quotes: frontend
+    string_single_quotes: frontend
+    string_double_quotes: frontend
+    boolean_no_quotes: true
+    boolean_single_quotes: 'true'
+    boolean_double_quotes: 'true'
+    number_no_quotes: 1
+    number_single_quotes: '1'
+    number_double_quotes: '1'
+</code></pre>
+<p><strong>Note</strong> : <span class="title-ref">kubesplit</span> is not fully
+<em>Kubernetes</em> aware for the moment, so it does not try to enforce
+this behaviour only on string sensible <em>kubernetes</em> resource fields
+(<span class="title-ref">.metadata.annotations</span> and
+<span class="title-ref">.spec.containers.environment</span> values)</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.50899def.min.js"></script>
+      
+    
+  </body>
+</html>
