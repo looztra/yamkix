@@ -26,6 +26,7 @@ env:
   UV_LINK_MODE: copy
   UV_PYTHON_PREFERENCE: only-managed
   UV_CACHE_DIR: /tmp/.uv-cache
+  MISE_INSTALL_FROM_GITHUB: 1
 
 jobs:
   pre-commit:
