@@ -176,7 +176,7 @@ jobs:
           path: dist/
 
       - name: Detect environment
-        if: ${{ github.event_name == 'push' || inputs.force_release }}
+        if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
         id: detect-deploy-env
         run: |
           echo "deploy_env=${{ startsWith(github.ref, 'refs/tags') && 'pypi' || 'testpypi' }}" >> "${GITHUB_OUTPUT}"
