@@ -170,7 +170,7 @@ jobs:
 
       - name: Store the distribution packages
         uses: actions/upload-artifact@v4
-        if: ${{ github.event_name == 'push' || inputs.force_release }}
+        if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
         with:
           name: python-package-distributions
           path: dist/
