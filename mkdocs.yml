@@ -22,13 +22,20 @@ theme:
     repo: fontawesome/brands/github
   features:
     - content.action.edit
+    - content.code.copy
 
 markdown_extensions:
   - admonition
-  - pymdownx.details
   - attr_list
   - md_in_html
+  - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
 plugins:
   - search
   - mkdocstrings:
@@ -49,5 +56,6 @@ plugins:
 nav:
   - Introduction: index.md
   - Configuration: configuration.md
+  - Install: install.md
   - Public API Reference: reference.md
   - Pointers: pointers.md
