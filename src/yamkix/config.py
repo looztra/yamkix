@@ -46,7 +46,7 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
             that all collections are dumped in block style by default, which is the typical YAML format where sequences
             and mappings are presented with indentation and newlines. Conversely, setting `default_flow_style = True`
             forces all collections to be dumped in flow style, meaning they are written on
-            a single line using square brackets [] for sequences and curly braces {} for mappings.
+            a single line using square brackets `[]` for sequences and curly braces `{}` for mappings.
         dash_inwards: Whether to use dash inwards, i.e. whether to indent the dash in front of a sequence.
         quotes_preserved: Whether to preserve quotes, i.e. preserve the original quotes
             used in the input in the output.

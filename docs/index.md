@@ -2,7 +2,7 @@
 
 ## Why?
 
-- Because I like my `yaml` file to be nicely formatted
+- Because I like my `yaml` file to be nicely formatted and there is not _out of the box_ **default** format rules.
 - Because
   <https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml>
   does not add explicit start of documents and I don't like it this

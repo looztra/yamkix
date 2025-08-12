@@ -23,6 +23,12 @@ theme:
   features:
     - content.action.edit
 
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences
 plugins:
   - search
   - mkdocstrings:
@@ -41,7 +47,7 @@ plugins:
       enable_creation_date: false
       type: iso_datetime
 nav:
-  - Yamkix?: index.md
+  - Introduction: index.md
   - Configuration: configuration.md
   - Public API Reference: reference.md
   - Pointers: pointers.md
