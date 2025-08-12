@@ -9,6 +9,10 @@
 
 You can read the docs at <https://looztra.github.io/yamkix/>
 
+## Changelog
+
+The Changelog is available at <https://looztra.github.io/yamkix/changelog.md>
+
 ## Hack
 
 Check [our contribution guidelines](https://looztra.github.io/yamkix/contributing).
