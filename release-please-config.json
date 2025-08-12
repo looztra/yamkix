@@ -43,7 +43,7 @@
     {
       "type": "chore",
       "section": "Miscellaneous Chores",
-      "hidden": false
+      "hidden": true
     },
     {
       "type": "refactor",
@@ -53,12 +53,12 @@
     {
       "type": "test",
       "section": "Tests",
-      "hidden": false
+      "hidden": true
     },
     {
       "type": "build",
       "section": "Build System",
-      "hidden": false
+      "hidden": true
     },
     {
       "type": "ci",
