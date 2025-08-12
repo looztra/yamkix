@@ -1,10 +1,30 @@
 ---
 site_name: Yamkix
-
+repo_url: https://github.com/looztra/yamkix
+edit_uri: edit/main/docs/
 theme:
   name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - content.action.edit
 
 plugins:
+  - search
   - mkdocstrings:
       handlers:
         python:
@@ -13,10 +33,13 @@ plugins:
             separate_signature: true
             show_signature_annotations: true
             extensions:
-              - griffe_pydantic: {schema: true}
+              - griffe_pydantic:
+                schema: true
               - griffe_typingdoc
               - griffe_warnings_deprecated
-
+  - git-revision-date-localized:
+      enable_creation_date: false
+      type: iso_datetime
 nav:
   - Yamkix?: index.md
   - Configuration: configuration.md
