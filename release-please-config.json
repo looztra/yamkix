@@ -8,6 +8,7 @@
   },
   "release-type": "python",
   "initial-version": "0.1.0",
+  "always-update": true,
   "changelog-sections": [
     {
       "type": "feat",
@@ -32,12 +33,12 @@
     {
       "type": "docs",
       "section": "Documentation",
-      "hidden": true
+      "hidden": false
     },
     {
       "type": "style",
       "section": "Styles",
-      "hidden": true
+      "hidden": false
     },
     {
       "type": "chore",
@@ -52,17 +53,17 @@
     {
       "type": "test",
       "section": "Tests",
-      "hidden": true
+      "hidden": false
     },
     {
       "type": "build",
       "section": "Build System",
-      "hidden": true
+      "hidden": false
     },
     {
       "type": "ci",
       "section": "Continuous Integration",
-      "hidden": true
+      "hidden": false
     }
   ]
 }
