@@ -58,4 +58,5 @@ nav:
   - Configuration: configuration.md
   - Install: install.md
   - Public API Reference: reference.md
+  - Contributing: contributing.md
   - Pointers: pointers.md

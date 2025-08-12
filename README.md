@@ -5,8 +5,10 @@
 
 ## Yamkix
 
-`Yamkix` is an opinionated `yaml`file formatter. You can read the docs at <https://looztra.github.io/yamkix/>
+`Yamkix` is an opinionated `yaml`file formatter.
+
+You can read the docs at <https://looztra.github.io/yamkix/>
 
 ## Hack
 
-See our [CONTRIBUTING](CONTRIBUTING.md) guide.
+Check [our contribution guidelines](https://looztra.github.io/yamkix/contributing).
