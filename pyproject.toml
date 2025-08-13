@@ -38,6 +38,7 @@ yamkix = "yamkix._cli:app"
 
 [dependency-groups]
 dev = [
+    { include-group = "docs" },
     "tox>=4.2",
     "faker>=36.0",
     "poethepoet>=0.29.0",
@@ -50,16 +51,17 @@ dev = [
     "ruff>=0.9.6",
     "tox-uv>=1.23.2",
     "pylint-pydantic>=0.3.5",
+    "taplo>=0.9.3",
+]
+docs = [
     "mkdocs>=1.6.1",
     "mkdocstrings[python]>=0.30.0",
     "mkdocs-material>=9.6.16",
     "griffe-pydantic>=1.1.6",
     "griffe-warnings-deprecated>=1.1.0",
     "griffe-typingdoc>=0.2.8",
-    "taplo>=0.9.3",
     "mkdocs-git-revision-date-localized-plugin>=1.4.7",
 ]
-
 [tool.hatch.version]
 source = "versioningit"
 

@@ -58,7 +58,7 @@ jobs:
       - name: Setup venv
         run: |
           uv python install
-          make setup-venv
+          uv sync --no-group docs
 
       - name: Check if uv lock file is up to date
         env:
@@ -101,8 +101,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       deploy_env: ${{ steps.detect-deploy-env.outputs.deploy_env }}
-    needs:
-      - pre-commit
     steps:
       - name: Checkout Code
         uses: actions/checkout@v5
@@ -137,9 +135,6 @@ jobs:
           echo "::group::make test"
           make test
           echo "::endgroup::"
-          echo "::group::make test-python-versions"
-          make test-python-versions
-          echo "::endgroup::"
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
@@ -152,12 +147,6 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Run Integration tests
-        run: |
-          echo "::group::make integration-tests"
-          make integration-tests
-          echo "::endgroup::"
 
       - name: Minimize uv cache
         run: uv cache prune --ci
@@ -203,3 +192,132 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://upload.pypi.org/legacy/' || 'https://test.pypi.org/legacy/' }}
+
+  mkdocs:
+    name: Build doc
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: jdx/mise-action@v2
+        with:
+          install: true
+          cache: true
+          version: ${{ vars.MISE_VERSION }}
+          mise_toml: |
+            [tools]
+            uv = "latest"
+
+      - name: Restore uv cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.uv-cache
+          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+            uv-${{ runner.os }}
+
+      - name: Setup venv
+        run: |
+          uv python install
+          uv sync --group docs
+
+      - name: Check we can build the docs
+        run: |
+          echo "::group::build docs with mkdocs"
+          make build-docs
+          echo "::endgroup::"
+
+  integration-tests:
+    name: Run Integration tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: jdx/mise-action@v2
+        with:
+          install: true
+          cache: true
+          version: ${{ vars.MISE_VERSION }}
+          mise_toml: |
+            [tools]
+            uv = "latest"
+
+      - name: Restore uv cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.uv-cache
+          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+            uv-${{ runner.os }}
+
+      - name: Setup venv
+        run: |
+          uv python install
+          uv sync --no-dev
+
+      - name: Run integration tests
+        run: |
+          echo "::group::run integration tests"
+          make integration-tests
+          echo "::endgroup::"
+
+  python-versions:
+    name: Run tests with various python versions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: jdx/mise-action@v2
+        with:
+          install: true
+          cache: true
+          version: ${{ vars.MISE_VERSION }}
+          mise_toml: |
+            [tools]
+            uv = "latest"
+
+      - name: Restore uv cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.uv-cache
+          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+            uv-${{ runner.os }}
+
+      - name: Setup venv
+        run: |
+          uv python install
+          make setup-venv
+
+      - name: Run 'test-python-versions' task
+        run: |
+          echo "::group::make test-python-versions"
+          make test-python-versions
+          echo "::endgroup::"
+
+  finalizer:
+    if: always()
+    runs-on: Ubuntu-latest
+    needs:
+      - pre-commit
+      - python-checks
+      - mkdocs
+      - integration-tests
+      - python-versions
+    steps:
+      - name: Decide whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
