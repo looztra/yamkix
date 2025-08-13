@@ -1464,6 +1464,15 @@ dev = [
     { name = "tox" },
     { name = "tox-uv" },
 ]
+docs = [
+    { name = "griffe-pydantic" },
+    { name = "griffe-typingdoc" },
+    { name = "griffe-warnings-deprecated" },
+    { name = "mkdocs" },
+    { name = "mkdocs-git-revision-date-localized-plugin" },
+    { name = "mkdocs-material" },
+    { name = "mkdocstrings", extra = ["python"] },
+]
 
 [package.metadata]
 requires-dist = [
@@ -1493,4 +1502,13 @@ dev = [
     { name = "taplo", specifier = ">=0.9.3" },
     { name = "tox", specifier = ">=4.2" },
     { name = "tox-uv", specifier = ">=1.23.2" },
+]
+docs = [
+    { name = "griffe-pydantic", specifier = ">=1.1.6" },
+    { name = "griffe-typingdoc", specifier = ">=0.2.8" },
+    { name = "griffe-warnings-deprecated", specifier = ">=1.1.0" },
+    { name = "mkdocs", specifier = ">=1.6.1" },
+    { name = "mkdocs-git-revision-date-localized-plugin", specifier = ">=1.4.7" },
+    { name = "mkdocs-material", specifier = ">=9.6.16" },
+    { name = "mkdocstrings", extras = ["python"], specifier = ">=0.30.0" },
 ]
