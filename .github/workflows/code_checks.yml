@@ -101,8 +101,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       deploy_env: ${{ steps.detect-deploy-env.outputs.deploy_env }}
-    needs:
-      - pre-commit
     steps:
       - name: Checkout Code
         uses: actions/checkout@v5
@@ -203,3 +201,15 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://upload.pypi.org/legacy/' || 'https://test.pypi.org/legacy/' }}
+
+  finalizer:
+    if: always()
+    runs-on: Ubuntu-latest
+    needs:
+      - pre-commit
+      - python-checks
+    steps:
+      - name: Decide whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
