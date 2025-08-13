@@ -14,7 +14,7 @@ class TestPackageInstallation:
         "resolution",
         [
             pytest.param("highest", id="highest"),
-            # pytest.param("lowest", id="lowest"),
+            pytest.param("lowest", id="lowest"),
             pytest.param("lowest-direct", id="lowest-direct"),
         ],
     )
