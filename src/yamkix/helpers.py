@@ -2,6 +2,8 @@
 
 from typing import Any
 
+from yamkix.__version__ import __version__
+
 StreamType = Any  # Copied from ruamel.yaml compat.py line 58
 
 
@@ -19,3 +21,12 @@ def strip_leading_double_space(stream: StreamType) -> StreamType:
     """Strip the potential leading double spaces in CommentedSeq."""
     stream = stream.removeprefix("  ")
     return stream.replace("\n  ", "\n")
+
+
+def get_yamkix_version() -> str:
+    """Get the current Yamkix version.
+
+    Returns:
+        str: The current Yamkix version.
+    """
+    return __version__
