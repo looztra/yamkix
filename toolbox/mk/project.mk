@@ -12,3 +12,8 @@ build-docs: ## ▶ Build the documentation
 serve-docs: ## ▶ Serve the documentation
 	@echo "Serving the documentation"
 	@uv run mkdocs serve
+
+.PHONY: poe-integration-tests
+poe-integration-tests: ## Run integration tests using poe
+	@echo "+ $@"
+	uv run poe pytest:integration
