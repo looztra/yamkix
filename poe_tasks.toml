@@ -13,7 +13,8 @@ pyright = [
     "pyright:run",
 ]
 "pyright:run" = "pyright"
-"pytest:cov" = "pytest --cov src --cov-report=xml --cov-report=term-missing --cov-branch --junitxml=generated/junit.xml -o junit_family=legacy"
+"pytest:cov" = "pytest --cov src --cov-report=xml --cov-report=term-missing --cov-branch --junitxml=generated/junit.xml -m 'not integration'"
+"pytest:integration" = "pytest -m integration"
 "ruff:fmt:check" = "ruff format --check"
 "ruff:fmt:run" = "ruff format"
 "ruff:lint" = "ruff check"
