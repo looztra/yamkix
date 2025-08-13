@@ -266,7 +266,7 @@ jobs:
       - name: Run integration tests
         run: |
           echo "::group::run integration tests"
-          make integration-tests
+          make integration-tests poe-integration-tests
           echo "::endgroup::"
 
   python-versions:

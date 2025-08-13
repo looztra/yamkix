@@ -1,6 +1,6 @@
 """Test helpers."""
 
-from yamkix.helpers import remove_all_linebreaks, string_is_comment, strip_leading_double_space
+from yamkix.helpers import get_yamkix_version, remove_all_linebreaks, string_is_comment, strip_leading_double_space
 
 
 def test_remove_all_linebreaks() -> None:
@@ -119,3 +119,15 @@ def test_strip_leading_double_space_when_none() -> None:
     stream = "text1\ntext2\n"
     actual = strip_leading_double_space(stream)
     assert actual == stream
+
+
+def test_get_yamkix_version() -> None:
+    """Test get_yamkix_version.
+
+    Ensures the function returns a valid version string.
+    """
+    version = get_yamkix_version()
+
+    # Version should be a non-empty string
+    assert isinstance(version, str)
+    assert len(version) > 0
