@@ -202,12 +202,51 @@ jobs:
         with:
           repository-url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://upload.pypi.org/legacy/' || 'https://test.pypi.org/legacy/' }}
 
+  mkdocs:
+    name: Build doc
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: jdx/mise-action@v2
+        with:
+          install: true
+          cache: true
+          version: ${{ vars.MISE_VERSION }}
+          mise_toml: |
+            [tools]
+            shellcheck = "latest"
+
+      - name: Restore uv cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.uv-cache
+          key: uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+            uv-${{ runner.os }}
+
+      - name: Setup venv
+        run: |
+          uv python install
+          uv sync --group docs
+
+      - name: Check we can build the docs
+        run: |
+          echo "::group::build docs with mkdocs"
+          uv run mkdocs build
+          echo "::endgroup::"
+
   finalizer:
     if: always()
     runs-on: Ubuntu-latest
     needs:
       - pre-commit
       - python-checks
+      - mkdocs
     steps:
       - name: Decide whether the needed jobs succeeded or failed
         uses: re-actors/alls-green@release/v1
