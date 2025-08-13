@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1](https://github.com/looztra/yamkix/compare/v0.11.0...v0.11.1) (2025-08-13)
+
+
+### Bug Fixes
+
+* **docs:** use the correct path to changelog url in README.md that is also pushed to PyPi ([#251](https://github.com/looztra/yamkix/issues/251)) ([06d88a5](https://github.com/looztra/yamkix/commit/06d88a50c7a79378a794e9baa8c0ede19ea7cd38))
+
 ## [0.11.0](https://github.com/looztra/yamkix/compare/v0.10.0...v0.11.0) (2025-08-13)
 
 
