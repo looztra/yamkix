@@ -5,7 +5,7 @@ editorconfig-checker = "3.4.0"
 "pipx:yamkix" = "0.11.1"
 shellcheck = "0.11.0"
 shfmt = "3.12.0"
-uv = "0.8.10"
+uv = "0.8.11"
 
 [settings]
 idiomatic_version_file_enable_tools = [
