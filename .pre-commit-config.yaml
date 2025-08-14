@@ -19,7 +19,7 @@ repos:
         exclude: |
           (?x)^(
               .gitmodules|
-              shared/bats-libs/.*
+              toolbox/bats-libs/.*
           )$
 
   - repo: https://gitlab.com/bmares/check-json5
