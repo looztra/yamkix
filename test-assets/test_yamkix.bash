@@ -84,7 +84,12 @@ function yamkix_spaces_before_comment_and_no_dash_inwards() {
   diff_result_vs_expected "spaces-before-comment-${spaces_before_comment}--no-dash-inwards"
 }
 
-function yamkix_stdin() {
+function yamkix_stdin_default() {
   local f_input=$1
   cat "$BATS_TEST_DIRNAME/test-assets/source/${f_input}.yml" | uv run yamkix
+}
+
+function yamkix_stdin_dash_input() {
+  local f_input=$1
+  cat "$BATS_TEST_DIRNAME/test-assets/source/${f_input}.yml" | uv run yamkix --input=STDIN
 }

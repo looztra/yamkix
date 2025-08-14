@@ -3,15 +3,16 @@
 import sys
 from argparse import Namespace
 from dataclasses import dataclass
+from typing import Final
 
 from typer import echo as typer_echo
 
 from yamkix.__version__ import __version__
 from yamkix.errors import InvalidTypValueError
 
-DEFAULT_LINE_WIDTH = 2048
-STDIN_DISPLAY_NAME = "STDIN"
-STDOUT_DISPLAY_NAME = "STDOUT"
+DEFAULT_LINE_WIDTH: Final = 2048
+STDIN_DISPLAY_NAME: Final = "STDIN"
+STDOUT_DISPLAY_NAME: Final = "STDOUT"
 
 
 @dataclass
@@ -212,7 +213,7 @@ def get_input_output_config_from_args(
     args: Namespace,
 ) -> YamkixInputOutputConfig:
     """Get input, output and associated labels as YamkixInputOutputConfig."""
-    f_input = None if args.input is None else args.input
+    f_input = None if (args.input is None or args.input == STDIN_DISPLAY_NAME) else args.input
     if args.stdout:
         f_output = None
     elif args.output is not None and args.output != STDOUT_DISPLAY_NAME:
@@ -277,12 +278,12 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
 ) -> YamkixConfig:
     """Create YamkixConfig from Typer arguments."""
     # Handle I/O configuration - match the original logic exactly
-    f_input = None if input_file is None else input_file
+    f_input = None if (input_file is None or input_file == STDIN_DISPLAY_NAME) else input_file
     if stdout:
         f_output = None
-    elif output_file is not None and output_file != "STDOUT":
+    elif output_file is not None and output_file != STDOUT_DISPLAY_NAME:
         f_output = output_file
-    elif output_file == "STDOUT" or f_input is None:
+    elif output_file == STDOUT_DISPLAY_NAME or f_input is None:
         f_output = None
     else:
         f_output = f_input

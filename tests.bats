@@ -1,6 +1,9 @@
 #!/usr/bin/env bats
-
-load test-assets/test_yamkix
+setup() {
+  load 'test-assets/test_yamkix'
+  load 'toolbox/bats-libs/bats-support/load'
+  load 'toolbox/bats-libs/bats-assert/load'
+}
 
 @test "dash at col0-1, no dash inwards" {
   yamkix_no_dash_inwards dash-at-col0-1
@@ -112,4 +115,18 @@ load test-assets/test_yamkix
 
 @test "issue-29, spaces-before-comment=2, no-dash-inwards" {
   yamkix_spaces_before_comment_and_no_dash_inwards issue-29 2
+}
+
+# bats test_tags=input:stdin
+@test "can read input from STDIN when --input is not specified" {
+  run yamkix_stdin_default simple
+  [ "$status" -eq 0 ]
+  assert_output --partial 'toto: foo'
+}
+
+# bats test_tags=input:stdin
+@test "can read input from STDIN when --input is specified" {
+  run yamkix_stdin_dash_input simple
+  [ "$status" -eq 0 ]
+  assert_output --partial 'toto: foo'
 }
