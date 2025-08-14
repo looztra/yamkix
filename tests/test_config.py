@@ -8,6 +8,8 @@ from pytest_mock import MockerFixture
 
 from yamkix.config import (
     DEFAULT_LINE_WIDTH,
+    STDIN_DISPLAY_NAME,
+    STDOUT_DISPLAY_NAME,
     YamkixConfig,
     YamkixInputOutputConfig,
     create_yamkix_config_from_typer_args,
@@ -62,6 +64,30 @@ class TestConfig:
         assert sut.output == f_input
         assert sut.output_display_name == f_input
 
+    def test_get_io_config_when_explicit_stdin_input_provided(self) -> None:
+        """Test get_input_output_config_from_args.
+
+        input=STDIN, output=None, stdout=None
+        """
+        parsed = Namespace(input=STDIN_DISPLAY_NAME, output=None, stdout=None)
+        sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
+        assert sut.input is None
+        assert sut.input_display_name == STDIN_DISPLAY_NAME
+        assert sut.output is None
+        assert sut.output_display_name == STDOUT_DISPLAY_NAME
+
+    def test_get_io_config_when_explicit_stdin_and_stdout_provided(self) -> None:
+        """Test get_input_output_config_from_args.
+
+        input=STDIN, output=STDOUT, stdout=None
+        """
+        parsed = Namespace(input=STDIN_DISPLAY_NAME, output=STDOUT_DISPLAY_NAME, stdout=None)
+        sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
+        assert sut.input is None
+        assert sut.input_display_name == STDIN_DISPLAY_NAME
+        assert sut.output is None
+        assert sut.output_display_name == STDOUT_DISPLAY_NAME
+
     def test_get_io_config_when_file_input_and_output_provided(self) -> None:
         """Test get_input_output_config_from_args.
 
@@ -112,13 +138,13 @@ class TestConfig:
         input=f_input, output=f_output, stdout=None
         """
         f_input = "path/to/input"
-        f_output = "STDOUT"
+        f_output = STDOUT_DISPLAY_NAME
         parsed = Namespace(input=f_input, output=f_output, stdout=None)
         sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
         assert sut.input == f_input
         assert sut.input_display_name == f_input
         assert sut.output is None
-        assert sut.output_display_name == "STDOUT"
+        assert sut.output_display_name == STDOUT_DISPLAY_NAME
 
     def test_get_io_config_when_file_output_provided(self) -> None:
         """Test get_input_output_config_from_args.
@@ -130,7 +156,7 @@ class TestConfig:
         sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
 
         assert sut.input is None
-        assert sut.input_display_name == "STDIN"
+        assert sut.input_display_name == STDIN_DISPLAY_NAME
         assert sut.output == f_output
         assert sut.output_display_name == f_output
 
@@ -564,10 +590,26 @@ class TestCreateYamkixConfigFromTyperArgs:
         assert config.io_config.input is None
         assert config.io_config.output is None
 
+        # Test case: input set explicitly to STDIN and no output -> output should be None (STDOUT)
+        config = create_yamkix_config_from_typer_args(
+            input_file=STDIN_DISPLAY_NAME,
+            output_file=None,
+            stdout=False,
+            typ="rt",
+            no_explicit_start=False,
+            explicit_end=False,
+            no_quotes_preserved=False,
+            default_flow_style=False,
+            no_dash_inwards=False,
+            spaces_before_comment=None,
+            version=False,
+        )
+        assert config.io_config.input is None
+        assert config.io_config.output is None
         # Test case: output is "STDOUT" -> output should be None
         config = create_yamkix_config_from_typer_args(
             input_file="input.yaml",
-            output_file="STDOUT",
+            output_file=STDOUT_DISPLAY_NAME,
             stdout=False,
             typ="rt",
             no_explicit_start=False,
