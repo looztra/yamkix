@@ -121,12 +121,28 @@ setup() {
 @test "can read input from STDIN when --input is not specified" {
   run yamkix_stdin_default simple
   [ "$status" -eq 0 ]
-  assert_output --partial 'toto: foo'
+  assert_output --stdin <<EOF
+---
+toto: foo
+titi:
+  - bar
+  - quix
+tutu:
+  yolo: baz
+EOF
 }
 
 # bats test_tags=input:stdin
 @test "can read input from STDIN when --input is specified" {
   run yamkix_stdin_dash_input simple
   [ "$status" -eq 0 ]
-  assert_output --partial 'toto: foo'
+  assert_output --stdin <<EOF
+---
+toto: foo
+titi:
+  - bar
+  - quix
+tutu:
+  yolo: baz
+EOF
 }
