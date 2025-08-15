@@ -11,7 +11,8 @@ from ruamel.yaml.scanner import ScannerError
 
 from yamkix.comments import process_comments
 from yamkix.config import YamkixConfig
-from yamkix.helpers import get_console, strip_leading_double_space
+from yamkix.errors import InvalidYamlContentError
+from yamkix.helpers import strip_leading_double_space
 from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 
@@ -36,11 +37,8 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> None:
         # Read the parsed content to force the scanner to issue errors if any
         ready_for_dump = list(parsed)
 
-    except (ScannerError, ParserError) as parser_error:
-        console = get_console()
-        console.print("Something is wrong in the input file, got error from ruamel.yaml", style="error")
-        console.print(parser_error, style="error")
-        return
+    except (ScannerError, ParserError) as parsing_error:
+        raise InvalidYamlContentError from parsing_error
     yamkix_dump_all(ready_for_dump, yaml, dash_inwards, output_file, spaces_before_comment)
 
 
