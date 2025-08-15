@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-from typer import echo as typer_echo
+from rich import get_console
 
 from yamkix.__version__ import __version__
 from yamkix.config import create_yamkix_config_from_typer_args, print_yamkix_config
@@ -30,7 +30,7 @@ def validate_typ(value: str) -> str:
 
 def echo_version() -> None:
     """Print version."""
-    typer_echo("yamkix v" + __version__)
+    get_console().print("yamkix v" + __version__, highlight=False)
 
 
 def version_callback(value: bool) -> None:

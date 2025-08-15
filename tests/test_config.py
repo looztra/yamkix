@@ -737,15 +737,17 @@ class TestPrintYamkixConfig:
     def test_print_yamkix_config_calls_typer_echo(self, mocker: MockerFixture) -> None:
         """Test that print_yamkix_config calls typer_echo with correct message."""
         # GIVEN
-        mock_typer_echo = mocker.patch("yamkix.config.typer_echo")
+        mock_get_console = mocker.patch("yamkix.config.get_console")
+        mock_console = mocker.Mock()
+        mock_get_console.return_value = mock_console
         config = get_default_yamkix_config()
 
         # WHEN
         print_yamkix_config(config)
 
         # THEN
-        mock_typer_echo.assert_called_once()
-        args, kwargs = mock_typer_echo.call_args
+        mock_console.print.assert_called_once()
+        args, kwargs = mock_console.print.call_args
 
         # Verify the message contains expected content
         message = args[0]
@@ -760,6 +762,3 @@ class TestPrintYamkixConfig:
         assert "quotes_preserved=True" in message
         assert "dash_inwards=True" in message
         assert "spaces_before_comment=None" in message
-
-        # Verify stderr output
-        assert kwargs.get("file") is not None

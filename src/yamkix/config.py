@@ -1,15 +1,13 @@
 """Yamkix configuration helpers."""
 
-import sys
 from argparse import Namespace
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Final
 
-from typer import echo as typer_echo
-
 from yamkix.__version__ import __version__
 from yamkix.errors import InvalidTypValueError
+from yamkix.helpers import get_console
 
 DEFAULT_LINE_WIDTH: Final = 2048
 STDIN_DISPLAY_NAME: Final = "STDIN"
@@ -205,9 +203,14 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
 def print_yamkix_config(yamkix_config: YamkixConfig) -> None:
     """Print a human readable Yamkix config on stderr."""
     yamkix_input_output_config = yamkix_config.io_config
-    typer_echo(
-        "[yamkix(" + __version__ + ")] Processing: " + str(yamkix_input_output_config) + ", " + str(yamkix_config),
-        file=sys.stderr,
+    console = get_console()
+    console.print(
+        r"[bold yellow]\[yamkix("
+        + __version__
+        + ")] Processing: "
+        + str(yamkix_input_output_config)
+        + ", "
+        + str(yamkix_config),
     )
 
 

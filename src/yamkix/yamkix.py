@@ -5,11 +5,12 @@ from pathlib import Path
 from typing import TextIO
 
 from ruamel.yaml import YAML
+from ruamel.yaml.comments import CommentedBase
 from ruamel.yaml.scanner import ScannerError
 
 from yamkix.comments import process_comments
 from yamkix.config import YamkixConfig
-from yamkix.helpers import strip_leading_double_space
+from yamkix.helpers import get_console, strip_leading_double_space
 from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 
@@ -35,14 +36,19 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> None:
         ready_for_dump = list(parsed)
 
     except ScannerError as scanner_error:
-        print("Something is wrong in the input file, got error from Scanner")  # noqa: T201
-        print(scanner_error)  # noqa: T201
+        console = get_console()
+        console.print("[bold red]Something is wrong in the input file, got error from Scanner")
+        console.print(scanner_error)
         return
     yamkix_dump_all(ready_for_dump, yaml, dash_inwards, output_file, spaces_before_comment)
 
 
 def yamkix_dump_all(
-    one_or_more_items: list, yaml: YAML, dash_inwards: bool, output_file: str | None, spaces_before_comment: int | None
+    one_or_more_items: list[CommentedBase],
+    yaml: YAML,
+    dash_inwards: bool,
+    output_file: str | None,
+    spaces_before_comment: int | None,
 ) -> None:
     """Dump all the documents from the input structure."""
     # Clear the output file if it is a file and it exists
@@ -59,7 +65,7 @@ def yamkix_dump_all(
 
 
 def yamkix_dump_one(
-    single_item: dict, yaml: YAML, dash_inwards: bool, out: TextIO, spaces_before_comment: int | None
+    single_item: CommentedBase, yaml: YAML, dash_inwards: bool, out: TextIO, spaces_before_comment: int | None
 ) -> None:
     """Dump a single document."""
     if spaces_before_comment is not None:
