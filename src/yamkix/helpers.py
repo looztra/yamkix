@@ -40,4 +40,4 @@ def get_yamkix_version() -> str:
 def get_console() -> Console:
     """Return the CLI rich console."""
     custom_theme = Theme({"info": "dim cyan", "warning": "magenta", "error": "bold red"})
-    return Console(theme=custom_theme)
+    return Console(theme=custom_theme, stderr=True)
