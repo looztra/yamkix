@@ -457,7 +457,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=True,
             no_dash_inwards=False,
             spaces_before_comment=1,
-            version=False,
+            files=None,
         )
 
         assert config.io_config.input == "test.yaml"
@@ -483,7 +483,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
 
         assert config.io_config.input == "test.yaml"
@@ -502,7 +502,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
 
         default_config = get_default_yamkix_config()
@@ -527,7 +527,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=True,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
 
         assert config.parsing_mode == "safe"
@@ -551,7 +551,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
         assert config.io_config.input == "input.yaml"
         assert config.io_config.output == "input.yaml"
@@ -568,7 +568,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
         assert config.io_config.input is None
         assert config.io_config.output == "output.yaml"
@@ -585,7 +585,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
         assert config.io_config.input is None
         assert config.io_config.output is None
@@ -602,7 +602,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
         assert config.io_config.input is None
         assert config.io_config.output is None
@@ -618,7 +618,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
         assert config.io_config.input == "input.yaml"
         assert config.io_config.output is None
