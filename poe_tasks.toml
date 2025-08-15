@@ -26,3 +26,4 @@ test = "pytest"
 "test:cov" = [
     "pytest:cov",
 ]
+"ty:run" = "ty check"
