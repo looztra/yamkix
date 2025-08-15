@@ -6,6 +6,10 @@ repos:
       - id: trailing-whitespace # Trims trailing whitespace
       - id: check-yaml # Validates YAML files
         args: [--allow-multiple-documents]
+        exclude: |
+          (?x)^(
+              tests/data/.*
+          )$
       - id: check-toml # Validates TOML files
       - id: check-json # Validates JSON files # .vscode/ json files are actually jsonc files
         exclude: ^.vscode/.*
@@ -52,7 +56,10 @@ repos:
     hooks:
       - id: yamllint
         args: [--config-data, relaxed, --no-warnings]
-
+        exclude: |
+          (?x)^(
+              tests/data/.*
+          )$
   - repo: local
     hooks:
       - id: taplo
@@ -65,7 +72,8 @@ repos:
         name: Check Yaml files are formatted with 'yamkix'
         exclude: |
           (?x)^(
-              test-assets/.*
+              test-assets/.*|
+              tests/data/.*
           )$
         entry: toolbox/scripts/yamkix-wrapper.sh
         types: [yaml]
