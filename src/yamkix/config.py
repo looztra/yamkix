@@ -37,7 +37,7 @@ class YamkixInputOutputConfig:
 
     def __str__(self) -> str:
         """Return a string representation of the input/output configuration."""
-        return f"YamkixInputOutputConfig(input={self.input_display_name}, output={self.output_display_name})"
+        return f"input={self.input_display_name}, output={self.output_display_name}"
 
 
 @dataclass
@@ -72,6 +72,25 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
     line_width: int
     version: bool | None
     io_config: YamkixInputOutputConfig
+
+    def __str__(self) -> str:
+        """Return a string representation of the YamkixConfig."""
+        return (
+            "typ="
+            + self.parsing_mode
+            + ", explicit_start="
+            + str(self.explicit_start)
+            + ", explicit_end="
+            + str(self.explicit_end)
+            + ", default_flow_style="
+            + str(self.default_flow_style)
+            + ", quotes_preserved="
+            + str(self.quotes_preserved)
+            + ", dash_inwards="
+            + str(self.dash_inwards)
+            + ", spaces_before_comment="
+            + str(self.spaces_before_comment)
+        )
 
 
 def get_default_yamkix_config() -> YamkixConfig:
@@ -187,28 +206,7 @@ def print_yamkix_config(yamkix_config: YamkixConfig) -> None:
     """Print a human readable Yamkix config on stderr."""
     yamkix_input_output_config = yamkix_config.io_config
     typer_echo(
-        "[yamkix("
-        + __version__
-        + ")] Processing: input="
-        + yamkix_input_output_config.input_display_name
-        + ", output="
-        + yamkix_input_output_config.output_display_name
-        + ", typ="
-        + yamkix_config.parsing_mode
-        + ", explicit_start="
-        + str(yamkix_config.explicit_start)
-        + ", explicit_end="
-        + str(yamkix_config.explicit_end)
-        + ", default_flow_style="
-        + str(yamkix_config.default_flow_style)
-        + ", quotes_preserved="
-        + str(yamkix_config.quotes_preserved)
-        + ", dash_inwards="
-        + str(yamkix_config.dash_inwards)
-        + ", spaces_before_comment="
-        + str(yamkix_config.spaces_before_comment)
-        + ", show_version="
-        + str(yamkix_config.version),
+        "[yamkix(" + __version__ + ")] Processing: " + str(yamkix_input_output_config) + ", " + str(yamkix_config),
         file=sys.stderr,
     )
 

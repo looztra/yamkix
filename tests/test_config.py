@@ -627,6 +627,32 @@ class TestCreateYamkixConfigFromTyperArgs:
 class TestPrintYamkixConfig:
     """Provide unit tests for print_yamkix_config function."""
 
+    def test_yamkix_input_output_config_str_with_file_paths(self) -> None:
+        """Test __str__ method of YamkixInputOutputConfig with file paths."""
+        # GIVEN
+        config = YamkixInputOutputConfig(input="input.yaml", output="output.yaml")
+
+        # WHEN
+        result = str(config)
+
+        # THEN
+        assert result == "input=input.yaml, output=output.yaml"
+
+    def test_yamkix_config_str_with_default_values(self) -> None:
+        """Test __str__ method of YamkixConfig with default values."""
+        # GIVEN
+        config = get_default_yamkix_config()
+
+        # WHEN
+        result = str(config)
+
+        # THEN
+        expected = (
+            "typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, "
+            "quotes_preserved=True, dash_inwards=True, spaces_before_comment=None"
+        )
+        assert result == expected
+
     def test_print_yamkix_config_calls_typer_echo(self, mocker: MockerFixture) -> None:
         """Test that print_yamkix_config calls typer_echo with correct message."""
         # GIVEN
@@ -653,7 +679,6 @@ class TestPrintYamkixConfig:
         assert "quotes_preserved=True" in message
         assert "dash_inwards=True" in message
         assert "spaces_before_comment=None" in message
-        assert "show_version=False" in message
 
         # Verify stderr output
         assert kwargs.get("file") is not None
