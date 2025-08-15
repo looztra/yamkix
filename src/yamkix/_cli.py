@@ -4,10 +4,11 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-from rich import get_console
 
 from yamkix.__version__ import __version__
 from yamkix.config import create_yamkix_config_from_typer_args, print_yamkix_config
+from yamkix.errors import InvalidYamlContentError
+from yamkix.helpers import get_console
 from yamkix.yamkix import round_trip_and_format
 
 # Create the Typer app
@@ -180,10 +181,16 @@ def main(  # noqa: PLR0913
         spaces_before_comment=spaces_before_comment,
         files=files,
     )
+    console = get_console()
     for config in yamkix_configs:
         if not silent_mode:
             print_yamkix_config(config)
-        round_trip_and_format(config)
+        try:
+            # Process the file(s)
+            round_trip_and_format(config)
+        except InvalidYamlContentError as e:
+            console.print(rf"Error processing \[{config.io_config.input_display_name}]: {e}", style="error")
+            console.print(e.__cause__, style="error")
 
 
 if __name__ == "__main__":
