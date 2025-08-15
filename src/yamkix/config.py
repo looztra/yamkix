@@ -23,9 +23,8 @@ class YamkixInputOutputConfig:
     Part of the config that manages `input` and `output`.
 
     Attributes:
-        input: The input file to parse or `STDIN` or `None`. Defaults to `STDIN` if not specified
-        output: The name of the file to generate (can be `STDOUT`). Will be the same as input file
-            if not specified (`None`), or `STDOUT` if `STDIN` was specified as input
+        input: The input file to parse if not `None`. `None` means `STDIN`.
+        output: The name of the file to generate if not `None`. `None` means `STDOUT`.
     """
 
     input: str | None
@@ -35,6 +34,10 @@ class YamkixInputOutputConfig:
         """Set display names for `input` and `output`."""
         self.input_display_name = STDIN_DISPLAY_NAME if self.input is None else self.input
         self.output_display_name = STDOUT_DISPLAY_NAME if self.output is None else self.output
+
+    def __str__(self) -> str:
+        """Return a string representation of the input/output configuration."""
+        return f"YamkixInputOutputConfig(input={self.input_display_name}, output={self.output_display_name})"
 
 
 @dataclass
