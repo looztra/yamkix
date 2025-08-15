@@ -19,7 +19,14 @@ from yamkix.yaml_writer import get_opinionated_yaml_writer
 def round_trip_and_format(yamkix_config: YamkixConfig) -> None:
     """Load a file and save it formatted.
 
-    FIXME
+    Arguments:
+        yamkix_config: The configuration for the Yamkix processing.
+
+    Returns:
+        None
+
+    Raises:
+        InvalidYamlContentError: If the YAML content is invalid.
     """
     yaml = get_opinionated_yaml_writer(yamkix_config)
     yamkix_io_config = yamkix_config.io_config

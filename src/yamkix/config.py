@@ -7,7 +7,7 @@ from typing import Final
 
 from yamkix.__version__ import __version__
 from yamkix.errors import InvalidTypValueError
-from yamkix.helpers import get_console
+from yamkix.helpers import get_stderr_console
 
 DEFAULT_LINE_WIDTH: Final = 2048
 STDIN_DISPLAY_NAME: Final = "STDIN"
@@ -203,7 +203,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
 def print_yamkix_config(yamkix_config: YamkixConfig) -> None:
     """Print a human readable Yamkix config on stderr."""
     yamkix_input_output_config = yamkix_config.io_config
-    console = get_console()
+    console = get_stderr_console()
     console.print(
         r"\[yamkix(" + __version__ + ")] Processing: " + str(yamkix_input_output_config) + ", " + str(yamkix_config),
         style="info",
