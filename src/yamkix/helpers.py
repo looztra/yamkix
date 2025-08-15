@@ -1,6 +1,9 @@
 """Useful (I guess) helpers."""
 
+from functools import lru_cache
 from typing import Any
+
+from rich.console import Console
 
 from yamkix.__version__ import __version__
 
@@ -30,3 +33,9 @@ def get_yamkix_version() -> str:
         str: The current Yamkix version.
     """
     return __version__
+
+
+@lru_cache
+def get_console() -> Console:
+    """Return the CLI rich console."""
+    return Console()
