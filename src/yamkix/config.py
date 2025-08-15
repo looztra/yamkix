@@ -205,12 +205,8 @@ def print_yamkix_config(yamkix_config: YamkixConfig) -> None:
     yamkix_input_output_config = yamkix_config.io_config
     console = get_console()
     console.print(
-        r"[bold yellow]\[yamkix("
-        + __version__
-        + ")] Processing: "
-        + str(yamkix_input_output_config)
-        + ", "
-        + str(yamkix_config),
+        r"\[yamkix(" + __version__ + ")] Processing: " + str(yamkix_input_output_config) + ", " + str(yamkix_config),
+        style="info",
     )
 
 

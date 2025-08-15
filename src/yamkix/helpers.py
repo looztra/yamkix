@@ -4,6 +4,7 @@ from functools import lru_cache
 from typing import Any
 
 from rich.console import Console
+from rich.theme import Theme
 
 from yamkix.__version__ import __version__
 
@@ -38,4 +39,5 @@ def get_yamkix_version() -> str:
 @lru_cache
 def get_console() -> Console:
     """Return the CLI rich console."""
-    return Console()
+    custom_theme = Theme({"info": "dim cyan", "warning": "magenta", "error": "bold red"})
+    return Console(theme=custom_theme)

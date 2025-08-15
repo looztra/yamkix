@@ -6,6 +6,7 @@ from typing import TextIO
 
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedBase
+from ruamel.yaml.parser import ParserError
 from ruamel.yaml.scanner import ScannerError
 
 from yamkix.comments import process_comments
@@ -35,10 +36,10 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> None:
         # Read the parsed content to force the scanner to issue errors if any
         ready_for_dump = list(parsed)
 
-    except ScannerError as scanner_error:
+    except (ScannerError, ParserError) as parser_error:
         console = get_console()
-        console.print("[bold red]Something is wrong in the input file, got error from Scanner")
-        console.print(scanner_error)
+        console.print("Something is wrong in the input file, got error from ruamel.yaml", style="error")
+        console.print(parser_error, style="error")
         return
     yamkix_dump_all(ready_for_dump, yaml, dash_inwards, output_file, spaces_before_comment)
 
