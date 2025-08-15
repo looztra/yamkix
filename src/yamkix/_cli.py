@@ -1,5 +1,6 @@
 """Typer-based CLI implementation for yamkix."""
 
+from pathlib import Path
 from typing import Annotated
 
 import typer
@@ -46,7 +47,8 @@ def main(  # noqa: PLR0913
         typer.Option(
             "-i",
             "--input",
-            help="the file to parse or 'STDIN'. Defaults to 'STDIN' if not specified",
+            help="the single file to parse or 'STDIN'. Defaults to 'STDIN' if not specified."
+            " Cannot be used if the list of files to process is specified using arguments.",
         ),
     ] = None,
     output_file: Annotated[
@@ -55,8 +57,8 @@ def main(  # noqa: PLR0913
             "-o",
             "--output",
             help=(
-                "the name of the file to generate (can be 'STDOUT') "
-                "(same as input file if not specified, hence 'STDOUT' if 'STDIN' as input)"
+                "the name of the file to generate (can be 'STDOUT'). "
+                "Will be the same as input file if not specified, and 'STDOUT' if 'STDIN' was specified as input."
             ),
         ),
     ] = None,
@@ -65,7 +67,7 @@ def main(  # noqa: PLR0913
         typer.Option(
             "-s",
             "--stdout",
-            help="output is STDOUT whatever the value for input (-i) and output (-o)",
+            help="output is 'STDOUT' whatever the value for input (-i/--input) and output (-o/--output).",
         ),
     ] = False,
     typ: Annotated[
@@ -73,7 +75,7 @@ def main(  # noqa: PLR0913
         typer.Option(
             "-t",
             "--typ",
-            help="the yaml parser mode. Can be 'safe' or 'rt'",
+            help="the yaml parser mode. Can be 'safe' or 'rt'. Using 'safe' will remove all comments.",
             callback=validate_typ,
         ),
     ] = "rt",
@@ -82,7 +84,7 @@ def main(  # noqa: PLR0913
         typer.Option(
             "-n",
             "--no-explicit-start",
-            help="by default, explicit start of the yaml doc is 'On', you can disable it with this option",
+            help="by default, explicit start of the yaml doc is 'On', you can disable it with this option.",
         ),
     ] = False,
     explicit_end: Annotated[
@@ -90,7 +92,7 @@ def main(  # noqa: PLR0913
         typer.Option(
             "-e",
             "--explicit-end",
-            help="by default, explicit end of the yaml doc is 'Off', you can enable it with this option",
+            help="by default, explicit end of the yaml doc is 'Off', you can enable it with this option.",
         ),
     ] = False,
     no_quotes_preserved: Annotated[
@@ -98,7 +100,7 @@ def main(  # noqa: PLR0913
         typer.Option(
             "-q",
             "--no-quotes-preserved",
-            help="by default, quotes are preserved you can disable this with this option",
+            help="by default, quotes are preserved you can disable this with this option.",
         ),
     ] = False,
     default_flow_style: Annotated[
@@ -108,7 +110,7 @@ def main(  # noqa: PLR0913
             "--default-flow-style",
             help=(
                 "enable the default flow style 'Off' by default. "
-                "In default flow style (with typ='rt'), maps and lists are written like json"
+                "In default flow style (with typ='rt'), maps and lists are written like json."
             ),
         ),
     ] = False,
@@ -119,7 +121,7 @@ def main(  # noqa: PLR0913
             "--no-dash-inwards",
             help=(
                 "by default, dash are pushed inwards "
-                "use '--no-dash-inwards' to have the dash start at the sequence level"
+                "use '--no-dash-inwards' to have the dash start at the sequence level."
             ),
         ),
     ] = False,
@@ -133,7 +135,7 @@ def main(  # noqa: PLR0913
             ),
         ),
     ] = None,
-    version: Annotated[
+    _version: Annotated[
         bool,
         typer.Option("-v", "--version", help="show yamkix version", callback=version_callback),
     ] = False,
@@ -145,6 +147,9 @@ def main(  # noqa: PLR0913
             help="silent mode, don't print config when processing file(s)",
         ),
     ] = False,
+    files: Annotated[
+        list[Path] | None, typer.Argument(help="the files to process, cannot be used with -i/--input")
+    ] = None,
 ) -> None:
     """Format yaml input file.
 
@@ -166,7 +171,7 @@ def main(  # noqa: PLR0913
         default_flow_style=default_flow_style,
         no_dash_inwards=no_dash_inwards,
         spaces_before_comment=spaces_before_comment,
-        version=version,
+        files=files,
     )
     if not silent_mode:
         print_yamkix_config(yamkix_config)

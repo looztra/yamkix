@@ -3,6 +3,7 @@
 import sys
 from argparse import Namespace
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Final
 
 from typer import echo as typer_echo
@@ -274,7 +275,7 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
     default_flow_style: bool,
     no_dash_inwards: bool,
     spaces_before_comment: int | None,
-    version: bool,
+    files: list[Path] | None,
 ) -> YamkixConfig:
     """Create YamkixConfig from Typer arguments."""
     # Handle I/O configuration - match the original logic exactly
@@ -302,6 +303,6 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
         parsing_mode=typ,
         spaces_before_comment=spaces_before_comment,
         line_width=DEFAULT_LINE_WIDTH,
-        version=version,
+        version=None,
         io_config=io_config,
     )

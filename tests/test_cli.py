@@ -87,7 +87,7 @@ class TestCli:
             default_flow_style=default_config.default_flow_style,
             no_dash_inwards=not default_config.dash_inwards,
             spaces_before_comment=default_config.spaces_before_comment,
-            version=None,  # Typer passes None when callback option is not used
+            files=None,
         )
         mock_print_config.assert_called_once()
         mock_round_trip.assert_called_once()
