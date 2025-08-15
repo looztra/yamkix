@@ -160,7 +160,7 @@ def main(  # noqa: PLR0913
     parsing mode 'rt'.
     """
     # Create configuration
-    yamkix_config = create_yamkix_config_from_typer_args(
+    yamkix_configs = create_yamkix_config_from_typer_args(
         input_file=input_file,
         output_file=output_file,
         stdout=stdout,
@@ -173,9 +173,10 @@ def main(  # noqa: PLR0913
         spaces_before_comment=spaces_before_comment,
         files=files,
     )
-    if not silent_mode:
-        print_yamkix_config(yamkix_config)
-    round_trip_and_format(yamkix_config)
+    for config in yamkix_configs:
+        if not silent_mode:
+            print_yamkix_config(config)
+        round_trip_and_format(config)
 
 
 if __name__ == "__main__":

@@ -32,8 +32,8 @@ class YamkixInputOutputConfig:
 
     def __post_init__(self) -> None:
         """Set display names for `input` and `output`."""
-        self.input_display_name = STDIN_DISPLAY_NAME if self.input is None else self.input
-        self.output_display_name = STDOUT_DISPLAY_NAME if self.output is None else self.output
+        self.input_display_name = STDIN_DISPLAY_NAME if self.input is None else str(self.input)
+        self.output_display_name = STDOUT_DISPLAY_NAME if self.output is None else str(self.output)
 
     def __str__(self) -> str:
         """Return a string representation of the input/output configuration."""
@@ -279,33 +279,56 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
     no_dash_inwards: bool,
     spaces_before_comment: int | None,
     files: list[Path] | None,
-) -> YamkixConfig:
-    """Create YamkixConfig from Typer arguments."""
-    # Handle I/O configuration - match the original logic exactly
-    f_input = None if (input_file is None or input_file == STDIN_DISPLAY_NAME) else input_file
-    if stdout:
-        f_output = None
-    elif output_file is not None and output_file != STDOUT_DISPLAY_NAME:
-        f_output = output_file
-    elif output_file == STDOUT_DISPLAY_NAME or f_input is None:
-        f_output = None
+) -> list[YamkixConfig]:
+    """Create a list of YamkixConfig from Typer arguments.
+
+    Note:
+        If `files` is not `None`, this function will create a `YamkixConfig` for each file in the list.
+        And `input_file`, `output_file` and `stdout` will not be taken into account.
+
+        If `files` is `None`, a single `YamkixConfig` will be created using the provided arguments.
+    """
+    if files is not None:
+        if len(files) == 0:
+            msg = "The 'files' argument cannot be an empty list."
+            raise ValueError(msg)
+        io_configs = [
+            YamkixInputOutputConfig(
+                input=str(file),
+                output=str(file),
+            )
+            for file in files
+        ]
     else:
-        f_output = f_input
+        f_input = None if (input_file is None or input_file == STDIN_DISPLAY_NAME) else input_file
+        if stdout:
+            f_output = None
+        elif output_file is not None and output_file != STDOUT_DISPLAY_NAME:
+            f_output = output_file
+        elif output_file == STDOUT_DISPLAY_NAME or f_input is None:
+            f_output = None
+        else:
+            f_output = f_input
 
-    io_config = YamkixInputOutputConfig(
-        input=f_input,
-        output=f_output,
-    )
+        io_configs = [
+            YamkixInputOutputConfig(
+                input=f_input,
+                output=f_output,
+            )
+        ]
 
-    return YamkixConfig(
-        explicit_start=not no_explicit_start,
-        explicit_end=explicit_end,
-        default_flow_style=default_flow_style,
-        dash_inwards=not no_dash_inwards,
-        quotes_preserved=not no_quotes_preserved,
-        parsing_mode=typ,
-        spaces_before_comment=spaces_before_comment,
-        line_width=DEFAULT_LINE_WIDTH,
-        version=None,
-        io_config=io_config,
-    )
+    return [
+        YamkixConfig(
+            explicit_start=not no_explicit_start,
+            explicit_end=explicit_end,
+            default_flow_style=default_flow_style,
+            dash_inwards=not no_dash_inwards,
+            quotes_preserved=not no_quotes_preserved,
+            parsing_mode=typ,
+            spaces_before_comment=spaces_before_comment,
+            line_width=DEFAULT_LINE_WIDTH,
+            version=None,
+            io_config=io_config,
+        )
+        for io_config in io_configs
+    ]

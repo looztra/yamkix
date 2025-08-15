@@ -58,7 +58,7 @@ def my_add_eol_comment(self, comment, key=NotNone, column=None) -> None:  # noqa
     self._yaml_add_eol_comment(ct, key=key)
 
 
-CommentedBase.yaml_add_eol_comment = my_add_eol_comment  # pyright: ignore [ reportAttributeAccessIssue]
+CommentedBase.yaml_add_eol_comment = my_add_eol_comment  # pyright: ignore [ reportAttributeAccessIssue] # ty: ignore[invalid-assignment]
 
 
 def process_comments(data: CommentedMap, column: int | None = None) -> None:  # noqa: C901
