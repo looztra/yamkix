@@ -1,0 +1,16 @@
+---
+# like that?
+a: 1 # boo
+b:
+# Hello
+  # World
+  c: 2
+  d: 3
+# before test1 (top level)
+test1:
+  # aligned with elt start
+# at col0
+  test2:
+    # another one aligned with elt start
+# another one at col0
+    test3: 3
