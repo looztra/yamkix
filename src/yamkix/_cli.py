@@ -8,7 +8,7 @@ import typer
 from yamkix.__version__ import __version__
 from yamkix.config import create_yamkix_config_from_typer_args, print_yamkix_config
 from yamkix.errors import InvalidYamlContentError
-from yamkix.helpers import get_console
+from yamkix.helpers import get_stderr_console, get_stdout_console
 from yamkix.yamkix import round_trip_and_format
 
 # Create the Typer app
@@ -31,7 +31,7 @@ def validate_typ(value: str) -> str:
 
 def echo_version() -> None:
     """Print version."""
-    get_console().print("yamkix v" + __version__, highlight=False)
+    get_stdout_console().print("yamkix v" + __version__, highlight=False)
 
 
 def version_callback(value: bool) -> None:
@@ -181,7 +181,7 @@ def main(  # noqa: PLR0913
         spaces_before_comment=spaces_before_comment,
         files=files,
     )
-    console = get_console()
+    console = get_stderr_console()
     for config in yamkix_configs:
         if not silent_mode:
             print_yamkix_config(config)

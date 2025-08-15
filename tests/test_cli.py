@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 
 from yamkix._cli import app, echo_version
 from yamkix.config import get_default_yamkix_config
+from yamkix.errors import InvalidYamlContentError
 
 runner = CliRunner()
 
@@ -180,3 +181,24 @@ class TestCli:
         mock_create_config.assert_called_once()
         mock_print_config.assert_not_called()
         mock_round_trip.assert_called_once()
+
+    def test_invalid_yaml_content_error_management(self, mocker: MockerFixture, shared_datadir: Path) -> None:
+        """Test that InvalidYamlContentError is raised for invalid YAML content."""
+        # GIVEN
+        mock_create_config = mocker.patch("yamkix._cli.create_yamkix_config_from_typer_args")
+        mock_config = mocker.Mock()
+        mock_create_config.return_value = [mock_config]
+        mock_print_config = mocker.patch("yamkix._cli.print_yamkix_config")
+        mock_round_trip = mocker.patch("yamkix._cli.round_trip_and_format", side_effect=InvalidYamlContentError)
+        mock_get_stderr_console = mocker.patch("yamkix._cli.get_stderr_console")
+        mock_stderr_console = mock_get_stderr_console.return_value
+        test_file = shared_datadir / "simple.yml"
+        # WHEN
+        result = runner.invoke(app, ["--input", str(test_file)])
+
+        # THEN
+        assert result.exit_code == 0
+        mock_create_config.assert_called_once()
+        mock_print_config.assert_called_once()
+        mock_round_trip.assert_called_once()
+        mock_stderr_console.print.assert_called()

@@ -37,7 +37,14 @@ def get_yamkix_version() -> str:
 
 
 @lru_cache
-def get_console() -> Console:
+def get_stderr_console() -> Console:
     """Return the CLI rich console."""
     custom_theme = Theme({"info": "dim cyan", "warning": "magenta", "error": "bold red"})
     return Console(theme=custom_theme, stderr=True)
+
+
+@lru_cache
+def get_stdout_console() -> Console:
+    """Return the CLI rich console."""
+    custom_theme = Theme({"info": "dim cyan", "warning": "magenta", "error": "bold red"})
+    return Console(theme=custom_theme, stderr=False)

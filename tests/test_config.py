@@ -734,12 +734,12 @@ class TestPrintYamkixConfig:
         )
         assert result == expected
 
-    def test_print_yamkix_config_calls_typer_echo(self, mocker: MockerFixture) -> None:
+    def test_print_yamkix_config_calls_stderr_console(self, mocker: MockerFixture) -> None:
         """Test that print_yamkix_config calls typer_echo with correct message."""
         # GIVEN
-        mock_get_console = mocker.patch("yamkix.config.get_console")
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
         mock_console = mocker.Mock()
-        mock_get_console.return_value = mock_console
+        mock_get_stderr_console.return_value = mock_console
         config = get_default_yamkix_config()
 
         # WHEN
