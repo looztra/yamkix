@@ -48,7 +48,10 @@ def main(  # noqa: PLR0913
             "-i",
             "--input",
             help="the single file to parse or 'STDIN'. Defaults to 'STDIN' if not specified."
-            " Cannot be used if the list of files to process is specified using arguments.",
+            " Cannot be used if the list of files to process is specified using arguments. "
+            "If you need to specify multiple files, pass them as arguments instead of using this option. "
+            "This flag will not be honored if the input file(s) has/have been specify using arguments "
+            "(and not -i/--input)",
         ),
     ] = None,
     output_file: Annotated[
@@ -58,7 +61,9 @@ def main(  # noqa: PLR0913
             "--output",
             help=(
                 "the name of the file to generate (can be 'STDOUT'). "
-                "Will be the same as input file if not specified, and 'STDOUT' if 'STDIN' was specified as input."
+                "Will be the same as input file if not specified, and 'STDOUT' if 'STDIN' was specified as input. "
+                "This flag will not be honored if the input file(s) has/have been specify using arguments "
+                "(and not -i/--input)"
             ),
         ),
     ] = None,
@@ -67,7 +72,9 @@ def main(  # noqa: PLR0913
         typer.Option(
             "-s",
             "--stdout",
-            help="output is 'STDOUT' whatever the value for input (-i/--input) and output (-o/--output).",
+            help="output is 'STDOUT' whatever the value for input (-i/--input) and output (-o/--output). "
+            "This flag will not be honored if the input file(s) has/have been specify using arguments "
+            "(and not -i/--input)",
         ),
     ] = False,
     typ: Annotated[
@@ -156,7 +163,7 @@ def main(  # noqa: PLR0913
     Yamkix formats YAML files with opinionated styling rules.
     By default, explicit_start is 'On', explicit_end is 'Off'
     and array elements are pushed inwards the start of the
-    matching sequence. Comments are preserved thanks to default
+    matching sequence. Comments are preserved if you use the default
     parsing mode 'rt'.
     """
     # Create configuration
