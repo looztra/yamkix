@@ -704,6 +704,44 @@ class TestCreateYamkixConfigFromTyperArgs:
                 files=[],
             )
 
+    @pytest.mark.parametrize(
+        ("input_f", "output_f", "stdout"),
+        [
+            pytest.param("file.yml", None, False, id="input_only"),
+            pytest.param("file.yml", None, True, id="input_stdout"),
+            pytest.param("file.yml", "plouf.yml", False, id="input_output"),
+            pytest.param("file.yml", "plouf.yml", True, id="input_output_stdout"),
+            pytest.param(None, "plouf.yml", False, id="output_only"),
+            pytest.param(None, "plouf.yml", True, id="output_stdout"),
+            pytest.param(None, None, True, id="stdout_only"),
+        ],
+    )
+    def test_create_yamkix_raise_warning(
+        self, tmp_path: Path, mocker: MockerFixture, input_f: str, output_f: str, stdout: bool
+    ) -> None:
+        """Test default configuration values."""
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
+        mock_console = mocker.Mock()
+        mock_get_stderr_console.return_value = mock_console
+        configs = create_yamkix_config_from_typer_args(
+            input_file=input_f,
+            output_file=output_f,
+            stdout=stdout,
+            typ="rt",
+            no_explicit_start=False,
+            explicit_end=False,
+            no_quotes_preserved=False,
+            default_flow_style=False,
+            no_dash_inwards=False,
+            spaces_before_comment=None,
+            files=[tmp_path / "simple.yml"],
+        )
+
+        assert len(configs) == 1
+        mock_console.print.assert_called_once()
+        args, kwargs = mock_console.print.call_args
+        assert "WARNING" in args[0]
+
 
 class TestPrintYamkixConfig:
     """Provide unit tests for print_yamkix_config function."""

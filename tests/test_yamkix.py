@@ -25,3 +25,12 @@ class TestRoundTripAndFormat:
         with pytest.raises(InvalidYamlContentError):
             round_trip_and_format(config)
         mock_yamkix_dump_all.assert_not_called()
+
+
+class TestYamkixDumpAll:
+    """Provide tests for the yamkix_dump_all function."""
+
+    @pytest.mark.skip(reason="This test is not implemented yet")
+    def test_existing_file_is_overwritten(self, mocker: MockerFixture) -> None:
+        """Test that yamkix_dump_all overwrites an existing file."""
+        # GIVEN
