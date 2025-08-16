@@ -1,0 +1,13 @@
+---
+list-of-maps:
+    - part_no: A4786  # comment 1
+      part_henon: mouhaha # you're not funny
+    - part_yes: A21  # also a comment here
+      part_iculier: partenaire # I don't always understand how it works
+list-only:
+    - first    # comment 2
+    - second   # what?
+    - third    # I have a comment too
+map-of-maps:
+    key:
+      sub-key: sub-value  # comment 3

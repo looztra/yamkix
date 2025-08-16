@@ -130,6 +130,8 @@ def get_default_yamkix_config() -> YamkixConfig:
 def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
     """Return a default `input` / `output` configuration.
 
+    Default values mean: input is `stdin` and output is `stdout`.
+
     Returns:
         yamkix_input_output_config: A default `YamkixInputOutputConfig` object.
     """
@@ -159,7 +161,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
             `full` -> full Dumper only, including python built-ins that are
                 potentially unsafe to load
             `base` -> baseloader
-                explicit_start: Whether to include explicit start markers (`---`).
+        explicit_start: Whether to include explicit start markers (`---`).
         explicit_end: Whether to include explicit end markers (`...`).
         default_flow_style: Whether to use default flow style. Setting `default_flow_style = False` ensures
             that all collections are dumped in block style by default, which is the typical YAML format where sequences

@@ -1,0 +1,5 @@
+---
+a-map:
+  key1: value1
+  key2: value2
+a-json-map: {key1: value1}
