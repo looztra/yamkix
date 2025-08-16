@@ -287,10 +287,16 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
 
         If `files` is `None`, a single `YamkixConfig` will be created using the provided arguments.
     """
+    stderr_console = get_stderr_console()
     if files is not None:
         if len(files) == 0:
             msg = "The 'files' argument cannot be an empty list."
             raise ValueError(msg)
+        if input_file is not None or output_file is not None or stdout:
+            stderr_console.print(
+                "WARNING: Options 'input', 'output' and 'stdout' are not honored when 'files' argument is used .",
+                style="warning",
+            )
         io_configs = [
             YamkixInputOutputConfig(
                 input=str(file),
