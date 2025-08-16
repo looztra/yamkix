@@ -1,5 +1,6 @@
 """Typer-based CLI implementation for yamkix."""
 
+from enum import Enum
 from pathlib import Path
 from typing import Annotated
 
@@ -21,14 +22,6 @@ app = typer.Typer(
 )
 
 
-def validate_typ(value: str) -> str:
-    """Validate the typ parameter."""
-    if value not in ["safe", "rt"]:
-        msg = f"Invalid value '{value}'. Must be 'safe' or 'rt'"
-        raise typer.BadParameter(msg)
-    return value
-
-
 def echo_version() -> None:
     """Print version."""
     get_stdout_console().print("yamkix v" + __version__, highlight=False)
@@ -39,6 +32,14 @@ def version_callback(value: bool) -> None:
     if value:
         echo_version()
         raise typer.Exit(code=0)
+
+
+# We cannot use StrEnum as we want to support python 3.10 too
+class SupportedYamlParserMode(str, Enum):
+    """Supported YAML parser modes."""
+
+    SAFE = "safe"
+    RT = "rt"
 
 
 @app.command()
@@ -79,14 +80,14 @@ def main(  # noqa: PLR0913
         ),
     ] = False,
     typ: Annotated[
-        str,
+        SupportedYamlParserMode,
         typer.Option(
             "-t",
             "--typ",
             help="the yaml parser mode. Can be 'safe' or 'rt'. Using 'safe' will remove all comments.",
-            callback=validate_typ,
+            case_sensitive=False,
         ),
-    ] = "rt",
+    ] = SupportedYamlParserMode.RT,
     no_explicit_start: Annotated[
         bool,
         typer.Option(
@@ -172,7 +173,7 @@ def main(  # noqa: PLR0913
         input_file=input_file,
         output_file=output_file,
         stdout=stdout,
-        typ=typ,
+        typ=typ.value,
         no_explicit_start=no_explicit_start,
         explicit_end=explicit_end,
         no_quotes_preserved=no_quotes_preserved,
