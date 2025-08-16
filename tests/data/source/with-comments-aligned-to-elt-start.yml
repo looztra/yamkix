@@ -1,0 +1,14 @@
+---
+# like that?
+a: 1 # boo
+b:
+  # Hello
+  # World
+  c: 2
+  d: 3
+# before test1 (top level)
+test1:
+  # before test2
+  test2:
+    # after test2
+    test3: 3
