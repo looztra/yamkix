@@ -63,8 +63,8 @@ class TestCli:
 
         # THEN
         assert result.exit_code != 0
-        assert "Invalid value 'invalid'" in result.output
-        assert "Must be 'safe' or 'rt'" in result.output
+        assert "'invalid' is not one of" in result.output
+        assert "'safe', 'rt'" in result.output
 
     def test_default_values_with_dash_input(self, mocker: MockerFixture, shared_datadir: Path) -> None:
         """Test running the CLI without any parameters uses default values."""
