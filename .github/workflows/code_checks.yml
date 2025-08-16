@@ -239,6 +239,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          submodules: true
 
       - uses: jdx/mise-action@v2
         with:

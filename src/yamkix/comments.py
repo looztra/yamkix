@@ -31,7 +31,7 @@ def yamkix_add_eol_comment(self, comment: str, key=NotNone, column: int | None =
     self._yaml_add_eol_comment(comment_as_list, key=key)
 
 
-CommentedBase.yaml_add_eol_comment = yamkix_add_eol_comment  # pyright: ignore[reportAttributeAccessIssue]
+CommentedBase.yaml_add_eol_comment = yamkix_add_eol_comment  # pyright: ignore[reportAttributeAccessIssue] # ty: ignore[invalid-assignment]
 
 
 def process_single_comment(data: CommentedBase, comment: str, key: str, column: int | None) -> None:

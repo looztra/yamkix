@@ -1,0 +1,18 @@
+---
+list-of-maps:
+  - part_no: A4786 # comment 1
+    part_henon: mouhaha # you're not funny
+  - part_yes: A21 # also a comment here
+    part_iculier: partenaire # I don't always understand how it works
+list-only:
+  - first # comment 2
+  - third # I have a comment too
+  - second # what?
+simple-map:
+  what-are-you-waiting-for: christmas? # duke nukem rulez
+  jingle: bels # not christmas yet
+map-of-maps:
+  key:
+    another-sub-key: w00t # casimir
+    sub-key: sub-value # comment 3
+    my-sub-key-name-is-longuer-than-yours: 1 # sentinel vs superman

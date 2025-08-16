@@ -1,17 +1,17 @@
 """Yamkix configuration helpers."""
 
-import sys
 from argparse import Namespace
 from dataclasses import dataclass
-
-from typer import echo as typer_echo
+from pathlib import Path
+from typing import Final
 
 from yamkix.__version__ import __version__
 from yamkix.errors import InvalidTypValueError
+from yamkix.helpers import get_stderr_console
 
-DEFAULT_LINE_WIDTH = 2048
-STDIN_DISPLAY_NAME = "STDIN"
-STDOUT_DISPLAY_NAME = "STDOUT"
+DEFAULT_LINE_WIDTH: Final = 2048
+STDIN_DISPLAY_NAME: Final = "STDIN"
+STDOUT_DISPLAY_NAME: Final = "STDOUT"
 
 
 @dataclass
@@ -21,9 +21,8 @@ class YamkixInputOutputConfig:
     Part of the config that manages `input` and `output`.
 
     Attributes:
-        input: The input file to parse or `STDIN` or `None`. Defaults to `STDIN` if not specified
-        output: The name of the file to generate (can be `STDOUT`). Will be the same as input file
-            if not specified (`None`), or `STDOUT` if `STDIN` was specified as input
+        input: The input file to parse if not `None`. `None` means `STDIN`.
+        output: The name of the file to generate if not `None`. `None` means `STDOUT`.
     """
 
     input: str | None
@@ -31,8 +30,12 @@ class YamkixInputOutputConfig:
 
     def __post_init__(self) -> None:
         """Set display names for `input` and `output`."""
-        self.input_display_name = STDIN_DISPLAY_NAME if self.input is None else self.input
-        self.output_display_name = STDOUT_DISPLAY_NAME if self.output is None else self.output
+        self.input_display_name = STDIN_DISPLAY_NAME if self.input is None else str(self.input)
+        self.output_display_name = STDOUT_DISPLAY_NAME if self.output is None else str(self.output)
+
+    def __str__(self) -> str:
+        """Return a string representation of the input/output configuration."""
+        return f"input={self.input_display_name}, output={self.output_display_name}"
 
 
 @dataclass
@@ -67,6 +70,25 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
     line_width: int
     version: bool | None
     io_config: YamkixInputOutputConfig
+
+    def __str__(self) -> str:
+        """Return a string representation of the YamkixConfig."""
+        return (
+            "typ="
+            + self.parsing_mode
+            + ", explicit_start="
+            + str(self.explicit_start)
+            + ", explicit_end="
+            + str(self.explicit_end)
+            + ", default_flow_style="
+            + str(self.default_flow_style)
+            + ", quotes_preserved="
+            + str(self.quotes_preserved)
+            + ", dash_inwards="
+            + str(self.dash_inwards)
+            + ", spaces_before_comment="
+            + str(self.spaces_before_comment)
+        )
 
 
 def get_default_yamkix_config() -> YamkixConfig:
@@ -108,6 +130,8 @@ def get_default_yamkix_config() -> YamkixConfig:
 def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
     """Return a default `input` / `output` configuration.
 
+    Default values mean: input is `stdin` and output is `stdout`.
+
     Returns:
         yamkix_input_output_config: A default `YamkixInputOutputConfig` object.
     """
@@ -137,7 +161,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
             `full` -> full Dumper only, including python built-ins that are
                 potentially unsafe to load
             `base` -> baseloader
-                explicit_start: Whether to include explicit start markers (`---`).
+        explicit_start: Whether to include explicit start markers (`---`).
         explicit_end: Whether to include explicit end markers (`...`).
         default_flow_style: Whether to use default flow style. Setting `default_flow_style = False` ensures
             that all collections are dumped in block style by default, which is the typical YAML format where sequences
@@ -181,30 +205,10 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
 def print_yamkix_config(yamkix_config: YamkixConfig) -> None:
     """Print a human readable Yamkix config on stderr."""
     yamkix_input_output_config = yamkix_config.io_config
-    typer_echo(
-        "[yamkix("
-        + __version__
-        + ")] Processing: input="
-        + yamkix_input_output_config.input_display_name
-        + ", output="
-        + yamkix_input_output_config.output_display_name
-        + ", typ="
-        + yamkix_config.parsing_mode
-        + ", explicit_start="
-        + str(yamkix_config.explicit_start)
-        + ", explicit_end="
-        + str(yamkix_config.explicit_end)
-        + ", default_flow_style="
-        + str(yamkix_config.default_flow_style)
-        + ", quotes_preserved="
-        + str(yamkix_config.quotes_preserved)
-        + ", dash_inwards="
-        + str(yamkix_config.dash_inwards)
-        + ", spaces_before_comment="
-        + str(yamkix_config.spaces_before_comment)
-        + ", show_version="
-        + str(yamkix_config.version),
-        file=sys.stderr,
+    console = get_stderr_console()
+    console.print(
+        r"\[yamkix(" + __version__ + ")] Processing: " + str(yamkix_input_output_config) + ", " + str(yamkix_config),
+        style="info",
     )
 
 
@@ -212,7 +216,7 @@ def get_input_output_config_from_args(
     args: Namespace,
 ) -> YamkixInputOutputConfig:
     """Get input, output and associated labels as YamkixInputOutputConfig."""
-    f_input = None if args.input is None else args.input
+    f_input = None if (args.input is None or args.input == STDIN_DISPLAY_NAME) else args.input
     if args.stdout:
         f_output = None
     elif args.output is not None and args.output != STDOUT_DISPLAY_NAME:
@@ -273,34 +277,63 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
     default_flow_style: bool,
     no_dash_inwards: bool,
     spaces_before_comment: int | None,
-    version: bool,
-) -> YamkixConfig:
-    """Create YamkixConfig from Typer arguments."""
-    # Handle I/O configuration - match the original logic exactly
-    f_input = None if input_file is None else input_file
-    if stdout:
-        f_output = None
-    elif output_file is not None and output_file != "STDOUT":
-        f_output = output_file
-    elif output_file == "STDOUT" or f_input is None:
-        f_output = None
+    files: list[Path] | None,
+) -> list[YamkixConfig]:
+    """Create a list of YamkixConfig from Typer arguments.
+
+    Note:
+        If `files` is not `None`, this function will create a `YamkixConfig` for each file in the list.
+        And `input_file`, `output_file` and `stdout` will not be taken into account.
+
+        If `files` is `None`, a single `YamkixConfig` will be created using the provided arguments.
+    """
+    stderr_console = get_stderr_console()
+    if files is not None:
+        if len(files) == 0:
+            msg = "The 'files' argument cannot be an empty list."
+            raise ValueError(msg)
+        if input_file is not None or output_file is not None or stdout:
+            stderr_console.print(
+                "WARNING: Options 'input', 'output' and 'stdout' are not honored when 'files' argument is used .",
+                style="warning",
+            )
+        io_configs = [
+            YamkixInputOutputConfig(
+                input=str(file),
+                output=str(file),
+            )
+            for file in files
+        ]
     else:
-        f_output = f_input
+        f_input = None if (input_file is None or input_file == STDIN_DISPLAY_NAME) else input_file
+        if stdout:
+            f_output = None
+        elif output_file is not None and output_file != STDOUT_DISPLAY_NAME:
+            f_output = output_file
+        elif output_file == STDOUT_DISPLAY_NAME or f_input is None:
+            f_output = None
+        else:
+            f_output = f_input
 
-    io_config = YamkixInputOutputConfig(
-        input=f_input,
-        output=f_output,
-    )
+        io_configs = [
+            YamkixInputOutputConfig(
+                input=f_input,
+                output=f_output,
+            )
+        ]
 
-    return YamkixConfig(
-        explicit_start=not no_explicit_start,
-        explicit_end=explicit_end,
-        default_flow_style=default_flow_style,
-        dash_inwards=not no_dash_inwards,
-        quotes_preserved=not no_quotes_preserved,
-        parsing_mode=typ,
-        spaces_before_comment=spaces_before_comment,
-        line_width=DEFAULT_LINE_WIDTH,
-        version=version,
-        io_config=io_config,
-    )
+    return [
+        YamkixConfig(
+            explicit_start=not no_explicit_start,
+            explicit_end=explicit_end,
+            default_flow_style=default_flow_style,
+            dash_inwards=not no_dash_inwards,
+            quotes_preserved=not no_quotes_preserved,
+            parsing_mode=typ,
+            spaces_before_comment=spaces_before_comment,
+            line_width=DEFAULT_LINE_WIDTH,
+            version=None,
+            io_config=io_config,
+        )
+        for io_config in io_configs
+    ]

@@ -10,7 +10,7 @@ StreamType = Any
 
 def strip_leading_double_space(stream: StreamType = Any) -> StreamType:
     """Strip leading double space."""
-    stream = stream.removeprefix("  ")
+    stream = stream.removeprefix("  ")  # ty: ignore[possibly-unbound-attribute]
     return stream.replace("\n  ", "\n")
 
 
