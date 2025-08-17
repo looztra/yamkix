@@ -64,10 +64,22 @@ def yamkix_dump_all(
     for doc in one_or_more_items:
         if output_file is None:
             out = sys.stdout
-            yamkix_dump_one(doc, yaml, dash_inwards, out, spaces_before_comment)
+            yamkix_dump_one(
+                single_item=doc,
+                yaml=yaml,
+                dash_inwards=dash_inwards,
+                out=out,
+                spaces_before_comment=spaces_before_comment,
+            )
         else:
             with Path(output_file).open(mode="a", encoding="UTF-8") as out:
-                yamkix_dump_one(doc, yaml, dash_inwards, out, spaces_before_comment)
+                yamkix_dump_one(
+                    single_item=doc,
+                    yaml=yaml,
+                    dash_inwards=dash_inwards,
+                    out=out,
+                    spaces_before_comment=spaces_before_comment,
+                )
 
 
 def yamkix_dump_one(
@@ -75,8 +87,8 @@ def yamkix_dump_one(
 ) -> None:
     """Dump a single document."""
     if spaces_before_comment is not None:
-        process_comments(single_item, column=spaces_before_comment)  # pyright: ignore[reportArgumentType]
+        process_comments(data=single_item, column=spaces_before_comment)  # pyright: ignore[reportArgumentType]
     if dash_inwards and type(single_item).__name__ == "CommentedSeq":
-        yaml.dump(single_item, out, transform=strip_leading_double_space)
+        yaml.dump(data=single_item, stream=out, transform=strip_leading_double_space)
     else:
-        yaml.dump(single_item, out)
+        yaml.dump(data=single_item, stream=out)

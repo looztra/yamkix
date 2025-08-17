@@ -1,5 +1,6 @@
 """Provide tests for the yamkix module."""
 
+import sys
 from pathlib import Path
 from textwrap import dedent
 
@@ -48,4 +49,21 @@ class TestYamkixDumpAll:
         yamkix_dump_all(
             [yaml_content], yaml_parser, dash_inwards=False, output_file=str(sut), spaces_before_comment=None
         )
-        assert sut.read_text() != initial_content
+        assert initial_content not in content
+        assert initial_content not in sut.read_text()
+
+    def test_write_to_stdout(self, mocker: MockerFixture) -> None:
+        """Test that yamkix_dump_all writes to stdout."""
+        # GIVEN
+        content = """\
+        name:
+            family: Smith # plouf
+            given: Alice  # one of the siblings
+        """
+        yaml_parser = get_opinionated_yaml_writer(get_default_yamkix_config())
+        yaml_content = yaml_parser.load(dedent(content))
+        yamkix_dump_one = mocker.patch("yamkix.yamkix.yamkix_dump_one")
+        yamkix_dump_all([yaml_content], yaml_parser, dash_inwards=False, output_file=None, spaces_before_comment=None)
+        yamkix_dump_one.assert_called_once_with(
+            single_item=yaml_content, yaml=yaml_parser, dash_inwards=False, out=sys.stdout, spaces_before_comment=None
+        )
