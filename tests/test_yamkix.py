@@ -29,6 +29,27 @@ class TestRoundTripAndFormat:
             round_trip_and_format(config)
         mock_yamkix_dump_all.assert_not_called()
 
+    def test_read_from_stdin(self, mocker: MockerFixture) -> None:
+        """Test that round_trip_and_format reads from stdin when input file is None."""
+        # GIVEN
+        mock_get_opinionated_yaml_writer = mocker.patch("yamkix.yamkix.get_opinionated_yaml_writer")
+        mock_sys_stdin = mocker.patch("sys.stdin")
+        stdin_read_return_value = mocker.Mock()
+        mock_sys_stdin.read.return_value = stdin_read_return_value
+        mock_load_all = mock_get_opinionated_yaml_writer.return_value.load_all
+        load_all_return_value = iter([mocker.Mock()])
+        mock_load_all.return_value = load_all_return_value
+        config = get_yamkix_config_from_default(io_config=YamkixInputOutputConfig(input=None, output=None))
+        mock_yamkix_dump_all = mocker.patch("yamkix.yamkix.yamkix_dump_all")
+
+        # WHEN
+        round_trip_and_format(config)
+
+        # THENm
+        mock_load_all.assert_called_once_with(stdin_read_return_value)
+        mock_sys_stdin.read.assert_called_once()
+        mock_yamkix_dump_all.assert_called_once()
+
 
 class TestYamkixDumpAll:
     """Provide tests for the yamkix_dump_all function."""

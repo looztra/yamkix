@@ -46,7 +46,13 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> None:
 
     except (ScannerError, ParserError) as parsing_error:
         raise InvalidYamlContentError from parsing_error
-    yamkix_dump_all(ready_for_dump, yaml, dash_inwards, output_file, spaces_before_comment)
+    yamkix_dump_all(
+        one_or_more_items=ready_for_dump,
+        yaml=yaml,
+        dash_inwards=dash_inwards,
+        output_file=output_file,
+        spaces_before_comment=spaces_before_comment,
+    )
 
 
 def yamkix_dump_all(
