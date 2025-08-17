@@ -58,7 +58,7 @@ def yamkix_dump_all(
 ) -> None:
     """Dump all the documents from the input structure."""
     # Clear the output file if it is a file and it exists
-    if output_file is not None and (output_file_path := Path(output_file)).is_file:  # Walrus baby
+    if output_file is not None and (output_file_path := Path(output_file)).is_file():  # Walrus baby
         with output_file_path.open(mode="w", encoding="UTF-8") as _:
             pass
     for doc in one_or_more_items:
