@@ -1,0 +1,7 @@
+---
+- id: yamkix
+  name: Format yaml files with Yamkix
+  description: This hook formats YAML files using Yamkix.
+  entry: yamkix
+  language: python
+  types: [yaml]
