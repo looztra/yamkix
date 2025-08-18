@@ -64,7 +64,7 @@
 
     ```shell
     cat file.yml | yamkix -q
-    ````
+    ```
 
 - if `stdin` is used for input and nothing is specified for output, then `stdout` will be used for output.
 
