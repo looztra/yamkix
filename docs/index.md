@@ -2,7 +2,7 @@
 
 ## Why?
 
-- Because I like my `yaml` file to be nicely formatted and there is not _out of the box_ **default** format rules.
+- Because I like my `yaml` file to be _nicely_ formatted and there is not _out of the box_ **default** format rules.
 - Because
   <https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml>
   does not add explicit start of documents and I don't like it this
@@ -39,6 +39,10 @@
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
+## Usage
+
+Check the [dedicated page](usage.md).
+
 ## Configuration
 
 In order to better understand what you can do with the configuration provided, have a look at the dedicated [Configuration](configuration.md) page.
@@ -49,25 +53,3 @@ In order to better understand what you can do with the configuration provided, h
   <http://online-generator.com/name-generator/product-name-generator.php>
   that suggested me `zamkix`. Just switched the starting `z` for the
   `y` of `yaml`
-
-## VSCode Task
-
-- Install the package with `uv tool install yamkix` (or `pip install --user yamkix` if you are not using [uv](https://docs.astral.sh/uv/concepts/tools/))
-
-- Sample **vscode** task :
-
-<!-- end list -->
-
-``` json
-{
-  "label": "format yaml with yamkix",
-  "type": "shell",
-  "command": "yamkix --input ${file}",
-  "group": "build",
-  "presentation": {
-    "reveal": "always",
-    "panel": "shared"
-  },
-  "problemMatcher": []
-}
-```

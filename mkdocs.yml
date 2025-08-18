@@ -57,6 +57,7 @@ nav:
   - Introduction: index.md
   - Configuration: configuration.md
   - Install: install.md
+  - Usage: usage.md
   - Public API Reference: reference.md
   - Changelog: changelog.md
   - Contributing: contributing.md

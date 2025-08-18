@@ -1,0 +1,10 @@
+---
+field1: value1
+field2:
+  i-am-a-string-with-double-quotes: some string with double-quote
+  i-am-a-string-with-single-quotes: another-string-with-simple-quote
+  i-am-a-string-without-quotes: look ma, no quotes!
+  i-am-a-real-number: 1.722
+  i-am-a-string-number: '1.722'
+  i-am-a-real-boolean: true
+  i-am-a-string-boolean: 'true'

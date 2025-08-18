@@ -1,6 +1,7 @@
 """Tests the YamkixConfig stuff."""
 
 from argparse import Namespace
+from pathlib import Path
 
 import pytest
 from faker import Faker
@@ -8,6 +9,8 @@ from pytest_mock import MockerFixture
 
 from yamkix.config import (
     DEFAULT_LINE_WIDTH,
+    STDIN_DISPLAY_NAME,
+    STDOUT_DISPLAY_NAME,
     YamkixConfig,
     YamkixInputOutputConfig,
     create_yamkix_config_from_typer_args,
@@ -21,21 +24,8 @@ from yamkix.config import (
 from yamkix.errors import InvalidTypValueError
 
 
-class TestConfig:
-    """Provide unit tests for the config package."""
-
-    def test_default_values(self) -> None:
-        """Test YamkixConfig default values."""
-        sut: YamkixConfig = get_default_yamkix_config()
-        assert sut.parsing_mode == "rt"
-        assert sut.explicit_start is True
-        assert sut.explicit_end is False
-        assert sut.default_flow_style is False
-        assert sut.dash_inwards is True
-        assert sut.quotes_preserved is True
-        assert sut.spaces_before_comment is None
-        assert sut.line_width == DEFAULT_LINE_WIDTH
-        assert sut.version is False
+class TestYamkixInputOutputConfig:
+    """Provide unit tests for the YamkixInputOutputConfig class."""
 
     def test_get_io_config_when_defaults(self) -> None:
         """Test get_input_output_config_from_args.
@@ -61,6 +51,30 @@ class TestConfig:
         assert sut.input_display_name == f_input
         assert sut.output == f_input
         assert sut.output_display_name == f_input
+
+    def test_get_io_config_when_explicit_stdin_input_provided(self) -> None:
+        """Test get_input_output_config_from_args.
+
+        input=STDIN, output=None, stdout=None
+        """
+        parsed = Namespace(input=STDIN_DISPLAY_NAME, output=None, stdout=None)
+        sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
+        assert sut.input is None
+        assert sut.input_display_name == STDIN_DISPLAY_NAME
+        assert sut.output is None
+        assert sut.output_display_name == STDOUT_DISPLAY_NAME
+
+    def test_get_io_config_when_explicit_stdin_and_stdout_provided(self) -> None:
+        """Test get_input_output_config_from_args.
+
+        input=STDIN, output=STDOUT, stdout=None
+        """
+        parsed = Namespace(input=STDIN_DISPLAY_NAME, output=STDOUT_DISPLAY_NAME, stdout=None)
+        sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
+        assert sut.input is None
+        assert sut.input_display_name == STDIN_DISPLAY_NAME
+        assert sut.output is None
+        assert sut.output_display_name == STDOUT_DISPLAY_NAME
 
     def test_get_io_config_when_file_input_and_output_provided(self) -> None:
         """Test get_input_output_config_from_args.
@@ -112,13 +126,13 @@ class TestConfig:
         input=f_input, output=f_output, stdout=None
         """
         f_input = "path/to/input"
-        f_output = "STDOUT"
+        f_output = STDOUT_DISPLAY_NAME
         parsed = Namespace(input=f_input, output=f_output, stdout=None)
         sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
         assert sut.input == f_input
         assert sut.input_display_name == f_input
         assert sut.output is None
-        assert sut.output_display_name == "STDOUT"
+        assert sut.output_display_name == STDOUT_DISPLAY_NAME
 
     def test_get_io_config_when_file_output_provided(self) -> None:
         """Test get_input_output_config_from_args.
@@ -130,9 +144,26 @@ class TestConfig:
         sut: YamkixInputOutputConfig = get_input_output_config_from_args(parsed)
 
         assert sut.input is None
-        assert sut.input_display_name == "STDIN"
+        assert sut.input_display_name == STDIN_DISPLAY_NAME
         assert sut.output == f_output
         assert sut.output_display_name == f_output
+
+
+class TestYamkixConfigFromArgs:
+    """Provide unit tests related to getting YamkixConfig from args."""
+
+    def test_default_values(self) -> None:
+        """Test YamkixConfig default values."""
+        sut: YamkixConfig = get_default_yamkix_config()
+        assert sut.parsing_mode == "rt"
+        assert sut.explicit_start is True
+        assert sut.explicit_end is False
+        assert sut.default_flow_style is False
+        assert sut.dash_inwards is True
+        assert sut.quotes_preserved is True
+        assert sut.spaces_before_comment is None
+        assert sut.line_width == DEFAULT_LINE_WIDTH
+        assert sut.version is False
 
     def test_get_config_from_args_with_invalid_typ(self) -> None:
         """Test get_config_from_args.
@@ -250,6 +281,10 @@ class TestConfig:
         parsed = Namespace(spaces_before_comment=faker.word())
         sut = get_spaces_before_comment_from_args(parsed)
         assert sut is None
+
+
+class TestGetYamkixConfigFromDefault:
+    """Provide unit tests for get_yamkix_config_from_default."""
 
     def test_get_yamkix_config_from_default_parsing_mode(self, faker: Faker) -> None:
         """Test get_yamkix_config_from_default.
@@ -420,7 +455,7 @@ class TestCreateYamkixConfigFromTyperArgs:
 
     def test_create_yamkix_config_from_typer_args(self) -> None:
         """Test the config creation function."""
-        config = create_yamkix_config_from_typer_args(
+        configs = create_yamkix_config_from_typer_args(
             input_file="test.yaml",
             output_file="output.yaml",
             stdout=False,
@@ -431,22 +466,23 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=True,
             no_dash_inwards=False,
             spaces_before_comment=1,
-            version=False,
+            files=None,
         )
 
-        assert config.io_config.input == "test.yaml"
-        assert config.io_config.output == "output.yaml"
-        assert config.parsing_mode == "rt"
-        assert config.explicit_start  # not no_explicit_start
-        assert config.explicit_end
-        assert config.quotes_preserved  # not no_quotes_preserved
-        assert config.default_flow_style
-        assert config.dash_inwards  # not no_dash_inwards
-        assert config.spaces_before_comment == 1
+        assert len(configs) == 1
+        assert configs[0].io_config.input == "test.yaml"
+        assert configs[0].io_config.output == "output.yaml"
+        assert configs[0].parsing_mode == "rt"
+        assert configs[0].explicit_start  # not no_explicit_start
+        assert configs[0].explicit_end
+        assert configs[0].quotes_preserved  # not no_quotes_preserved
+        assert configs[0].default_flow_style
+        assert configs[0].dash_inwards  # not no_dash_inwards
+        assert configs[0].spaces_before_comment == 1
 
     def test_create_yamkix_config_stdout_override(self) -> None:
         """Test that stdout option overrides output file."""
-        config = create_yamkix_config_from_typer_args(
+        configs = create_yamkix_config_from_typer_args(
             input_file="test.yaml",
             output_file="output.yaml",
             stdout=True,  # This should override output_file
@@ -457,15 +493,15 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
-
-        assert config.io_config.input == "test.yaml"
-        assert config.io_config.output is None  # Should be None due to stdout=True
+        assert len(configs) == 1
+        assert configs[0].io_config.input == "test.yaml"
+        assert configs[0].io_config.output is None  # Should be None due to stdout=True
 
     def test_create_yamkix_config_defaults(self) -> None:
         """Test default configuration values."""
-        config = create_yamkix_config_from_typer_args(
+        configs = create_yamkix_config_from_typer_args(
             input_file=None,
             output_file=None,
             stdout=False,
@@ -476,21 +512,22 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
 
         default_config = get_default_yamkix_config()
-        assert config.parsing_mode == default_config.parsing_mode
-        assert config.explicit_start == default_config.explicit_start
-        assert config.explicit_end == default_config.explicit_end
-        assert config.default_flow_style == default_config.default_flow_style
-        assert config.dash_inwards == default_config.dash_inwards
-        assert config.quotes_preserved == default_config.quotes_preserved
-        assert config.spaces_before_comment == default_config.spaces_before_comment
+        assert len(configs) == 1
+        assert configs[0].parsing_mode == default_config.parsing_mode
+        assert configs[0].explicit_start == default_config.explicit_start
+        assert configs[0].explicit_end == default_config.explicit_end
+        assert configs[0].default_flow_style == default_config.default_flow_style
+        assert configs[0].dash_inwards == default_config.dash_inwards
+        assert configs[0].quotes_preserved == default_config.quotes_preserved
+        assert configs[0].spaces_before_comment == default_config.spaces_before_comment
 
     def test_create_yamkix_config_negated_flags(self) -> None:
         """Test negated boolean flags work correctly."""
-        config = create_yamkix_config_from_typer_args(
+        configs = create_yamkix_config_from_typer_args(
             input_file=None,
             output_file=None,
             stdout=False,
@@ -501,20 +538,21 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=True,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
 
-        assert config.parsing_mode == "safe"
-        assert not config.explicit_start  # no_explicit_start=True
-        assert not config.explicit_end
-        assert not config.quotes_preserved  # no_quotes_preserved=True
-        assert not config.default_flow_style
-        assert not config.dash_inwards  # no_dash_inwards=True
+        assert len(configs) == 1
+        assert configs[0].parsing_mode == "safe"
+        assert not configs[0].explicit_start  # no_explicit_start=True
+        assert not configs[0].explicit_end
+        assert not configs[0].quotes_preserved  # no_quotes_preserved=True
+        assert not configs[0].default_flow_style
+        assert not configs[0].dash_inwards  # no_dash_inwards=True
 
-    def test_create_yamkix_config_io_logic(self) -> None:
+    def test_create_yamkix_config_io_logic_with_input_file(self) -> None:
         """Test input/output file logic."""
         # Test case: input file but no output specified -> output should be same as input
-        config = create_yamkix_config_from_typer_args(
+        configs = create_yamkix_config_from_typer_args(
             input_file="input.yaml",
             output_file=None,
             stdout=False,
@@ -525,13 +563,15 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
-        assert config.io_config.input == "input.yaml"
-        assert config.io_config.output == "input.yaml"
+        assert configs[0].io_config.input == "input.yaml"
+        assert configs[0].io_config.output == "input.yaml"
 
+    def test_create_yamkix_config_io_logic_with_output_file(self) -> None:
+        """Test input/output file logic."""
         # Test case: no input file but output specified -> output should be the specified file
-        config = create_yamkix_config_from_typer_args(
+        configs = create_yamkix_config_from_typer_args(
             input_file=None,
             output_file="output.yaml",
             stdout=False,
@@ -542,13 +582,15 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
-        assert config.io_config.input is None
-        assert config.io_config.output == "output.yaml"
+        assert configs[0].io_config.input is None
+        assert configs[0].io_config.output == "output.yaml"
 
+    def test_create_yamkix_config_io_logic_with_input_none_and_output_none(self) -> None:
+        """Test input/output file logic."""
         # Test case: no input file and no output -> output should be None (STDOUT)
-        config = create_yamkix_config_from_typer_args(
+        configs = create_yamkix_config_from_typer_args(
             input_file=None,
             output_file=None,
             stdout=False,
@@ -559,15 +601,17 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
-        assert config.io_config.input is None
-        assert config.io_config.output is None
+        assert configs[0].io_config.input is None
+        assert configs[0].io_config.output is None
 
-        # Test case: output is "STDOUT" -> output should be None
-        config = create_yamkix_config_from_typer_args(
-            input_file="input.yaml",
-            output_file="STDOUT",
+    def test_create_yamkix_config_io_logic_with_explicit_stdin_as_input(self) -> None:
+        """Test input/output file logic."""
+        # Test case: input set explicitly to STDIN and no output -> output should be None (STDOUT)
+        configs = create_yamkix_config_from_typer_args(
+            input_file=STDIN_DISPLAY_NAME,
+            output_file=None,
             stdout=False,
             typ="rt",
             no_explicit_start=False,
@@ -576,27 +620,172 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
-            version=False,
+            files=None,
         )
-        assert config.io_config.input == "input.yaml"
-        assert config.io_config.output is None
+        assert configs[0].io_config.input is None
+        assert configs[0].io_config.output is None
+
+    def test_create_yamkix_config_io_logic_with_explicit_stdout_as_output(self) -> None:
+        """Test input/output file logic."""
+        # Test case: output is "STDOUT" -> output should be None
+        configs = create_yamkix_config_from_typer_args(
+            input_file="input.yaml",
+            output_file=STDOUT_DISPLAY_NAME,
+            stdout=False,
+            typ="rt",
+            no_explicit_start=False,
+            explicit_end=False,
+            no_quotes_preserved=False,
+            default_flow_style=False,
+            no_dash_inwards=False,
+            spaces_before_comment=None,
+            files=None,
+        )
+        assert configs[0].io_config.input == "input.yaml"
+        assert configs[0].io_config.output is None
+
+    def test_create_yamkix_config_io_logic_with_single_argument(self, shared_datadir: Path) -> None:
+        """Test input/output file logic."""
+        test_file1 = shared_datadir / "simple.yml"
+        configs = create_yamkix_config_from_typer_args(
+            input_file=None,
+            output_file=None,
+            stdout=False,
+            typ="rt",
+            no_explicit_start=False,
+            explicit_end=False,
+            no_quotes_preserved=False,
+            default_flow_style=False,
+            no_dash_inwards=False,
+            spaces_before_comment=None,
+            files=[test_file1],
+        )
+        assert configs[0].io_config.input == str(test_file1)
+        assert configs[0].io_config.output == str(test_file1)
+
+    def test_create_yamkix_config_io_logic_with_two_arguments(self, shared_datadir: Path) -> None:
+        """Test input/output file logic."""
+        test_file1 = shared_datadir / "simple.yml"
+        test_file2 = shared_datadir / "multi-doc-1.yml"
+        input_files = [test_file1, test_file2]
+        configs = create_yamkix_config_from_typer_args(
+            input_file=None,
+            output_file=None,
+            stdout=False,
+            typ="rt",
+            no_explicit_start=False,
+            explicit_end=False,
+            no_quotes_preserved=False,
+            default_flow_style=False,
+            no_dash_inwards=False,
+            spaces_before_comment=None,
+            files=input_files,
+        )
+        assert len(configs) == len(input_files)
+        assert configs[0].io_config.input == str(test_file1)
+        assert configs[0].io_config.output == str(test_file1)
+        assert configs[1].io_config.input == str(test_file2)
+        assert configs[1].io_config.output == str(test_file2)
+
+    def test_create_yamkix_config_io_logic_with_empty_files(self) -> None:
+        """Test input/output file logic."""
+        with pytest.raises(ValueError, match="The 'files' argument cannot be an empty list."):
+            create_yamkix_config_from_typer_args(
+                input_file=None,
+                output_file=None,
+                stdout=False,
+                typ="rt",
+                no_explicit_start=False,
+                explicit_end=False,
+                no_quotes_preserved=False,
+                default_flow_style=False,
+                no_dash_inwards=False,
+                spaces_before_comment=None,
+                files=[],
+            )
+
+    @pytest.mark.parametrize(
+        ("input_f", "output_f", "stdout"),
+        [
+            pytest.param("file.yml", None, False, id="input_only"),
+            pytest.param("file.yml", None, True, id="input_stdout"),
+            pytest.param("file.yml", "plouf.yml", False, id="input_output"),
+            pytest.param("file.yml", "plouf.yml", True, id="input_output_stdout"),
+            pytest.param(None, "plouf.yml", False, id="output_only"),
+            pytest.param(None, "plouf.yml", True, id="output_stdout"),
+            pytest.param(None, None, True, id="stdout_only"),
+        ],
+    )
+    def test_create_yamkix_raise_warning(
+        self, tmp_path: Path, mocker: MockerFixture, input_f: str, output_f: str, stdout: bool
+    ) -> None:
+        """Test default configuration values."""
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
+        mock_console = mocker.Mock()
+        mock_get_stderr_console.return_value = mock_console
+        configs = create_yamkix_config_from_typer_args(
+            input_file=input_f,
+            output_file=output_f,
+            stdout=stdout,
+            typ="rt",
+            no_explicit_start=False,
+            explicit_end=False,
+            no_quotes_preserved=False,
+            default_flow_style=False,
+            no_dash_inwards=False,
+            spaces_before_comment=None,
+            files=[tmp_path / "simple.yml"],
+        )
+
+        assert len(configs) == 1
+        mock_console.print.assert_called_once()
+        args, kwargs = mock_console.print.call_args
+        assert "WARNING" in args[0]
 
 
 class TestPrintYamkixConfig:
     """Provide unit tests for print_yamkix_config function."""
 
-    def test_print_yamkix_config_calls_typer_echo(self, mocker: MockerFixture) -> None:
+    def test_yamkix_input_output_config_str_with_file_paths(self) -> None:
+        """Test __str__ method of YamkixInputOutputConfig with file paths."""
+        # GIVEN
+        config = YamkixInputOutputConfig(input="input.yaml", output="output.yaml")
+
+        # WHEN
+        result = str(config)
+
+        # THEN
+        assert result == "input=input.yaml, output=output.yaml"
+
+    def test_yamkix_config_str_with_default_values(self) -> None:
+        """Test __str__ method of YamkixConfig with default values."""
+        # GIVEN
+        config = get_default_yamkix_config()
+
+        # WHEN
+        result = str(config)
+
+        # THEN
+        expected = (
+            "typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, "
+            "quotes_preserved=True, dash_inwards=True, spaces_before_comment=None"
+        )
+        assert result == expected
+
+    def test_print_yamkix_config_calls_stderr_console(self, mocker: MockerFixture) -> None:
         """Test that print_yamkix_config calls typer_echo with correct message."""
         # GIVEN
-        mock_typer_echo = mocker.patch("yamkix.config.typer_echo")
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
+        mock_console = mocker.Mock()
+        mock_get_stderr_console.return_value = mock_console
         config = get_default_yamkix_config()
 
         # WHEN
         print_yamkix_config(config)
 
         # THEN
-        mock_typer_echo.assert_called_once()
-        args, kwargs = mock_typer_echo.call_args
+        mock_console.print.assert_called_once()
+        args, kwargs = mock_console.print.call_args
 
         # Verify the message contains expected content
         message = args[0]
@@ -611,7 +800,3 @@ class TestPrintYamkixConfig:
         assert "quotes_preserved=True" in message
         assert "dash_inwards=True" in message
         assert "spaces_before_comment=None" in message
-        assert "show_version=False" in message
-
-        # Verify stderr output
-        assert kwargs.get("file") is not None

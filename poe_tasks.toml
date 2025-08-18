@@ -2,6 +2,7 @@
 "lint:all" = [
     "ruff:lint",
     "ruff:fmt:check",
+    "ty:run",
     "pylint",
     "pyright",
 ]
@@ -26,3 +27,4 @@ test = "pytest"
 "test:cov" = [
     "pytest:cov",
 ]
+"ty:run" = "ty check"

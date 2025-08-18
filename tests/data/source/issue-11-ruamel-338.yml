@@ -1,0 +1,8 @@
+---
+spec:
+  template:
+    spec:
+      containers:
+      - # no-ImageLatestTagLinter
+        name: foo1
+        image: "localhost/foo:latest"

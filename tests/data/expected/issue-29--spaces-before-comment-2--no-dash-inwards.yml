@@ -1,0 +1,6 @@
+---
+item: 123
+list:  # this is a comment that kills it
+- a
+- b
+- c
