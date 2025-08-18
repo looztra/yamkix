@@ -5,4 +5,5 @@
   entry: yamkix
   language: python
   types: [yaml]
+  pass_filenames: true
   args: [--silent]
