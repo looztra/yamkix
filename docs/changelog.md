@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.12.0](https://github.com/looztra/yamkix/compare/v0.11.1...v0.12.0) (2025-08-18)
+
+
+### Features
+
+* **inputs:** support formatting multiple files at once ([c16ffb7](https://github.com/looztra/yamkix/commit/c16ffb79447d831bf3961346b4f2863e33c3cbce))
+* **pre-commit:** you can now use yamkix as a pre-commit hook ([c16ffb7](https://github.com/looztra/yamkix/commit/c16ffb79447d831bf3961346b4f2863e33c3cbce))
+
+
+### Bug Fixes
+
+* **inputs:** explicit STDIN input now works as documented ([c16ffb7](https://github.com/looztra/yamkix/commit/c16ffb79447d831bf3961346b4f2863e33c3cbce))
+
+
+### Documentation
+
+* **cli:** document the usage as a cli and as a pre-commit hook ([c16ffb7](https://github.com/looztra/yamkix/commit/c16ffb79447d831bf3961346b4f2863e33c3cbce))
+
 ## [0.11.1](https://github.com/looztra/yamkix/compare/v0.11.0...v0.11.1) (2025-08-13)
 
 
