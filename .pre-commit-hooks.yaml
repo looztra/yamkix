@@ -5,3 +5,4 @@
   entry: yamkix
   language: python
   types: [yaml]
+  args: [--silent]
