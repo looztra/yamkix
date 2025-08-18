@@ -84,6 +84,7 @@ jobs:
       - name: Detect if docs have changed
         id: detect-docs-changed
         run: |
+          echo "::group::detect diff"
           docs_changed=0
           if ! diff -r generated/mkdocs/previous generated/mkdocs/current; then
             docs_changed=1
