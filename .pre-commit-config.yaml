@@ -60,6 +60,18 @@ repos:
           (?x)^(
               tests/data/.*
           )$
+
+  - repo: https://github.com/looztra/yamkix
+    rev: v0.12.0
+    hooks:
+      - id: yamkix
+        args: [--no-quotes-preserved]
+        exclude: |
+          (?x)^(
+              test-assets/.*|
+              tests/data/.*
+          )$
+
   - repo: local
     hooks:
       - id: taplo
@@ -68,17 +80,6 @@ repos:
         types: [text]
         language: system
         pass_filenames: false
-      - id: yamkix-wrapper # Check yaml with ourselves. We have to exclude test-assets/*
-        name: Check Yaml files are formatted with 'yamkix'
-        exclude: |
-          (?x)^(
-              test-assets/.*|
-              tests/data/.*
-          )$
-        entry: toolbox/scripts/yamkix-wrapper.sh
-        types: [yaml]
-        language: script
-        pass_filenames: true
       - id: ruff-format
         name: Check that files are formatted as expected with 'ruff format --check'
         entry: uv run --frozen ruff format --check
