@@ -51,6 +51,23 @@
       yolo: baz
     ```
 
+### Reading from STDIN
+
+- You can format the input provide through `stdin`
+- `stdin` input can be specified explicitly, using `--input STDIN`
+
+    ```shell
+    cat file.yml | yamkix --input STDIN
+    ```
+
+- `stdin` input is implicit if you don't specify any input through `-i/--input` or any CLI argument:
+
+    ```shell
+    cat file.yml | yamkix -q
+    ````
+
+- if `stdin` is used for input and nothing is specified for output, then `stdout` will be used for output.
+
 ### Formatting **multiple** files
 
 - If you need to format multiple files in a single call to `Yamkix`, don't use `-i/--input`, just pass the list of files as arguments to the `yamkix` cli

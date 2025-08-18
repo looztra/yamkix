@@ -6,7 +6,7 @@ test-python-versions: ## ▶ Run tests for all supported python versions
 .PHONY: build-docs
 build-docs: ## ▶ Build the documentation
 	@echo "Building the documentation"
-	@uv run mkdocs build
+	@uv run mkdocs build --site-dir generated/mkdocs/HEAD
 
 .PHONY: serve-docs
 serve-docs: ## ▶ Serve the documentation
