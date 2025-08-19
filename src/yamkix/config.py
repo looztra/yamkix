@@ -53,6 +53,7 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
         dash_inwards: Whether to use dash inwards, i.e. whether to indent the dash in front of a sequence.
         quotes_preserved: Whether to preserve quotes, i.e. preserve the original quotes
             used in the input in the output.
+        parsing_mode: `rt` -> RoundTripLoader/RoundTripDumper, `safe` -> SafeLoader/SafeDumper
         spaces_before_comment: Number of spaces before comments.
         line_width: Maximum line width.
         version: Whether to include version information (deprecated)
@@ -157,10 +158,6 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
     Parameters:
         parsing_mode: `rt`/`None` -> RoundTripLoader/RoundTripDumper, (default)
             `safe` -> SafeLoader/SafeDumper,
-            `unsafe` -> normal/unsafe Loader/Dumper (pending deprecation)
-            `full` -> full Dumper only, including python built-ins that are
-                potentially unsafe to load
-            `base` -> baseloader
         explicit_start: Whether to include explicit start markers (`---`).
         explicit_end: Whether to include explicit end markers (`...`).
         default_flow_style: Whether to use default flow style. Setting `default_flow_style = False` ensures
