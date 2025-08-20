@@ -33,11 +33,8 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> None:
     double_quotes_yaml = None
     yaml = get_opinionated_yaml_writer(yamkix_config)
     if yamkix_config.quotes_preserved is False and yamkix_config.enforce_double_quotes:
-        double_quotes_config = deepcopy(yamkix_config)
-        # For an unidentified reason (so far), we cannot just get a deepcopy of the `yaml` writer
-        # and set `quotes_preserved` to `True`.
-        double_quotes_config.quotes_preserved = True
-        double_quotes_yaml = get_opinionated_yaml_writer(double_quotes_config)
+        double_quotes_yaml = deepcopy(yaml)
+        double_quotes_yaml.preserve_quotes = True
     yamkix_io_config = yamkix_config.io_config
     input_file = yamkix_io_config.input
     if input_file is not None:
