@@ -24,11 +24,11 @@
   - if quotes are not present around booleans and numbers, there
     will be no quotes in the output too
 
-!!! note "For double quotes lovers"
+!!! info "For double quotes lovers"
     Starting with `v0.13.0`, there is an option, `--enforce-double-quotes`, to enforce the usage of double
     quotes when `-q` or `--no-quotes-preserved` is used.
 
-!!! note "Should you use quotes for yaml strings?"
+!!! question "Should you use quotes for yaml strings?"
 
     If you are wondering if you should use quotes or not when writing yaml code, you can read this [awesome Stack Overflow thread](https://stackoverflow.com/questions/19109912/do-i-need-quotes-for-strings-in-yaml/69850618#69850618).
 
