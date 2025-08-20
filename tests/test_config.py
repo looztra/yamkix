@@ -634,11 +634,19 @@ class TestCreateYamkixConfigFromTyperArgs:
         assert configs[0].io_config.input is None
         assert configs[0].io_config.output is None
 
-    def test_create_yamkix_config_io_logic_with_explicit_stdin_as_input(self) -> None:
+    @pytest.mark.parametrize(
+        "input_file",
+        [
+            pytest.param(STDIN_DISPLAY_NAME, id="STDIN"),
+            pytest.param("StDin", id="StDin"),
+            pytest.param(STDIN_DISPLAY_NAME.lower(), id="stdin"),
+        ],
+    )
+    def test_create_yamkix_config_io_logic_with_explicit_stdin_as_input(self, input_file: str) -> None:
         """Test input/output file logic."""
         # Test case: input set explicitly to STDIN and no output -> output should be None (STDOUT)
         configs = create_yamkix_config_from_typer_args(
-            input_file=STDIN_DISPLAY_NAME,
+            input_file=input_file,
             output_file=None,
             stdout=False,
             typ="rt",
@@ -654,12 +662,20 @@ class TestCreateYamkixConfigFromTyperArgs:
         assert configs[0].io_config.input is None
         assert configs[0].io_config.output is None
 
-    def test_create_yamkix_config_io_logic_with_explicit_stdout_as_output(self) -> None:
+    @pytest.mark.parametrize(
+        "output_file",
+        [
+            pytest.param(STDOUT_DISPLAY_NAME, id="STDOUT"),
+            pytest.param("StDout", id="StDout"),
+            pytest.param(STDOUT_DISPLAY_NAME.lower(), id="stdout"),
+        ],
+    )
+    def test_create_yamkix_config_io_logic_with_explicit_stdout_as_output(self, output_file: str) -> None:
         """Test input/output file logic."""
         # Test case: output is "STDOUT" -> output should be None
         configs = create_yamkix_config_from_typer_args(
             input_file="input.yaml",
-            output_file=STDOUT_DISPLAY_NAME,
+            output_file=output_file,
             stdout=False,
             typ="rt",
             no_explicit_start=False,
