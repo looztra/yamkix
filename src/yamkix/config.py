@@ -53,7 +53,9 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
         dash_inwards: Whether to use dash inwards, i.e. whether to indent the dash in front of a sequence.
         quotes_preserved: Whether to preserve quotes, i.e. preserve the original quotes
             used in the input in the output.
+        parsing_mode: `rt` -> RoundTripLoader/RoundTripDumper, `safe` -> SafeLoader/SafeDumper
         spaces_before_comment: Number of spaces before comments.
+        enforce_double_quotes: Whether to enforce double quotes when quotes_preserved is False
         line_width: Maximum line width.
         version: Whether to include version information (deprecated)
         io_config: Input/Output configuration.
@@ -67,6 +69,7 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
     quotes_preserved: bool
     parsing_mode: str
     spaces_before_comment: int | None
+    enforce_double_quotes: bool
     line_width: int
     version: bool | None
     io_config: YamkixInputOutputConfig
@@ -84,6 +87,8 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
             + str(self.default_flow_style)
             + ", quotes_preserved="
             + str(self.quotes_preserved)
+            + ", enforce_double_quotes="
+            + str(self.enforce_double_quotes)
             + ", dash_inwards="
             + str(self.dash_inwards)
             + ", spaces_before_comment="
@@ -103,6 +108,7 @@ def get_default_yamkix_config() -> YamkixConfig:
                 <li><i>default_flow_style = False</i></li>
                 <li><i>dash_inwards = True</i></li>
                 <li><i>quotes_preserved = True</i></li>
+                <li><i>enforce_double_quotes = False</i></li>
                 <li><i>spaces_before_comment = None</i></li>
                 <li><i>line_width = 2048</i></li>
                 <li><i>io_config</i>:
@@ -120,6 +126,7 @@ def get_default_yamkix_config() -> YamkixConfig:
         default_flow_style=False,
         dash_inwards=True,
         quotes_preserved=True,
+        enforce_double_quotes=False,
         spaces_before_comment=None,
         line_width=DEFAULT_LINE_WIDTH,
         version=False,
@@ -148,6 +155,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
     default_flow_style: bool | None = None,
     dash_inwards: bool | None = None,
     quotes_preserved: bool | None = None,
+    enforce_double_quotes: bool = False,
     spaces_before_comment: int | None = None,
     line_width: int | None = None,
     io_config: YamkixInputOutputConfig | None = None,
@@ -157,10 +165,6 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
     Parameters:
         parsing_mode: `rt`/`None` -> RoundTripLoader/RoundTripDumper, (default)
             `safe` -> SafeLoader/SafeDumper,
-            `unsafe` -> normal/unsafe Loader/Dumper (pending deprecation)
-            `full` -> full Dumper only, including python built-ins that are
-                potentially unsafe to load
-            `base` -> baseloader
         explicit_start: Whether to include explicit start markers (`---`).
         explicit_end: Whether to include explicit end markers (`...`).
         default_flow_style: Whether to use default flow style. Setting `default_flow_style = False` ensures
@@ -171,6 +175,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
         dash_inwards: Whether to use dash inwards, i.e. whether to indent the dash in front of a sequence.
         quotes_preserved: Whether to preserve quotes, i.e. preserve the original quotes
             used in the input in the output.
+        enforce_double_quotes: Whether to enforce double quotes when quotes_preserved is False.
         spaces_before_comment: Number of spaces before comments.
         line_width: Maximum line width.
         io_config: Input/Output configuration.
@@ -193,6 +198,9 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
         default_flow_style=default_flow_style if default_flow_style is not None else default_config.default_flow_style,
         dash_inwards=dash_inwards if dash_inwards is not None else default_config.dash_inwards,
         quotes_preserved=quotes_preserved if quotes_preserved is not None else default_config.quotes_preserved,
+        enforce_double_quotes=enforce_double_quotes
+        if enforce_double_quotes is not None
+        else default_config.enforce_double_quotes,
         spaces_before_comment=spaces_before_comment
         if spaces_before_comment is not None
         else default_config.spaces_before_comment,
@@ -246,6 +254,7 @@ def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixC
         default_flow_style=args.default_flow_style if args.default_flow_style is not None else False,
         dash_inwards=not args.no_dash_inwards,
         quotes_preserved=not args.no_quotes_preserved,
+        enforce_double_quotes=False,
         parsing_mode=args.typ,
         version=args.version if args.version is not None else False,
         spaces_before_comment=get_spaces_before_comment_from_args(args),
@@ -266,6 +275,34 @@ def get_spaces_before_comment_from_args(args: Namespace) -> None | int:
     return spaces_before_comment
 
 
+def raise_enforce_double_quotes_warning_if_needed(
+    enforce_double_quotes: bool,
+    no_quotes_preserved: bool,
+) -> None:
+    """Raise a warning if needed based on the config."""
+    stderr_console = get_stderr_console()
+    if no_quotes_preserved is False and enforce_double_quotes is True:
+        stderr_console.print(
+            "WARNING: Option '--enforce-double-quotes' is useless unless '--no-quotes-preserved' is also set.",
+            style="warning",
+        )
+
+
+def raise_input_output_warning_if_needed(
+    files: list[Path] | None,
+    input_file: str | None,
+    output_file: str | None,
+    stdout: bool,
+) -> None:
+    """Raise a warning if needed based on the config."""
+    stderr_console = get_stderr_console()
+    if files is not None and (input_file is not None or output_file is not None or stdout):
+        stderr_console.print(
+            "WARNING: Options 'input', 'output' and 'stdout' are not honored when 'files' argument is used .",
+            style="warning",
+        )
+
+
 def create_yamkix_config_from_typer_args(  # noqa: PLR0913
     input_file: str | None,
     output_file: str | None,
@@ -274,6 +311,7 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
     no_explicit_start: bool,
     explicit_end: bool,
     no_quotes_preserved: bool,
+    enforce_double_quotes: bool,
     default_flow_style: bool,
     no_dash_inwards: bool,
     spaces_before_comment: int | None,
@@ -287,16 +325,15 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
 
         If `files` is `None`, a single `YamkixConfig` will be created using the provided arguments.
     """
-    stderr_console = get_stderr_console()
+    raise_enforce_double_quotes_warning_if_needed(
+        enforce_double_quotes=enforce_double_quotes, no_quotes_preserved=no_quotes_preserved
+    )
+    raise_input_output_warning_if_needed(files=files, input_file=input_file, output_file=output_file, stdout=stdout)
     if files is not None:
         if len(files) == 0:
             msg = "The 'files' argument cannot be an empty list."
             raise ValueError(msg)
-        if input_file is not None or output_file is not None or stdout:
-            stderr_console.print(
-                "WARNING: Options 'input', 'output' and 'stdout' are not honored when 'files' argument is used .",
-                style="warning",
-            )
+
         io_configs = [
             YamkixInputOutputConfig(
                 input=str(file),
@@ -329,6 +366,7 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
             default_flow_style=default_flow_style,
             dash_inwards=not no_dash_inwards,
             quotes_preserved=not no_quotes_preserved,
+            enforce_double_quotes=enforce_double_quotes,
             parsing_mode=typ,
             spaces_before_comment=spaces_before_comment,
             line_width=DEFAULT_LINE_WIDTH,

@@ -24,10 +24,11 @@
   - if quotes are not present around booleans and numbers, there
     will be no quotes in the output too
 
-**Note**: there is no option for the moment to force the usage of double
-quotes when `-q` or `--no-quotes-preserved` is used.
+!!! info "For double quotes lovers"
+    Starting with `v0.13.0`, there is an option, `--enforce-double-quotes`, to enforce the usage of double
+    quotes when `-q` or `--no-quotes-preserved` is used.
 
-!!! note
+!!! question "Should you use quotes for yaml strings?"
 
     If you are wondering if you should use quotes or not when writing yaml code, you can read this [awesome Stack Overflow thread](https://stackoverflow.com/questions/19109912/do-i-need-quotes-for-strings-in-yaml/69850618#69850618).
 
@@ -83,7 +84,7 @@ the output will be the same as the input :
         number_double_quotes: "1"
     ```
 
-### Quotes not preserved (using <span class="title-ref">-q/--no-quotes-preserved</span>)
+### Quotes not preserved (using `-q/--no-quotes-preserved`)
 
 With input :
 
@@ -127,8 +128,46 @@ the output will be :
         number_double_quotes: '1'
     ```
 
-**Note** : `kubesplit` is not fully
-*Kubernetes* aware for the moment, so it does not try to enforce
-this behaviour only on string sensible *kubernetes* resource fields
-(`.metadata.annotations` and
-`.spec.containers.environment` values)
+### Quotes not preserved and enforcing double quotes (using `-q/--no-quotes-preserved` **and** `-E/--enforce-double-quotes`)
+
+With input :
+
+    ``` yaml
+    ---
+    apiVersion: extensions/v1beta1 # with comment
+    kind: ReplicaSet
+    metadata:
+      name: tname
+      namespace: tns
+      annotations:
+        string_no_quotes: frontend
+        string_single_quotes: 'frontend'
+        string_double_quotes: "frontend"
+        boolean_no_quotes: true
+        boolean_single_quotes: 'true'
+        boolean_double_quotes: "true"
+        number_no_quotes: 1
+        number_single_quotes: '1'
+        number_double_quotes: "1"
+    ```
+
+the output will be :
+
+    ``` yaml
+    ---
+    apiVersion: extensions/v1beta1 # with comment
+    kind: ReplicaSet
+    metadata:
+      name: tname
+      namespace: tns
+      annotations:
+        string_no_quotes: frontend
+        string_single_quotes: frontend
+        string_double_quotes: frontend
+        boolean_no_quotes: true
+        boolean_single_quotes: "true"
+        boolean_double_quotes: "true"
+        number_no_quotes: 1
+        number_single_quotes: "1"
+        number_double_quotes: "1"
+    ```

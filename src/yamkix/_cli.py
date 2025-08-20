@@ -112,6 +112,15 @@ def main(  # noqa: PLR0913
             help="by default, quotes are preserved you can disable this with this option.",
         ),
     ] = False,
+    enforce_double_quotes: Annotated[
+        bool,
+        typer.Option(
+            "-E",
+            "--enforce-double-quotes",
+            help="enforce double quotes when --no-quotes-preserved is activated "
+            "(by default, you get single quotes which is the recommended behavior)",
+        ),
+    ] = False,
     default_flow_style: Annotated[
         bool,
         typer.Option(
@@ -119,7 +128,7 @@ def main(  # noqa: PLR0913
             "--default-flow-style",
             help=(
                 "enable the default flow style 'Off' by default. "
-                "In default flow style (with typ='rt'), maps and lists are written like json."
+                "In default flow style (with --typ 'rt'), maps and lists are written like json."
             ),
         ),
     ] = False,
@@ -129,8 +138,8 @@ def main(  # noqa: PLR0913
             "-d",
             "--no-dash-inwards",
             help=(
-                "by default, dash are pushed inwards "
-                "use '--no-dash-inwards' to have the dash start at the sequence level."
+                "by default, dash are pushed inwards. "
+                "Use '--no-dash-inwards' to have the dash start at the sequence level."
             ),
         ),
     ] = False,
@@ -144,10 +153,6 @@ def main(  # noqa: PLR0913
             ),
         ),
     ] = None,
-    _version: Annotated[
-        bool,
-        typer.Option("-v", "--version", help="show yamkix version", callback=version_callback),
-    ] = False,
     silent_mode: Annotated[
         bool,
         typer.Option(
@@ -155,6 +160,10 @@ def main(  # noqa: PLR0913
             "--silent",
             help="silent mode, don't print config when processing file(s)",
         ),
+    ] = False,
+    _version: Annotated[
+        bool,
+        typer.Option("-v", "--version", help="show yamkix version", callback=version_callback),
     ] = False,
     files: Annotated[
         list[Path] | None, typer.Argument(help="the files to process, cannot be used with -i/--input")
@@ -180,6 +189,7 @@ def main(  # noqa: PLR0913
         default_flow_style=default_flow_style,
         no_dash_inwards=no_dash_inwards,
         spaces_before_comment=spaces_before_comment,
+        enforce_double_quotes=enforce_double_quotes,
         files=files,
     )
     console = get_stderr_console()

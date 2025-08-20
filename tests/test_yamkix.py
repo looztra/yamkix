@@ -81,10 +81,21 @@ class TestYamkixDumpAll:
             family: Smith # plouf
             given: Alice  # one of the siblings
         """
-        yaml_parser = get_opinionated_yaml_writer(get_default_yamkix_config())
+        config = get_default_yamkix_config()
+        yaml_parser = get_opinionated_yaml_writer(config)
         yaml_content = yaml_parser.load(dedent(content))
         yamkix_dump_one = mocker.patch("yamkix.yamkix.yamkix_dump_one")
-        yamkix_dump_all([yaml_content], yaml_parser, dash_inwards=False, output_file=None, spaces_before_comment=None)
+        yamkix_dump_all(
+            [yaml_content],
+            yaml_parser,
+            dash_inwards=config.dash_inwards,
+            output_file=None,
+            spaces_before_comment=config.spaces_before_comment,
+        )
         yamkix_dump_one.assert_called_once_with(
-            single_item=yaml_content, yaml=yaml_parser, dash_inwards=False, out=sys.stdout, spaces_before_comment=None
+            single_item=yaml_content,
+            yaml=yaml_parser,
+            dash_inwards=config.dash_inwards,
+            out=sys.stdout,
+            spaces_before_comment=config.spaces_before_comment,
         )
