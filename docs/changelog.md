@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.13.0](https://github.com/looztra/yamkix/compare/v0.12.0...v0.13.0) (2025-08-20)
+
+
+### Features
+
+* **quotes:** provide the option `--enforce-double-quotes` to use double quotes when cleaning up quotes with `--no-preserve-quotes` ([#271](https://github.com/looztra/yamkix/issues/271)) ([6ee1a00](https://github.com/looztra/yamkix/commit/6ee1a00116b41e50f9f36208ba9784f1d8999cd4))
+* **stdin/stdout:** ignore case when specifying explicit STDIN/STDOUT ([#272](https://github.com/looztra/yamkix/issues/272)) ([aca3262](https://github.com/looztra/yamkix/commit/aca3262986fd78a1396ada30d8cf446ea52d520c))
+
+
+### Bug Fixes
+
+* **docs:** remove extra back tick in usage.md that prevent code block display ([#267](https://github.com/looztra/yamkix/issues/267)) ([eb39654](https://github.com/looztra/yamkix/commit/eb39654a6d5915e64bf0b76d84dab77b61e3e583))
+
+
+### Documentation
+
+* **cli:** add some extra docs regarding stdin/stdout usage ([#264](https://github.com/looztra/yamkix/issues/264)) ([c572ccc](https://github.com/looztra/yamkix/commit/c572cccce02e25f769da8845773cf394283918f3))
+
 ## [0.12.0](https://github.com/looztra/yamkix/compare/v0.11.1...v0.12.0) (2025-08-18)
 
 
