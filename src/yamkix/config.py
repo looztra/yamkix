@@ -342,12 +342,17 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
             for file in files
         ]
     else:
-        f_input = None if (input_file is None or input_file == STDIN_DISPLAY_NAME) else input_file
+        f_input = None if (input_file is None or input_file.lower() == STDIN_DISPLAY_NAME.lower()) else input_file
+        # If stdout is set, then output=STDOUT whatever f_output and f_input values
         if stdout:
             f_output = None
-        elif output_file is not None and output_file != STDOUT_DISPLAY_NAME:
+        # if f_output is not None and not 'stdout' (whatever the case)
+        elif output_file is not None and output_file.lower() != STDOUT_DISPLAY_NAME.lower():
             f_output = output_file
-        elif output_file == STDOUT_DISPLAY_NAME or f_input is None:
+        # if f_output is 'stdout' (whatever the case) or if f_input is None (stdin)
+        elif (output_file is not None and output_file.lower() == STDOUT_DISPLAY_NAME.lower()) or (
+            output_file is None and f_input is None
+        ):
             f_output = None
         else:
             f_output = f_input
