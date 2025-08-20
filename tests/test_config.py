@@ -20,6 +20,8 @@ from yamkix.config import (
     get_spaces_before_comment_from_args,
     get_yamkix_config_from_default,
     print_yamkix_config,
+    raise_enforce_double_quotes_warning_if_needed,
+    raise_input_output_warning_if_needed,
 )
 from yamkix.errors import InvalidTypValueError
 
@@ -430,6 +432,24 @@ class TestGetYamkixConfigFromDefault:
         assert sut.line_width == new_val
         assert sut.io_config == reference.io_config
 
+    def test_get_yamkix_config_from_default_enforce_double_quotes(self) -> None:
+        """Test get_yamkix_config_from_default.
+
+        change enforce_double_quotes
+        """
+        reference = get_yamkix_config_from_default()
+        sut = get_yamkix_config_from_default(enforce_double_quotes=True)
+        assert sut.parsing_mode == reference.parsing_mode
+        assert sut.explicit_start == reference.explicit_start
+        assert sut.explicit_end == reference.explicit_end
+        assert sut.default_flow_style == reference.default_flow_style
+        assert sut.dash_inwards == reference.dash_inwards
+        assert sut.quotes_preserved == reference.quotes_preserved
+        assert sut.spaces_before_comment == reference.spaces_before_comment
+        assert sut.enforce_double_quotes is True
+        assert sut.line_width == reference.line_width
+        assert sut.io_config == reference.io_config
+
     def test_get_yamkix_config_from_default_io_config(self) -> None:
         """Test get_yamkix_config_from_default.
 
@@ -466,6 +486,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=True,
             no_dash_inwards=False,
             spaces_before_comment=1,
+            enforce_double_quotes=False,
             files=None,
         )
 
@@ -479,6 +500,7 @@ class TestCreateYamkixConfigFromTyperArgs:
         assert configs[0].default_flow_style
         assert configs[0].dash_inwards  # not no_dash_inwards
         assert configs[0].spaces_before_comment == 1
+        assert configs[0].enforce_double_quotes is False
 
     def test_create_yamkix_config_stdout_override(self) -> None:
         """Test that stdout option overrides output file."""
@@ -493,6 +515,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
+            enforce_double_quotes=False,
             files=None,
         )
         assert len(configs) == 1
@@ -512,6 +535,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
+            enforce_double_quotes=False,
             files=None,
         )
 
@@ -538,6 +562,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=True,
             spaces_before_comment=None,
+            enforce_double_quotes=False,
             files=None,
         )
 
@@ -563,6 +588,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
+            enforce_double_quotes=False,
             files=None,
         )
         assert configs[0].io_config.input == "input.yaml"
@@ -582,6 +608,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
+            enforce_double_quotes=False,
             files=None,
         )
         assert configs[0].io_config.input is None
@@ -601,6 +628,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
+            enforce_double_quotes=False,
             files=None,
         )
         assert configs[0].io_config.input is None
@@ -620,6 +648,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
+            enforce_double_quotes=False,
             files=None,
         )
         assert configs[0].io_config.input is None
@@ -639,6 +668,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
+            enforce_double_quotes=False,
             files=None,
         )
         assert configs[0].io_config.input == "input.yaml"
@@ -658,6 +688,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
+            enforce_double_quotes=False,
             files=[test_file1],
         )
         assert configs[0].io_config.input == str(test_file1)
@@ -679,6 +710,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             default_flow_style=False,
             no_dash_inwards=False,
             spaces_before_comment=None,
+            enforce_double_quotes=False,
             files=input_files,
         )
         assert len(configs) == len(input_files)
@@ -701,46 +733,9 @@ class TestCreateYamkixConfigFromTyperArgs:
                 default_flow_style=False,
                 no_dash_inwards=False,
                 spaces_before_comment=None,
+                enforce_double_quotes=False,
                 files=[],
             )
-
-    @pytest.mark.parametrize(
-        ("input_f", "output_f", "stdout"),
-        [
-            pytest.param("file.yml", None, False, id="input_only"),
-            pytest.param("file.yml", None, True, id="input_stdout"),
-            pytest.param("file.yml", "plouf.yml", False, id="input_output"),
-            pytest.param("file.yml", "plouf.yml", True, id="input_output_stdout"),
-            pytest.param(None, "plouf.yml", False, id="output_only"),
-            pytest.param(None, "plouf.yml", True, id="output_stdout"),
-            pytest.param(None, None, True, id="stdout_only"),
-        ],
-    )
-    def test_create_yamkix_raise_warning(
-        self, tmp_path: Path, mocker: MockerFixture, input_f: str, output_f: str, stdout: bool
-    ) -> None:
-        """Test default configuration values."""
-        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
-        mock_console = mocker.Mock()
-        mock_get_stderr_console.return_value = mock_console
-        configs = create_yamkix_config_from_typer_args(
-            input_file=input_f,
-            output_file=output_f,
-            stdout=stdout,
-            typ="rt",
-            no_explicit_start=False,
-            explicit_end=False,
-            no_quotes_preserved=False,
-            default_flow_style=False,
-            no_dash_inwards=False,
-            spaces_before_comment=None,
-            files=[tmp_path / "simple.yml"],
-        )
-
-        assert len(configs) == 1
-        mock_console.print.assert_called_once()
-        args, kwargs = mock_console.print.call_args
-        assert "WARNING" in args[0]
 
 
 class TestPrintYamkixConfig:
@@ -768,7 +763,7 @@ class TestPrintYamkixConfig:
         # THEN
         expected = (
             "typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, "
-            "quotes_preserved=True, dash_inwards=True, spaces_before_comment=None"
+            "quotes_preserved=True, enforce_double_quotes=False, dash_inwards=True, spaces_before_comment=None"
         )
         assert result == expected
 
@@ -800,3 +795,123 @@ class TestPrintYamkixConfig:
         assert "quotes_preserved=True" in message
         assert "dash_inwards=True" in message
         assert "spaces_before_comment=None" in message
+
+
+class TestRaiseEnforceDoubleQuotesWarning:
+    """Test the raise_enforce_double_quotes_warning_if_needed function."""
+
+    def test_warning_is_raised(self, mocker: MockerFixture) -> None:
+        """Test that a warning is raised when needed."""
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
+        mock_console = mocker.Mock()
+        mock_get_stderr_console.return_value = mock_console
+
+        # WHEN
+        raise_enforce_double_quotes_warning_if_needed(
+            enforce_double_quotes=True,
+            no_quotes_preserved=False,
+        )
+
+        # THEN
+        mock_console.print.assert_called_once()
+        args, kwargs = mock_console.print.call_args
+        assert (
+            "WARNING: Option '--enforce-double-quotes' is useless unless '--no-quotes-preserved' is also set."
+            in args[0]
+        )
+
+    @pytest.mark.parametrize(
+        ("enforce_double_quotes", "no_quotes_preserved"),
+        [
+            pytest.param(True, True, id="both_set"),  # Both options set
+            pytest.param(False, False, id="neither_set"),  # Neither option set
+            pytest.param(False, True, id="only_no_quotes_set"),  # Only no_quotes_preserved set
+        ],
+    )
+    def test_no_warning_is_raised(
+        self, mocker: MockerFixture, enforce_double_quotes: bool, no_quotes_preserved: bool
+    ) -> None:
+        """Test that no warning is raised when not needed."""
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
+        mock_console = mocker.Mock()
+        mock_get_stderr_console.return_value = mock_console
+
+        # WHEN
+        raise_enforce_double_quotes_warning_if_needed(
+            enforce_double_quotes=enforce_double_quotes,
+            no_quotes_preserved=no_quotes_preserved,
+        )
+
+        # THEN
+        mock_console.print.assert_not_called()
+
+
+class TestRaiseInputOutputWarningIfNeeded:
+    """Test the raise_input_output_warning_if_needed function."""
+
+    @pytest.mark.parametrize(
+        ("input_f", "output_f", "stdout"),
+        [
+            pytest.param("file.yml", None, False, id="input_only"),
+            pytest.param("file.yml", None, True, id="input_stdout"),
+            pytest.param("file.yml", "plouf.yml", False, id="input_output"),
+            pytest.param("file.yml", "plouf.yml", True, id="input_output_stdout"),
+            pytest.param(None, "plouf.yml", False, id="output_only"),
+            pytest.param(None, "plouf.yml", True, id="output_stdout"),
+            pytest.param(None, None, True, id="stdout_only"),
+        ],
+    )
+    def test_warning_is_raised(
+        self, tmp_path: Path, mocker: MockerFixture, input_f: str, output_f: str, stdout: bool
+    ) -> None:
+        """Test that a warning is raised when needed."""
+        files = [tmp_path / "input.yaml"]
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
+        mock_console = mocker.Mock()
+        mock_get_stderr_console.return_value = mock_console
+
+        # WHEN
+        raise_input_output_warning_if_needed(
+            files=files,
+            input_file=input_f,
+            output_file=output_f,
+            stdout=stdout,
+        )
+
+        # THEN
+        mock_console.print.assert_called_once()
+        args, kwargs = mock_console.print.call_args
+        assert "WARNING" in args[0]
+        assert "input" in args[0]
+        assert "output" in args[0]
+        assert "stdout" in args[0]
+        assert "not honored" in args[0]
+
+    @pytest.mark.parametrize(
+        ("input_f", "output_f", "stdout"),
+        [
+            pytest.param("file.yml", None, False, id="input_only"),
+            pytest.param("file.yml", None, True, id="input_stdout"),
+            pytest.param("file.yml", "plouf.yml", False, id="input_output"),
+            pytest.param("file.yml", "plouf.yml", True, id="input_output_stdout"),
+            pytest.param(None, "plouf.yml", False, id="output_only"),
+            pytest.param(None, "plouf.yml", True, id="output_stdout"),
+            pytest.param(None, None, True, id="stdout_only"),
+        ],
+    )
+    def test_warning_is_not_raised(self, mocker: MockerFixture, input_f: str, output_f: str, stdout: bool) -> None:
+        """Test that a warning is not raised when not needed."""
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
+        mock_console = mocker.Mock()
+        mock_get_stderr_console.return_value = mock_console
+
+        # WHEN
+        raise_input_output_warning_if_needed(
+            files=None,
+            input_file=input_f,
+            output_file=output_f,
+            stdout=stdout,
+        )
+
+        # THEN
+        mock_console.print.assert_not_called()

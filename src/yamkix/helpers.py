@@ -5,6 +5,7 @@ from typing import Any
 
 from rich.console import Console
 from rich.theme import Theme
+from ruamel.yaml.scalarstring import DoubleQuotedScalarString, SingleQuotedScalarString
 
 from yamkix.__version__ import __version__
 
@@ -57,3 +58,19 @@ def get_stdout_console() -> Console:
     """Return the CLI rich console."""
     custom_theme = get_custom_theme()
     return Console(theme=custom_theme, stderr=False)
+
+
+def convert_single_to_double_quotes(
+    obj: Any,  # noqa: ANN401
+) -> Any:  # noqa: ANN401
+    """Recursively convert single quoted strings to double quoted."""
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            obj[key] = convert_single_to_double_quotes(value)
+    elif isinstance(obj, list):
+        for i, item in enumerate(obj):
+            obj[i] = convert_single_to_double_quotes(item)
+    elif isinstance(obj, SingleQuotedScalarString):
+        # Convert single quoted to double quoted
+        return DoubleQuotedScalarString(str(obj))
+    return obj

@@ -51,6 +51,12 @@ class TestNonRegression:
                 id="no_start_no_end_no_quotes_preserved",
             ),
             pytest.param(
+                "no-start-no-end",
+                "no-quotes-preserved-enforce-double-quotes",
+                ["--no-quotes-preserved", "--enforce-double-quotes"],
+                id="no_start_no_end_no_quotes_preserved_enforce_double_quotes",
+            ),
+            pytest.param(
                 "issue-11-bad-indent",
                 "spaces-before-comment-2--no-dash-inwards",
                 ["--spaces-before-comment", "2", "--no-dash-inwards"],

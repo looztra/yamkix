@@ -2,16 +2,10 @@
 
 import io
 import sys
+from copy import deepcopy
 
 from ruamel.yaml import YAML
 from ruamel.yaml.scalarstring import DoubleQuotedScalarString, SingleQuotedScalarString
-
-
-def preserved_quotes_yaml() -> YAML:
-    """Create a YAML instance that enforces double quotes for all quoted strings."""
-    yaml = YAML(typ="rt")
-    yaml.preserve_quotes = True
-    return yaml
 
 
 def convert_single_to_double_quotes(obj):  # noqa: ANN001, ANN201
@@ -29,9 +23,10 @@ def convert_single_to_double_quotes(obj):  # noqa: ANN001, ANN201
 
 
 # Test the implementation
-single_quote_yaml = YAML(typ="rt")
-single_quote_yaml.preserve_quotes = False
-double_quote_yaml = preserved_quotes_yaml()
+yaml = YAML(typ="rt")
+yaml.preserve_quotes = False
+double_quote_yaml = deepcopy(yaml)
+double_quote_yaml.preserve_quotes = True
 
 inp = """\
 i-am-a-string-with-double-quotes: "some string with double-quote"
@@ -43,9 +38,10 @@ i-am-a-real-boolean: true
 i-am-a-string-boolean: "true"
 """
 
-first_rt_data = single_quote_yaml.load(inp)
-string_io = io.StringIO()
-single_quote_yaml.dump(first_rt_data, stream=string_io)
-data = double_quote_yaml.load(string_io.getvalue())
+first_rt_data = yaml.load(inp)
+
+doc_after_first_rt_as_string = io.StringIO()
+yaml.dump(first_rt_data, stream=doc_after_first_rt_as_string)
+data = double_quote_yaml.load(doc_after_first_rt_as_string.getvalue())
 data = convert_single_to_double_quotes(data)
 double_quote_yaml.dump(data, sys.stdout)
