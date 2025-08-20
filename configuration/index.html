@@ -355,6 +355,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#quotes-not-preserved-and-enforcing-double-quotes-using-q-no-quotes-preserved-and-e-enforce-double-quotes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quotes not preserved and enforcing double quotes (using -q/--no-quotes-preserved and -E/--enforce-double-quotes)
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -554,6 +563,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#quotes-not-preserved-and-enforcing-double-quotes-using-q-no-quotes-preserved-and-e-enforce-double-quotes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quotes not preserved and enforcing double quotes (using -q/--no-quotes-preserved and -E/--enforce-double-quotes)
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -609,10 +627,13 @@
 <li>if quotes are not present around booleans and numbers, there
     will be no quotes in the output too</li>
 </ul>
-<p><strong>Note</strong>: there is no option for the moment to force the usage of double
+<div class="admonition info">
+<p class="admonition-title">For double quotes lovers</p>
+<p>Starting with <code>v0.13.0</code>, there is an option, <code>--enforce-double-quotes</code>, to enforce the usage of double
 quotes when <code>-q</code> or <code>--no-quotes-preserved</code> is used.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+</div>
+<div class="admonition question">
+<p class="admonition-title">Should you use quotes for yaml strings?</p>
 <p>If you are wondering if you should use quotes or not when writing yaml code, you can read this <a href="https://stackoverflow.com/questions/19109912/do-i-need-quotes-for-strings-in-yaml/69850618#69850618">awesome Stack Overflow thread</a>.</p>
 <p>Quoting the TLDR; section here:</p>
 <p>With that being said, according to the official YAML specification one should:</p>
@@ -663,7 +684,7 @@ metadata:
     number_double_quotes: &quot;1&quot;
 ```
 </code></pre></div>
-<h3 id="quotes-not-preserved-using-q-no-quotes-preserved">Quotes not preserved (using <span class="title-ref">-q/--no-quotes-preserved</span>)</h3>
+<h3 id="quotes-not-preserved-using-q-no-quotes-preserved">Quotes not preserved (using <code>-q/--no-quotes-preserved</code>)</h3>
 <p>With input :</p>
 <div class="language-text highlight"><pre><span></span><code>``` yaml
 ---
@@ -704,11 +725,47 @@ metadata:
     number_double_quotes: &#39;1&#39;
 ```
 </code></pre></div>
-<p><strong>Note</strong> : <code>kubesplit</code> is not fully
-<em>Kubernetes</em> aware for the moment, so it does not try to enforce
-this behaviour only on string sensible <em>kubernetes</em> resource fields
-(<code>.metadata.annotations</code> and
-<code>.spec.containers.environment</code> values)</p>
+<h3 id="quotes-not-preserved-and-enforcing-double-quotes-using-q-no-quotes-preserved-and-e-enforce-double-quotes">Quotes not preserved and enforcing double quotes (using <code>-q/--no-quotes-preserved</code> <strong>and</strong> <code>-E/--enforce-double-quotes</code>)</h3>
+<p>With input :</p>
+<div class="language-text highlight"><pre><span></span><code>``` yaml
+---
+apiVersion: extensions/v1beta1 # with comment
+kind: ReplicaSet
+metadata:
+  name: tname
+  namespace: tns
+  annotations:
+    string_no_quotes: frontend
+    string_single_quotes: &#39;frontend&#39;
+    string_double_quotes: &quot;frontend&quot;
+    boolean_no_quotes: true
+    boolean_single_quotes: &#39;true&#39;
+    boolean_double_quotes: &quot;true&quot;
+    number_no_quotes: 1
+    number_single_quotes: &#39;1&#39;
+    number_double_quotes: &quot;1&quot;
+```
+</code></pre></div>
+<p>the output will be :</p>
+<div class="language-text highlight"><pre><span></span><code>``` yaml
+---
+apiVersion: extensions/v1beta1 # with comment
+kind: ReplicaSet
+metadata:
+  name: tname
+  namespace: tns
+  annotations:
+    string_no_quotes: frontend
+    string_single_quotes: frontend
+    string_double_quotes: frontend
+    boolean_no_quotes: true
+    boolean_single_quotes: &quot;true&quot;
+    boolean_double_quotes: &quot;true&quot;
+    number_no_quotes: 1
+    number_single_quotes: &quot;1&quot;
+    number_double_quotes: &quot;1&quot;
+```
+</code></pre></div>
 
 
 
@@ -729,7 +786,7 @@ this behaviour only on string sensible <em>kubernetes</em> resource fields
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="August 12, 2025 14:48:32 UTC">2025-08-12 14:48:32</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="August 20, 2025 12:59:08 UTC">2025-08-20 12:59:08</span>
   </span>
 
     
