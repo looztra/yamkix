@@ -61,7 +61,8 @@ jobs:
           uv python install
           uv sync --group docs
 
-      - run: |
+      - name: Set cache id for mkdocs-material assets
+        run: |
           echo "cache_id=$(date --utc '+%V')" >> "${GITHUB_ENV}"
 
       - uses: actions/cache@v4
