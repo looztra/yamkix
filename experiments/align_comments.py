@@ -39,17 +39,21 @@ with Path("generated/test-assets/source/with-comments-to-align.yml").open(encodi
 
 def align_comments_anthon(d: CommentedMap, extra_indent: int = 0) -> None:  # noqa: D103
     def align_one(d: CommentedMap, extra_indent: int = 0) -> None:
-        rprint(f"{d}")
+        rprint(f"{d=}")
+        index_in_comment = 2
+        if isinstance(d, list):
+            index_in_comment = 0
         comments = d.ca.items.values()
         if not comments:
             rprint("No comments to align")
             return
         max_column_index = -1
         for comment in comments:
-            rprint(f"{comment}")
-            max_column_index = max(max_column_index, comment[2].column)
+            rprint(f"{comment=}")
+            max_column_index = max(max_column_index, comment[index_in_comment].column)
+        rprint(f"Max column index: {max_column_index}")
         for comment in comments:
-            comment[2].column = max_column_index + extra_indent
+            comment[index_in_comment].column = max_column_index + extra_indent
 
     if isinstance(d, dict):
         align_one(d, extra_indent=extra_indent)
