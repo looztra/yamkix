@@ -1,0 +1,22 @@
+---
+raw-list:
+  - 3 # comment 1
+  - 5555 # comment 2
+  - 72 # comment 3
+b: # yolo
+  - d: 3 # World
+  - c: 722 # Hello
+    z: 100000.0 # yop
+  - a: # Hello
+      name: ohohoho # guess who
+      key: santa # got you
+test2:
+  test3: 3 # after test2
+  another-key: 4 # comment 6
+dict_with_sub_dict:
+  sub_key1:
+    name: casimir # name of casimir
+    value: 42 # key when name is casimir
+  sub_key2:
+    name: test # name of test
+    value: 2 # key when name is test
