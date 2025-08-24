@@ -41,10 +41,15 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
+          inventories:
+            - url: https://docs.python.org/3/objects.inv
+              domains: [std, py]
           options:
             docstring_style: google
             separate_signature: true
             show_signature_annotations: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
             extensions:
               - griffe_pydantic:
                 schema: true
