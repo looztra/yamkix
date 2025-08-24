@@ -6,7 +6,11 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Yamkix is an opinionated yaml file formatter.">
       
+      
+      
+        <link rel="canonical" href="https://looztra.github.io/yamkix/usage/">
       
       
         <link rel="prev" href="../install/">
@@ -637,13 +641,13 @@
   
 
 
-<h1 id="how-to-use-yamkix">How to use Yamkix</h1>
-<h2 id="standalone">Standalone</h2>
+<h1 id="how-to-use-yamkix">How to use Yamkix<a class="headerlink" href="#how-to-use-yamkix" title="Permanent link">&para;</a></h1>
+<h2 id="standalone">Standalone<a class="headerlink" href="#standalone" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Just use <code>yamkix</code> like any other CLI</li>
 <li>Check the available options with <code>yamkix --help</code> (and have a look at the <a href="../configuration/">configuration</a> documentation)</li>
 </ul>
-<h3 id="formatting-a-single-yaml-file-and-control-where-to-output-the-outcome">Formatting a <strong>single</strong> yaml file and control where to output the outcome</h3>
+<h3 id="formatting-a-single-yaml-file-and-control-where-to-output-the-outcome">Formatting a <strong>single</strong> yaml file and control where to output the outcome<a class="headerlink" href="#formatting-a-single-yaml-file-and-control-where-to-output-the-outcome" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Use the <code>-i/--input</code> option to identify the source file</li>
 <li>
@@ -686,7 +690,7 @@
 </span></code></pre></div>
 </li>
 </ul>
-<h3 id="reading-from-stdin">Reading from STDIN</h3>
+<h3 id="reading-from-stdin">Reading from STDIN<a class="headerlink" href="#reading-from-stdin" title="Permanent link">&para;</a></h3>
 <ul>
 <li>You can format the input provide through <code>stdin</code></li>
 <li>
@@ -703,7 +707,7 @@
 <p>if <code>stdin</code> is used for input and nothing is specified for output, then <code>stdout</code> will be used for output.</p>
 </li>
 </ul>
-<h3 id="formatting-multiple-files">Formatting <strong>multiple</strong> files</h3>
+<h3 id="formatting-multiple-files">Formatting <strong>multiple</strong> files<a class="headerlink" href="#formatting-multiple-files" title="Permanent link">&para;</a></h3>
 <ul>
 <li>
 <p>If you need to format multiple files in a single call to <code>Yamkix</code>, don't use <code>-i/--input</code>, just pass the list of files as arguments to the <code>yamkix</code> cli</p>
@@ -715,7 +719,7 @@
 <p class="admonition-title">Note</p>
 <p>It is not possible to output to <code>stdout</code> when formatting multiple files (feel free to <a href="https://github.com/looztra/yamkix/issues">raise an issue</a> if you are interested in this feature).</p>
 </div>
-<h2 id="pre-commit-hook">Pre-commit hook</h2>
+<h2 id="pre-commit-hook">Pre-commit hook<a class="headerlink" href="#pre-commit-hook" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
 <p>Since <code>v0.12.0</code>, you can now use <code>yamkix</code> as a pre-commit hook:</p>
@@ -756,7 +760,7 @@
 <p class="admonition-title">Note</p>
 <p><code>args</code> and <code>exclude</code> are related to the <a href="https://pre-commit.com/#pre-commit-configyaml---hooks">pre-commit framework</a>, <strong>not</strong> to yamkix.</p>
 </div>
-<h2 id="vscode-task">VSCode Task</h2>
+<h2 id="vscode-task">VSCode Task<a class="headerlink" href="#vscode-task" title="Permanent link">&para;</a></h2>
 <ul>
 <li>
 <p>Install the package with <code>uv tool install yamkix</code> (or <code>pip install --user yamkix</code> if you are not using <a href="https://docs.astral.sh/uv/concepts/tools/">uv</a>)</p>

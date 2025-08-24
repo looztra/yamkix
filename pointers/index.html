@@ -6,7 +6,11 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Yamkix is an opinionated yaml file formatter.">
       
+      
+      
+        <link rel="canonical" href="https://looztra.github.io/yamkix/pointers/">
       
       
         <link rel="prev" href="../contributing/">
@@ -569,15 +573,15 @@
   
 
 
-<h1 id="pointers">Pointers</h1>
-<h2 id="ruamelyaml">ruamel.yaml</h2>
+<h1 id="pointers">Pointers<a class="headerlink" href="#pointers" title="Permanent link">&para;</a></h1>
+<h2 id="ruamelyaml">ruamel.yaml<a class="headerlink" href="#ruamelyaml" title="Permanent link">&para;</a></h2>
 <p><code>Yamkix</code> relies on the awesome <a href="https://yaml.dev/doc/ruamel.yaml/">ruamel.yaml</a> package.</p>
-<h2 id="kubesplit">kubesplit</h2>
+<h2 id="kubesplit">kubesplit<a class="headerlink" href="#kubesplit" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://github.com/looztra/kubesplit">kubesplit</a> (from the same author as <code>yamkix</code>) uses <code>yamkix</code> under the hood to format the yaml descriptors that it generates.</li>
 <li>We try to make sure <code>kubesplit</code> compatible with <code>yamkix</code>. Please create issues in either <a href="https://github.com/looztra/yamkix/issues">yamkix github repo</a> or <a href="https://github.com/looztra/kubesplit/issues">kubesplit github repo</a> if you think we broke something.</li>
 </ul>
-<h2 id="using-yamkix-api">Using <code>yamkix</code> API</h2>
+<h2 id="using-yamkix-api">Using <code>yamkix</code> API<a class="headerlink" href="#using-yamkix-api" title="Permanent link">&para;</a></h2>
 <ul>
 <li>In the future, we will try to not generate breaking changes in the functions and classes that we consider <code>public</code>, i.e. the ones declared in the <code>yamkix</code> root <a href="https://github.com/looztra/yamkix/blob/main/src/yamkix/__init__.py"><strong>init</strong>.py</a>.</li>
 <li>if you think we did break the API contract, please <a href="https://github.com/looztra/yamkix/issues">raise an issue</a>.</li>

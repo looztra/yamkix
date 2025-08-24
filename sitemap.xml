@@ -1,3 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://looztra.github.io/yamkix/</loc>
+         <lastmod>2025-08-24</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/changelog/</loc>
+         <lastmod>2025-08-24</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/configuration/</loc>
+         <lastmod>2025-08-24</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/contributing/</loc>
+         <lastmod>2025-08-24</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/install/</loc>
+         <lastmod>2025-08-24</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/pointers/</loc>
+         <lastmod>2025-08-24</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/reference/</loc>
+         <lastmod>2025-08-24</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/usage/</loc>
+         <lastmod>2025-08-24</lastmod>
+    </url>
 </urlset>

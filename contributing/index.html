@@ -6,7 +6,11 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Yamkix is an opinionated yaml file formatter.">
       
+      
+      
+        <link rel="canonical" href="https://looztra.github.io/yamkix/contributing/">
       
       
         <link rel="prev" href="../changelog/">
@@ -751,13 +755,13 @@
   
 
 
-<h1 id="how-to-contribute">How to contribute</h1>
-<h2 id="prerequisites">Prerequisites</h2>
-<h3 id="mandatory">Mandatory</h3>
+<h1 id="how-to-contribute">How to contribute<a class="headerlink" href="#how-to-contribute" title="Permanent link">&para;</a></h1>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<h3 id="mandatory">Mandatory<a class="headerlink" href="#mandatory" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="https://docs.astral.sh/uv/getting-started/installation/">uv</a></li>
 </ul>
-<h3 id="optional">Optional</h3>
+<h3 id="optional">Optional<a class="headerlink" href="#optional" title="Permanent link">&para;</a></h3>
 <ul>
 <li><a href="https://mise.jdx.dev/">mise</a></li>
 <li><a href="https://pre-commit.com/#install">Pre-Commit</a></li>
@@ -765,30 +769,30 @@
 <li><a href="https://github.com/mvdan/sh">shellcheck</a></li>
 <li><a href="https://github.com/editorconfig-checker/editorconfig-checker">editorconfig-checker</a></li>
 </ul>
-<h3 id="install-the-optional-prerequisites">Install the optional prerequisites</h3>
+<h3 id="install-the-optional-prerequisites">Install the optional prerequisites<a class="headerlink" href="#install-the-optional-prerequisites" title="Permanent link">&para;</a></h3>
 <ul>
 <li>If you installed mise, you can simply run:</li>
 </ul>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mise<span class="w"> </span>install
 </span></code></pre></div>
-<h2 id="hack">Hack</h2>
+<h2 id="hack">Hack<a class="headerlink" href="#hack" title="Permanent link">&para;</a></h2>
 <ul>
 <li>run <code>make setup-venv</code> so that <code>uv</code> inits a virtual environment with required dependencies (same as <code>uv sync</code>)</li>
 </ul>
-<h3 id="update-the-dependencies">Update the dependencies</h3>
+<h3 id="update-the-dependencies">Update the dependencies<a class="headerlink" href="#update-the-dependencies" title="Permanent link">&para;</a></h3>
 <p>Run <code>make upgrade-dependencies</code>, this is the same as <code>uv sync --upgrade</code></p>
-<h3 id="code">Code</h3>
+<h3 id="code">Code<a class="headerlink" href="#code" title="Permanent link">&para;</a></h3>
 <ul>
 <li>run <code>make tests</code> to launch unit tests (same as `uv run poe test:cov)</li>
 <li>run <code>make lint</code> to launch linters (same as <code>uv run poe lint:all</code>)</li>
 </ul>
-<h3 id="pre-commit">Pre-Commit</h3>
+<h3 id="pre-commit">Pre-Commit<a class="headerlink" href="#pre-commit" title="Permanent link">&para;</a></h3>
 <ul>
 <li>If you want to run pre-commit before each commit, run once <code>make precommit-install</code></li>
 <li>If you don't want to configure a pre-commit hook (your choice, pre-commit is run by the CICD anyway), you can run it when you want, use <code>make precommit-run</code></li>
 </ul>
-<h3 id="configure-your-editor">Configure your editor</h3>
-<h4 id="vscode">VSCode</h4>
+<h3 id="configure-your-editor">Configure your editor<a class="headerlink" href="#configure-your-editor" title="Permanent link">&para;</a></h3>
+<h4 id="vscode">VSCode<a class="headerlink" href="#vscode" title="Permanent link">&para;</a></h4>
 <ul>
 <li>It's a good idea to install the <a href="https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig">EditorConfig for VSCode extension</a></li>
 <li>Your <code>settings.json</code> (user or workspace or project) should contain:</li>
@@ -809,7 +813,7 @@
 </span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">  </span><span class="nt">&quot;python.testing.pytestEnabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 </span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span>
 </span></code></pre></div>
-<h4 id="others">Others</h4>
+<h4 id="others">Others<a class="headerlink" href="#others" title="Permanent link">&para;</a></h4>
 <ul>
 <li>Feel free to contribute any other editor configuration</li>
 </ul>
