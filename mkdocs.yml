@@ -1,5 +1,7 @@
 ---
 site_name: Yamkix
+site_url: https://looztra.github.io/yamkix/
+site_description: Yamkix is an opinionated yaml file formatter.
 repo_url: https://github.com/looztra/yamkix
 edit_uri: edit/main/docs/
 theme:
@@ -24,7 +26,16 @@ theme:
     - content.action.edit
     - content.code.copy
 
+validation:
+  omitted_files: warn
+  absolute_links: warn # Or 'relative_to_docs' - new in MkDocs 1.6
+  unrecognized_links: warn
+  anchors: warn # New in MkDocs 1.6
+
 markdown_extensions:
+  - toc:
+      permalink: true
+  - sane_lists
   - admonition
   - attr_list
   - md_in_html
@@ -67,3 +78,5 @@ nav:
   - Changelog: changelog.md
   - Contributing: contributing.md
   - Pointers: pointers.md
+watch:
+  - src
