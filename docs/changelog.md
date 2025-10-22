@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.13.1](https://github.com/looztra/yamkix/compare/v0.13.0...v0.13.1) (2025-10-22)
+
+
+### Documentation
+
+* **api:** enable inventories, show symbol types ([#280](https://github.com/looztra/yamkix/issues/280)) ([3aaead5](https://github.com/looztra/yamkix/commit/3aaead54358ae1163a8021b573f8021f7d49ee8f))
+* **mkdocs:** add site desc and url, tune mkdocs config to validate links ([#283](https://github.com/looztra/yamkix/issues/283)) ([8afd86d](https://github.com/looztra/yamkix/commit/8afd86dab5c05377b1b143c398ebb6fa7577be9e))
+
 ## [0.13.0](https://github.com/looztra/yamkix/compare/v0.12.0...v0.13.0) (2025-08-20)
 
 
