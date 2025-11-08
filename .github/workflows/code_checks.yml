@@ -27,6 +27,9 @@ env:
   UV_PYTHON_PREFERENCE: only-managed
   UV_CACHE_DIR: /tmp/.uv-cache
   MISE_INSTALL_FROM_GITHUB: 1
+  # The following repository variables control mise-action caching across jobs:
+  # - MISE_CACHE_ENABLED: set to 'false' to disable mise action caching; defaults to 'true' when unset
+  # - MISE_CACHE_KEY_PREFIX: prefix used for cache keys so different workflows can share/segregate caches
 
 jobs:
   pre-commit:
@@ -43,7 +46,8 @@ jobs:
       - uses: jdx/mise-action@v3
         with:
           install: true
-          cache: false
+          cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
+          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v0'}}
           version: ${{ vars.MISE_VERSION }}
 
       - name: Restore uv cache
@@ -110,7 +114,8 @@ jobs:
       - uses: jdx/mise-action@v3
         with:
           install: true
-          cache: true
+          cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
+          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v0'}}
           version: ${{ vars.MISE_VERSION }}
 
       - name: Restore uv cache
@@ -205,7 +210,8 @@ jobs:
       - uses: jdx/mise-action@v3
         with:
           install: true
-          cache: true
+          cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
+          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v0'}}
           version: ${{ vars.MISE_VERSION }}
           mise_toml: |
             [tools]
@@ -244,7 +250,8 @@ jobs:
       - uses: jdx/mise-action@v3
         with:
           install: true
-          cache: true
+          cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
+          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v0'}}
           version: ${{ vars.MISE_VERSION }}
           mise_toml: |
             [tools]
@@ -282,7 +289,8 @@ jobs:
       - uses: jdx/mise-action@v3
         with:
           install: true
-          cache: true
+          cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
+          cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v0'}}
           version: ${{ vars.MISE_VERSION }}
           mise_toml: |
             [tools]
