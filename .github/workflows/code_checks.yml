@@ -43,7 +43,7 @@ jobs:
       - uses: jdx/mise-action@v3
         with:
           install: true
-          cache: true
+          cache: false
           version: ${{ vars.MISE_VERSION }}
 
       - name: Restore uv cache
