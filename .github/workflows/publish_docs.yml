@@ -39,7 +39,7 @@ jobs:
       - uses: jdx/mise-action@v3
         with:
           install: true
-          cache: true
+          cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
           version: ${{ vars.MISE_VERSION }}
 
       - name: Configure Git Credentials
