@@ -737,7 +737,7 @@ class TestCreateYamkixConfigFromTyperArgs:
 
     def test_create_yamkix_config_io_logic_with_empty_files(self) -> None:
         """Test input/output file logic."""
-        with pytest.raises(ValueError, match="The 'files' argument cannot be an empty list."):
+        with pytest.raises(ValueError, match=r"The 'files' argument cannot be an empty list."):
             create_yamkix_config_from_typer_args(
                 input_file=None,
                 output_file=None,
@@ -796,7 +796,7 @@ class TestPrintYamkixConfig:
 
         # THEN
         mock_console.print.assert_called_once()
-        args, kwargs = mock_console.print.call_args
+        args, _ = mock_console.print.call_args
 
         # Verify the message contains expected content
         message = args[0]
@@ -830,7 +830,7 @@ class TestRaiseEnforceDoubleQuotesWarning:
 
         # THEN
         mock_console.print.assert_called_once()
-        args, kwargs = mock_console.print.call_args
+        args, _ = mock_console.print.call_args
         assert (
             "WARNING: Option '--enforce-double-quotes' is useless unless '--no-quotes-preserved' is also set."
             in args[0]
@@ -896,7 +896,7 @@ class TestRaiseInputOutputWarningIfNeeded:
 
         # THEN
         mock_console.print.assert_called_once()
-        args, kwargs = mock_console.print.call_args
+        args, _ = mock_console.print.call_args
         assert "WARNING" in args[0]
         assert "input" in args[0]
         assert "output" in args[0]

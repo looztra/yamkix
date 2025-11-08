@@ -93,3 +93,9 @@ dirty = "{base_version}+dirty{build_date:%Y%m%d}"
 
 # Format used when there are both commits and uncommitted changes:
 distance-dirty = "{next_version}.dev{distance}+{vcs}{rev}.d{build_date:%Y%m%d}"
+
+[tool.ty.src]
+include = [
+    "src",
+    "tests",
+]
