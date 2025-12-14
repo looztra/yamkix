@@ -11,9 +11,9 @@ This document provides context and instructions for AI agents working on this re
 ## Workflow & Standards
 
 ### Commit & Pull Requests
-- **Conventional Commits**: Use `feat:`, `fix:`, `chore:`, etc.
-  - Example: `feat: add configurable line width`
-  - Example: `fix: resolve lint errors in tests`
+- **Conventional Commits**: ALWAYS use a scope. Format: `type(scope): description`.
+  - Example: `feat(cli): add configurable line width`
+  - Example: `fix(tests): resolve lint errors in tests`
 - **Pull Requests**:
   - Title should match the commit format.
   - Link issues using `Fixes #<issue_number>`.
