@@ -216,8 +216,8 @@ class TestCli:
         mock_create_config = mocker.patch("yamkix._cli.create_yamkix_config_from_typer_args")
         mock_config = mocker.Mock()
         mock_create_config.return_value = [mock_config]
-        mock_print_config = mocker.patch("yamkix._cli.print_yamkix_config")
-        mock_round_trip = mocker.patch("yamkix._cli.round_trip_and_format")
+        mocker.patch("yamkix._cli.print_yamkix_config")
+        mocker.patch("yamkix._cli.round_trip_and_format")
         test_file = shared_datadir / "simple.yml"
 
         # WHEN
