@@ -93,6 +93,7 @@ class TestCli:
             no_dash_inwards=not default_config.dash_inwards,
             spaces_before_comment=default_config.spaces_before_comment,
             enforce_double_quotes=default_config.enforce_double_quotes,
+            line_width=default_config.line_width,
             files=None,
         )
         mock_print_config.assert_called_once_with(mock_config)
@@ -125,6 +126,7 @@ class TestCli:
             no_dash_inwards=not default_config.dash_inwards,
             spaces_before_comment=default_config.spaces_before_comment,
             enforce_double_quotes=default_config.enforce_double_quotes,
+            line_width=default_config.line_width,
             files=[test_file],
         )
         mock_print_config.assert_called_once_with(mock_config)
@@ -160,6 +162,7 @@ class TestCli:
             no_dash_inwards=not default_config.dash_inwards,
             spaces_before_comment=default_config.spaces_before_comment,
             enforce_double_quotes=default_config.enforce_double_quotes,
+            line_width=default_config.line_width,
             files=[test_file1, test_file2],
         )
         mock_print_config.assert_called()
@@ -205,3 +208,35 @@ class TestCli:
         mock_print_config.assert_called_once()
         mock_round_trip.assert_called_once()
         mock_stderr_console.print.assert_called()
+
+    def test_line_width_arg(self, mocker: MockerFixture, shared_datadir: Path) -> None:
+        """Test the line_width arg."""
+        # GIVEN
+        mock_create_config = mocker.patch("yamkix._cli.create_yamkix_config_from_typer_args")
+        mock_config = mocker.Mock()
+        mock_create_config.return_value = [mock_config]
+        mocker.patch("yamkix._cli.print_yamkix_config")
+        mocker.patch("yamkix._cli.round_trip_and_format")
+        test_file = shared_datadir / "simple.yml"
+
+        # WHEN
+        result = runner.invoke(app, ["--line-width", "100", "--input", str(test_file)])
+
+        # THEN
+        assert result.exit_code == 0
+        default_config = get_default_yamkix_config()
+        mock_create_config.assert_called_once_with(
+            input_file=str(test_file),
+            output_file=default_config.io_config.output,
+            stdout=False,
+            typ=default_config.parsing_mode,
+            no_explicit_start=not default_config.explicit_start,
+            explicit_end=default_config.explicit_end,
+            no_quotes_preserved=not default_config.quotes_preserved,
+            default_flow_style=default_config.default_flow_style,
+            no_dash_inwards=not default_config.dash_inwards,
+            spaces_before_comment=default_config.spaces_before_comment,
+            enforce_double_quotes=default_config.enforce_double_quotes,
+            line_width=100,
+            files=None,
+        )

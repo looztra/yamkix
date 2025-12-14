@@ -7,7 +7,7 @@ from typing import Annotated
 import typer
 
 from yamkix.__version__ import __version__
-from yamkix.config import create_yamkix_config_from_typer_args, print_yamkix_config
+from yamkix.config import DEFAULT_LINE_WIDTH, create_yamkix_config_from_typer_args, print_yamkix_config
 from yamkix.errors import InvalidYamlContentError
 from yamkix.helpers import get_stderr_console, get_stdout_console
 from yamkix.yamkix import round_trip_and_format
@@ -153,6 +153,14 @@ def main(  # noqa: PLR0913
             ),
         ),
     ] = None,
+    line_width: Annotated[
+        int,
+        typer.Option(
+            "-w",
+            "--line-width",
+            help="specify the maximum line width.",
+        ),
+    ] = DEFAULT_LINE_WIDTH,
     silent_mode: Annotated[
         bool,
         typer.Option(
@@ -190,6 +198,7 @@ def main(  # noqa: PLR0913
         no_dash_inwards=no_dash_inwards,
         spaces_before_comment=spaces_before_comment,
         enforce_double_quotes=enforce_double_quotes,
+        line_width=line_width,
         files=files,
     )
     console = get_stderr_console()

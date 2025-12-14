@@ -93,6 +93,8 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
             + str(self.dash_inwards)
             + ", spaces_before_comment="
             + str(self.spaces_before_comment)
+            + ", line_width="
+            + str(self.line_width)
         )
 
 
@@ -315,6 +317,7 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
     default_flow_style: bool,
     no_dash_inwards: bool,
     spaces_before_comment: int | None,
+    line_width: int,
     files: list[Path] | None,
 ) -> list[YamkixConfig]:
     """Create a list of YamkixConfig from Typer arguments.
@@ -374,7 +377,7 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
             enforce_double_quotes=enforce_double_quotes,
             parsing_mode=typ,
             spaces_before_comment=spaces_before_comment,
-            line_width=DEFAULT_LINE_WIDTH,
+            line_width=line_width,
             version=None,
             io_config=io_config,
         )
