@@ -792,6 +792,7 @@ class TestPrintYamkixConfig:
         expected = (
             "typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, "
             "quotes_preserved=True, enforce_double_quotes=False, dash_inwards=True, spaces_before_comment=None"
+            ", line_width=2048"
         )
         assert result == expected
 

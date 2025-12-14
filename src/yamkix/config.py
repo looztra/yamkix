@@ -93,6 +93,8 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
             + str(self.dash_inwards)
             + ", spaces_before_comment="
             + str(self.spaces_before_comment)
+            + ", line_width="
+            + str(self.line_width)
         )
 
 
