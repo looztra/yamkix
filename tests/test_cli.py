@@ -209,7 +209,6 @@ class TestCli:
         mock_round_trip.assert_called_once()
         mock_stderr_console.print.assert_called()
 
-
     def test_line_width_arg(self, mocker: MockerFixture, shared_datadir: Path) -> None:
         """Test the line_width arg."""
         # GIVEN
