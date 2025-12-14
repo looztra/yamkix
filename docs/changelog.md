@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.14.0](https://github.com/looztra/yamkix/compare/v0.13.0...v0.14.0) (2025-12-14)
+
+
+### Features
+
+* **cli:** provide option to configure max line length (fixes [#282](https://github.com/looztra/yamkix/issues/282)) ([#330](https://github.com/looztra/yamkix/issues/330)) ([5acf3f7](https://github.com/looztra/yamkix/commit/5acf3f7706b4a8cbcb3cf2f2bb7e3234fd0cad86))
+
+
+### Documentation
+
+* **api:** enable inventories, show symbol types ([#280](https://github.com/looztra/yamkix/issues/280)) ([3aaead5](https://github.com/looztra/yamkix/commit/3aaead54358ae1163a8021b573f8021f7d49ee8f))
+* **mkdocs:** add site desc and url, tune mkdocs config to validate links ([#283](https://github.com/looztra/yamkix/issues/283)) ([8afd86d](https://github.com/looztra/yamkix/commit/8afd86dab5c05377b1b143c398ebb6fa7577be9e))
+
+
+### Continuous Integration
+
+* **mise:** make mise cache configurable via GitHub variable ([#310](https://github.com/looztra/yamkix/issues/310)) ([c205dbd](https://github.com/looztra/yamkix/commit/c205dbd4ce338120e4c1873f4582ac16b9da7842))
+
 ## [0.13.0](https://github.com/looztra/yamkix/compare/v0.12.0...v0.13.0) (2025-08-20)
 
 
