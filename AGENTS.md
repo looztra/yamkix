@@ -20,7 +20,15 @@ This document provides context and instructions for AI agents working on this re
   - Provide a clear verification plan and results.
 
 ### Code Style & Quality
-- **Python**: Follow PEP 8 & PEP 257.
+- **Markdown**: Follow GitHub's markdown instructions and `.markdownlint.yaml`.
+- **Python**:
+  - Follow PEP 8 & PEP 257.
+  - **Docstrings**:
+    - Use one-line docstrings for functions that do not raise exceptions.
+    - Use multi-line docstrings for functions that raise exceptions.
+    - Modules must include a docstring and packages must have `__init__.py`.
+  - **Strings**: Use f-strings for formatting (except when writing log statements).
+  - **Imports**: Respect `import-outside-toplevel` (pylint) and `PLC0415` (ruff).
 - **Tools**:
   - **Linting**: `ruff check` (or `poe ruff:lint`)
   - **Formatting**: `ruff format` (or `poe ruff:fmt:run`)
@@ -32,6 +40,7 @@ This document provides context and instructions for AI agents working on this re
 - **Location**: `tests/` (e.g., `tests/test_foo.py` for `foo.py`)
 - **Conventions**:
   - Use `pytest.fixture` in `tests/conftest.py`.
+  - Define fixtures using `@pytest.fixture(name="foo")` explicit naming.
   - Use `pytest.mark.parametrize` with `pytest.param(..., id="...")` for distinct test cases.
 - **Running Tests**:
   - `pytest` (using `uv` environment)
