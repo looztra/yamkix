@@ -11,6 +11,7 @@ This document provides context and instructions for AI agents working on this re
 ## Workflow & Standards
 
 ### Commit & Pull Requests
+
 - **Conventional Commits**: ALWAYS use a scope. Format: `type(scope): description`.
   - Example: `feat(cli): add configurable line width`
   - Example: `fix(tests): resolve lint errors in tests`
@@ -20,22 +21,24 @@ This document provides context and instructions for AI agents working on this re
   - Provide a clear verification plan and results.
 
 ### Code Style & Quality
+
 - **Markdown**: Follow GitHub's markdown instructions and `.markdownlint.yaml`.
 - **Python**:
   - Follow PEP 8 & PEP 257.
   - **Docstrings**:
-    - Use one-line docstrings for functions that do not raise exceptions.
-    - Use multi-line docstrings for functions that raise exceptions.
+    - Use complete docstrings that follow the Google docstring style.
     - Modules must include a docstring and packages must have `__init__.py`.
   - **Strings**: Use f-strings for formatting (except when writing log statements).
   - **Imports**: Respect `import-outside-toplevel` (pylint) and `PLC0415` (ruff).
 - **Tools**:
   - **Linting**: `ruff check` (or `poe ruff:lint`)
   - **Formatting**: `ruff format` (or `poe ruff:fmt:run`)
+  - **Markdown Linting**: `pre-commit run --all-files markdownlint-cli2` or `poe lint:all` (if configured)
   - **Type Checking**: `pyright` & `ty`
 - **Pre-check**: always run `poe lint:all` before submitting changes.
 
 ### Testing
+
 - **Framework**: `pytest`
 - **Location**: `tests/` (e.g., `tests/test_foo.py` for `foo.py`)
 - **Conventions**:
@@ -49,6 +52,7 @@ This document provides context and instructions for AI agents working on this re
 ## Task Runner (`poe`)
 
 This project uses `poethepoet` for task management. Common tasks:
+
 - `poe lint:all`: Run all linters (ruff, pyright, pylint, ty).
 - `poe ruff:lint:fix`: Auto-fix ruff issues.
 - `poe ruff:fmt:run`: Format code.
@@ -62,7 +66,7 @@ This project uses `poethepoet` for task management. Common tasks:
 
 ## General Guidelines for Agents
 
-1.  **Read First**: Check `AGENTS.md` (this file) and `poe_tasks.toml` to understand available tools.
-2.  **Verify Often**: Run tests and linters frequently (e.g., after every significant edit).
-3.  **Be Explicit**: In PR descriptions and commit messages, explaining *why* a change was made is as important as *what* changed.
-4.  **Use `uv`**: Ensure you are using the `uv` managed environment (e.g., `.venv/bin/python` or `uv run`).
+1. **Read First**: Check `AGENTS.md` (this file) and `poe_tasks.toml` to understand available tools.
+2. **Verify Often**: Run tests and linters frequently (e.g., after every significant edit).
+3. **Be Explicit**: In PR descriptions and commit messages, explaining *why* a change was made is as important as *what* changed.
+4. **Use `uv`**: Ensure you are using the `uv` managed environment (e.g., `.venv/bin/python` or `uv run`).
