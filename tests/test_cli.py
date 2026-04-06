@@ -9,6 +9,7 @@ from typer.testing import CliRunner
 from yamkix._cli import app, echo_version
 from yamkix.config import get_default_yamkix_config
 from yamkix.errors import InvalidYamlContentError
+from yamkix.yamkix import FileProcessingResult
 
 runner = CliRunner()
 
@@ -240,3 +241,88 @@ class TestCli:
             line_width=100,
             files=None,
         )
+
+    def test_summary_mode_not_printed_when_flag_absent(self, mocker: MockerFixture, shared_datadir: Path) -> None:
+        """Test that summary is not printed when --summary is not passed."""
+        # GIVEN
+        mock_create_config = mocker.patch("yamkix._cli.create_yamkix_config_from_typer_args")
+        mock_config = mocker.Mock()
+        mock_create_config.return_value = [mock_config]
+        mocker.patch("yamkix._cli.print_yamkix_config")
+        fake_result = FileProcessingResult(input_display_name="test.yml", error=False, unchanged=True)
+        mocker.patch("yamkix._cli.round_trip_and_format", return_value=fake_result)
+        mock_get_stderr_console = mocker.patch("yamkix._cli.get_stderr_console")
+        mock_stderr_console = mock_get_stderr_console.return_value
+        test_file = shared_datadir / "simple.yml"
+
+        # WHEN
+        result = runner.invoke(app, ["--input", str(test_file)])
+
+        # THEN
+        assert result.exit_code == 0
+        mock_stderr_console.print.assert_not_called()
+
+    def test_summary_mode_printed_when_flag_present(self, mocker: MockerFixture, shared_datadir: Path) -> None:
+        """Test that summary is printed to stderr when --summary is passed."""
+        # GIVEN
+        mock_create_config = mocker.patch("yamkix._cli.create_yamkix_config_from_typer_args")
+        mock_config = mocker.Mock()
+        mock_create_config.return_value = [mock_config]
+        mocker.patch("yamkix._cli.print_yamkix_config")
+        fake_result = FileProcessingResult(input_display_name="test.yml", error=False, unchanged=False)
+        mocker.patch("yamkix._cli.round_trip_and_format", return_value=fake_result)
+        mock_get_stderr_console = mocker.patch("yamkix._cli.get_stderr_console")
+        mock_stderr_console = mock_get_stderr_console.return_value
+        test_file = shared_datadir / "simple.yml"
+
+        # WHEN
+        result = runner.invoke(app, ["--summary", "--input", str(test_file)])
+
+        # THEN
+        assert result.exit_code == 0
+        mock_stderr_console.print.assert_called_once()
+        call_args = mock_stderr_console.print.call_args
+        summary_text = call_args[0][0]
+        assert "1 file(s) processed" in summary_text
+        assert "0 error(s)" in summary_text
+        assert "0 unchanged" in summary_text
+
+    def test_summary_mode_counts_errors_and_unchanged(self, mocker: MockerFixture, shared_datadir: Path) -> None:
+        """Test that summary correctly counts errors and unchanged files across multiple configs."""
+        # GIVEN
+        mock_create_config = mocker.patch("yamkix._cli.create_yamkix_config_from_typer_args")
+        mock_config1 = mocker.Mock()
+        mock_config2 = mocker.Mock()
+        mock_config3 = mocker.Mock()
+        mock_create_config.return_value = [mock_config1, mock_config2, mock_config3]
+        mocker.patch("yamkix._cli.print_yamkix_config")
+        results = [
+            FileProcessingResult(input_display_name="a.yml", error=False, unchanged=True),
+            FileProcessingResult(input_display_name="b.yml", error=False, unchanged=False),
+            FileProcessingResult(input_display_name="c.yml", error=True, unchanged=False),
+        ]
+        mocker.patch("yamkix._cli.round_trip_and_format", side_effect=results)
+        mock_get_stderr_console = mocker.patch("yamkix._cli.get_stderr_console")
+        mock_stderr_console = mock_get_stderr_console.return_value
+        test_file = shared_datadir / "simple.yml"
+
+        # WHEN - InvalidYamlContentError is raised for mock_config3 inside the CLI loop
+        mocker.patch(
+            "yamkix._cli.round_trip_and_format",
+            side_effect=[
+                FileProcessingResult(input_display_name="a.yml", error=False, unchanged=True),
+                FileProcessingResult(input_display_name="b.yml", error=False, unchanged=False),
+                InvalidYamlContentError,
+            ],
+        )
+        mock_config3.io_config.input_display_name = "c.yml"
+        result = runner.invoke(app, ["--summary", str(test_file)])
+
+        # THEN
+        assert result.exit_code == 0
+        # The summary print is the last call on the console
+        last_call_args = mock_stderr_console.print.call_args_list[-1]
+        summary_text = last_call_args[0][0]
+        assert "3 file(s) processed" in summary_text
+        assert "1 error(s)" in summary_text
+        assert "1 unchanged" in summary_text

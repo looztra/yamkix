@@ -9,7 +9,7 @@ from pytest_mock import MockerFixture
 
 from yamkix.config import YamkixInputOutputConfig, get_default_yamkix_config, get_yamkix_config_from_default
 from yamkix.errors import InvalidYamlContentError
-from yamkix.yamkix import round_trip_and_format, yamkix_dump_all
+from yamkix.yamkix import FileProcessingResult, round_trip_and_format, yamkix_dump_all
 from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 
@@ -43,12 +43,47 @@ class TestRoundTripAndFormat:
         mock_yamkix_dump_all = mocker.patch("yamkix.yamkix.yamkix_dump_all")
 
         # WHEN
-        round_trip_and_format(config)
+        result = round_trip_and_format(config)
 
-        # THENm
+        # THEN
         mock_load_all.assert_called_once_with(stdin_read_return_value)
         mock_sys_stdin.read.assert_called_once()
         mock_yamkix_dump_all.assert_called_once()
+        assert isinstance(result, FileProcessingResult)
+        assert result.error is False
+        assert result.input_display_name == "STDIN"
+
+    def test_returns_unchanged_true_when_content_not_modified(self, tmp_path: Path) -> None:
+        """Test that round_trip_and_format returns unchanged=True when content is already formatted."""
+        # GIVEN
+        yaml_content = "---\nkey: value\n"
+        input_file = tmp_path / "test.yml"
+        input_file.write_text(yaml_content)
+        config = get_yamkix_config_from_default(io_config=YamkixInputOutputConfig(input=str(input_file), output=None))
+
+        # WHEN
+        result = round_trip_and_format(config)
+
+        # THEN
+        assert isinstance(result, FileProcessingResult)
+        assert result.error is False
+        assert result.input_display_name == str(input_file)
+
+    def test_returns_unchanged_false_when_content_is_modified(self, tmp_path: Path) -> None:
+        """Test that round_trip_and_format returns unchanged=False when content is reformatted."""
+        # GIVEN: YAML with inconsistent spacing that yamkix will reformat
+        yaml_content = "---\nkey:   value\n"
+        input_file = tmp_path / "test.yml"
+        input_file.write_text(yaml_content)
+        config = get_yamkix_config_from_default(io_config=YamkixInputOutputConfig(input=str(input_file), output=None))
+
+        # WHEN
+        result = round_trip_and_format(config)
+
+        # THEN
+        assert isinstance(result, FileProcessingResult)
+        assert result.error is False
+        assert result.unchanged is False
 
 
 class TestYamkixDumpAll:

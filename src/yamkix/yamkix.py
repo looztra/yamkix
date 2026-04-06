@@ -2,6 +2,7 @@
 
 import sys
 from copy import deepcopy
+from dataclasses import dataclass
 from io import StringIO
 from pathlib import Path
 from typing import TextIO
@@ -18,14 +19,30 @@ from yamkix.helpers import convert_single_to_double_quotes, strip_leading_double
 from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 
-def round_trip_and_format(yamkix_config: YamkixConfig) -> None:
+@dataclass
+class FileProcessingResult:
+    """Result of processing a single YAML file.
+
+    Attributes:
+        input_display_name: Display name of the processed input (file path or 'STDIN').
+        error: Whether the file failed to parse.
+        unchanged: Whether the output content is identical to the input content.
+    """
+
+    input_display_name: str
+    error: bool
+    unchanged: bool
+
+
+def round_trip_and_format(yamkix_config: YamkixConfig) -> FileProcessingResult:
     """Load a file and save it formatted.
 
     Arguments:
         yamkix_config: The configuration for the Yamkix processing.
 
     Returns:
-        None
+        A FileProcessingResult describing whether an error occurred and whether
+        the content was unchanged.
 
     Raises:
         InvalidYamlContentError: If the YAML content is invalid.
@@ -39,9 +56,11 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> None:
     input_file = yamkix_io_config.input
     if input_file is not None:
         with Path(input_file).open(encoding="UTF-8") as f_input:
-            parsed = yaml.load_all(f_input.read())
+            raw_input = f_input.read()
+        parsed = yaml.load_all(raw_input)
     else:
-        parsed = yaml.load_all(sys.stdin.read())
+        raw_input = sys.stdin.read()
+        parsed = yaml.load_all(raw_input)
     ready_for_dump = []
     try:
         # Read the parsed content to force the scanner to issue errors if any
@@ -49,6 +68,8 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> None:
 
     except (ScannerError, ParserError) as parsing_error:
         raise InvalidYamlContentError from parsing_error
+
+    output_buffer = StringIO()
     yamkix_dump_all(
         one_or_more_items=ready_for_dump,
         yaml=yaml,
@@ -56,6 +77,13 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> None:
         output_file=yamkix_io_config.output,
         spaces_before_comment=yamkix_config.spaces_before_comment,
         double_quotes_yaml=double_quotes_yaml,
+        capture_buffer=output_buffer,
+    )
+    unchanged = output_buffer.getvalue() == raw_input
+    return FileProcessingResult(
+        input_display_name=yamkix_io_config.input_display_name,
+        error=False,
+        unchanged=unchanged,
     )
 
 
@@ -66,6 +94,7 @@ def yamkix_dump_all(  # noqa: PLR0913
     output_file: str | None,
     spaces_before_comment: int | None,
     double_quotes_yaml: YAML | None = None,
+    capture_buffer: StringIO | None = None,
 ) -> None:
     """Dump all the documents from the input structure.
 
@@ -77,6 +106,8 @@ def yamkix_dump_all(  # noqa: PLR0913
         spaces_before_comment: The number of spaces to use before comments.
         double_quotes_yaml: An optional `YAML` writer for double quotes management.
             This `YAML` instance should be configured like the `yaml` one but with `preserve` quotes set to `True`
+        capture_buffer: An optional `StringIO` buffer that receives a copy of the dumped output.
+            Used by `round_trip_and_format` to detect whether the content was changed.
 
     """
     # Clear the output file if it is a file and it exists
@@ -108,6 +139,14 @@ def yamkix_dump_all(  # noqa: PLR0913
                 out=out,
                 spaces_before_comment=spaces_before_comment,
             )
+            if capture_buffer is not None:
+                yamkix_dump_one(
+                    single_item=single_item,
+                    yaml=yaml_instance,
+                    dash_inwards=dash_inwards,
+                    out=capture_buffer,
+                    spaces_before_comment=spaces_before_comment,
+                )
         else:
             with Path(output_file).open(mode="a", encoding="UTF-8") as out:
                 yamkix_dump_one(
@@ -115,6 +154,14 @@ def yamkix_dump_all(  # noqa: PLR0913
                     yaml=yaml_instance,
                     dash_inwards=dash_inwards,
                     out=out,
+                    spaces_before_comment=spaces_before_comment,
+                )
+            if capture_buffer is not None:
+                yamkix_dump_one(
+                    single_item=single_item,
+                    yaml=yaml_instance,
+                    dash_inwards=dash_inwards,
+                    out=capture_buffer,
                     spaces_before_comment=spaces_before_comment,
                 )
 
