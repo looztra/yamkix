@@ -11,6 +11,12 @@
   [ruamel.yaml](https://pypi.python.org/pypi/ruamel.yaml) `round_trip`
   mode (you can disable it with `--typ safe`)
 
+## Output and Logging Options
+
+- Use `--silent` to suppress the configuration information that is normally printed to stderr during processing
+- Use `--summary` to print processing statistics (total files, errors, unchanged count, and elapsed time) after all files have been processed
+- Both options can be combined: `--silent --summary` will only output the summary line without per-file configuration details
+
 ## To preserve or not to preserve quotes?
 
 - *Quotes preserved* means : if there were quotes in the input, they

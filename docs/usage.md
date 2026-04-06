@@ -79,6 +79,29 @@
 !!! Note
     It is not possible to output to `stdout` when formatting multiple files (feel free to [raise an issue](https://github.com/looztra/yamkix/issues) if you are interested in this feature).
 
+### Processing summary
+
+- Use `--summary` to print processing statistics after all files have been processed
+- The summary includes:
+  - Total number of files processed
+  - Number of files that encountered parse errors
+  - Number of files with unchanged content (already properly formatted)
+  - Total processing time
+
+    ```shell
+    yamkix --summary path/to/file1.yml path/to/file2.yml
+    # Output:
+    # [yamkix] Summary: 2 file(s) processed, 0 error(s), 1 unchanged, 0.042s
+    ```
+
+- When combined with `--silent` (which suppresses per-file config output), only the summary is printed to stderr:
+
+    ```shell
+    yamkix --silent --summary path/to/file1.yml path/to/file2.yml
+    # Produces minimal output:
+    # [yamkix] Summary: 2 file(s) processed, 0 error(s), 1 unchanged, 0.042s
+    ```
+
 ## Pre-commit hook
 
 - Since `v0.12.0`, you can now use `yamkix` as a pre-commit hook:
