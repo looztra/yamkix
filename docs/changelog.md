@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.0](https://github.com/looztra/yamkix/compare/v0.14.0...v0.15.0) (2026-04-06)
+
+
+### Features
+
+* **summary:** implement the --summary flag ([#377](https://github.com/looztra/yamkix/issues/377)) ([a705c80](https://github.com/looztra/yamkix/commit/a705c80cd770ccd7a2dffe607a14e44050da9972))
+
 ## [0.14.0](https://github.com/looztra/yamkix/compare/v0.13.0...v0.14.0) (2025-12-14)
 
 
