@@ -1,5 +1,6 @@
 """Typer-based CLI implementation for yamkix."""
 
+import time
 from enum import Enum
 from pathlib import Path
 from typing import Annotated
@@ -10,7 +11,7 @@ from yamkix.__version__ import __version__
 from yamkix.config import DEFAULT_LINE_WIDTH, create_yamkix_config_from_typer_args, print_yamkix_config
 from yamkix.errors import InvalidYamlContentError
 from yamkix.helpers import get_stderr_console, get_stdout_console
-from yamkix.yamkix import round_trip_and_format
+from yamkix.yamkix import FileProcessingResult, round_trip_and_format
 
 # Create the Typer app
 app = typer.Typer(
@@ -169,6 +170,13 @@ def main(  # noqa: PLR0913
             help="silent mode, don't print config when processing file(s)",
         ),
     ] = False,
+    summary_mode: Annotated[
+        bool,
+        typer.Option(
+            "--summary",
+            help="print a summary of the processing statistics after all files have been processed",
+        ),
+    ] = False,
     _version: Annotated[
         bool,
         typer.Option("-v", "--version", help="show yamkix version", callback=version_callback),
@@ -202,15 +210,34 @@ def main(  # noqa: PLR0913
         files=files,
     )
     console = get_stderr_console()
+    results: list[FileProcessingResult] = []
+    start_time = time.monotonic()
     for config in yamkix_configs:
         if not silent_mode:
             print_yamkix_config(config)
         try:
             # Process the file(s)
-            round_trip_and_format(config)
+            result = round_trip_and_format(config)
+            results.append(result)
         except InvalidYamlContentError as e:
             console.print(rf"Error processing \[{config.io_config.input_display_name}]: {e}", style="error")
             console.print(e.__cause__, style="error")
+            results.append(
+                FileProcessingResult(
+                    input_display_name=config.io_config.input_display_name,
+                    error=True,
+                    unchanged=False,
+                )
+            )
+    if summary_mode:
+        elapsed = time.monotonic() - start_time
+        total = len(results)
+        errors = sum(1 for r in results if r.error)
+        unchanged = sum(1 for r in results if r.unchanged)
+        console.print(
+            f"[yamkix] Summary: {total} file(s) processed, {errors} error(s), {unchanged} unchanged, {elapsed:.3f}s",
+            style="info",
+        )
 
 
 if __name__ == "__main__":
