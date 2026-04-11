@@ -23,9 +23,10 @@ ignore = [
 ]
 
 "**/tests/**/*" = [
-    "S101", # S101: Use of assert detected. Hey man, we do need asserts in pytest tests.
-    "D100", # D100: Missing docstring in public module.
-    "D104", # D104: Missing docstring in public package.
+    "S101",    # S101: Use of assert detected. Hey man, we do need asserts in pytest tests.
+    "D100",    # D100: Missing docstring in public module.
+    "D104",    # D104: Missing docstring in public package.
+    "PLR2004", # Magic value used in comparison are ok in tests.
 ]
 
 # Use Google-style docstrings.

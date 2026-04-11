@@ -72,6 +72,35 @@ def process_comments_for_seq(data: CommentedSeq, column: int | None = None) -> N
         process_comments(elem, column=column)
 
 
+def align_comments(data: CommentedBase, extra: int = 0) -> None:
+    """Align EOL comments within each dict/list to the maximum column.
+
+    This recursively traverses the data structure and aligns all EOL comments
+    within each dict/list to the maximum column position found in that dict/list.
+
+    Args:
+        data: The CommentedMap or CommentedSeq to process.
+        extra: Additional spaces to add after the maximum column position.
+    """
+
+    def align_one(d: CommentedBase, extra: int = 0) -> None:
+        if not hasattr(d, "ca") or not d.ca or not d.ca.items:
+            return
+        max_col = max((comment[2].column for comment in d.ca.items.values() if comment[2] is not None), default=0)
+        for comment in d.ca.items.values():
+            if comment[2] is not None:
+                comment[2].column = max_col + extra
+
+    if isinstance(data, CommentedMap):
+        align_one(data, extra=extra)
+        for val in data.values():
+            align_comments(val, extra=extra)
+    elif isinstance(data, CommentedSeq):
+        align_one(data, extra=extra)
+        for elem in data:
+            align_comments(elem, extra=extra)
+
+
 def process_comments(data: CommentedBase, column: int | None = None) -> None:
     """Reposition comments."""
     if isinstance(data, CommentedMap):

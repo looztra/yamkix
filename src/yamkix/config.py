@@ -57,6 +57,7 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
         spaces_before_comment: Number of spaces before comments.
         enforce_double_quotes: Whether to enforce double quotes when quotes_preserved is False
         line_width: Maximum line width.
+        align_comments: Whether to align EOL comments within each dict/list to the maximum column.
         version: Whether to include version information (deprecated)
         io_config: Input/Output configuration.
 
@@ -71,6 +72,7 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
     spaces_before_comment: int | None
     enforce_double_quotes: bool
     line_width: int
+    align_comments: bool
     version: bool | None
     io_config: YamkixInputOutputConfig
 
@@ -95,6 +97,8 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
             + str(self.spaces_before_comment)
             + ", line_width="
             + str(self.line_width)
+            + ", align_comments="
+            + str(self.align_comments)
         )
 
 
@@ -113,6 +117,7 @@ def get_default_yamkix_config() -> YamkixConfig:
                 <li><i>enforce_double_quotes = False</i></li>
                 <li><i>spaces_before_comment = None</i></li>
                 <li><i>line_width = 2048</i></li>
+                <li><i>align_comments = False</i></li>
                 <li><i>io_config</i>:
                     <ul>
                         <li><i>input = None</i></li>
@@ -131,6 +136,7 @@ def get_default_yamkix_config() -> YamkixConfig:
         enforce_double_quotes=False,
         spaces_before_comment=None,
         line_width=DEFAULT_LINE_WIDTH,
+        align_comments=False,
         version=False,
         io_config=get_default_yamkix_input_output_config(),
     )
@@ -160,6 +166,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
     enforce_double_quotes: bool = False,
     spaces_before_comment: int | None = None,
     line_width: int | None = None,
+    align_comments: bool | None = None,
     io_config: YamkixInputOutputConfig | None = None,
 ) -> YamkixConfig:
     """Return a `Yamkix` configuration, based on the default one.
@@ -180,6 +187,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
         enforce_double_quotes: Whether to enforce double quotes when quotes_preserved is False.
         spaces_before_comment: Number of spaces before comments.
         line_width: Maximum line width.
+        align_comments: Whether to align EOL comments within each dict/list to the maximum column.
         io_config: Input/Output configuration.
 
     Returns:
@@ -207,6 +215,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
         if spaces_before_comment is not None
         else default_config.spaces_before_comment,
         line_width=line_width if line_width is not None else default_config.line_width,
+        align_comments=align_comments if align_comments is not None else default_config.align_comments,
         version=None,
         io_config=io_config if io_config is not None else get_default_yamkix_input_output_config(),
     )
@@ -262,6 +271,7 @@ def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixC
         spaces_before_comment=get_spaces_before_comment_from_args(args),
         io_config=yamkix_input_output_config,
         line_width=default_yamkix_config.line_width,
+        align_comments=getattr(args, "align_comments", False),
     )
 
 
@@ -318,6 +328,7 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
     no_dash_inwards: bool,
     spaces_before_comment: int | None,
     line_width: int,
+    align_comments: bool,
     files: list[Path] | None,
 ) -> list[YamkixConfig]:
     """Create a list of YamkixConfig from Typer arguments.
@@ -378,6 +389,7 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
             parsing_mode=typ,
             spaces_before_comment=spaces_before_comment,
             line_width=line_width,
+            align_comments=align_comments,
             version=None,
             io_config=io_config,
         )

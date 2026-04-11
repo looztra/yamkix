@@ -95,6 +95,7 @@ class TestCli:
             spaces_before_comment=default_config.spaces_before_comment,
             enforce_double_quotes=default_config.enforce_double_quotes,
             line_width=default_config.line_width,
+            align_comments=default_config.align_comments,
             files=None,
         )
         mock_print_config.assert_called_once_with(mock_config)
@@ -128,6 +129,7 @@ class TestCli:
             spaces_before_comment=default_config.spaces_before_comment,
             enforce_double_quotes=default_config.enforce_double_quotes,
             line_width=default_config.line_width,
+            align_comments=default_config.align_comments,
             files=[test_file],
         )
         mock_print_config.assert_called_once_with(mock_config)
@@ -164,6 +166,7 @@ class TestCli:
             spaces_before_comment=default_config.spaces_before_comment,
             enforce_double_quotes=default_config.enforce_double_quotes,
             line_width=default_config.line_width,
+            align_comments=default_config.align_comments,
             files=[test_file1, test_file2],
         )
         mock_print_config.assert_called()
@@ -239,6 +242,7 @@ class TestCli:
             spaces_before_comment=default_config.spaces_before_comment,
             enforce_double_quotes=default_config.enforce_double_quotes,
             line_width=100,
+            align_comments=default_config.align_comments,
             files=None,
         )
 

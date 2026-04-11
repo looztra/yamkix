@@ -154,6 +154,14 @@ def main(  # noqa: PLR0913
             ),
         ),
     ] = None,
+    align_comments: Annotated[
+        bool,
+        typer.Option(
+            "-a",
+            "--align-comments",
+            help="align EOL comments within each dict/list to the maximum column.",
+        ),
+    ] = False,
     line_width: Annotated[
         int,
         typer.Option(
@@ -207,6 +215,7 @@ def main(  # noqa: PLR0913
         spaces_before_comment=spaces_before_comment,
         enforce_double_quotes=enforce_double_quotes,
         line_width=line_width,
+        align_comments=align_comments,
         files=files,
     )
     console = get_stderr_console()

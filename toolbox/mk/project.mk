@@ -17,3 +17,10 @@ serve-docs: ## ▶ Serve the documentation
 poe-integration-tests: ## Run integration tests using poe
 	@echo "+ $@"
 	uv run poe pytest:integration
+
+.PHONY: test-all
+test-all: tests integration-tests poe-integration-tests test-python-versions ## ▶ Run all tests
+	@echo "All tests completed successfully"
+
+.PHONY: all-tests
+all-tests: test-all ## ▶ Run all tests (alias for test-all)
