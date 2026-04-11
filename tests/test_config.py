@@ -488,6 +488,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             spaces_before_comment=1,
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
             files=None,
         )
 
@@ -518,6 +519,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             spaces_before_comment=None,
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
             files=None,
         )
         assert len(configs) == 1
@@ -539,6 +541,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             spaces_before_comment=None,
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
             files=None,
         )
 
@@ -567,6 +570,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             spaces_before_comment=None,
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
             files=None,
         )
 
@@ -594,6 +598,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             spaces_before_comment=None,
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
             files=None,
         )
         assert configs[0].io_config.input == "input.yaml"
@@ -615,6 +620,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             spaces_before_comment=None,
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
             files=None,
         )
         assert configs[0].io_config.input is None
@@ -636,6 +642,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             spaces_before_comment=None,
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
             files=None,
         )
         assert configs[0].io_config.input is None
@@ -665,6 +672,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             spaces_before_comment=None,
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
             files=None,
         )
         assert configs[0].io_config.input is None
@@ -694,6 +702,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             spaces_before_comment=None,
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
             files=None,
         )
         assert configs[0].io_config.input == "input.yaml"
@@ -715,6 +724,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             spaces_before_comment=None,
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
             files=[test_file1],
         )
         assert configs[0].io_config.input == str(test_file1)
@@ -738,6 +748,7 @@ class TestCreateYamkixConfigFromTyperArgs:
             spaces_before_comment=None,
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
             files=input_files,
         )
         assert len(configs) == len(input_files)
@@ -762,6 +773,7 @@ class TestCreateYamkixConfigFromTyperArgs:
                 spaces_before_comment=None,
                 enforce_double_quotes=False,
                 line_width=DEFAULT_LINE_WIDTH,
+                align_comments=False,
                 files=[],
             )
 
@@ -792,7 +804,7 @@ class TestPrintYamkixConfig:
         expected = (
             "typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, "
             "quotes_preserved=True, enforce_double_quotes=False, dash_inwards=True, spaces_before_comment=None"
-            ", line_width=2048"
+            ", line_width=2048, align_comments=False"
         )
         assert result == expected
 

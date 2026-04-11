@@ -152,6 +152,12 @@ class TestNonRegression:
                 ["--spaces-before-comment", "2"],
                 id="issue_29_spaces_before_comment_2",
             ),
+            pytest.param(
+                "issue-259-01",
+                "no-explicit-start--align-comments",
+                ["--no-explicit-start", "--align-comments"],
+                id="issue_259_01_no_explicit_start_align_comments",
+            ),
         ],
     )
     def test_config(

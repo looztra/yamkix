@@ -12,7 +12,7 @@ from ruamel.yaml.comments import CommentedBase
 from ruamel.yaml.parser import ParserError
 from ruamel.yaml.scanner import ScannerError
 
-from yamkix.comments import process_comments
+from yamkix.comments import align_comments, process_comments
 from yamkix.config import YamkixConfig
 from yamkix.errors import InvalidYamlContentError
 from yamkix.helpers import convert_single_to_double_quotes, strip_leading_double_space
@@ -78,6 +78,7 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> FileProcessingResult:
         spaces_before_comment=yamkix_config.spaces_before_comment,
         double_quotes_yaml=double_quotes_yaml,
         capture_buffer=output_buffer,
+        align_comments_flag=yamkix_config.align_comments,
     )
     unchanged = output_buffer.getvalue() == raw_input
     return FileProcessingResult(
@@ -95,6 +96,7 @@ def yamkix_dump_all(  # noqa: PLR0913
     spaces_before_comment: int | None,
     double_quotes_yaml: YAML | None = None,
     capture_buffer: StringIO | None = None,
+    align_comments_flag: bool = False,
 ) -> None:
     """Dump all the documents from the input structure.
 
@@ -108,6 +110,7 @@ def yamkix_dump_all(  # noqa: PLR0913
             This `YAML` instance should be configured like the `yaml` one but with `preserve` quotes set to `True`
         capture_buffer: An optional `StringIO` buffer that receives a copy of the dumped output.
             Used by `round_trip_and_format` to detect whether the content was changed.
+        align_comments_flag: Whether to align EOL comments within each dict/list to the maximum column.
 
     """
     # Clear the output file if it is a file and it exists
@@ -130,6 +133,8 @@ def yamkix_dump_all(  # noqa: PLR0913
         else:
             yaml_instance = yaml
             single_item = doc
+        if align_comments_flag:
+            align_comments(data=single_item)
         if output_file is None:
             out = sys.stdout
             yamkix_dump_one(
