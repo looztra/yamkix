@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Features
+
+* **cli:** add `--align-comments` flag to align EOL comments within each dict/list ([#259](https://github.com/looztra/yamkix/issues/259))
+
 ## [0.15.0](https://github.com/looztra/yamkix/compare/v0.14.0...v0.15.0) (2026-04-06)
 
 
