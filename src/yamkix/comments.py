@@ -86,11 +86,8 @@ def align_comments(data: CommentedBase, extra: int = 0) -> None:
     def align_one(d: CommentedBase, extra: int = 0) -> None:
         if not hasattr(d, "ca") or not d.ca or not d.ca.items:
             return
-        comments = d.ca.items.values()
-        if not comments:
-            return
-        max_col = max((comment[2].column for comment in comments if comment[2] is not None), default=0)
-        for comment in comments:
+        max_col = max((comment[2].column for comment in d.ca.items.values() if comment[2] is not None), default=0)
+        for comment in d.ca.items.values():
             if comment[2] is not None:
                 comment[2].column = max_col + extra
 

@@ -51,7 +51,7 @@ def test_yamkix_add_eol_comment() -> None:
     assert code["family"] == "Smith"
 
 
-def test_align_comments_with_no_comments(mocker: MockerFixture) -> None:
+def test_align_comments_with_no_comments() -> None:
     """Test align_comments when there are no comments in the data structure.
 
     This covers the early return when ca.items is empty (line 88).
