@@ -91,3 +91,28 @@ def test_align_comments_with_sequence(mocker: MockerFixture) -> None:
     assert comment_mock_1.column == 5
     assert comment_mock_2.column == 5
     assert comment_mock_3.column == 5
+
+
+def test_align_comments_with_some_null_comments(mocker: MockerFixture) -> None:
+    """Test align_comments when some comments have comment[2] as None.
+
+    This covers line 91 (the guard 'if comment[2] is not None').
+    """
+    comment_mock_1 = mocker.Mock(column=3)
+    comment_mock_2 = mocker.Mock(column=5)
+
+    mock_seq_ca = mocker.Mock(
+        spec=CommentedSeq,
+        items={
+            0: [None, None, comment_mock_1],
+            1: [None, None, comment_mock_2],
+            2: [None, None, None],  # comment[2] is None - exercises line 91
+        },
+    )
+    mock_seq = mocker.Mock(spec=CommentedSeq, ca=mock_seq_ca)
+    mock_seq.__iter__ = mocker.Mock(return_value=iter([]))
+
+    align_comments(mock_seq)
+
+    assert comment_mock_1.column == 5
+    assert comment_mock_2.column == 5
