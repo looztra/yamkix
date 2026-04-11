@@ -173,9 +173,9 @@ the output will be :
         boolean_no_quotes: true
         boolean_single_quotes: "true"
         boolean_double_quotes: "true"
-    number_no_quotes: 1
-    number_single_quotes: "1"
-    number_double_quotes: "1"
+        number_no_quotes: 1
+        number_single_quotes: "1"
+        number_double_quotes: "1"
     ```
 
 ## Aligning End-of-Line Comments
@@ -186,29 +186,32 @@ When using `--typ rt` (round-trip mode, which is the default), yamkix preserves 
 
 With input :
 
-```yaml
-sub_key1:
-  a: 1 # comment 1
-  b: asdf # comment 2
-  c: 3.3333 # comment 3
-sub_key2:
-  a: long text # comment 4
-  b: an even longer text # comment 5
-```
+    ``` yaml
+    ---
+    sub_key1:
+      a: 1 # comment 1
+      b: asdf # comment 2
+      c: 3.3333 # comment 3
+    sub_key2:
+      a: long text # comment 4
+      b: an even longer text # comment 5
+    ```
 
 the output with `--align-comments` will be:
 
-```yaml
-sub_key1:
-  a: 1      # comment 1
-  b: asdf   # comment 2
-  c: 3.3333 # comment 3
-sub_key2:
-  a: long text           # comment 4
-  b: an even longer text # comment 5
-```
+    ``` yaml
+    ---
+    sub_key1:
+      a: 1      # comment 1
+      b: asdf   # comment 2
+      c: 3.3333 # comment 3
+    sub_key2:
+      a: long text           # comment 4
+      b: an even longer text # comment 5
+    ```
 
 The alignment works by:
+
 - Finding the longest value in each dict/list
 - Positioning all EOL comments in that container to align with the longest value
 - Processing nested structures recursively
