@@ -1,0 +1,12 @@
+---
+# Source - https://stackoverflow.com/q/71332643
+# Posted by spaceman_spiff, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-04-11, License - CC BY-SA 4.0
+
+sub_key1:
+  a: 1 # comment 1
+  b: asdf # comment 2
+  c: 3.3333 # comment 3
+sub_key2:
+  a: long text # comment 4
+  b: an even longer text # comment 5

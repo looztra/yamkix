@@ -158,6 +158,12 @@ class TestNonRegression:
                 ["--no-explicit-start", "--align-comments"],
                 id="issue_259_01_no_explicit_start_align_comments",
             ),
+            pytest.param(
+                "issue-259-01",
+                "default",
+                [],
+                id="issue_259_01_default_no_align",
+            ),
         ],
     )
     def test_config(
