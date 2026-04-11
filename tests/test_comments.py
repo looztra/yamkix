@@ -54,12 +54,12 @@ def test_yamkix_add_eol_comment() -> None:
 def test_align_comments_with_no_comments(mocker: MockerFixture) -> None:
     """Test align_comments when there are no comments in the data structure.
 
-    This covers line 91 (the early return when comments is empty).
+    This covers the early return when ca.items is empty (line 88).
     """
-    mock_ca = mocker.Mock(spec=CommentedMap, items={})
-    mock_data = mocker.Mock(spec=CommentedMap, ca=mock_ca)
-    mock_data.values.return_value = []
-    align_comments(mock_data)
+    yaml = YAML()
+    code = yaml.load("key: value")
+    assert code.ca.items == {}
+    align_comments(code)
 
 
 def test_align_comments_with_sequence(mocker: MockerFixture) -> None:
