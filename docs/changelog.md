@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.0](https://github.com/looztra/yamkix/compare/v0.15.0...v0.16.0) (2026-04-13)
+
+
+### Features
+
+* **cli:** add --align-comments flag to align EOL comments ([#384](https://github.com/looztra/yamkix/issues/384)) ([617b656](https://github.com/looztra/yamkix/commit/617b6560f54f685726faf1a2af825e78cb7e0365))
+
 ## [0.15.0](https://github.com/looztra/yamkix/compare/v0.14.0...v0.15.0) (2026-04-06)
 
 
