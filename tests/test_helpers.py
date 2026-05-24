@@ -1,8 +1,12 @@
 """Test helpers."""
 
+from typing import Any
+
+from ruamel.yaml import YAML
 from ruamel.yaml.scalarstring import DoubleQuotedScalarString, SingleQuotedScalarString
 
 from yamkix.helpers import (
+    convert_flow_to_block_style,
     convert_single_to_double_quotes,
     get_yamkix_version,
     remove_all_linebreaks,
@@ -349,3 +353,59 @@ class TestConvertSingleToDoubleQuotes:
         assert result["users"][0]["settings"]["timeout"] == timeout_value
         assert result["users"][1]["tags"][1] == "user"
         assert result["config"]["debug"] is False
+
+
+def _load_yaml(text: str) -> Any:  # noqa: ANN401
+    """Load YAML text using the round-trip loader."""
+    yaml = YAML()
+    return yaml.load(text)
+
+
+class TestConvertFlowToBlockStyle:
+    """Test cases for convert_flow_to_block_style function."""
+
+    def test_flow_sequence_is_converted(self) -> None:
+        """Test that a top-level flow sequence is converted to block style."""
+        data = _load_yaml("a_list: [a, b, c]\n")
+        assert data["a_list"].fa.flow_style() is True
+        convert_flow_to_block_style(data)
+        assert data["a_list"].fa.flow_style() is False
+
+    def test_flow_mapping_is_converted(self) -> None:
+        """Test that a top-level flow mapping is converted to block style."""
+        data = _load_yaml("a_map: {first: yolo, second: foo}\n")
+        assert data["a_map"].fa.flow_style() is True
+        convert_flow_to_block_style(data)
+        assert data["a_map"].fa.flow_style() is False
+
+    def test_nested_flow_structures_are_converted(self) -> None:
+        """Test that nested flow-style sequences and mappings are all converted."""
+        data = _load_yaml("outer: {inner_list: [x, y], inner_map: {a: 1}}\n")
+        assert data["outer"].fa.flow_style() is True
+        convert_flow_to_block_style(data)
+        assert data["outer"].fa.flow_style() is False
+        assert data["outer"]["inner_list"].fa.flow_style() is False
+        assert data["outer"]["inner_map"].fa.flow_style() is False
+
+    def test_already_block_style_is_unchanged(self) -> None:
+        """Test that block-style structures are unaffected."""
+        data = _load_yaml("a_list:\n  - a\n  - b\n")
+        assert data["a_list"].fa.flow_style() is False
+        convert_flow_to_block_style(data)
+        assert data["a_list"].fa.flow_style() is False
+
+    def test_scalar_values_are_not_modified(self) -> None:
+        """Test that scalar values pass through without error."""
+        data = _load_yaml("key: value\n")
+        convert_flow_to_block_style(data)
+        assert data["key"] == "value"
+
+    def test_mixed_document_converts_only_flow_parts(self) -> None:
+        """Test that only flow-style parts of a mixed document are converted."""
+        yaml_text = "block_list:\n  - a\n  - b\nflow_list: [x, y]\n"
+        data = _load_yaml(yaml_text)
+        assert data["block_list"].fa.flow_style() is False
+        assert data["flow_list"].fa.flow_style() is True
+        convert_flow_to_block_style(data)
+        assert data["block_list"].fa.flow_style() is False
+        assert data["flow_list"].fa.flow_style() is False

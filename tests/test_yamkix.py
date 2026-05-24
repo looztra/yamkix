@@ -1,6 +1,7 @@
 """Provide tests for the yamkix module."""
 
 import sys
+from io import StringIO
 from pathlib import Path
 from textwrap import dedent
 
@@ -134,3 +135,63 @@ class TestYamkixDumpAll:
             out=sys.stdout,
             spaces_before_comment=config.spaces_before_comment,
         )
+
+
+class TestConvertFlowToBlock:
+    """Tests for the convert_flow_to_block feature integrated into yamkix_dump_all."""
+
+    def test_flow_sequences_and_maps_become_block(self, tmp_path: Path) -> None:
+        """Test that flow-style sequences and mappings are converted to block style."""
+        # GIVEN
+        yaml_content = "---\na_list: [a, b, c]\na_map: {first: yolo, second: foo}\n"
+        input_file = tmp_path / "test.yml"
+        input_file.write_text(yaml_content)
+        config = get_yamkix_config_from_default(
+            convert_flow_to_block=True,
+            io_config=YamkixInputOutputConfig(input=str(input_file), output=None),
+        )
+
+        # WHEN
+        result = round_trip_and_format(config)
+
+        # THEN
+        assert result.error is False
+        assert result.unchanged is False
+
+    def test_block_style_unchanged_when_flag_disabled(self, tmp_path: Path) -> None:
+        """Test that flow-style content is preserved when flag is off."""
+        # GIVEN: already-formatted block YAML
+        yaml_content = "---\na_list:\n  - a\n  - b\n  - c\n"
+        input_file = tmp_path / "test.yml"
+        input_file.write_text(yaml_content)
+        config = get_yamkix_config_from_default(
+            convert_flow_to_block=False,
+            io_config=YamkixInputOutputConfig(input=str(input_file), output=None),
+        )
+
+        # WHEN
+        result = round_trip_and_format(config)
+
+        # THEN
+        assert result.error is False
+        assert result.unchanged is True
+
+    def test_yamkix_dump_all_calls_convert_when_flag_set(self) -> None:
+        """Test yamkix_dump_all invokes convert_flow_to_block_style when flag is True."""
+        config = get_default_yamkix_config()
+        yaml_parser = get_opinionated_yaml_writer(config)
+        yaml_content = yaml_parser.load("a_list: [x, y]\n")
+        buf = StringIO()
+        yamkix_dump_all(
+            [yaml_content],
+            yaml_parser,
+            dash_inwards=True,
+            output_file=None,
+            spaces_before_comment=None,
+            capture_buffer=buf,
+            convert_flow_to_block=True,
+        )
+        output = buf.getvalue()
+        assert "[x, y]" not in output
+        assert "- x" in output
+        assert "- y" in output

@@ -96,6 +96,7 @@ class TestCli:
             enforce_double_quotes=default_config.enforce_double_quotes,
             line_width=default_config.line_width,
             align_comments=default_config.align_comments,
+            convert_flow_to_block=default_config.convert_flow_to_block,
             files=None,
         )
         mock_print_config.assert_called_once_with(mock_config)
@@ -130,6 +131,7 @@ class TestCli:
             enforce_double_quotes=default_config.enforce_double_quotes,
             line_width=default_config.line_width,
             align_comments=default_config.align_comments,
+            convert_flow_to_block=default_config.convert_flow_to_block,
             files=[test_file],
         )
         mock_print_config.assert_called_once_with(mock_config)
@@ -167,6 +169,7 @@ class TestCli:
             enforce_double_quotes=default_config.enforce_double_quotes,
             line_width=default_config.line_width,
             align_comments=default_config.align_comments,
+            convert_flow_to_block=default_config.convert_flow_to_block,
             files=[test_file1, test_file2],
         )
         mock_print_config.assert_called()
@@ -243,6 +246,7 @@ class TestCli:
             enforce_double_quotes=default_config.enforce_double_quotes,
             line_width=100,
             align_comments=default_config.align_comments,
+            convert_flow_to_block=default_config.convert_flow_to_block,
             files=None,
         )
 

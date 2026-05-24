@@ -58,6 +58,7 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
         enforce_double_quotes: Whether to enforce double quotes when quotes_preserved is False
         line_width: Maximum line width.
         align_comments: Whether to align EOL comments within each dict/list to the maximum column.
+        convert_flow_to_block: Whether to convert flow-style (JSON-style) collections to block style.
         version: Whether to include version information (deprecated)
         io_config: Input/Output configuration.
 
@@ -73,6 +74,7 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
     enforce_double_quotes: bool
     line_width: int
     align_comments: bool
+    convert_flow_to_block: bool
     version: bool | None
     io_config: YamkixInputOutputConfig
 
@@ -99,6 +101,8 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
             + str(self.line_width)
             + ", align_comments="
             + str(self.align_comments)
+            + ", convert_flow_to_block="
+            + str(self.convert_flow_to_block)
         )
 
 
@@ -118,6 +122,7 @@ def get_default_yamkix_config() -> YamkixConfig:
                 <li><i>spaces_before_comment = None</i></li>
                 <li><i>line_width = 2048</i></li>
                 <li><i>align_comments = False</i></li>
+                <li><i>convert_flow_to_block = False</i></li>
                 <li><i>io_config</i>:
                     <ul>
                         <li><i>input = None</i></li>
@@ -137,6 +142,7 @@ def get_default_yamkix_config() -> YamkixConfig:
         spaces_before_comment=None,
         line_width=DEFAULT_LINE_WIDTH,
         align_comments=False,
+        convert_flow_to_block=False,
         version=False,
         io_config=get_default_yamkix_input_output_config(),
     )
@@ -167,6 +173,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
     spaces_before_comment: int | None = None,
     line_width: int | None = None,
     align_comments: bool | None = None,
+    convert_flow_to_block: bool | None = None,
     io_config: YamkixInputOutputConfig | None = None,
 ) -> YamkixConfig:
     """Return a `Yamkix` configuration, based on the default one.
@@ -188,6 +195,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
         spaces_before_comment: Number of spaces before comments.
         line_width: Maximum line width.
         align_comments: Whether to align EOL comments within each dict/list to the maximum column.
+        convert_flow_to_block: Whether to convert flow-style (JSON-style) collections to block style.
         io_config: Input/Output configuration.
 
     Returns:
@@ -216,6 +224,9 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
         else default_config.spaces_before_comment,
         line_width=line_width if line_width is not None else default_config.line_width,
         align_comments=align_comments if align_comments is not None else default_config.align_comments,
+        convert_flow_to_block=convert_flow_to_block
+        if convert_flow_to_block is not None
+        else default_config.convert_flow_to_block,
         version=None,
         io_config=io_config if io_config is not None else get_default_yamkix_input_output_config(),
     )
@@ -272,6 +283,7 @@ def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixC
         io_config=yamkix_input_output_config,
         line_width=default_yamkix_config.line_width,
         align_comments=getattr(args, "align_comments", False),
+        convert_flow_to_block=getattr(args, "convert_flow_to_block", False),
     )
 
 
@@ -329,6 +341,7 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
     spaces_before_comment: int | None,
     line_width: int,
     align_comments: bool,
+    convert_flow_to_block: bool,
     files: list[Path] | None,
 ) -> list[YamkixConfig]:
     """Create a list of YamkixConfig from Typer arguments.
@@ -390,6 +403,7 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
             spaces_before_comment=spaces_before_comment,
             line_width=line_width,
             align_comments=align_comments,
+            convert_flow_to_block=convert_flow_to_block,
             version=None,
             io_config=io_config,
         )
