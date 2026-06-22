@@ -5,6 +5,7 @@ from typing import Any
 
 from rich.console import Console
 from rich.theme import Theme
+from ruamel.yaml.comments import CommentedMap, CommentedSeq
 from ruamel.yaml.scalarstring import DoubleQuotedScalarString, SingleQuotedScalarString
 
 from yamkix.__version__ import __version__
@@ -58,6 +59,22 @@ def get_stdout_console() -> Console:
     """Return the CLI rich console."""
     custom_theme = get_custom_theme()
     return Console(theme=custom_theme, stderr=False)
+
+
+def convert_flow_to_block_style(data: Any) -> None:  # noqa: ANN401
+    """Recursively convert flow-style collections to block style.
+
+    Args:
+        data: The YAML data structure to convert in-place.
+    """
+    if isinstance(data, CommentedMap):
+        data.fa.set_block_style()
+        for value in data.values():
+            convert_flow_to_block_style(value)
+    elif isinstance(data, CommentedSeq):
+        data.fa.set_block_style()
+        for item in data:
+            convert_flow_to_block_style(item)
 
 
 def convert_single_to_double_quotes(

@@ -15,7 +15,7 @@ from ruamel.yaml.scanner import ScannerError
 from yamkix.comments import align_comments, process_comments
 from yamkix.config import YamkixConfig
 from yamkix.errors import InvalidYamlContentError
-from yamkix.helpers import convert_single_to_double_quotes, strip_leading_double_space
+from yamkix.helpers import convert_flow_to_block_style, convert_single_to_double_quotes, strip_leading_double_space
 from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 
@@ -79,6 +79,7 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> FileProcessingResult:
         double_quotes_yaml=double_quotes_yaml,
         capture_buffer=output_buffer,
         align_comments_flag=yamkix_config.align_comments,
+        convert_flow_to_block=yamkix_config.convert_flow_to_block,
     )
     unchanged = output_buffer.getvalue() == raw_input
     return FileProcessingResult(
@@ -97,6 +98,7 @@ def yamkix_dump_all(  # noqa: PLR0913
     double_quotes_yaml: YAML | None = None,
     capture_buffer: StringIO | None = None,
     align_comments_flag: bool = False,
+    convert_flow_to_block: bool = False,
 ) -> None:
     """Dump all the documents from the input structure.
 
@@ -111,6 +113,7 @@ def yamkix_dump_all(  # noqa: PLR0913
         capture_buffer: An optional `StringIO` buffer that receives a copy of the dumped output.
             Used by `round_trip_and_format` to detect whether the content was changed.
         align_comments_flag: Whether to align EOL comments within each dict/list to the maximum column.
+        convert_flow_to_block: Whether to convert flow-style (JSON-style) collections to block style.
 
     """
     # Clear the output file if it is a file and it exists
@@ -118,6 +121,8 @@ def yamkix_dump_all(  # noqa: PLR0913
         with output_file_path.open(mode="w", encoding="UTF-8") as _:
             pass
     for doc in one_or_more_items:
+        if convert_flow_to_block:
+            convert_flow_to_block_style(doc)
         # If we have a double_quotes_yaml instance, then proceed to an extra roundtrip
         # the first one, using the `yaml` instance, will remove unnecessary quotes
         # and convert all quotes to single quote

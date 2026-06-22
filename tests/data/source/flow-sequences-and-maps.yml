@@ -1,0 +1,7 @@
+---
+a_list: [a, b, c]
+a_map: {first: yolo, second: foo}
+nested: {inner_list: [x, y], inner_map: {a: 1}}
+already_block:
+  - item1
+  - item2

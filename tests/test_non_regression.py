@@ -164,6 +164,18 @@ class TestNonRegression:
                 [],
                 id="issue_259_01_default_no_align",
             ),
+            pytest.param(
+                "lists-and-maps-json-style",
+                "convert-flow-to-block",
+                ["--convert-flow-to-block"],
+                id="lists_and_maps_json_style_convert_flow_to_block",
+            ),
+            pytest.param(
+                "flow-sequences-and-maps",
+                "convert-flow-to-block",
+                ["--convert-flow-to-block"],
+                id="flow_sequences_and_maps_convert_flow_to_block",
+            ),
         ],
     )
     def test_config(

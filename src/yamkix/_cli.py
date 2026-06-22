@@ -162,6 +162,14 @@ def main(  # noqa: PLR0913
             help="align EOL comments within each dict/list to the maximum column.",
         ),
     ] = False,
+    convert_flow_to_block: Annotated[
+        bool,
+        typer.Option(
+            "-b",
+            "--convert-flow-to-block",
+            help="convert flow-style (JSON-style) sequences and mappings to block style.",
+        ),
+    ] = False,
     line_width: Annotated[
         int,
         typer.Option(
@@ -216,6 +224,7 @@ def main(  # noqa: PLR0913
         enforce_double_quotes=enforce_double_quotes,
         line_width=line_width,
         align_comments=align_comments,
+        convert_flow_to_block=convert_flow_to_block,
         files=files,
     )
     console = get_stderr_console()

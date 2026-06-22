@@ -62,6 +62,7 @@ class TestGetOpinionatedYamlWriter:
             line_width=DEFAULT_LINE_WIDTH,
             enforce_double_quotes=False,
             align_comments=False,
+            convert_flow_to_block=False,
             version=False,
             io_config=YamkixInputOutputConfig(input=None, output=None),
         )
@@ -91,6 +92,7 @@ class TestGetOpinionatedYamlWriter:
             enforce_double_quotes=False,
             line_width=CUSTOM_LINE_WIDTH_120,
             align_comments=False,
+            convert_flow_to_block=False,
             version=False,
             io_config=YamkixInputOutputConfig(input=None, output=None),
         )
@@ -120,6 +122,7 @@ class TestGetOpinionatedYamlWriter:
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
             align_comments=False,
+            convert_flow_to_block=False,
             version=False,
             io_config=YamkixInputOutputConfig(input=None, output=None),
         )
@@ -146,6 +149,7 @@ class TestGetOpinionatedYamlWriter:
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
             align_comments=False,
+            convert_flow_to_block=False,
             version=False,
             io_config=YamkixInputOutputConfig(input=None, output=None),
         )
@@ -175,6 +179,7 @@ class TestGetOpinionatedYamlWriter:
             enforce_double_quotes=False,
             line_width=custom_width,
             align_comments=False,
+            convert_flow_to_block=False,
             version=False,
             io_config=YamkixInputOutputConfig(input=None, output=None),
         )
@@ -199,6 +204,7 @@ class TestGetOpinionatedYamlWriter:
             enforce_double_quotes=False,
             line_width=CUSTOM_LINE_WIDTH_100,
             align_comments=False,
+            convert_flow_to_block=False,
             version=False,
             io_config=YamkixInputOutputConfig(input=None, output=None),
         )
@@ -228,6 +234,7 @@ class TestGetOpinionatedYamlWriter:
             enforce_double_quotes=True,
             line_width=CUSTOM_LINE_WIDTH_200,
             align_comments=False,
+            convert_flow_to_block=False,
             version=True,
             io_config=YamkixInputOutputConfig(input="test.yaml", output="output.yaml"),
         )
@@ -267,6 +274,7 @@ class TestGetOpinionatedYamlWriter:
             enforce_double_quotes=False,
             line_width=DEFAULT_LINE_WIDTH,
             align_comments=False,
+            convert_flow_to_block=False,
             version=False,
             io_config=YamkixInputOutputConfig(input=None, output=None),
         )
@@ -300,6 +308,7 @@ class TestGetOpinionatedYamlWriter:
             enforce_double_quotes=False,
             line_width=line_width,
             align_comments=False,
+            convert_flow_to_block=False,
             version=False,
             io_config=YamkixInputOutputConfig(input=None, output=None),
         )
