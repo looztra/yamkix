@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.1](https://github.com/looztra/yamkix/compare/v0.16.0...v0.16.1) (2026-07-02)
+
+
+### Documentation
+
+* **claude:** add CLAUDE.md with architecture and dev commands ([#407](https://github.com/looztra/yamkix/issues/407)) ([9b7be30](https://github.com/looztra/yamkix/commit/9b7be30ea330af7ca7f16e0de0c209ed5f1da72e))
+
 ## [0.16.0](https://github.com/looztra/yamkix/compare/v0.15.0...v0.16.0) (2026-04-13)
 
 
