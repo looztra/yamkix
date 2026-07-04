@@ -69,14 +69,32 @@ plugins:
   - git-revision-date-localized:
       enable_creation_date: false
       type: iso_datetime
+  - redirects:
+      redirect_maps:
+        install.md: how-to/install.md
+        usage.md: how-to/format-files.md
+        configuration.md: explanation/formatting-rules.md
+        reference.md: reference/api.md
+        pointers.md: explanation/ecosystem.md
 nav:
-  - Introduction: index.md
-  - Configuration: configuration.md
-  - Install: install.md
-  - Usage: usage.md
-  - Public API Reference: reference.md
-  - Changelog: changelog.md
+  - Home: index.md
+  - Tutorials:
+      - Getting started: tutorials/getting-started.md
+  - How-to guides:
+      - Install: how-to/install.md
+      - Format files: how-to/format-files.md
+      - Convert flow style to block style: how-to/enforce-block-style.md
+      - Control quotes: how-to/control-quotes.md
+      - Align comments: how-to/align-comments.md
+      - Use as a pre-commit hook: how-to/pre-commit.md
+      - Editor integration: how-to/editor-integration.md
+  - Reference:
+      - CLI options: reference/cli.md
+      - Public API: reference/api.md
+      - Changelog: changelog.md
+  - Explanation:
+      - Formatting rules: explanation/formatting-rules.md
+      - Ecosystem: explanation/ecosystem.md
   - Contributing: contributing.md
-  - Pointers: pointers.md
 watch:
   - src

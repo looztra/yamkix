@@ -329,7 +329,7 @@ name = "exceptiongroup"
 version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+    { name = "typing-extensions" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/50/79/66800aadf48771f6b62f7eb014e352e5d06856655206165d775e675a02c9/exceptiongroup-1.3.1.tar.gz", hash = "sha256:8b412432c6055b0b7d14c310000ae93352ed6754f70fa8f7c34141f91c4e3219", size = 30371, upload-time = "2025-11-21T23:01:54.787Z" }
 wheels = [
@@ -710,6 +710,19 @@ wheels = [
 ]
 
 [[package]]
+name = "mkdocs-redirects"
+version = "1.2.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "mkdocs" },
+    { name = "properdocs" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/73/25/49725f78ca5d3026b09973f7a2b3a8b179cc2e8c15e43d5a13bc79f6b274/mkdocs_redirects-1.2.3.tar.gz", hash = "sha256:5e980330999299729a2d6a125347d1af78023d68a23681a4de3053ce7dfe2e51", size = 7712, upload-time = "2026-03-28T13:57:41.766Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c6/90/871b1cddc01d2ba1637b858eeeabc2e3013dc8df591306b5567b98ef0870/mkdocs_redirects-1.2.3-py3-none-any.whl", hash = "sha256:ec7312fff462d03ec16395d0c001006a418f8d0c21cdf2b47ff11cf839dc3ce0", size = 6245, upload-time = "2026-03-28T13:57:40.466Z" },
+]
+
+[[package]]
 name = "mkdocstrings"
 version = "1.0.4"
 source = { registry = "https://pypi.org/simple" }
@@ -821,6 +834,29 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/3b/f5/d501fcb67e450fd3fae9db06050420c0c6043758cfa8c30ba40278211265/poethepoet-0.46.0.tar.gz", hash = "sha256:daf8469031879ef59ef0b34fdba83574d65e41eb9186e20cd0f7c89ce479b030", size = 117276, upload-time = "2026-05-15T15:52:02.548Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/af/01/a9d6ea30351919298d3dc237172ae6a60ce0224ecaaee289b671ab979c13/poethepoet-0.46.0-py3-none-any.whl", hash = "sha256:dc6d770a14792d124abac9066c5a707876027d1878ac9ca26cf57e9b2a96dc89", size = 150581, upload-time = "2026-05-15T15:52:01.118Z" },
+]
+
+[[package]]
+name = "properdocs"
+version = "1.6.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "ghp-import" },
+    { name = "jinja2" },
+    { name = "markdown" },
+    { name = "markupsafe" },
+    { name = "packaging" },
+    { name = "pathspec" },
+    { name = "platformdirs" },
+    { name = "pyyaml" },
+    { name = "pyyaml-env-tag" },
+    { name = "watchdog" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ec/29/f27a4e1eddf72ed3db6e47818fbafe6debbf09fd7051f9c1a007239b46ef/properdocs-1.6.7.tar.gz", hash = "sha256:adc7b16e562890af0e098a7e5b02e3a81c20894a87d6a28d345c9300de73c26e", size = 276141, upload-time = "2026-03-20T20:07:48.167Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bd/4d/fc923f5c85318ee8cc903566dc4e0ebe41b2dfc1d2ecf5546db232397ed6/properdocs-1.6.7-py3-none-any.whl", hash = "sha256:6fa0cfa2e01bf338f684892c8a506cf70ea88ae7f3479c933b6fa20168101cbd", size = 225406, upload-time = "2026-03-20T20:07:46.875Z" },
 ]
 
 [[package]]
@@ -1609,6 +1645,7 @@ dev = [
     { name = "mkdocs" },
     { name = "mkdocs-git-revision-date-localized-plugin" },
     { name = "mkdocs-material" },
+    { name = "mkdocs-redirects" },
     { name = "mkdocstrings", extra = ["python"] },
     { name = "poethepoet" },
     { name = "pylint" },
@@ -1632,6 +1669,7 @@ docs = [
     { name = "mkdocs" },
     { name = "mkdocs-git-revision-date-localized-plugin" },
     { name = "mkdocs-material" },
+    { name = "mkdocs-redirects" },
     { name = "mkdocstrings", extra = ["python"] },
 ]
 
@@ -1650,6 +1688,7 @@ dev = [
     { name = "mkdocs", specifier = ">=1.6.1" },
     { name = "mkdocs-git-revision-date-localized-plugin", specifier = ">=1.4.7" },
     { name = "mkdocs-material", specifier = ">=9.6.16" },
+    { name = "mkdocs-redirects", specifier = ">=1.2.2" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=0.30.0" },
     { name = "poethepoet", specifier = ">=0.29.0" },
     { name = "pylint", specifier = ">=3.3.0" },
@@ -1673,5 +1712,6 @@ docs = [
     { name = "mkdocs", specifier = ">=1.6.1" },
     { name = "mkdocs-git-revision-date-localized-plugin", specifier = ">=1.4.7" },
     { name = "mkdocs-material", specifier = ">=9.6.16" },
+    { name = "mkdocs-redirects", specifier = ">=1.2.2" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=0.30.0" },
 ]

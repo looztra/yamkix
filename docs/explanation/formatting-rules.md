@@ -1,4 +1,8 @@
-# Configuration
+# Formatting rules
+
+This page explains the reasoning behind yamkix's opinionated defaults and the YAML concepts they rely on. For task-oriented instructions, see the [how-to guides](../how-to/format-files.md); for the exhaustive option list, see the [CLI options reference](../reference/cli.md).
+
+## The opinionated defaults
 
 - Explicit start of yaml docs by default (you can disable it with
   `--no-explicit-start`)
@@ -11,11 +15,7 @@
   [ruamel.yaml](https://pypi.python.org/pypi/ruamel.yaml) `round_trip`
   mode (you can disable it with `--typ safe`)
 
-## Output and Logging Options
-
-- Use `--silent` to suppress the configuration information that is normally printed to stderr during processing
-- Use `--summary` to print processing statistics (total files, errors, unchanged count, and elapsed time) after all files have been processed
-- Both options can be combined: `--silent --summary` will only output the summary line without per-file configuration details
+These defaults exist because YAML has no single _out of the box_ canonical format: yamkix picks one and applies it consistently, while staying conservative about everything it does not have an opinion on (quotes, collection styles, comments).
 
 ## To preserve or not to preserve quotes?
 
@@ -30,9 +30,9 @@
   - if quotes are not present around booleans and numbers, there
     will be no quotes in the output too
 
-!!! info "For double quotes lovers"
-    Starting with `v0.13.0`, there is an option, `--enforce-double-quotes`, to enforce the usage of double
-    quotes when `-q` or `--no-quotes-preserved` is used.
+See the [Control quotes](../how-to/control-quotes.md) guide for before/after examples.
+
+### Should you use quotes for yaml strings?
 
 !!! question "Should you use quotes for yaml strings?"
 
@@ -46,174 +46,44 @@
     - Use the single-quoted style (') if characters such as " and \ are being used inside the string to avoid escaping them and therefore improve readability.
     - Use the double-quoted style (") when the first two options aren't sufficient, i.e. in scenarios where more complex line breaks are required or non-printable characters are needed.
 
-### Quotes preserved (default behavior)
+## Flow style vs block style
 
-With input :
+YAML offers two ways to write collections:
 
-    ``` yaml
-    ---
-    apiVersion: extensions/v1beta1 # with comment
-    kind: ReplicaSet
-    metadata:
-      name: tname
-      namespace: tns
-      annotations:
-        string_no_quotes: frontend
-        string_single_quotes: 'frontend'
-        string_double_quotes: "frontend"
-        boolean_no_quotes: true
-        boolean_single_quotes: 'true'
-        boolean_double_quotes: "true"
-        number_no_quotes: 1
-        number_single_quotes: '1'
-        number_double_quotes: "1"
+- **Block style** uses indentation and one item per line — the style most people associate with YAML:
+
+    ```yaml
+    a_list:
+      - a
+      - b
+    a_map:
+      first: yolo
     ```
 
-the output will be the same as the input :
+- **Flow style** uses explicit indicators — square brackets `[]` for sequences and curly braces `{}` for mappings — making YAML a superset of JSON:
 
-    ``` yaml
-    ---
-    apiVersion: extensions/v1beta1 # with comment
-    kind: ReplicaSet
-    metadata:
-      name: tname
-      namespace: tns
-      annotations:
-        string_no_quotes: frontend
-        string_single_quotes: 'frontend'
-        string_double_quotes: "frontend"
-        boolean_no_quotes: true
-        boolean_single_quotes: 'true'
-        boolean_double_quotes: "true"
-        number_no_quotes: 1
-        number_single_quotes: '1'
-        number_double_quotes: "1"
+    ```yaml
+    a_list: [a, b]
+    a_map: {first: yolo}
     ```
 
-### Quotes not preserved (using `-q/--no-quotes-preserved`)
+### Why `--default-flow-style` barely affects round-tripped content
 
-With input :
+In the default `rt` (round-trip) parsing mode, `ruamel.yaml` remembers the style of **each individual collection** it parsed, so it can re-emit your document as close to the input as possible. The writer-level `--default-flow-style` setting only applies to collections that don't carry that per-node memory (e.g. newly created ones) — which is why a flow-style map in your input stays flow style in the output, whatever the writer default says.
 
-    ``` yaml
-    ---
-    apiVersion: extensions/v1beta1 # with comment
-    kind: ReplicaSet
-    metadata:
-      name: tname
-      namespace: tns
-      annotations:
-        string_no_quotes: frontend
-        string_single_quotes: 'frontend'
-        string_double_quotes: "frontend"
-        boolean_no_quotes: true
-        boolean_single_quotes: 'true'
-        boolean_double_quotes: "true"
-        number_no_quotes: 1
-        number_single_quotes: '1'
-        number_double_quotes: "1"
-    ```
+This per-node preservation is a feature (yamkix does not rewrite what you wrote), but it also means there was historically no way to *normalize* JSON-style collections to block style.
 
-the output will be :
+### Why `--enforce-block-style` exists
 
-    ``` yaml
-    ---
-    apiVersion: extensions/v1beta1 # with comment
-    kind: ReplicaSet
-    metadata:
-      name: tname
-      namespace: tns
-      annotations:
-        string_no_quotes: frontend
-        string_single_quotes: frontend
-        string_double_quotes: frontend
-        boolean_no_quotes: true
-        boolean_single_quotes: 'true'
-        boolean_double_quotes: 'true'
-        number_no_quotes: 1
-        number_single_quotes: '1'
-        number_double_quotes: '1'
-    ```
+The `-B/--enforce-block-style` option ([issue #278](https://github.com/looztra/yamkix/issues/278)) fills that gap: it walks the parsed document and switches every collection's per-node style to block before dumping. Because the per-node style always wins over the writer default, this option also takes precedence over `--default-flow-style` (yamkix prints a warning if you combine them).
 
-### Quotes not preserved and enforcing double quotes (using `-q/--no-quotes-preserved` **and** `-E/--enforce-double-quotes`)
+Two caveats worth understanding:
 
-With input :
+- **Empty collections stay flow style** (`[]` / `{}`): block style has no representation for an empty collection, so the emitter keeps the flow form.
+- **Comments attached to flow collections** are re-emitted at their original column after the conversion, which can leave extra padding on the key line. Combining with `--spaces-before-comment` normalizes them — see the [how-to guide](../how-to/enforce-block-style.md#comments-attached-to-flow-collections).
 
-    ``` yaml
-    ---
-    apiVersion: extensions/v1beta1 # with comment
-    kind: ReplicaSet
-    metadata:
-      name: tname
-      namespace: tns
-      annotations:
-        string_no_quotes: frontend
-        string_single_quotes: 'frontend'
-        string_double_quotes: "frontend"
-        boolean_no_quotes: true
-        boolean_single_quotes: 'true'
-        boolean_double_quotes: "true"
-        number_no_quotes: 1
-        number_single_quotes: '1'
-        number_double_quotes: "1"
-    ```
+## Output and Logging Options
 
-the output will be :
-
-    ``` yaml
-    ---
-    apiVersion: extensions/v1beta1 # with comment
-    kind: ReplicaSet
-    metadata:
-      name: tname
-      namespace: tns
-      annotations:
-        string_no_quotes: frontend
-        string_single_quotes: frontend
-        string_double_quotes: frontend
-        boolean_no_quotes: true
-        boolean_single_quotes: "true"
-        boolean_double_quotes: "true"
-        number_no_quotes: 1
-        number_single_quotes: "1"
-        number_double_quotes: "1"
-    ```
-
-## Aligning End-of-Line Comments
-
-When using `--typ rt` (round-trip mode, which is the default), yamkix preserves comments in your YAML files. By default, comments remain at their original position. However, you can enable comment alignment using the `-a/--align-comments` option.
-
-### Aligning comments (using `-a/--align-comments`)
-
-With input :
-
-    ``` yaml
-    ---
-    sub_key1:
-      a: 1 # comment 1
-      b: asdf # comment 2
-      c: 3.3333 # comment 3
-    sub_key2:
-      a: long text # comment 4
-      b: an even longer text # comment 5
-    ```
-
-the output with `--align-comments` will be:
-
-    ``` yaml
-    ---
-    sub_key1:
-      a: 1      # comment 1
-      b: asdf   # comment 2
-      c: 3.3333 # comment 3
-    sub_key2:
-      a: long text           # comment 4
-      b: an even longer text # comment 5
-    ```
-
-The alignment works by:
-
-- Finding the longest value in each dict/list
-- Positioning all EOL comments in that container to align with the longest value
-- Processing nested structures recursively
-
-This feature is useful when you want consistent visual alignment of comments in your YAML files, making them more readable.
+- Use `--silent` to suppress the configuration information that is normally printed to stderr during processing
+- Use `--summary` to print processing statistics (total files, errors, unchanged count, and elapsed time) after all files have been processed
+- Both options can be combined: `--silent --summary` will only output the summary line without per-file configuration details

@@ -64,6 +64,7 @@ docs = [
     "griffe-warnings-deprecated>=1.1.0",
     "griffe-typingdoc>=0.2.8",
     "mkdocs-git-revision-date-localized-plugin>=1.4.7",
+    "mkdocs-redirects>=1.2.2",
 ]
 [tool.hatch.version]
 source = "versioningit"
