@@ -2,34 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://looztra.github.io/yamkix/</loc>
-         <lastmod>2026-04-13</lastmod>
+         <lastmod>2026-07-04</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/yamkix/changelog/</loc>
-         <lastmod>2026-04-13</lastmod>
-    </url>
-    <url>
-         <loc>https://looztra.github.io/yamkix/configuration/</loc>
-         <lastmod>2026-04-13</lastmod>
+         <lastmod>2026-07-04</lastmod>
     </url>
     <url>
          <loc>https://looztra.github.io/yamkix/contributing/</loc>
-         <lastmod>2026-04-13</lastmod>
+         <lastmod>2026-07-04</lastmod>
     </url>
     <url>
-         <loc>https://looztra.github.io/yamkix/install/</loc>
-         <lastmod>2026-04-13</lastmod>
+         <loc>https://looztra.github.io/yamkix/explanation/ecosystem/</loc>
+         <lastmod>2026-07-04</lastmod>
     </url>
     <url>
-         <loc>https://looztra.github.io/yamkix/pointers/</loc>
-         <lastmod>2026-04-13</lastmod>
+         <loc>https://looztra.github.io/yamkix/explanation/formatting-rules/</loc>
+         <lastmod>2026-07-04</lastmod>
     </url>
     <url>
-         <loc>https://looztra.github.io/yamkix/reference/</loc>
-         <lastmod>2026-04-13</lastmod>
+         <loc>https://looztra.github.io/yamkix/how-to/align-comments/</loc>
+         <lastmod>2026-07-04</lastmod>
     </url>
     <url>
-         <loc>https://looztra.github.io/yamkix/usage/</loc>
-         <lastmod>2026-04-13</lastmod>
+         <loc>https://looztra.github.io/yamkix/how-to/control-quotes/</loc>
+         <lastmod>2026-07-04</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/how-to/editor-integration/</loc>
+         <lastmod>2026-07-04</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/how-to/enforce-block-style/</loc>
+         <lastmod>2026-07-04</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/how-to/format-files/</loc>
+         <lastmod>2026-07-04</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/how-to/install/</loc>
+         <lastmod>2026-07-04</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/how-to/pre-commit/</loc>
+         <lastmod>2026-07-04</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/reference/api/</loc>
+         <lastmod>2026-07-04</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/reference/cli/</loc>
+         <lastmod>2026-07-04</lastmod>
+    </url>
+    <url>
+         <loc>https://looztra.github.io/yamkix/tutorials/getting-started/</loc>
+         <lastmod>2026-07-04</lastmod>
     </url>
 </urlset>
