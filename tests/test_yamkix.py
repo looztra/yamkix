@@ -106,6 +106,7 @@ class TestRoundTripAndFormat:
         # THEN
         assert result.error is False
         assert result.unchanged is False
+        # editorconfig-checker-disable
         expected = dedent("""\
             ---
             a_list:
@@ -116,6 +117,7 @@ class TestRoundTripAndFormat:
               first: yolo
               second: foo
         """)
+        # editorconfig-checker-enable
         assert input_file.read_text() == expected
 
     def test_enforce_block_style_with_enforce_double_quotes_two_pass(self, tmp_path: Path) -> None:
@@ -139,12 +141,14 @@ class TestRoundTripAndFormat:
 
         # THEN
         assert result.error is False
+        # editorconfig-checker-disable
         expected = dedent("""\
             ---
             a:
               - "123"
               - "456"
         """)
+        # editorconfig-checker-enable
         assert input_file.read_text() == expected
 
 

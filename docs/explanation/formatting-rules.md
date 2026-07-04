@@ -19,11 +19,11 @@ These defaults exist because YAML has no single _out of the box_ canonical forma
 
 ## To preserve or not to preserve quotes?
 
-- *Quotes preserved* means : if there were quotes in the input, they
+- _Quotes preserved_ means : if there were quotes in the input, they
   will also be present in the output, and it will be the same type
   (single/double) of quotes
-- *Quotes not preserved* means :
-  - if quotes are not necessary (around *pure* strings), they will
+- _Quotes not preserved_ means :
+  - if quotes are not necessary (around _pure_ strings), they will
     be removed
   - if quotes are present around booleans and numbers, they will be
     converted to default (single quotes)
@@ -71,7 +71,7 @@ YAML offers two ways to write collections:
 
 In the default `rt` (round-trip) parsing mode, `ruamel.yaml` remembers the style of **each individual collection** it parsed, so it can re-emit your document as close to the input as possible. The writer-level `--default-flow-style` setting only applies to collections that don't carry that per-node memory (e.g. newly created ones) — which is why a flow-style map in your input stays flow style in the output, whatever the writer default says.
 
-This per-node preservation is a feature (yamkix does not rewrite what you wrote), but it also means there was historically no way to *normalize* JSON-style collections to block style.
+This per-node preservation is a feature (yamkix does not rewrite what you wrote), but it also means there was historically no way to _normalize_ JSON-style collections to block style.
 
 ### Why `--enforce-block-style` exists
 

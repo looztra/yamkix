@@ -372,11 +372,13 @@ class TestEnforceBlockStyle:
     def test_flow_map_converted_to_block(self) -> None:
         """Test that a flow-style map is converted to block style."""
         yaml_input = "a_map: {first: yolo, second: foo}\n"
+        # editorconfig-checker-disable
         expected = dedent("""\
             a_map:
               first: yolo
               second: foo
         """)
+        # editorconfig-checker-enable
         assert self._round_trip(yaml_input) == expected
 
     def test_flow_seq_converted_to_block(self) -> None:
@@ -393,6 +395,7 @@ class TestEnforceBlockStyle:
     def test_nested_flow_collections_converted_recursively(self) -> None:
         """Test that nested flow collections are converted at any depth."""
         yaml_input = "nested: {outer: {inner: [1, 2, {deep: true}]}}\n"
+        # editorconfig-checker-disable
         expected = dedent("""\
             nested:
               outer:
@@ -401,6 +404,7 @@ class TestEnforceBlockStyle:
                 - 2
                 - deep: true
         """)
+        # editorconfig-checker-enable
         assert self._round_trip(yaml_input) == expected
 
     def test_empty_collections_stay_flow(self) -> None:
@@ -413,6 +417,7 @@ class TestEnforceBlockStyle:
 
     def test_block_style_input_is_unchanged(self) -> None:
         """Test that an already block-style document is left as-is."""
+        # editorconfig-checker-disable
         yaml_input = dedent("""\
             a_list:
             - a
@@ -420,6 +425,7 @@ class TestEnforceBlockStyle:
             a_map:
               first: yolo
         """)
+        # editorconfig-checker-enable
         assert self._round_trip(yaml_input) == yaml_input
 
     def test_scalar_input_is_noop(self) -> None:
