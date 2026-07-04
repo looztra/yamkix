@@ -77,7 +77,7 @@ def convert_single_to_double_quotes(
     return obj
 
 
-def enforce_block_style(
+def convert_flow_to_block_style(
     data: Any,  # noqa: ANN401
 ) -> None:
     """Recursively convert flow-style (JSON-like) collections to block style.
@@ -98,9 +98,9 @@ def enforce_block_style(
     if isinstance(data, CommentedMap):
         data.fa.set_block_style()
         for key, value in data.items():
-            enforce_block_style(key)
-            enforce_block_style(value)
+            convert_flow_to_block_style(key)
+            convert_flow_to_block_style(value)
     elif isinstance(data, CommentedSeq):
         data.fa.set_block_style()
         for item in data:
-            enforce_block_style(item)
+            convert_flow_to_block_style(item)

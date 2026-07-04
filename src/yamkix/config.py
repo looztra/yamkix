@@ -171,7 +171,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
     dash_inwards: bool | None = None,
     quotes_preserved: bool | None = None,
     enforce_double_quotes: bool = False,
-    enforce_block_style: bool = False,
+    enforce_block_style: bool | None = None,
     spaces_before_comment: int | None = None,
     line_width: int | None = None,
     align_comments: bool | None = None,

@@ -7,8 +7,8 @@ from ruamel.yaml import YAML
 from ruamel.yaml.scalarstring import DoubleQuotedScalarString, SingleQuotedScalarString
 
 from yamkix.helpers import (
+    convert_flow_to_block_style,
     convert_single_to_double_quotes,
-    enforce_block_style,
     get_yamkix_version,
     remove_all_linebreaks,
     string_is_comment,
@@ -356,15 +356,15 @@ class TestConvertSingleToDoubleQuotes:
         assert result["config"]["debug"] is False
 
 
-class TestEnforceBlockStyle:
-    """Test cases for the enforce_block_style function."""
+class TestConvertFlowToBlockStyle:
+    """Test cases for the convert_flow_to_block_style function."""
 
     @staticmethod
     def _round_trip(yaml_input: str) -> str:
-        """Load yaml_input in rt mode, apply enforce_block_style and dump the result."""
+        """Load yaml_input in rt mode, apply convert_flow_to_block_style and dump the result."""
         yaml = YAML(typ="rt")
         data = yaml.load(yaml_input)
-        enforce_block_style(data)
+        convert_flow_to_block_style(data)
         output = StringIO()
         yaml.dump(data, output)
         return output.getvalue()
@@ -429,9 +429,9 @@ class TestEnforceBlockStyle:
         assert self._round_trip(yaml_input) == yaml_input
 
     def test_scalar_input_is_noop(self) -> None:
-        """Test that calling enforce_block_style on scalars does not raise."""
+        """Test that calling convert_flow_to_block_style on scalars does not raise."""
         for scalar in ["yolo", 42, 3.14, True, None]:
-            enforce_block_style(scalar)
+            convert_flow_to_block_style(scalar)
 
     def test_anchors_and_aliases_preserved(self) -> None:
         """Test that anchors and aliases survive the conversion."""
