@@ -5,6 +5,7 @@ from typing import Any
 
 from rich.console import Console
 from rich.theme import Theme
+from ruamel.yaml.comments import CommentedMap, CommentedSeq
 from ruamel.yaml.scalarstring import DoubleQuotedScalarString, SingleQuotedScalarString
 
 from yamkix.__version__ import __version__
@@ -74,3 +75,32 @@ def convert_single_to_double_quotes(
         # Convert single quoted to double quoted
         return DoubleQuotedScalarString(str(obj))
     return obj
+
+
+def enforce_block_style(
+    data: Any,  # noqa: ANN401
+) -> None:
+    """Recursively convert flow-style (JSON-like) collections to block style.
+
+    Sets block style on every `CommentedMap`/`CommentedSeq` at any depth.
+    Scalars are left untouched. Only applies in `rt` parsing mode where
+    collections are `CommentedMap`/`CommentedSeq` instances; plain dicts and
+    lists produced by the `safe` mode are left as-is (they are already dumped
+    in block style unless `default_flow_style` says otherwise).
+
+    Note:
+        Empty collections are still emitted flow style (`[]` / `{}`) by
+        `ruamel.yaml` as block style has no representation for them.
+
+    Args:
+        data: The YAML document (or sub-node) to process.
+    """
+    if isinstance(data, CommentedMap):
+        data.fa.set_block_style()
+        for key, value in data.items():
+            enforce_block_style(key)
+            enforce_block_style(value)
+    elif isinstance(data, CommentedSeq):
+        data.fa.set_block_style()
+        for item in data:
+            enforce_block_style(item)

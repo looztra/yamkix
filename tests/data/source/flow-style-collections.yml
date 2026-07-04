@@ -1,0 +1,11 @@
+---
+a_list: [a, b, c]
+a_map: {first: yolo, second: 42}
+nested:
+  outer: {inner: [1, 2, {deep: true}]}
+empty_list: []
+empty_map: {}
+list_of_flow_maps:
+  - {name: one}
+  - {name: two}
+quoted_in_flow: ['123', "456"]

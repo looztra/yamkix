@@ -164,6 +164,48 @@ class TestNonRegression:
                 [],
                 id="issue_259_01_default_no_align",
             ),
+            pytest.param(
+                "flow-style-collections",
+                "default",
+                [],
+                id="flow_style_collections_default",
+            ),
+            pytest.param(
+                "flow-style-collections",
+                "enforce-block-style",
+                ["--enforce-block-style"],
+                id="flow_style_collections_enforce_block_style",
+            ),
+            pytest.param(
+                "flow-style-collections",
+                "default-flow-style-and-enforce-block-style",
+                ["--default-flow-style", "--enforce-block-style"],
+                id="flow_style_collections_default_flow_style_conflict",
+            ),
+            pytest.param(
+                "flow-style-collections",
+                "no-quotes-preserved-enforce-double-quotes-enforce-block-style",
+                ["--no-quotes-preserved", "--enforce-double-quotes", "--enforce-block-style"],
+                id="flow_style_collections_no_quotes_preserved_enforce_double_quotes_enforce_block_style",
+            ),
+            pytest.param(
+                "flow-style-with-comments",
+                "enforce-block-style",
+                ["--enforce-block-style"],
+                id="flow_style_with_comments_enforce_block_style",
+            ),
+            pytest.param(
+                "flow-style-with-comments",
+                "enforce-block-style-spaces-before-comment-1",
+                ["--enforce-block-style", "--spaces-before-comment", "1"],
+                id="flow_style_with_comments_enforce_block_style_spaces_before_comment_1",
+            ),
+            pytest.param(
+                "lists-and-maps-json-style",
+                "enforce-block-style",
+                ["--enforce-block-style"],
+                id="lists_and_maps_json_style_enforce_block_style",
+            ),
         ],
     )
     def test_config(

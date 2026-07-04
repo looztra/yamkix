@@ -1,0 +1,5 @@
+---
+# leading comment
+a_list: [a, b] # eol comment on flow seq
+a_map: {k: v} # eol comment on flow map
+plain: value # regular comment

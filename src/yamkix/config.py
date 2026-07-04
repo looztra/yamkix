@@ -60,6 +60,8 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
         align_comments: Whether to align EOL comments within each dict/list to the maximum column.
         version: Whether to include version information (deprecated)
         io_config: Input/Output configuration.
+        enforce_block_style: Whether to convert flow-style (JSON-like) collections to block style.
+            Only applies in `rt` parsing mode. Takes precedence over `default_flow_style`.
 
     """
 
@@ -75,6 +77,7 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
     align_comments: bool
     version: bool | None
     io_config: YamkixInputOutputConfig
+    enforce_block_style: bool = False
 
     def __str__(self) -> str:
         """Return a string representation of the YamkixConfig."""
@@ -91,6 +94,8 @@ class YamkixConfig:  # pylint: disable=too-many-instance-attributes
             + str(self.quotes_preserved)
             + ", enforce_double_quotes="
             + str(self.enforce_double_quotes)
+            + ", enforce_block_style="
+            + str(self.enforce_block_style)
             + ", dash_inwards="
             + str(self.dash_inwards)
             + ", spaces_before_comment="
@@ -115,6 +120,7 @@ def get_default_yamkix_config() -> YamkixConfig:
                 <li><i>dash_inwards = True</i></li>
                 <li><i>quotes_preserved = True</i></li>
                 <li><i>enforce_double_quotes = False</i></li>
+                <li><i>enforce_block_style = False</i></li>
                 <li><i>spaces_before_comment = None</i></li>
                 <li><i>line_width = 2048</i></li>
                 <li><i>align_comments = False</i></li>
@@ -134,6 +140,7 @@ def get_default_yamkix_config() -> YamkixConfig:
         dash_inwards=True,
         quotes_preserved=True,
         enforce_double_quotes=False,
+        enforce_block_style=False,
         spaces_before_comment=None,
         line_width=DEFAULT_LINE_WIDTH,
         align_comments=False,
@@ -164,6 +171,7 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
     dash_inwards: bool | None = None,
     quotes_preserved: bool | None = None,
     enforce_double_quotes: bool = False,
+    enforce_block_style: bool = False,
     spaces_before_comment: int | None = None,
     line_width: int | None = None,
     align_comments: bool | None = None,
@@ -185,6 +193,8 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
         quotes_preserved: Whether to preserve quotes, i.e. preserve the original quotes
             used in the input in the output.
         enforce_double_quotes: Whether to enforce double quotes when quotes_preserved is False.
+        enforce_block_style: Whether to convert flow-style (JSON-like) collections to block style.
+            Only applies in `rt` parsing mode. Takes precedence over `default_flow_style`.
         spaces_before_comment: Number of spaces before comments.
         line_width: Maximum line width.
         align_comments: Whether to align EOL comments within each dict/list to the maximum column.
@@ -211,6 +221,9 @@ def get_yamkix_config_from_default(  # noqa: PLR0913
         enforce_double_quotes=enforce_double_quotes
         if enforce_double_quotes is not None
         else default_config.enforce_double_quotes,
+        enforce_block_style=enforce_block_style
+        if enforce_block_style is not None
+        else default_config.enforce_block_style,
         spaces_before_comment=spaces_before_comment
         if spaces_before_comment is not None
         else default_config.spaces_before_comment,
@@ -272,6 +285,7 @@ def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixC
         io_config=yamkix_input_output_config,
         line_width=default_yamkix_config.line_width,
         align_comments=getattr(args, "align_comments", False),
+        enforce_block_style=getattr(args, "enforce_block_style", False),
     )
 
 
@@ -296,6 +310,20 @@ def raise_enforce_double_quotes_warning_if_needed(
     if no_quotes_preserved is False and enforce_double_quotes is True:
         stderr_console.print(
             "WARNING: Option '--enforce-double-quotes' is useless unless '--no-quotes-preserved' is also set.",
+            style="warning",
+        )
+
+
+def raise_enforce_block_style_warning_if_needed(
+    enforce_block_style: bool,
+    default_flow_style: bool,
+) -> None:
+    """Raise a warning if needed based on the config."""
+    stderr_console = get_stderr_console()
+    if enforce_block_style is True and default_flow_style is True:
+        stderr_console.print(
+            "WARNING: Option '--enforce-block-style' overrides '--default-flow-style': "
+            "all collections will be dumped in block style.",
             style="warning",
         )
 
@@ -330,6 +358,7 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
     line_width: int,
     align_comments: bool,
     files: list[Path] | None,
+    enforce_block_style: bool = False,
 ) -> list[YamkixConfig]:
     """Create a list of YamkixConfig from Typer arguments.
 
@@ -341,6 +370,9 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
     """
     raise_enforce_double_quotes_warning_if_needed(
         enforce_double_quotes=enforce_double_quotes, no_quotes_preserved=no_quotes_preserved
+    )
+    raise_enforce_block_style_warning_if_needed(
+        enforce_block_style=enforce_block_style, default_flow_style=default_flow_style
     )
     raise_input_output_warning_if_needed(files=files, input_file=input_file, output_file=output_file, stdout=stdout)
     if files is not None:
@@ -386,6 +418,7 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913
             dash_inwards=not no_dash_inwards,
             quotes_preserved=not no_quotes_preserved,
             enforce_double_quotes=enforce_double_quotes,
+            enforce_block_style=enforce_block_style,
             parsing_mode=typ,
             spaces_before_comment=spaces_before_comment,
             line_width=line_width,
