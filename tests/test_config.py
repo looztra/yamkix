@@ -1,4 +1,5 @@
 """Tests the YamkixConfig stuff."""
+# pylint: disable=too-many-lines
 
 from argparse import Namespace
 from pathlib import Path
@@ -20,6 +21,7 @@ from yamkix.config import (
     get_spaces_before_comment_from_args,
     get_yamkix_config_from_default,
     print_yamkix_config,
+    raise_enforce_block_style_warning_if_needed,
     raise_enforce_double_quotes_warning_if_needed,
     raise_input_output_warning_if_needed,
 )
@@ -165,6 +167,7 @@ class TestYamkixConfigFromArgs:
         assert sut.quotes_preserved is True
         assert sut.spaces_before_comment is None
         assert sut.line_width == DEFAULT_LINE_WIDTH
+        assert sut.enforce_block_style is False
         assert sut.version is False
 
     def test_get_config_from_args_with_invalid_typ(self) -> None:
@@ -221,6 +224,7 @@ class TestYamkixConfigFromArgs:
         assert sut.quotes_preserved == yamkix_default_config.quotes_preserved
         assert sut.spaces_before_comment == yamkix_default_config.spaces_before_comment
         assert sut.line_width == yamkix_default_config.line_width
+        assert sut.enforce_block_style == yamkix_default_config.enforce_block_style
         assert sut.version == yamkix_default_config.version
 
     def test_get_config_from_args_with_no_io(self) -> None:
@@ -450,6 +454,24 @@ class TestGetYamkixConfigFromDefault:
         assert sut.line_width == reference.line_width
         assert sut.io_config == reference.io_config
 
+    def test_get_yamkix_config_from_default_enforce_block_style(self) -> None:
+        """Test get_yamkix_config_from_default.
+
+        change enforce_block_style
+        """
+        reference = get_yamkix_config_from_default()
+        sut = get_yamkix_config_from_default(enforce_block_style=True)
+        assert sut.parsing_mode == reference.parsing_mode
+        assert sut.explicit_start == reference.explicit_start
+        assert sut.explicit_end == reference.explicit_end
+        assert sut.default_flow_style == reference.default_flow_style
+        assert sut.dash_inwards == reference.dash_inwards
+        assert sut.quotes_preserved == reference.quotes_preserved
+        assert sut.spaces_before_comment == reference.spaces_before_comment
+        assert sut.enforce_block_style is True
+        assert sut.line_width == reference.line_width
+        assert sut.io_config == reference.io_config
+
     def test_get_yamkix_config_from_default_io_config(self) -> None:
         """Test get_yamkix_config_from_default.
 
@@ -503,6 +525,30 @@ class TestCreateYamkixConfigFromTyperArgs:
         assert configs[0].dash_inwards  # not no_dash_inwards
         assert configs[0].spaces_before_comment == 1
         assert configs[0].enforce_double_quotes is False
+        assert configs[0].enforce_block_style is False
+
+    def test_create_yamkix_config_from_typer_args_enforce_block_style(self) -> None:
+        """Test the config creation function with enforce_block_style set."""
+        configs = create_yamkix_config_from_typer_args(
+            input_file=None,
+            output_file=None,
+            stdout=False,
+            typ="rt",
+            no_explicit_start=False,
+            explicit_end=False,
+            no_quotes_preserved=False,
+            default_flow_style=False,
+            no_dash_inwards=False,
+            spaces_before_comment=None,
+            enforce_double_quotes=False,
+            line_width=DEFAULT_LINE_WIDTH,
+            align_comments=False,
+            files=None,
+            enforce_block_style=True,
+        )
+
+        assert len(configs) == 1
+        assert configs[0].enforce_block_style is True
 
     def test_create_yamkix_config_stdout_override(self) -> None:
         """Test that stdout option overrides output file."""
@@ -803,7 +849,8 @@ class TestPrintYamkixConfig:
         # THEN
         expected = (
             "typ=rt, explicit_start=True, explicit_end=False, default_flow_style=False, "
-            "quotes_preserved=True, enforce_double_quotes=False, dash_inwards=True, spaces_before_comment=None"
+            "quotes_preserved=True, enforce_double_quotes=False, enforce_block_style=False, "
+            "dash_inwards=True, spaces_before_comment=None"
             ", line_width=2048, align_comments=False"
         )
         assert result == expected
@@ -834,6 +881,7 @@ class TestPrintYamkixConfig:
         assert "explicit_end=False" in message
         assert "default_flow_style=False" in message
         assert "quotes_preserved=True" in message
+        assert "enforce_block_style=False" in message
         assert "dash_inwards=True" in message
         assert "spaces_before_comment=None" in message
 
@@ -881,6 +929,52 @@ class TestRaiseEnforceDoubleQuotesWarning:
         raise_enforce_double_quotes_warning_if_needed(
             enforce_double_quotes=enforce_double_quotes,
             no_quotes_preserved=no_quotes_preserved,
+        )
+
+        # THEN
+        mock_console.print.assert_not_called()
+
+
+class TestRaiseEnforceBlockStyleWarning:
+    """Test the raise_enforce_block_style_warning_if_needed function."""
+
+    def test_warning_is_raised(self, mocker: MockerFixture) -> None:
+        """Test that a warning is raised when needed."""
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
+        mock_console = mocker.Mock()
+        mock_get_stderr_console.return_value = mock_console
+
+        # WHEN
+        raise_enforce_block_style_warning_if_needed(
+            enforce_block_style=True,
+            default_flow_style=True,
+        )
+
+        # THEN
+        mock_console.print.assert_called_once()
+        args, _ = mock_console.print.call_args
+        assert "WARNING: Option '--enforce-block-style' overrides '--default-flow-style'" in args[0]
+
+    @pytest.mark.parametrize(
+        ("enforce_block_style", "default_flow_style"),
+        [
+            pytest.param(False, False, id="neither_set"),
+            pytest.param(True, False, id="only_enforce_block_style_set"),
+            pytest.param(False, True, id="only_default_flow_style_set"),
+        ],
+    )
+    def test_no_warning_is_raised(
+        self, mocker: MockerFixture, enforce_block_style: bool, default_flow_style: bool
+    ) -> None:
+        """Test that no warning is raised when not needed."""
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
+        mock_console = mocker.Mock()
+        mock_get_stderr_console.return_value = mock_console
+
+        # WHEN
+        raise_enforce_block_style_warning_if_needed(
+            enforce_block_style=enforce_block_style,
+            default_flow_style=default_flow_style,
         )
 
         # THEN

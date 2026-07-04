@@ -1,11 +1,10 @@
-# How to use Yamkix
+# Format files
 
-## Standalone
+This guide shows the different ways to feed YAML content to `yamkix` and control where the formatted output goes.
 
-- Just use `yamkix` like any other CLI
-- Check the available options with `yamkix --help` (and have a look at the [configuration](configuration.md) documentation)
+Check the available options with `yamkix --help` (or see the [CLI options reference](../reference/cli.md)).
 
-### Formatting a **single** yaml file and control where to output the outcome
+## Format a **single** yaml file and control where to output the outcome
 
 - Use the `-i/--input` option to identify the source file
 - If you don't specify any output option with `-o/--output` or `-s/--stdout` then the result will overwrite the source file
@@ -51,7 +50,7 @@
       yolo: baz
     ```
 
-### Reading from STDIN
+## Read from STDIN
 
 - You can format the input provide through `stdin`
 - `stdin` input can be specified explicitly, using `--input STDIN`
@@ -68,7 +67,7 @@
 
 - if `stdin` is used for input and nothing is specified for output, then `stdout` will be used for output.
 
-### Formatting **multiple** files
+## Format **multiple** files
 
 - If you need to format multiple files in a single call to `Yamkix`, don't use `-i/--input`, just pass the list of files as arguments to the `yamkix` cli
 
@@ -79,7 +78,7 @@
 !!! Note
     It is not possible to output to `stdout` when formatting multiple files (feel free to [raise an issue](https://github.com/looztra/yamkix/issues) if you are interested in this feature).
 
-### Processing summary
+## Print a processing summary
 
 - Use `--summary` to print processing statistics after all files have been processed
 - The summary includes:
@@ -101,67 +100,3 @@
     # Produces minimal output:
     # [yamkix] Summary: 2 file(s) processed, 0 error(s), 1 unchanged, 0.042s
     ```
-
-## Pre-commit hook
-
-- Since `v0.12.0`, you can now use `yamkix` as a pre-commit hook:
-
-    ```yaml
-    repos:
-      - repo: https://github.com/looztra/yamkix
-      rev: v0.12.0
-      hooks:
-        - id: yamkix
-    ```
-
-- you can pass options to `yamkix`through the `args` key:
-
-    ```yaml
-    repos:
-      - repo: https://github.com/looztra/yamkix
-      rev: v0.12.0
-      hooks:
-        - id: yamkix
-          args: [--no-quotes-preserved]
-    ```
-
-- you can control which files will be parsed with the `exclude` key:
-
-    ```yaml
-    repos:
-      - repo: https://github.com/looztra/yamkix
-      rev: v0.12.0
-      hooks:
-        - id: yamkix
-          args: [--no-quotes-preserved]
-          exclude: |
-            (?x)^(
-                test-assets/.*|
-                tests/data/.*
-            )$
-    ```
-
-!!! Note
-    `args` and `exclude` are related to the [pre-commit framework](https://pre-commit.com/#pre-commit-configyaml---hooks), **not** to yamkix.
-
-## VSCode Task
-
-- Install the package with `uv tool install yamkix` (or `pip install --user yamkix` if you are not using [uv](https://docs.astral.sh/uv/concepts/tools/))
-
-- Sample **vscode** task :
-
-<!-- end list -->
-
-``` json
-{
-  "label": "format yaml with yamkix",
-  "type": "shell",
-  "command": "yamkix --input ${file}",
-  "group": "build",
-  "presentation": {
-    "reveal": "always",
-    "panel": "shared"
-  },
-  "problemMatcher": []
-}
-```

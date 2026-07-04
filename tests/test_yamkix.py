@@ -85,6 +85,72 @@ class TestRoundTripAndFormat:
         assert result.error is False
         assert result.unchanged is False
 
+    def test_enforce_block_style_end_to_end(self, tmp_path: Path) -> None:
+        """Test that round_trip_and_format converts flow-style collections when enforce_block_style is set."""
+        # GIVEN
+        yaml_content = dedent("""\
+            ---
+            a_list: [a, b, c]
+            a_map: {first: yolo, second: foo}
+        """)
+        input_file = tmp_path / "test.yml"
+        input_file.write_text(yaml_content)
+        config = get_yamkix_config_from_default(
+            enforce_block_style=True,
+            io_config=YamkixInputOutputConfig(input=str(input_file), output=str(input_file)),
+        )
+
+        # WHEN
+        result = round_trip_and_format(config)
+
+        # THEN
+        assert result.error is False
+        assert result.unchanged is False
+        # editorconfig-checker-disable
+        expected = dedent("""\
+            ---
+            a_list:
+              - a
+              - b
+              - c
+            a_map:
+              first: yolo
+              second: foo
+        """)
+        # editorconfig-checker-enable
+        assert input_file.read_text() == expected
+
+    def test_enforce_block_style_with_enforce_double_quotes_two_pass(self, tmp_path: Path) -> None:
+        """Test that enforce_block_style survives the enforce_double_quotes second round-trip."""
+        # GIVEN: numeric-looking strings so quotes are required and get double-quoted
+        yaml_content = dedent("""\
+            ---
+            a: ['123', "456"]
+        """)
+        input_file = tmp_path / "test.yml"
+        input_file.write_text(yaml_content)
+        config = get_yamkix_config_from_default(
+            quotes_preserved=False,
+            enforce_double_quotes=True,
+            enforce_block_style=True,
+            io_config=YamkixInputOutputConfig(input=str(input_file), output=str(input_file)),
+        )
+
+        # WHEN
+        result = round_trip_and_format(config)
+
+        # THEN
+        assert result.error is False
+        # editorconfig-checker-disable
+        expected = dedent("""\
+            ---
+            a:
+              - "123"
+              - "456"
+        """)
+        # editorconfig-checker-enable
+        assert input_file.read_text() == expected
+
 
 class TestYamkixDumpAll:
     """Provide tests for the yamkix_dump_all function."""

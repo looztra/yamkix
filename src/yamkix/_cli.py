@@ -133,6 +133,17 @@ def main(  # noqa: PLR0913
             ),
         ),
     ] = False,
+    enforce_block_style: Annotated[
+        bool,
+        typer.Option(
+            "-B",
+            "--enforce-block-style",
+            help=(
+                "convert flow-style (JSON-like) maps and lists to block style. "
+                "Overrides --default-flow-style. Empty collections ([] and {}) are kept as-is."
+            ),
+        ),
+    ] = False,
     no_dash_inwards: Annotated[
         bool,
         typer.Option(
@@ -214,6 +225,7 @@ def main(  # noqa: PLR0913
         no_dash_inwards=no_dash_inwards,
         spaces_before_comment=spaces_before_comment,
         enforce_double_quotes=enforce_double_quotes,
+        enforce_block_style=enforce_block_style,
         line_width=line_width,
         align_comments=align_comments,
         files=files,

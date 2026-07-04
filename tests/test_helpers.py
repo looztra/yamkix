@@ -1,8 +1,13 @@
 """Test helpers."""
 
+from io import StringIO
+from textwrap import dedent
+
+from ruamel.yaml import YAML
 from ruamel.yaml.scalarstring import DoubleQuotedScalarString, SingleQuotedScalarString
 
 from yamkix.helpers import (
+    convert_flow_to_block_style,
     convert_single_to_double_quotes,
     get_yamkix_version,
     remove_all_linebreaks,
@@ -349,3 +354,95 @@ class TestConvertSingleToDoubleQuotes:
         assert result["users"][0]["settings"]["timeout"] == timeout_value
         assert result["users"][1]["tags"][1] == "user"
         assert result["config"]["debug"] is False
+
+
+class TestConvertFlowToBlockStyle:
+    """Test cases for the convert_flow_to_block_style function."""
+
+    @staticmethod
+    def _round_trip(yaml_input: str) -> str:
+        """Load yaml_input in rt mode, apply convert_flow_to_block_style and dump the result."""
+        yaml = YAML(typ="rt")
+        data = yaml.load(yaml_input)
+        convert_flow_to_block_style(data)
+        output = StringIO()
+        yaml.dump(data, output)
+        return output.getvalue()
+
+    def test_flow_map_converted_to_block(self) -> None:
+        """Test that a flow-style map is converted to block style."""
+        yaml_input = "a_map: {first: yolo, second: foo}\n"
+        # editorconfig-checker-disable
+        expected = dedent("""\
+            a_map:
+              first: yolo
+              second: foo
+        """)
+        # editorconfig-checker-enable
+        assert self._round_trip(yaml_input) == expected
+
+    def test_flow_seq_converted_to_block(self) -> None:
+        """Test that a flow-style sequence is converted to block style."""
+        yaml_input = "a_list: [a, b, c]\n"
+        expected = dedent("""\
+            a_list:
+            - a
+            - b
+            - c
+        """)
+        assert self._round_trip(yaml_input) == expected
+
+    def test_nested_flow_collections_converted_recursively(self) -> None:
+        """Test that nested flow collections are converted at any depth."""
+        yaml_input = "nested: {outer: {inner: [1, 2, {deep: true}]}}\n"
+        # editorconfig-checker-disable
+        expected = dedent("""\
+            nested:
+              outer:
+                inner:
+                - 1
+                - 2
+                - deep: true
+        """)
+        # editorconfig-checker-enable
+        assert self._round_trip(yaml_input) == expected
+
+    def test_empty_collections_stay_flow(self) -> None:
+        """Test that empty collections are still emitted flow style ([] and {})."""
+        yaml_input = dedent("""\
+            empty_list: []
+            empty_map: {}
+        """)
+        assert self._round_trip(yaml_input) == yaml_input
+
+    def test_block_style_input_is_unchanged(self) -> None:
+        """Test that an already block-style document is left as-is."""
+        # editorconfig-checker-disable
+        yaml_input = dedent("""\
+            a_list:
+            - a
+            - b
+            a_map:
+              first: yolo
+        """)
+        # editorconfig-checker-enable
+        assert self._round_trip(yaml_input) == yaml_input
+
+    def test_scalar_input_is_noop(self) -> None:
+        """Test that calling convert_flow_to_block_style on scalars does not raise."""
+        for scalar in ["yolo", 42, 3.14, True, None]:
+            convert_flow_to_block_style(scalar)
+
+    def test_anchors_and_aliases_preserved(self) -> None:
+        """Test that anchors and aliases survive the conversion."""
+        yaml_input = dedent("""\
+            base: &anc [x, y]
+            copy: *anc
+        """)
+        expected = dedent("""\
+            base: &anc
+            - x
+            - y
+            copy: *anc
+        """)
+        assert self._round_trip(yaml_input) == expected
