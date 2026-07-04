@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.17.0](https://github.com/looztra/yamkix/compare/v0.16.0...v0.17.0) (2026-07-04)
+
+
+### Features
+
+* **cli:** add --enforce-block-style to convert flow-style collections to block style ([#429](https://github.com/looztra/yamkix/issues/429)) ([d8cb8a5](https://github.com/looztra/yamkix/commit/d8cb8a5e856842d4a69c47f7f6ec9d0d6482f179))
+
+
+### Documentation
+
+* **claude:** add CLAUDE.md with architecture and dev commands ([#407](https://github.com/looztra/yamkix/issues/407)) ([9b7be30](https://github.com/looztra/yamkix/commit/9b7be30ea330af7ca7f16e0de0c209ed5f1da72e))
+
 ## [0.16.0](https://github.com/looztra/yamkix/compare/v0.15.0...v0.16.0) (2026-04-13)
 
 
