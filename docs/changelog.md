@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.0](https://github.com/looztra/yamkix/compare/v1.0.0...v1.1.0) (2026-07-05)
+
+
+### Bug Fixes
+
+* **emitter:** strip trailing spaces at line-width fold points ([#437](https://github.com/looztra/yamkix/issues/437)) ([#439](https://github.com/looztra/yamkix/issues/439)) ([9f90403](https://github.com/looztra/yamkix/commit/9f904032ba4283e021111601ed208143fa423eba))
+
+
+### Documentation
+
+* **explanation:** compare yamkix defaults with yamllint relaxed preset ([#436](https://github.com/looztra/yamkix/issues/436)) ([3513bb8](https://github.com/looztra/yamkix/commit/3513bb8c3026b61c3155af1a68a3848e64742de9))
+
+
+### Miscellaneous Chores
+
+* **version:** release 1.1.0 ([49b37f3](https://github.com/looztra/yamkix/commit/49b37f3abf1e992218f1076369f9da4246f183e2))
+
 ## [1.0.0](https://github.com/looztra/yamkix/compare/v0.17.0...v1.0.0) (2026-07-05)
 
 
