@@ -72,7 +72,7 @@ yamkix --input file.yml --line-width 80
 
     Each `␣` is a real trailing space, and `trailing-spaces` is an **error-level** rule in both the `default` and `relaxed` presets — so wrapping converts a warning-level `line-length` finding into hard errors. Folded flow collections can additionally trip the `indentation` rule, and non-breakable tokens (long URLs…) still exceed the width anyway (tolerated by yamllint thanks to `allow-non-breakable-words: true`).
 
-    This is why yamkix ships with `line_width=2048`: until the emitter folds cleanly, the right place to reconcile the two tools is the yamllint config, not the yamkix flag — see the companion config below.
+    This is why yamkix ships with `line_width=2048`: until the emitter folds cleanly ([issue #437](https://github.com/looztra/yamkix/issues/437)), the right place to reconcile the two tools is the yamllint config, not the yamkix flag — see the companion config below.
 
 ## Bottom line
 
