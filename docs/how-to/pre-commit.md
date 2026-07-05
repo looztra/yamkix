@@ -7,7 +7,7 @@ This guide shows how to run `yamkix` automatically on your YAML files with the [
     ```yaml
     repos:
       - repo: https://github.com/looztra/yamkix
-      rev: v0.12.0
+      rev: v1.0.0
       hooks:
         - id: yamkix
     ```
@@ -17,10 +17,10 @@ This guide shows how to run `yamkix` automatically on your YAML files with the [
     ```yaml
     repos:
       - repo: https://github.com/looztra/yamkix
-      rev: v0.12.0
+      rev: v1.0.0
       hooks:
         - id: yamkix
-          args: [--no-quotes-preserved]
+          args: [--no-quotes-preserved, --silent]
     ```
 
 - you can control which files will be parsed with the `exclude` key:
@@ -28,10 +28,10 @@ This guide shows how to run `yamkix` automatically on your YAML files with the [
     ```yaml
     repos:
       - repo: https://github.com/looztra/yamkix
-      rev: v0.12.0
+      rev: v1.0.0
       hooks:
         - id: yamkix
-          args: [--no-quotes-preserved]
+          args: [--no-quotes-preserved, --silent]
           exclude: |
             (?x)^(
                 test-assets/.*|
