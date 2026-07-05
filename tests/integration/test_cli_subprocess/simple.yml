@@ -1,0 +1,7 @@
+---
+toto: foo
+titi:
+  - bar
+  - quix
+tutu:
+  yolo: baz
