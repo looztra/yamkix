@@ -79,6 +79,20 @@ class TestCliSubprocess:
         assert "input=STDIN" in result.stderr
         assert "output=STDOUT" in result.stderr
 
+    def test_line_width_output_has_no_trailing_spaces(self, datadir: Path) -> None:
+        """Test that wrapped lines produced by --line-width carry no trailing spaces (issue #437)."""
+        # GIVEN
+        source = datadir / "issue-437.yml"
+        expected = datadir / "issue-437--line-width-80.yml"
+
+        # WHEN
+        result = run_yamkix(["--input", str(source), "--output", "STDOUT", "--line-width", "80"])
+
+        # THEN
+        assert result.returncode == 0
+        assert result.stdout == expected.read_text()
+        assert not any(line.endswith(" ") for line in result.stdout.splitlines())
+
     def test_stdin_silent(self, datadir: Path) -> None:
         """Test that STDIN input in silent mode does not print the config banner to stderr."""
         # GIVEN

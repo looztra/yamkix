@@ -3,6 +3,7 @@
 from io import StringIO
 from textwrap import dedent
 
+import pytest
 from ruamel.yaml import YAML
 from ruamel.yaml.scalarstring import DoubleQuotedScalarString, SingleQuotedScalarString
 
@@ -13,6 +14,8 @@ from yamkix.helpers import (
     remove_all_linebreaks,
     string_is_comment,
     strip_leading_double_space,
+    strip_leading_double_space_and_trailing_spaces,
+    strip_trailing_spaces,
 )
 
 
@@ -132,6 +135,31 @@ def test_strip_leading_double_space_when_none() -> None:
     stream = "text1\ntext2\n"
     actual = strip_leading_double_space(stream)
     assert actual == stream
+
+
+@pytest.mark.parametrize(
+    ("stream", "expected"),
+    [
+        pytest.param("text1 \n  text2 \n", "text1\n  text2\n", id="fold_point_trailing_spaces"),
+        pytest.param("text1\ntext2\n", "text1\ntext2\n", id="no_trailing_spaces"),
+        pytest.param("text1   \n", "text1\n", id="multiple_trailing_spaces"),
+        pytest.param("text1 ", "text1", id="no_trailing_newline"),
+        pytest.param("", "", id="empty_stream"),
+        pytest.param('quoted: "line one \\nline two"\n', 'quoted: "line one \\nline two"\n', id="escaped_space_kept"),
+    ],
+)
+def test_strip_trailing_spaces(stream: str, expected: str) -> None:
+    """Test strip_trailing_spaces removes end-of-line spaces without touching anything else."""
+    assert strip_trailing_spaces(stream) == expected
+
+
+def test_strip_leading_double_space_and_trailing_spaces() -> None:
+    """Test the composition of strip_leading_double_space and strip_trailing_spaces."""
+    stream = "  text1 \n  text2  \ntext3\n"
+
+    actual = strip_leading_double_space_and_trailing_spaces(stream)
+    expected = "text1\ntext2\ntext3\n"
+    assert actual == expected
 
 
 def test_get_yamkix_version() -> None:

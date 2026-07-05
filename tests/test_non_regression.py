@@ -206,6 +206,18 @@ class TestNonRegression:
                 ["--enforce-block-style"],
                 id="lists_and_maps_json_style_enforce_block_style",
             ),
+            pytest.param(
+                "issue-437",
+                "line-width-80",
+                ["--line-width", "80"],
+                id="issue_437_line_width_80_no_trailing_spaces",
+            ),
+            pytest.param(
+                "issue-437",
+                "default",
+                [],
+                id="issue_437_default",
+            ),
         ],
     )
     def test_config(
