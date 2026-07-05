@@ -4,6 +4,10 @@
 
 `Yamkix` relies on the awesome [ruamel.yaml](https://yaml.dev/doc/ruamel.yaml/) package.
 
+## yamllint
+
+[yamllint](https://yamllint.readthedocs.io/en/stable/) is the natural linter neighbor of a formatter like `yamkix`: it checks YAML where `yamkix` rewrites it. See [Comparison with yamllint](yamllint-relaxed.md) for a detailed analysis of how `yamkix` default output relates to yamllint's `relaxed` preset.
+
 ## kubesplit
 
 - [kubesplit](https://github.com/looztra/kubesplit) (from the same author as `yamkix`) uses `yamkix` under the hood to format the yaml descriptors that it generates.

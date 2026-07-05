@@ -95,6 +95,7 @@ nav:
   - Explanation:
       - Formatting rules: explanation/formatting-rules.md
       - Ecosystem: explanation/ecosystem.md
+      - Comparison with yamllint: explanation/yamllint-relaxed.md
   - Contributing: contributing.md
 watch:
   - src
