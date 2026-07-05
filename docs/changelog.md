@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.0](https://github.com/looztra/yamkix/compare/v0.17.0...v1.0.0) (2026-07-05)
+
+
+### Miscellaneous Chores
+
+* **version:** release 1.0.0 ([#431](https://github.com/looztra/yamkix/issues/431)) ([7383cac](https://github.com/looztra/yamkix/commit/7383cace75c46598ba023b7b95d5cab5a45abe2a))
+
 ## [0.17.0](https://github.com/looztra/yamkix/compare/v0.16.0...v0.17.0) (2026-07-04)
 
 
