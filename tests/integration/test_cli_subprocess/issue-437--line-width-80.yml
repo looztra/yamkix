@@ -1,0 +1,10 @@
+---
+description: this is a fairly long plain scalar value that will definitely
+  exceed the eighty character limit imposed by yamllint default and relaxed
+  presets
+a_list: [one, two, three, four, five, six, seven, eight, nine, ten, eleven,
+      twelve, thirteen, fourteen]
+embedded_space_break: "line one \nline two"
+block: |
+  literal content
+  stays intact

@@ -60,19 +60,11 @@ In theory, yes: the `-w/--line-width` option sets the wrap width (default `2048`
 yamkix --input file.yml --line-width 80
 ```
 
-!!! warning "In practice, don't: you will trade a warning for errors"
+!!! note "Fold-point trailing spaces: fixed since 1.1.0"
 
-    The underlying `ruamel.yaml` emitter leaves a **trailing space at every fold point** when it wraps plain scalars and flow collections:
+    The underlying `ruamel.yaml` emitter leaves a **trailing space at every fold point** when it wraps plain scalars and flow collections — and `trailing-spaces` is an **error-level** rule in both the `default` and `relaxed` presets. Since yamkix 1.1.0 this artifact is stripped from the output ([issue #437](https://github.com/looztra/yamkix/issues/437)), so wrapped output no longer trips `trailing-spaces`.
 
-    ```yaml
-    description: this is a fairly long plain scalar value that will definitely␣
-      exceed the eighty character limit imposed by yamllint default and relaxed␣
-      presets
-    ```
-
-    Each `␣` is a real trailing space, and `trailing-spaces` is an **error-level** rule in both the `default` and `relaxed` presets — so wrapping converts a warning-level `line-length` finding into hard errors. Folded flow collections can additionally trip the `indentation` rule, and non-breakable tokens (long URLs…) still exceed the width anyway (tolerated by yamllint thanks to `allow-non-breakable-words: true`).
-
-    This is why yamkix ships with `line_width=2048`: until the emitter folds cleanly ([issue #437](https://github.com/looztra/yamkix/issues/437)), the right place to reconcile the two tools is the yamllint config, not the yamkix flag — see the companion config below.
+    Remaining caveats before reaching for `--line-width 80`: folded flow collections can trip the `indentation` rule (warning-level in relaxed), and non-breakable tokens (long URLs…) still exceed the width anyway (tolerated by yamllint thanks to `allow-non-breakable-words: true`). yamkix still ships with `line_width=2048` by default; if you prefer not to wrap, the yamllint side can be reconciled with the companion config below.
 
 ## Bottom line
 

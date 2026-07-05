@@ -15,7 +15,12 @@ from ruamel.yaml.scanner import ScannerError
 from yamkix.comments import align_comments, process_comments
 from yamkix.config import YamkixConfig
 from yamkix.errors import InvalidYamlContentError
-from yamkix.helpers import convert_flow_to_block_style, convert_single_to_double_quotes, strip_leading_double_space
+from yamkix.helpers import (
+    convert_flow_to_block_style,
+    convert_single_to_double_quotes,
+    strip_leading_double_space_and_trailing_spaces,
+    strip_trailing_spaces,
+)
 from yamkix.yaml_writer import get_opinionated_yaml_writer
 
 
@@ -196,6 +201,6 @@ def yamkix_dump_one(
     if spaces_before_comment is not None:
         process_comments(data=single_item, column=spaces_before_comment)
     if dash_inwards and type(single_item).__name__ == "CommentedSeq":
-        yaml.dump(data=single_item, stream=out, transform=strip_leading_double_space)
+        yaml.dump(data=single_item, stream=out, transform=strip_leading_double_space_and_trailing_spaces)
     else:
-        yaml.dump(data=single_item, stream=out)
+        yaml.dump(data=single_item, stream=out, transform=strip_trailing_spaces)

@@ -29,6 +29,37 @@ def strip_leading_double_space(stream: StreamType) -> StreamType:
     return stream.replace("\n  ", "\n")
 
 
+def strip_trailing_spaces(stream: StreamType) -> StreamType:
+    """Strip the spaces the emitter leaves at line-fold points.
+
+    Works around the `ruamel.yaml` emitter writing a space before deciding to
+    break a line (when the configured line width forces wrapping of plain
+    scalars or flow collections). Safe to apply to the whole emitted stream:
+    the emitter never puts a semantic space at end-of-line (scalars containing
+    a space followed by a line break are always emitted double-quoted with
+    escapes). See https://github.com/looztra/yamkix/issues/437.
+
+    Args:
+        stream: The emitted YAML document as a string.
+
+    Returns:
+        The stream with trailing spaces removed from every line.
+    """
+    return "\n".join(line.rstrip(" ") for line in stream.split("\n"))
+
+
+def strip_leading_double_space_and_trailing_spaces(stream: StreamType) -> StreamType:
+    """Apply both `strip_leading_double_space` and `strip_trailing_spaces`.
+
+    Args:
+        stream: The emitted YAML document as a string.
+
+    Returns:
+        The stream with leading double spaces and trailing spaces removed.
+    """
+    return strip_trailing_spaces(strip_leading_double_space(stream))
+
+
 def get_yamkix_version() -> str:
     """Get the current Yamkix version.
 
