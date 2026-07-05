@@ -20,11 +20,6 @@ repos:
       - id: detect-private-key # Check for the existence of private keys
       - id: check-executables-have-shebangs # Checks that executables have shebangs
       - id: end-of-file-fixer # Makes sure files end in a newline and only a newline
-        exclude: |
-          (?x)^(
-              .gitmodules|
-              toolbox/bats-libs/.*
-          )$
 
   - repo: https://gitlab.com/bmares/check-json5
     rev: v1.0.1
@@ -47,9 +42,7 @@ repos:
     rev: 3.0.0
     hooks:
       - id: shellcheck # Shell scripts conform to shellcheck
-        exclude: ^shared/bats-libs/.*
       - id: shfmt # Check shell style with shfmt
-        exclude: ^shared/bats-libs/.*
 
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.38.0
@@ -68,8 +61,8 @@ repos:
         args: [--no-quotes-preserved]
         exclude: |
           (?x)^(
-              test-assets/.*|
-              tests/data/.*
+              tests/data/.*|
+              tests/integration/test_cli_subprocess/.*
           )$
 
   - repo: local

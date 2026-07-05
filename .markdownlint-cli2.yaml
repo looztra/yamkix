@@ -5,4 +5,3 @@ globs:
   - '!**/.tox/**/*.md'
   - '!**/.pytest_cache'
   - '!docs/changelog.md'
-  - '!toolbox/bats-libs/**/*.md'
