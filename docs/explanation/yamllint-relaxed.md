@@ -44,13 +44,35 @@ The `relaxed` preset `extends: default` and is deliberately more tolerant:
 
 1. **`document-start` — yamkix is _stricter_ than relaxed.** yamkix always adds `---` (`explicit_start=True`); relaxed does not care either way (rule disabled). No conflict — but yamkix here matches the **default** preset's opinion (warning if missing), not relaxed's indifference.
 
-2. **`line-length` — the main real gap.** relaxed still warns at **80 characters** (softened by `allow-non-breakable-inline-mappings: true`). yamkix uses `line_width=2048`, i.e. it deliberately _never wraps_ — and it will not shorten long input lines either. yamkix output can freely trigger `line-length` warnings under relaxed. (Warning-level only, so `yamllint -d relaxed` still exits 0 unless `--strict` is used.)
+2. **`line-length` — the main real gap.** relaxed still warns at **80 characters** (softened by `allow-non-breakable-inline-mappings: true`). yamkix uses `line_width=2048`, i.e. it deliberately _never wraps_ — and it will not shorten long input lines either. yamkix output can freely trigger `line-length` warnings under relaxed. (Warning-level only, so `yamllint -d relaxed` still exits 0 unless `--strict` is used.) See [Can yamkix wrap long lines itself?](#can-yamkix-wrap-long-lines-itself) below before reaching for `--line-width`.
 
 3. **`empty-lines` — unenforced by yamkix.** relaxed warns above 2 consecutive blank lines (`max: 2`, `max-start/end: 0`). ruamel's round-trip preserves blank-line runs attached to comments, so yamkix can pass through more than 2 blank lines untouched.
 
 4. **`indent-sequences` philosophy.** relaxed merely requires _consistency_ (indented dashes or not — pick one). yamkix's `dash_inwards` actively **normalizes** to indented dashes (`offset=2`). The output is compatible, but yamkix imposes one of the two styles relaxed would accept — closer to yamllint default's `indent-sequences: true`.
 
 5. **Scope difference.** yamkix normalizes things yamllint never even looks at in relaxed mode: it round-trips through a parser (so it _rejects_ invalid YAML outright, where yamllint reports syntax errors), and it can rewrite quote styles or flow style on demand.
+
+## Can yamkix wrap long lines itself?
+
+In theory, yes: the `-w/--line-width` option sets the wrap width (default `2048`, i.e. never wrap), so `yamkix -w 80` asks the emitter to fold lines at yamllint's limit:
+
+```console
+yamkix --input file.yml --line-width 80
+```
+
+!!! warning "In practice, don't: you will trade a warning for errors"
+
+    The underlying `ruamel.yaml` emitter leaves a **trailing space at every fold point** when it wraps plain scalars and flow collections:
+
+    ```yaml
+    description: this is a fairly long plain scalar value that will definitely␣
+      exceed the eighty character limit imposed by yamllint default and relaxed␣
+      presets
+    ```
+
+    Each `␣` is a real trailing space, and `trailing-spaces` is an **error-level** rule in both the `default` and `relaxed` presets — so wrapping converts a warning-level `line-length` finding into hard errors. Folded flow collections can additionally trip the `indentation` rule, and non-breakable tokens (long URLs…) still exceed the width anyway (tolerated by yamllint thanks to `allow-non-breakable-words: true`).
+
+    This is why yamkix ships with `line_width=2048`: until the emitter folds cleanly, the right place to reconcile the two tools is the yamllint config, not the yamkix flag — see the companion config below.
 
 ## Bottom line
 
