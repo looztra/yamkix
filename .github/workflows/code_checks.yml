@@ -100,7 +100,7 @@ jobs:
       - name: Run pre-commit checks
         run: |
           echo "::group::Run pre-commit checks"
-          pre-commit run --all-files --show-diff-on-failure
+          mise run precommit:run
           echo "::endgroup::"
 
   python-checks:
