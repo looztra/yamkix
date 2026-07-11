@@ -211,7 +211,7 @@ jobs:
           path: dist/
 
       - name: Publish package distributions to TestPyPI
-        uses: pypa/gh-action-pypi-publish@ba38be9e461d3875417946c167d0b5f3d385a247 # unstable/v1
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
         with:
           repository-url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://upload.pypi.org/legacy/' || 'https://test.pypi.org/legacy/' }}
 
@@ -346,6 +346,6 @@ jobs:
       - python-versions
     steps:
       - name: Decide whether the needed jobs succeeded or failed
-        uses: re-actors/alls-green@a638d6464689bbb24c325bb3fe9404d63a913030 # unstable/v1
+        uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # v1.2.2
         with:
           jobs: ${{ toJSON(needs) }}
