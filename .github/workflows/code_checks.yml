@@ -147,15 +147,15 @@ jobs:
       - name: Setup venv
         run: |
           uv python install
-          make setup-venv
+          mise run venv:setup
 
       - name: Python checks
         run: |
-          echo "::group::make lint"
-          make lint
+          echo "::group::mise run lint"
+          mise run lint
           echo "::endgroup::"
-          echo "::group::make test"
-          make test
+          echo "::group::mise run test"
+          mise run test
           echo "::endgroup::"
 
       - name: Upload test results to Codecov
@@ -176,8 +176,8 @@ jobs:
 
       - name: Check we can build the distribution
         run: |
-          echo "::group::make dist"
-          make dist
+          echo "::group::mise run dist"
+          mise run dist
           echo "::endgroup::"
 
       - name: Store the distribution packages
@@ -255,7 +255,7 @@ jobs:
       - name: Check we can build the docs
         run: |
           echo "::group::build docs with mkdocs"
-          make build-docs
+          mise run docs:build
           echo "::endgroup::"
 
   integration-tests:
@@ -294,7 +294,7 @@ jobs:
       - name: Run integration tests
         run: |
           echo "::group::run integration tests"
-          make poe-integration-tests
+          mise run test:integration
           echo "::endgroup::"
 
   python-versions:
@@ -328,12 +328,12 @@ jobs:
       - name: Setup venv
         run: |
           uv python install
-          make setup-venv
+          mise run venv:setup
 
       - name: Run 'test-python-versions' task
         run: |
-          echo "::group::make test-python-versions"
-          make test-python-versions
+          echo "::group::mise run test:python-versions"
+          mise run test:python-versions
           echo "::endgroup::"
 
   finalizer:
