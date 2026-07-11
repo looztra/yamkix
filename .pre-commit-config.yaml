@@ -58,7 +58,7 @@ repos:
     rev: v1.1.0
     hooks:
       - id: yamkix
-        args: [--no-quotes-preserved]
+        args: [--no-quotes-preserved, --silent]
         exclude: |
           (?x)^(
               tests/data/.*|
