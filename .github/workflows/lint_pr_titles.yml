@@ -2,11 +2,17 @@
 name: Lint PR Title
 
 on:
-  pull_request_target:
+  # pull_request_target is required to comment on PRs coming from forks.
+  # It is safe here: the workflow never checks out or executes PR code,
+  # and the token is restricted to pull-requests: write below.
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
     types:
       - opened
       - edited
       - synchronize
+
+permissions:
+  pull-requests: write
 
 jobs:
   lint-pr-title:

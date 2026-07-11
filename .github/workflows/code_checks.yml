@@ -18,6 +18,9 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}-checks
   cancel-in-progress: true
@@ -42,6 +45,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
@@ -105,20 +109,32 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       deploy_env: ${{ steps.detect-deploy-env.outputs.deploy_env }}
+      is_release: ${{ steps.detect-release.outputs.is_release }}
     steps:
+      - name: Detect release run
+        id: detect-release
+        env:
+          IS_RELEASE: ${{ ((github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release) && 'true' || 'false' }}
+        run: |
+          echo "is_release=${IS_RELEASE}" >> "${GITHUB_OUTPUT}"
+
       - name: Checkout Code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
+      # Caches are disabled on release runs so that a poisoned cache entry
+      # cannot influence the distribution published to (Test)PyPI.
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
           install: true
-          cache: ${{ vars.MISE_CACHE_ENABLED || 'true'}}
+          cache: ${{ steps.detect-release.outputs.is_release == 'true' && 'false' || vars.MISE_CACHE_ENABLED || 'true' }}
           cache_key_prefix: ${{ vars.MISE_CACHE_KEY_PREFIX || 'mise-v0'}}
           version: ${{ vars.MISE_VERSION }}
 
       - name: Restore uv cache
+        if: steps.detect-release.outputs.is_release != 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: /tmp/.uv-cache
@@ -165,13 +181,13 @@ jobs:
 
       - name: Store the distribution packages
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
+        if: steps.detect-release.outputs.is_release == 'true'
         with:
           name: python-package-distributions
           path: dist/
 
       - name: Detect environment
-        if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
+        if: steps.detect-release.outputs.is_release == 'true'
         id: detect-deploy-env
         run: |
           echo "deploy_env=${{ startsWith(github.ref, 'refs/tags') && 'pypi' || 'testpypi' }}" >> "${GITHUB_OUTPUT}"
@@ -179,7 +195,7 @@ jobs:
   deploy-release:
     name: Deploy Release
     runs-on: ubuntu-latest
-    if: (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) || (github.event_name == 'pull_request' && github.head_ref == 'release-please--branches--main') || inputs.force_release
+    if: needs.python-checks.outputs.is_release == 'true'
     environment:
       name: ${{ needs.python-checks.outputs.deploy_env }}
       url: ${{ needs.python-checks.outputs.deploy_env == 'pypi' && 'https://pypi.org/project/yamkix/' || 'https://test.pypi.org/project/yamkix/' }}
@@ -207,6 +223,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
@@ -246,6 +263,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
@@ -285,6 +303,7 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - uses: jdx/mise-action@e6a8b3978addb5a52f2b4cd9d91eafa7f0ab959d # v4.2.0
         with:
