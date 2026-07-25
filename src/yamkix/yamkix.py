@@ -94,7 +94,7 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> FileProcessingResult:
     )
 
 
-def yamkix_dump_all(  # noqa: PLR0913
+def yamkix_dump_all(  # noqa: PLR0913, PLR0917
     one_or_more_items: list[CommentedBase],
     yaml: YAML,
     dash_inwards: bool,

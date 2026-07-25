@@ -163,7 +163,7 @@ def get_default_yamkix_input_output_config() -> YamkixInputOutputConfig:
     )
 
 
-def get_yamkix_config_from_default(  # noqa: PLR0913
+def get_yamkix_config_from_default(  # noqa: PLR0913, PLR0917
     parsing_mode: str | None = None,
     explicit_start: bool | None = None,
     explicit_end: bool | None = None,
@@ -343,7 +343,7 @@ def raise_input_output_warning_if_needed(
         )
 
 
-def create_yamkix_config_from_typer_args(  # noqa: PLR0913
+def create_yamkix_config_from_typer_args(  # noqa: PLR0913, PLR0917
     input_file: str | None,
     output_file: str | None,
     stdout: bool,
