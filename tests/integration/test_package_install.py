@@ -18,7 +18,7 @@ class TestPackageInstallation:
             pytest.param("lowest-direct", id="lowest-direct"),
         ],
     )
-    def test_yamkix_can_be_installed_from_dist(  # noqa: PLR0913
+    def test_yamkix_can_be_installed_from_dist(
         self,
         wheel_file: Path,
         path_to_uv: str,

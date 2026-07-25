@@ -60,7 +60,7 @@ class TestKubesplitCompatibility:
         )
         assert result_tool_uninstall.returncode == 0, f"Uninstallation failed: {result_tool_uninstall.stderr}"
 
-    def test_kubesplit_run(  # noqa: PLR0913
+    def test_kubesplit_run(
         self,
         wheel_file: Path,
         path_to_uv: str,
