@@ -289,7 +289,7 @@ def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixC
     )
 
 
-def get_spaces_before_comment_from_args(args: Namespace) -> None | int:
+def get_spaces_before_comment_from_args(args: Namespace) -> int | None:
     """Extract a valid value for spaces_before_comment from args."""
     if args.spaces_before_comment is None:
         spaces_before_comment = None
