@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2135,7 +2135,7 @@ And <code>input_file</code>, <code>output_file</code> and <code>stdout</code> wi
 <span class="normal"><a href="#__codelineno-0-427">427</a></span>
 <span class="normal"><a href="#__codelineno-0-428">428</a></span>
 <span class="normal"><a href="#__codelineno-0-429">429</a></span>
-<span class="normal"><a href="#__codelineno-0-430">430</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-346"><a id="__codelineno-0-346" name="__codelineno-0-346"></a><span class="k">def</span><span class="w"> </span><span class="nf">create_yamkix_config_from_typer_args</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+<span class="normal"><a href="#__codelineno-0-430">430</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-346"><a id="__codelineno-0-346" name="__codelineno-0-346"></a><span class="k">def</span><span class="w"> </span><span class="nf">create_yamkix_config_from_typer_args</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913, PLR0917</span>
 </span><span id="__span-0-347"><a id="__codelineno-0-347" name="__codelineno-0-347"></a>    <span class="n">input_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-348"><a id="__codelineno-0-348" name="__codelineno-0-348"></a>    <span class="n">output_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-349"><a id="__codelineno-0-349" name="__codelineno-0-349"></a>    <span class="n">stdout</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
@@ -2853,7 +2853,7 @@ some of the default values.</p>
 <span class="normal"><a href="#__codelineno-0-231">231</a></span>
 <span class="normal"><a href="#__codelineno-0-232">232</a></span>
 <span class="normal"><a href="#__codelineno-0-233">233</a></span>
-<span class="normal"><a href="#__codelineno-0-234">234</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-166"><a id="__codelineno-0-166" name="__codelineno-0-166"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_yamkix_config_from_default</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+<span class="normal"><a href="#__codelineno-0-234">234</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-166"><a id="__codelineno-0-166" name="__codelineno-0-166"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_yamkix_config_from_default</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913, PLR0917</span>
 </span><span id="__span-0-167"><a id="__codelineno-0-167" name="__codelineno-0-167"></a>    <span class="n">parsing_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-168"><a id="__codelineno-0-168" name="__codelineno-0-168"></a>    <span class="n">explicit_start</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-169"><a id="__codelineno-0-169" name="__codelineno-0-169"></a>    <span class="n">explicit_end</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -3261,7 +3261,7 @@ Used by <code>round_trip_and_format</code> to detect whether the content was cha
 <span class="normal"><a href="#__codelineno-0-178">178</a></span>
 <span class="normal"><a href="#__codelineno-0-179">179</a></span>
 <span class="normal"><a href="#__codelineno-0-180">180</a></span>
-<span class="normal"><a href="#__codelineno-0-181">181</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-97"><a id="__codelineno-0-97" name="__codelineno-0-97"></a><span class="k">def</span><span class="w"> </span><span class="nf">yamkix_dump_all</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+<span class="normal"><a href="#__codelineno-0-181">181</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-97"><a id="__codelineno-0-97" name="__codelineno-0-97"></a><span class="k">def</span><span class="w"> </span><span class="nf">yamkix_dump_all</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913, PLR0917</span>
 </span><span id="__span-0-98"><a id="__codelineno-0-98" name="__codelineno-0-98"></a>    <span class="n">one_or_more_items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">CommentedBase</span><span class="p">],</span>
 </span><span id="__span-0-99"><a id="__codelineno-0-99" name="__codelineno-0-99"></a>    <span class="n">yaml</span><span class="p">:</span> <span class="n">YAML</span><span class="p">,</span>
 </span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100"></a>    <span class="n">dash_inwards</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
@@ -3603,7 +3603,7 @@ This is the result of a <code>yaml.load</code> call, or one of the items from a 
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.action.edit", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
