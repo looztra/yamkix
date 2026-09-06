@@ -8,6 +8,14 @@ This document provides context and instructions for AI agents working on this re
 - **Language**: Python (managed via `uv`)
 - **Main Branch**: `main`
 
+## Repository Structure
+
+- `src/yamkix/` — package source: `_cli.py` (Typer app), `config.py` (`YamkixConfig`/`YamkixInputOutputConfig`), `yamkix.py` (core formatting), `yaml_writer.py` (ruamel.yaml setup), `comments.py` (comment handling), `helpers.py`, `errors.py`, `args.py`.
+- `tests/` — unit tests (`test_*.py`) plus `tests/integration/` (marked `@pytest.mark.integration`, excluded from `poe test:cov`).
+- `docs/` — mkdocs Diataxis site (`tutorials/`, `how-to/`, `reference/`, `explanation/`), published by `.github/workflows/publish_docs.yml`.
+- `toolbox/mise/` and `toolbox/mk/` — shared `mise` task definitions and Makefile includes.
+- `experiments/` — scratch/exploratory scripts, not part of the package or CI.
+
 ## Workflow & Standards
 
 ### Commit & Pull Requests
@@ -63,6 +71,30 @@ This project uses `poethepoet` for task management. Common tasks:
 - **Configuration**: Managed in `src/yamkix/config.py`.
 - **CLI**: Implemented using `typer` in `src/yamkix/_cli.py`.
 - **YAML Handling**: Uses `ruamel.yaml` in `src/yamkix/yamkix.py` and `src/yamkix/yaml_writer.py`.
+
+## CI/CD
+
+- **`.github/workflows/code_checks.yml`**: pre-commit checks, Python lint+test (`mise run lint` / `mise run test`), distribution build check, mkdocs build check, integration tests, and release-please-driven publish to (Test)PyPI on release runs.
+- **`.github/workflows/release_please.yml`**: drives `docs/changelog.md`, `version.txt`, and `.release-please-manifest.json` via conventional-commit history — never edit these by hand.
+- **`.github/workflows/lint_pr_titles.yml`**: enforces conventional-commit PR titles (scope required, matching this file's commit convention).
+- **`.github/workflows/codeql.yml`** and **`workflows_checks.yml`**: security/workflow linting (CodeQL, `zizmor`, `actionlint`).
+- **Dependency updates**: `renovate.json5` covers Python/tool deps; `.github/dependabot.yml` covers GitHub Actions only (weekly).
+
+## Adding a New CLI Flag
+
+1. Add the `typer.Option` parameter to `main()` in `src/yamkix/_cli.py`.
+2. Forward it as a kwarg to `create_yamkix_config_from_typer_args()` in `src/yamkix/config.py`.
+3. Add/extend the corresponding field on `YamkixConfig` (or `YamkixInputOutputConfig` for I/O flags) in `config.py`.
+4. Consume the field where formatting happens: `yaml_writer.py` (writer-level settings), `yamkix.py` (`round_trip_and_format`), or `comments.py` (comment behavior).
+5. Add/extend tests in `tests/test_cli.py` (flag parsing) and `tests/test_config.py` (config construction).
+6. Document the flag in `docs/reference/` and/or `docs/how-to/`.
+
+## Common Pitfalls
+
+- Don't hand-edit `version.txt` or `docs/changelog.md` — both are managed by `release-please`.
+- `enforce_double_quotes` requires a two-pass round trip (see `yamkix.py`) — don't collapse it into a single pass.
+- Integration tests are excluded from `poe test:cov` (`-m 'not integration'`); run them explicitly with `pytest -m integration` or `mise run test:integration`.
+- `.python-version` (3.14) is the dev/CI runtime; `requires-python = ">=3.10"` and the trove classifiers (3.10–3.12) define supported runtimes — they are not the same thing.
 
 ## General Guidelines for Agents
 

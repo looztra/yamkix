@@ -1,0 +1,69 @@
+---
+name: Bug Report
+description: Report unexpected or incorrect yamkix formatting behavior
+title: 'fix(): '
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the sections below so it can be reproduced quickly.
+
+  - type: input
+    id: version
+    attributes:
+      label: yamkix version
+      description: Output of `yamkix --version` (or `--v`)
+      placeholder: yamkix v1.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python version
+      description: Output of `python --version`
+      placeholder: Python 3.12.4
+    validations:
+      required: true
+
+  - type: input
+    id: command
+    attributes:
+      label: Command used
+      description: The exact yamkix invocation, including flags
+      placeholder: yamkix -i input.yaml -o output.yaml --enforce-double-quotes
+    validations:
+      required: true
+
+  - type: textarea
+    id: input-yaml
+    attributes:
+      label: Input YAML
+      description: The smallest YAML snippet that reproduces the issue
+      render: yaml
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected output
+      render: yaml
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual output
+      render: yaml
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: OS, shell, or anything else that might be relevant

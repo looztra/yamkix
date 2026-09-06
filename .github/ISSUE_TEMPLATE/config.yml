@@ -1,0 +1,6 @@
+---
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://looztra.github.io/yamkix/
+    about: Check the docs (tutorials, how-to guides, reference) before opening an issue.
