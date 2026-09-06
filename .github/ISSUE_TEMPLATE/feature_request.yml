@@ -1,0 +1,41 @@
+---
+name: Feature Request
+description: Suggest a new yamkix flag, formatting option, or behavior
+title: 'feat(): '
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement! Please describe the motivation and desired behavior.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: What formatting behavior or workflow is currently missing or awkward?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: >
+        Describe the new CLI flag or behavior you'd like. If it's a flag, suggest a name (e.g.
+        `--no-dash-inwards`) consistent with yamkix's existing `--flag-name` / `-x` convention.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any workarounds you're currently using, or other approaches you considered
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Example input/output YAML, links to related issues, etc.
