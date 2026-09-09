@@ -44,7 +44,7 @@ repos:
       - id: shellcheck # Shell scripts conform to shellcheck
       - id: shfmt # Check shell style with shfmt
 
-  - repo: https://github.com/adrienverge/yamllint.git
+  - repo: https://github.com/adrienverge/yamllint
     rev: v1.38.0
     hooks:
       - id: yamllint
