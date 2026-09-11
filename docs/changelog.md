@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.2.0](https://github.com/looztra/yamkix/compare/v1.1.0...v1.2.0) (2026-09-11)
+
+
+### Features
+
+* **renovate:** add 7 day cooldown for python, actions, and pre-commit updates ([#446](https://github.com/looztra/yamkix/issues/446)) ([c5deadb](https://github.com/looztra/yamkix/commit/c5deadb9da52a23a52e3710c8ff8b9f9fb4a7a45))
+
+
+### Bug Fixes
+
+* **pre-commit:** drop stray .git suffix from yamllint repo url ([#517](https://github.com/looztra/yamkix/issues/517)) ([2e4dd3f](https://github.com/looztra/yamkix/commit/2e4dd3fe5a3d99a07dd132d9dc9cd6183268c122))
+
+
+### Continuous Integration
+
+* **workflows:** add CodeQL analysis for python and actions ([#449](https://github.com/looztra/yamkix/issues/449)) ([11012fe](https://github.com/looztra/yamkix/commit/11012fe31673afa8b799b0918e0b4c8a3e6c6e58))
+* **workflows:** harden workflows with zizmor, permissions and pinned actions ([#448](https://github.com/looztra/yamkix/issues/448)) ([b59e057](https://github.com/looztra/yamkix/commit/b59e057549df83045e0a8eb3d7ee3eee3f554c56))
+
 ## [1.1.0](https://github.com/looztra/yamkix/compare/v1.0.0...v1.1.0) (2026-07-05)
 
 
