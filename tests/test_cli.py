@@ -481,3 +481,41 @@ class TestCli:
         assert result.exit_code == 0
         assert result.stderr.splitlines() == [f"[yamkix] Modified: {escaped_name}"]
         assert source.read_text() == "---\nkey: value\n"
+
+    def test_list_modified_reports_crlf_normalization_in_place(self, tmp_path: Path) -> None:
+        """A CRLF-to-LF rewrite changes the file on disk and must be reported."""
+        source = tmp_path / "source.yml"
+        source.write_bytes(b"---\r\nkey: value\r\n")
+
+        result = runner.invoke(app, ["--silent", "--list-modified", str(source)])
+
+        assert result.exit_code == 0
+        assert source.read_bytes() == b"---\nkey: value\n"
+        assert result.stderr.splitlines() == [f"[yamkix] Modified: {source}"]
+
+    @pytest.mark.skipif(sys.platform == "win32", reason="/dev/null is POSIX-only")
+    def test_list_modified_skips_special_file_output(self, tmp_path: Path) -> None:
+        """Writing to a special file such as /dev/null is never reported."""
+        source = tmp_path / "source.yml"
+        source.write_text("key:   value\n")
+
+        result = runner.invoke(app, ["--silent", "--list-modified", "--input", str(source), "--output", "/dev/null"])
+
+        assert result.exit_code == 0
+        assert result.stderr.splitlines() == []
+
+    def test_list_modified_falls_back_when_output_unreadable(self, tmp_path: Path, mocker: MockerFixture) -> None:
+        """An unreadable output does not crash and falls back to the formatting result."""
+        source = tmp_path / "source.yml"
+        source.write_text("key:   value\n")
+        destination = tmp_path / "destination.yml"
+        destination.write_text("old\n")
+        mocker.patch.object(Path, "read_bytes", side_effect=PermissionError("denied"))
+
+        result = runner.invoke(
+            app, ["--silent", "--list-modified", "--input", str(source), "--output", str(destination)]
+        )
+
+        assert result.exit_code == 0
+        assert destination.read_text() == "---\nkey: value\n"
+        assert result.stderr.splitlines() == [f"[yamkix] Modified: {destination}"]

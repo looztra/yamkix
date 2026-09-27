@@ -43,15 +43,52 @@ class SupportedYamlParserMode(str, Enum):
     RT = "rt"
 
 
+class _Untracked(Enum):
+    """Marker for an output whose bytes cannot be safely snapshotted."""
+
+    MARKER = "untracked"
+
+
+_UNTRACKED = _Untracked.MARKER
+
+
+def _snapshot_output(output: str) -> bytes | _Untracked | None:
+    """Read the current bytes of an output file, if it is safe to do so.
+
+    Only regular files are read: special files such as ``/dev/stdout`` or FIFOs could block
+    or yield meaningless content.
+
+    Args:
+        output: Path of the output file.
+
+    Returns:
+        The file bytes, None if the path does not exist, or ``_UNTRACKED`` if the path is not
+        a regular file or cannot be read.
+    """
+    output_path = Path(output)
+    try:
+        if not output_path.exists():
+            return None
+        if not output_path.is_file():
+            return _UNTRACKED
+        return output_path.read_bytes()
+    except OSError:
+        return _UNTRACKED
+
+
 def _modified_output_name(
-    config: YamkixConfig, result: FileProcessingResult, previous_output: bytes | None
+    config: YamkixConfig, result: FileProcessingResult, previous_output: bytes | _Untracked | None
 ) -> str | None:
     """Return the name of a created or content-modified output file, if any.
+
+    Raw bytes are compared so that changes invisible after text decoding (such as CRLF to LF
+    line endings) are reported. Special files are never reported. When a regular output file
+    cannot be read, fall back to whether formatting changed the content.
 
     Args:
         config: Configuration of the processed input and output.
         result: Outcome of formatting the input.
-        previous_output: Previous contents of a separate output file, or None if absent.
+        previous_output: Output snapshot taken before processing (see `_snapshot_output`).
 
     Returns:
         The written output filename if its content changed, otherwise None.
@@ -59,10 +96,15 @@ def _modified_output_name(
     output = config.io_config.output
     if output is None:
         return None
-    if output == config.io_config.input:
+    output_path = Path(output)
+    if output_path.exists() and not output_path.is_file():
+        # Special files (/dev/null, /dev/stdout, FIFOs...) are streams, not files whose content changed.
+        return None
+    current_output = _snapshot_output(output)
+    if previous_output is _UNTRACKED or current_output is _UNTRACKED:
         modified = not result.unchanged
     else:
-        modified = previous_output != Path(output).read_bytes()
+        modified = previous_output != current_output
     return config.io_config.output_display_name if modified else None
 
 
@@ -269,10 +311,7 @@ def main(  # noqa: PLR0913, PLR0917
             if not silent_mode:
                 print_yamkix_config(config)
             output = config.io_config.output
-            previous_output = None
-            if list_modified_mode and output is not None and output != config.io_config.input:
-                output_path = Path(output)
-                previous_output = output_path.read_bytes() if output_path.is_file() else None
+            previous_output = _snapshot_output(output) if list_modified_mode and output is not None else None
             try:
                 # Process the file(s)
                 result = round_trip_and_format(config)
