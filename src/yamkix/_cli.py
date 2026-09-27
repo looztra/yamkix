@@ -8,7 +8,7 @@ from typing import Annotated
 import typer
 
 from yamkix.__version__ import __version__
-from yamkix.config import DEFAULT_LINE_WIDTH, create_yamkix_config_from_typer_args, print_yamkix_config
+from yamkix.config import DEFAULT_LINE_WIDTH, YamkixConfig, create_yamkix_config_from_typer_args, print_yamkix_config
 from yamkix.errors import InvalidYamlContentError
 from yamkix.helpers import get_stderr_console, get_stdout_console
 from yamkix.yamkix import FileProcessingResult, round_trip_and_format
@@ -41,6 +41,29 @@ class SupportedYamlParserMode(str, Enum):
 
     SAFE = "safe"
     RT = "rt"
+
+
+def _modified_output_name(
+    config: YamkixConfig, result: FileProcessingResult, previous_output: bytes | None
+) -> str | None:
+    """Return the name of a created or content-modified output file, if any.
+
+    Args:
+        config: Configuration of the processed input and output.
+        result: Outcome of formatting the input.
+        previous_output: Previous contents of a separate output file, or None if absent.
+
+    Returns:
+        The written output filename if its content changed, otherwise None.
+    """
+    output = config.io_config.output
+    if output is None:
+        return None
+    if output == config.io_config.input:
+        modified = not result.unchanged
+    else:
+        modified = previous_output != Path(output).read_bytes()
+    return config.io_config.output_display_name if modified else None
 
 
 @app.command()
@@ -200,7 +223,7 @@ def main(  # noqa: PLR0913, PLR0917
         bool,
         typer.Option(
             "--list-modified",
-            help="print the list of files whose content has been modified, after all files have been processed",
+            help="list output files created or whose content changed, after processing",
         ),
     ] = False,
     _version: Annotated[
@@ -239,34 +262,45 @@ def main(  # noqa: PLR0913, PLR0917
     )
     console = get_stderr_console()
     results: list[FileProcessingResult] = []
+    modified_files: list[str] = []
     start_time = time.monotonic()
-    for config in yamkix_configs:
-        if not silent_mode:
-            print_yamkix_config(config)
-        try:
-            # Process the file(s)
-            result = round_trip_and_format(config)
-            results.append(result)
-        except InvalidYamlContentError as e:
-            console.print(rf"Error processing \[{config.io_config.input_display_name}]: {e}", style="error")
-            console.print(e.__cause__, style="error")
-            results.append(
-                FileProcessingResult(
-                    input_display_name=config.io_config.input_display_name,
-                    error=True,
-                    unchanged=False,
+    try:
+        for config in yamkix_configs:
+            if not silent_mode:
+                print_yamkix_config(config)
+            output = config.io_config.output
+            previous_output = None
+            if list_modified_mode and output is not None and output != config.io_config.input:
+                output_path = Path(output)
+                previous_output = output_path.read_bytes() if output_path.is_file() else None
+            try:
+                # Process the file(s)
+                result = round_trip_and_format(config)
+                results.append(result)
+                if list_modified_mode and (modified_name := _modified_output_name(config, result, previous_output)):
+                    modified_files.append(modified_name)
+            except InvalidYamlContentError as e:
+                console.print(rf"Error processing \[{config.io_config.input_display_name}]: {e}", style="error")
+                console.print(e.__cause__, style="error")
+                results.append(
+                    FileProcessingResult(
+                        input_display_name=config.io_config.input_display_name,
+                        error=True,
+                        unchanged=False,
+                    )
                 )
+    finally:
+        for name in modified_files:
+            display_name = name
+            if not name.isprintable():
+                display_name = "".join(char if char.isprintable() else ascii(char)[1:-1] for char in name)
+            console.print(
+                f"[yamkix] Modified: {display_name}",
+                style="info",
+                markup=False,
+                highlight=False,
+                soft_wrap=True,
             )
-    if list_modified_mode:
-        for result in results:
-            if not result.error and not result.unchanged:
-                console.print(
-                    f"[yamkix] Modified: {result.input_display_name}",
-                    style="info",
-                    markup=False,
-                    highlight=False,
-                    soft_wrap=True,
-                )
     if summary_mode:
         elapsed = time.monotonic() - start_time
         total = len(results)

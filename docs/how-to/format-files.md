@@ -103,8 +103,11 @@ Check the available options with `yamkix --help` (or see the [CLI options refere
 
 ## List the modified files
 
-- Use `--list-modified` to print, after all files have been processed, one stderr line per file whose content was reformatted
-- Unchanged files and files that failed to parse are not listed; nothing is printed when no file was modified
+- Use `--list-modified` to print one stderr line per output file created or whose content changed, after processing
+- For in-place formatting, the reported path is the input file. With `--output`, it is the destination, even if the source was already formatted. `--stdout` does not modify a file and produces no modified-file line
+- Unchanged destinations and files that failed to parse are not listed; no modified-file lines appear when nothing changed
+- If a later file fails to open, files modified earlier in the run are still listed before the command exits with an error
+- Control characters in filenames are escaped (for example, a newline appears as `\n`) to keep one report per line
 
     ```shell
     yamkix --silent --list-modified path/to/file1.yml path/to/file2.yml

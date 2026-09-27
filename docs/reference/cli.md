@@ -34,7 +34,7 @@ yamkix [OPTIONS] [FILES]...
 | `--line-width` | `-w` | INTEGER | `2048` | specify the maximum line width. |
 | `--silent` | `-S` | flag | off | silent mode, don't print config when processing file(s). |
 | `--summary` | | flag | off | print a summary of the processing statistics after all files have been processed. |
-| `--list-modified` | | flag | off | print the list of files whose content has been modified, after all files have been processed. |
+| `--list-modified` | | flag | off | list output files created or whose content changed; no file is listed for stdout output. |
 | `--version` | `-v` | flag | | show yamkix version. |
 | `--help` | `-h` | flag | | show the help message and exit. |
 
