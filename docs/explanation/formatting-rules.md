@@ -87,3 +87,4 @@ Two caveats worth understanding:
 - Use `--silent` to suppress the configuration information that is normally printed to stderr during processing
 - Use `--summary` to print processing statistics (total files, errors, unchanged count, and elapsed time) after all files have been processed
 - Both options can be combined: `--silent --summary` will only output the summary line without per-file configuration details
+- Use `--list-modified` to print one line per output file created or whose content changed; stdout is not a file. It works with or without `--silent` and `--summary`

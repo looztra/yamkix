@@ -39,5 +39,16 @@ This guide shows how to run `yamkix` automatically on your YAML files with the [
             )$
     ```
 
+- the hook runs with `--silent` by default, so nothing tells you which files were reformatted; add `--list-modified` to print one line per modified file:
+
+    ```yaml
+    repos:
+      - repo: https://github.com/looztra/yamkix
+      rev: v1.0.0
+      hooks:
+        - id: yamkix
+          args: [--silent, --list-modified]
+    ```
+
 !!! Note
     `args` and `exclude` are related to the [pre-commit framework](https://pre-commit.com/#pre-commit-configyaml---hooks), **not** to yamkix.

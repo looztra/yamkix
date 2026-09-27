@@ -43,6 +43,27 @@ class SupportedYamlParserMode(str, Enum):
     RT = "rt"
 
 
+def _format_report_name(name: str) -> str:
+    """Make a filename safe to print on a single report line, without ambiguity.
+
+    Names that are printable and do not start with a double quote are returned as is. Other names
+    are wrapped in double quotes, with backslashes, double quotes and non-printable characters
+    escaped, so a quoted report can always be told apart from a literal filename.
+
+    Args:
+        name: The filename to report.
+
+    Returns:
+        The filename to print.
+    """
+    if name.isprintable() and not name.startswith('"'):
+        return name
+    escaped = "".join(
+        "\\" + char if char in {"\\", '"'} else char if char.isprintable() else ascii(char)[1:-1] for char in name
+    )
+    return f'"{escaped}"'
+
+
 @app.command()
 def main(  # noqa: PLR0913, PLR0917
     input_file: Annotated[
@@ -196,6 +217,13 @@ def main(  # noqa: PLR0913, PLR0917
             help="print a summary of the processing statistics after all files have been processed",
         ),
     ] = False,
+    list_modified_mode: Annotated[
+        bool,
+        typer.Option(
+            "--list-modified",
+            help="list output files created or whose content changed, after processing",
+        ),
+    ] = False,
     _version: Annotated[
         bool,
         typer.Option("-v", "--version", help="show yamkix version", callback=version_callback),
@@ -232,23 +260,43 @@ def main(  # noqa: PLR0913, PLR0917
     )
     console = get_stderr_console()
     results: list[FileProcessingResult] = []
+    modified_files: list[str] = []
     start_time = time.monotonic()
-    for config in yamkix_configs:
-        if not silent_mode:
-            print_yamkix_config(config)
-        try:
-            # Process the file(s)
-            result = round_trip_and_format(config)
-            results.append(result)
-        except InvalidYamlContentError as e:
-            console.print(rf"Error processing \[{config.io_config.input_display_name}]: {e}", style="error")
-            console.print(e.__cause__, style="error")
-            results.append(
-                FileProcessingResult(
-                    input_display_name=config.io_config.input_display_name,
-                    error=True,
-                    unchanged=False,
+    try:
+        for config in yamkix_configs:
+            if not silent_mode:
+                print_yamkix_config(config)
+            written_outputs: list[str] = []
+            try:
+                # Process the file(s)
+                result = round_trip_and_format(config, on_output_write=written_outputs.append)
+                results.append(result)
+                if list_modified_mode and result.output_changed:
+                    modified_files.append(config.io_config.output_display_name)
+            except InvalidYamlContentError as e:
+                console.print(rf"Error processing \[{config.io_config.input_display_name}]: {e}", style="error")
+                console.print(e.__cause__, style="error")
+                results.append(
+                    FileProcessingResult(
+                        input_display_name=config.io_config.input_display_name,
+                        error=True,
+                        unchanged=False,
+                    )
                 )
+            except BaseException:
+                # The output may be truncated or partially written: report it before propagating
+                if list_modified_mode and written_outputs:
+                    modified_files.append(config.io_config.output_display_name)
+                raise
+    finally:
+        for name in modified_files:
+            console.print(
+                f"[yamkix] Modified: {_format_report_name(name)}",
+                style="info",
+                markup=False,
+                highlight=False,
+                emoji=False,
+                soft_wrap=True,
             )
     if summary_mode:
         elapsed = time.monotonic() - start_time

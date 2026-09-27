@@ -1,9 +1,11 @@
 """Load a yaml file and save it formatted according to some rules."""
 
+import os
 import sys
+from collections.abc import Callable
 from copy import deepcopy
 from dataclasses import dataclass
-from io import StringIO
+from io import BytesIO, StringIO, TextIOWrapper
 from pathlib import Path
 from typing import TextIO
 
@@ -31,19 +33,49 @@ class FileProcessingResult:
     Attributes:
         input_display_name: Display name of the processed input (file path or 'STDIN').
         error: Whether the file failed to parse.
-        unchanged: Whether the output content is identical to the input content.
+        unchanged: Whether the formatted content is byte-identical to the input content.
+        output_changed: Whether an output file was created or its bytes changed.
+            Always False for stdout and for special files such as ``/dev/null``.
     """
 
     input_display_name: str
     error: bool
     unchanged: bool
+    output_changed: bool = False
 
 
-def round_trip_and_format(yamkix_config: YamkixConfig) -> FileProcessingResult:
+def _read_regular_file(path: Path) -> bytes | None:
+    """Return the bytes of a regular file, or None if the path does not exist.
+
+    Args:
+        path: The file to read.
+
+    Returns:
+        The file content, or None if the file does not exist.
+
+    Raises:
+        OSError: If the path exists but cannot be read.
+    """
+    try:
+        return path.read_bytes()
+    except FileNotFoundError:
+        return None
+
+
+def _is_special_file(path: Path) -> bool:
+    """Return whether the path exists but is not a regular file (device, FIFO, directory...)."""
+    return path.exists() and not path.is_file()
+
+
+def round_trip_and_format(
+    yamkix_config: YamkixConfig, on_output_write: Callable[[str], None] | None = None
+) -> FileProcessingResult:
     """Load a file and save it formatted.
 
     Arguments:
         yamkix_config: The configuration for the Yamkix processing.
+        on_output_write: Optional callback invoked with the output path right before an output file
+            is truncated or created. It lets callers know a file may be partially written if dumping fails.
 
     Returns:
         A FileProcessingResult describing whether an error occurred and whether
@@ -59,13 +91,15 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> FileProcessingResult:
         double_quotes_yaml.preserve_quotes = True
     yamkix_io_config = yamkix_config.io_config
     input_file = yamkix_io_config.input
+    input_bytes = b""
     if input_file is not None:
-        with Path(input_file).open(encoding="UTF-8") as f_input:
+        input_bytes = Path(input_file).read_bytes()
+        # Decode like text-mode open() does (universal newlines), while keeping raw bytes for comparisons
+        with TextIOWrapper(BytesIO(input_bytes), encoding="UTF-8") as f_input:
             raw_input = f_input.read()
-        parsed = yaml.load_all(raw_input)
     else:
         raw_input = sys.stdin.read()
-        parsed = yaml.load_all(raw_input)
+    parsed = yaml.load_all(raw_input)
     ready_for_dump = []
     try:
         # Read the parsed content to force the scanner to issue errors if any
@@ -74,23 +108,44 @@ def round_trip_and_format(yamkix_config: YamkixConfig) -> FileProcessingResult:
     except (ScannerError, ParserError) as parsing_error:
         raise InvalidYamlContentError from parsing_error
 
+    output_file = yamkix_io_config.output
+    # Snapshot the destination before it is overwritten. Stdout and special files are never tracked.
+    track_output = output_file is not None and not _is_special_file(Path(output_file))
+    previous_output: bytes | None = None
+    previous_output_readable = True
+    if output_file is not None and track_output:
+        if output_file == input_file:
+            previous_output = input_bytes
+        else:
+            try:
+                previous_output = _read_regular_file(Path(output_file))
+            except OSError:
+                previous_output_readable = False
+        if on_output_write is not None:
+            on_output_write(output_file)
     output_buffer = StringIO()
     yamkix_dump_all(
         one_or_more_items=ready_for_dump,
         yaml=yaml,
         dash_inwards=yamkix_config.dash_inwards,
-        output_file=yamkix_io_config.output,
+        output_file=output_file,
         spaces_before_comment=yamkix_config.spaces_before_comment,
         double_quotes_yaml=double_quotes_yaml,
         capture_buffer=output_buffer,
         align_comments_flag=yamkix_config.align_comments,
         enforce_block_style_flag=yamkix_config.enforce_block_style,
     )
-    unchanged = output_buffer.getvalue() == raw_input
+    formatted = output_buffer.getvalue()
+    # Output files are written in text mode, which translates "\n" to the platform line separator
+    written_bytes = formatted.replace("\n", os.linesep).encode("UTF-8")
+    unchanged = written_bytes == input_bytes if input_file is not None else formatted == raw_input
+    # An unreadable destination cannot be compared, so it is conservatively reported as changed
+    output_changed = track_output and (not previous_output_readable or written_bytes != previous_output)
     return FileProcessingResult(
         input_display_name=yamkix_io_config.input_display_name,
         error=False,
         unchanged=unchanged,
+        output_changed=output_changed,
     )
 
 
