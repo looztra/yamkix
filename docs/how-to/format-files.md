@@ -104,10 +104,11 @@ Check the available options with `yamkix --help` (or see the [CLI options refere
 ## List the modified files
 
 - Use `--list-modified` to print one stderr line per output file created or whose content changed, after processing
-- For in-place formatting, the reported path is the input file. With `--output`, it is the destination, even if the source was already formatted. `--stdout` does not modify a file and produces no modified-file line
-- Unchanged destinations and files that failed to parse are not listed; no modified-file lines appear when nothing changed
-- If a later file fails to open, files modified earlier in the run are still listed before the command exits with an error
-- Control characters in filenames are escaped (for example, a newline appears as `\n`) to keep one report per line
+- For in-place formatting, the reported path is the input file. With `--output`, it is the destination, even if the source was already formatted. `--stdout` and special files such as `/dev/null` are not files whose content changed and produce no modified-file line
+- Changes are detected on raw bytes, so a file whose only change is its line endings (for example CRLF converted to LF) is listed, and not counted as unchanged by `--summary`
+- Unchanged destinations and files that failed to parse are not listed; no modified-file lines appear when nothing changed. A destination that cannot be read is listed, since it cannot be compared
+- If a later file fails to open, files modified earlier in the run are still listed before the command exits with an error. A file left partially written by a failure is listed too
+- Filenames containing control characters, or starting with a double quote, are printed between double quotes with backslash escapes (for example, a newline appears as `"a\nb.yml"`), to keep one unambiguous report per line
 
     ```shell
     yamkix --silent --list-modified path/to/file1.yml path/to/file2.yml

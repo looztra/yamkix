@@ -100,8 +100,9 @@ Running `yamkix` without any option applies the following configuration:
 │ --silent                 -S                 silent mode.             │
 │ --summary                                   print a processing       │
 │                                             summary.                 │
-│ --list-modified                             print the modified       │
-│                                             files.                   │
+│ --list-modified                             list output files        │
+│                                             created or whose content │
+│                                             changed.                 │
 │ --version                -v                 show yamkix version      │
 │ --help                   -h                 Show this message and    │
 │                                             exit.                    │
