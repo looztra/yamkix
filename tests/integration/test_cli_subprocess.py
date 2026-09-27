@@ -106,3 +106,19 @@ class TestCliSubprocess:
         assert result.returncode == 0
         assert result.stdout == expected.read_text()
         assert "input=STDIN" not in result.stderr
+
+    def test_list_modified_reports_reformatted_files(self, tmp_path: Path) -> None:
+        """Test that --list-modified prints one stderr line per reformatted file (issue #477)."""
+        # GIVEN
+        formatted = tmp_path / "formatted.yml"
+        formatted.write_text("---\nkey: value\n")
+        unformatted = tmp_path / "unformatted.yml"
+        unformatted.write_text("---\nkey:   value\n")
+
+        # WHEN
+        result = run_yamkix(["--silent", "--list-modified", str(formatted), str(unformatted)])
+
+        # THEN
+        assert result.returncode == 0
+        assert result.stderr.splitlines() == [f"[yamkix] Modified: {unformatted}"]
+        assert unformatted.read_text() == "---\nkey: value\n"

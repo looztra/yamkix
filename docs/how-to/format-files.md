@@ -100,3 +100,16 @@ Check the available options with `yamkix --help` (or see the [CLI options refere
     # Produces minimal output:
     # [yamkix] Summary: 2 file(s) processed, 0 error(s), 1 unchanged, 0.042s
     ```
+
+## List the modified files
+
+- Use `--list-modified` to print, after all files have been processed, one stderr line per file whose content was reformatted
+- Unchanged files and files that failed to parse are not listed; nothing is printed when no file was modified
+
+    ```shell
+    yamkix --silent --list-modified path/to/file1.yml path/to/file2.yml
+    # Output (file1.yml was already formatted):
+    # [yamkix] Modified: path/to/file2.yml
+    ```
+
+- It can be combined with `--summary`: the modified files are listed before the summary line

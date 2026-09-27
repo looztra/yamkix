@@ -196,6 +196,13 @@ def main(  # noqa: PLR0913, PLR0917
             help="print a summary of the processing statistics after all files have been processed",
         ),
     ] = False,
+    list_modified_mode: Annotated[
+        bool,
+        typer.Option(
+            "--list-modified",
+            help="print the list of files whose content has been modified, after all files have been processed",
+        ),
+    ] = False,
     _version: Annotated[
         bool,
         typer.Option("-v", "--version", help="show yamkix version", callback=version_callback),
@@ -250,6 +257,16 @@ def main(  # noqa: PLR0913, PLR0917
                     unchanged=False,
                 )
             )
+    if list_modified_mode:
+        for result in results:
+            if not result.error and not result.unchanged:
+                console.print(
+                    f"[yamkix] Modified: {result.input_display_name}",
+                    style="info",
+                    markup=False,
+                    highlight=False,
+                    soft_wrap=True,
+                )
     if summary_mode:
         elapsed = time.monotonic() - start_time
         total = len(results)
