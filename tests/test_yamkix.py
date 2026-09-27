@@ -85,6 +85,64 @@ class TestRoundTripAndFormat:
         assert result.error is False
         assert result.unchanged is False
 
+    @pytest.mark.parametrize(
+        ("existing", "expected_changed"),
+        [
+            pytest.param(None, True, id="created"),
+            pytest.param(b"---\nkey: value\n", False, id="identical"),
+            pytest.param(b"---\r\nkey: value\r\n", True, id="crlf"),
+        ],
+    )
+    def test_output_changed_for_separate_destination(
+        self, tmp_path: Path, existing: bytes | None, expected_changed: bool
+    ) -> None:
+        """Test that output_changed compares the destination bytes, not the input."""
+        # GIVEN: an unformatted source, so input-based comparison would always say "changed"
+        input_file = tmp_path / "source.yml"
+        input_file.write_text("key:   value\n")
+        output_file = tmp_path / "destination.yml"
+        if existing is not None:
+            output_file.write_bytes(existing)
+        config = get_yamkix_config_from_default(
+            io_config=YamkixInputOutputConfig(input=str(input_file), output=str(output_file))
+        )
+
+        # WHEN
+        result = round_trip_and_format(config)
+
+        # THEN
+        assert result.unchanged is False
+        assert result.output_changed is expected_changed
+
+    def test_crlf_input_is_not_unchanged(self, tmp_path: Path) -> None:
+        """Test that a CRLF file rewritten with LF is neither unchanged nor unmodified."""
+        # GIVEN
+        input_file = tmp_path / "test.yml"
+        input_file.write_bytes(b"---\r\nkey: value\r\n")
+        config = get_yamkix_config_from_default(
+            io_config=YamkixInputOutputConfig(input=str(input_file), output=str(input_file))
+        )
+
+        # WHEN
+        result = round_trip_and_format(config)
+
+        # THEN
+        assert result.unchanged is False
+        assert result.output_changed is True
+
+    def test_output_changed_false_for_stdout(self, tmp_path: Path) -> None:
+        """Test that output_changed is False when writing to stdout."""
+        # GIVEN
+        input_file = tmp_path / "test.yml"
+        input_file.write_text("key:   value\n")
+        config = get_yamkix_config_from_default(io_config=YamkixInputOutputConfig(input=str(input_file), output=None))
+
+        # WHEN
+        result = round_trip_and_format(config)
+
+        # THEN
+        assert result.output_changed is False
+
     def test_enforce_block_style_end_to_end(self, tmp_path: Path) -> None:
         """Test that round_trip_and_format converts flow-style collections when enforce_block_style is set."""
         # GIVEN

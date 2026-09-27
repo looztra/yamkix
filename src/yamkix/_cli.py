@@ -8,7 +8,7 @@ from typing import Annotated
 import typer
 
 from yamkix.__version__ import __version__
-from yamkix.config import DEFAULT_LINE_WIDTH, YamkixConfig, create_yamkix_config_from_typer_args, print_yamkix_config
+from yamkix.config import DEFAULT_LINE_WIDTH, create_yamkix_config_from_typer_args, print_yamkix_config
 from yamkix.errors import InvalidYamlContentError
 from yamkix.helpers import get_stderr_console, get_stdout_console
 from yamkix.yamkix import FileProcessingResult, round_trip_and_format
@@ -43,69 +43,25 @@ class SupportedYamlParserMode(str, Enum):
     RT = "rt"
 
 
-class _Untracked(Enum):
-    """Marker for an output whose bytes cannot be safely snapshotted."""
+def _format_report_name(name: str) -> str:
+    """Make a filename safe to print on a single report line, without ambiguity.
 
-    MARKER = "untracked"
-
-
-_UNTRACKED = _Untracked.MARKER
-
-
-def _snapshot_output(output: str) -> bytes | _Untracked | None:
-    """Read the current bytes of an output file, if it is safe to do so.
-
-    Only regular files are read: special files such as ``/dev/stdout`` or FIFOs could block
-    or yield meaningless content.
+    Names that are printable and do not start with a double quote are returned as is. Other names
+    are wrapped in double quotes, with backslashes, double quotes and non-printable characters
+    escaped, so a quoted report can always be told apart from a literal filename.
 
     Args:
-        output: Path of the output file.
+        name: The filename to report.
 
     Returns:
-        The file bytes, None if the path does not exist, or ``_UNTRACKED`` if the path is not
-        a regular file or cannot be read.
+        The filename to print.
     """
-    output_path = Path(output)
-    try:
-        if not output_path.exists():
-            return None
-        if not output_path.is_file():
-            return _UNTRACKED
-        return output_path.read_bytes()
-    except OSError:
-        return _UNTRACKED
-
-
-def _modified_output_name(
-    config: YamkixConfig, result: FileProcessingResult, previous_output: bytes | _Untracked | None
-) -> str | None:
-    """Return the name of a created or content-modified output file, if any.
-
-    Raw bytes are compared so that changes invisible after text decoding (such as CRLF to LF
-    line endings) are reported. Special files are never reported. When a regular output file
-    cannot be read, fall back to whether formatting changed the content.
-
-    Args:
-        config: Configuration of the processed input and output.
-        result: Outcome of formatting the input.
-        previous_output: Output snapshot taken before processing (see `_snapshot_output`).
-
-    Returns:
-        The written output filename if its content changed, otherwise None.
-    """
-    output = config.io_config.output
-    if output is None:
-        return None
-    output_path = Path(output)
-    if output_path.exists() and not output_path.is_file():
-        # Special files (/dev/null, /dev/stdout, FIFOs...) are streams, not files whose content changed.
-        return None
-    current_output = _snapshot_output(output)
-    if previous_output is _UNTRACKED or current_output is _UNTRACKED:
-        modified = not result.unchanged
-    else:
-        modified = previous_output != current_output
-    return config.io_config.output_display_name if modified else None
+    if name.isprintable() and not name.startswith('"'):
+        return name
+    escaped = "".join(
+        "\\" + char if char in {"\\", '"'} else char if char.isprintable() else ascii(char)[1:-1] for char in name
+    )
+    return f'"{escaped}"'
 
 
 @app.command()
@@ -310,14 +266,13 @@ def main(  # noqa: PLR0913, PLR0917
         for config in yamkix_configs:
             if not silent_mode:
                 print_yamkix_config(config)
-            output = config.io_config.output
-            previous_output = _snapshot_output(output) if list_modified_mode and output is not None else None
+            written_outputs: list[str] = []
             try:
                 # Process the file(s)
-                result = round_trip_and_format(config)
+                result = round_trip_and_format(config, on_output_write=written_outputs.append)
                 results.append(result)
-                if list_modified_mode and (modified_name := _modified_output_name(config, result, previous_output)):
-                    modified_files.append(modified_name)
+                if list_modified_mode and result.output_changed:
+                    modified_files.append(config.io_config.output_display_name)
             except InvalidYamlContentError as e:
                 console.print(rf"Error processing \[{config.io_config.input_display_name}]: {e}", style="error")
                 console.print(e.__cause__, style="error")
@@ -328,16 +283,19 @@ def main(  # noqa: PLR0913, PLR0917
                         unchanged=False,
                     )
                 )
+            except BaseException:
+                # The output may be truncated or partially written: report it before propagating
+                if list_modified_mode and written_outputs:
+                    modified_files.append(config.io_config.output_display_name)
+                raise
     finally:
         for name in modified_files:
-            display_name = name
-            if not name.isprintable():
-                display_name = "".join(char if char.isprintable() else ascii(char)[1:-1] for char in name)
             console.print(
-                f"[yamkix] Modified: {display_name}",
+                f"[yamkix] Modified: {_format_report_name(name)}",
                 style="info",
                 markup=False,
                 highlight=False,
+                emoji=False,
                 soft_wrap=True,
             )
     if summary_mode:

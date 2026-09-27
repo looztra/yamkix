@@ -1,5 +1,7 @@
 """Tests for the Typer-based CLI implementation."""
 
+import errno
+import os
 import sys
 from pathlib import Path
 
@@ -101,7 +103,7 @@ class TestCli:
             files=None,
         )
         mock_print_config.assert_called_once_with(mock_config)
-        mock_round_trip.assert_called_once_with(mock_config)
+        mock_round_trip.assert_called_once_with(mock_config, on_output_write=mocker.ANY)
 
     def test_default_values_with_one_argument(self, mocker: MockerFixture, shared_datadir: Path) -> None:
         """Test running the CLI without any parameters uses default values."""
@@ -136,7 +138,7 @@ class TestCli:
             files=[test_file],
         )
         mock_print_config.assert_called_once_with(mock_config)
-        mock_round_trip.assert_called_once_with(mock_config)
+        mock_round_trip.assert_called_once_with(mock_config, on_output_write=mocker.ANY)
 
     def test_default_values_with_two_arguments(self, mocker: MockerFixture, shared_datadir: Path) -> None:
         """Test running the CLI without any parameters uses default values."""
@@ -479,7 +481,7 @@ class TestCli:
 
         escaped_name = str(source).replace("\n", r"\n")
         assert result.exit_code == 0
-        assert result.stderr.splitlines() == [f"[yamkix] Modified: {escaped_name}"]
+        assert result.stderr.splitlines() == [f'[yamkix] Modified: "{escaped_name}"']
         assert source.read_text() == "---\nkey: value\n"
 
     def test_list_modified_reports_crlf_normalization_in_place(self, tmp_path: Path) -> None:
@@ -504,18 +506,77 @@ class TestCli:
         assert result.exit_code == 0
         assert result.stderr.splitlines() == []
 
-    def test_list_modified_falls_back_when_output_unreadable(self, tmp_path: Path, mocker: MockerFixture) -> None:
-        """An unreadable output does not crash and falls back to the formatting result."""
+    def test_list_modified_reports_unreadable_destination(self, tmp_path: Path, mocker: MockerFixture) -> None:
+        """An unreadable destination cannot be compared, so it is reported without crashing."""
         source = tmp_path / "source.yml"
-        source.write_text("key:   value\n")
+        source.write_text("---\nkey: value\n")
         destination = tmp_path / "destination.yml"
-        destination.write_text("old\n")
-        mocker.patch.object(Path, "read_bytes", side_effect=PermissionError("denied"))
+        destination.write_text("---\nkey: value\n")
+        real_read_bytes = Path.read_bytes
+
+        def read_bytes(path: Path) -> bytes:
+            if path == destination:
+                raise PermissionError(path)
+            return real_read_bytes(path)
+
+        mocker.patch.object(Path, "read_bytes", autospec=True, side_effect=read_bytes)
 
         result = runner.invoke(
             app, ["--silent", "--list-modified", "--input", str(source), "--output", str(destination)]
         )
 
         assert result.exit_code == 0
-        assert destination.read_text() == "---\nkey: value\n"
         assert result.stderr.splitlines() == [f"[yamkix] Modified: {destination}"]
+
+    def test_list_modified_and_summary_agree_on_crlf(self, tmp_path: Path) -> None:
+        """A CRLF-to-LF rewrite is both listed as modified and not counted as unchanged."""
+        source = tmp_path / "source.yml"
+        source.write_bytes(b"---\r\nkey: value\r\n")
+
+        result = runner.invoke(app, ["--silent", "--list-modified", "--summary", str(source)])
+
+        assert result.exit_code == 0
+        assert f"[yamkix] Modified: {source}" in result.stderr.splitlines()
+        assert "0 unchanged" in result.stderr
+
+    def test_list_modified_does_not_render_emoji_codes(self, tmp_path: Path) -> None:
+        """Rich emoji codes such as :smile: in a filename are printed literally."""
+        source = tmp_path / "x:smile:y.yml"
+        source.write_text("key:   value\n")
+
+        result = runner.invoke(app, ["--silent", "--list-modified", str(source)])
+
+        assert result.exit_code == 0
+        assert result.stderr.splitlines() == [f"[yamkix] Modified: {source}"]
+
+    @pytest.mark.skipif(sys.platform == "win32", reason="backslash is a path separator on Windows")
+    def test_list_modified_literal_backslash_is_distinct_from_escaped_newline(self, tmp_path: Path) -> None:
+        """A literal backslash-n filename is printed as is, unlike an escaped (quoted) newline."""
+        literal = tmp_path / "a\\nb.yml"
+        literal.write_text("key:   value\n")
+        with_newline = tmp_path / "a\nb.yml"
+        with_newline.write_text("key:   value\n")
+
+        result = runner.invoke(app, ["--silent", "--list-modified", str(literal), str(with_newline)])
+
+        assert result.exit_code == 0
+        assert result.stderr.splitlines() == [
+            f"[yamkix] Modified: {literal}",
+            f'[yamkix] Modified: "{tmp_path}/a\\nb.yml"',
+        ]
+
+    def test_list_modified_reports_partially_written_output(self, tmp_path: Path, mocker: MockerFixture) -> None:
+        """An output truncated by a failure during dumping is still reported."""
+        source = tmp_path / "source.yml"
+        source.write_text("---\nkey: value\n")
+
+        def failing_dump(**kwargs: object) -> None:
+            Path(str(kwargs["output_file"])).write_text("")
+            raise OSError(errno.ENOSPC, os.strerror(errno.ENOSPC))
+
+        mocker.patch("yamkix.yamkix.yamkix_dump_all", side_effect=failing_dump)
+
+        result = runner.invoke(app, ["--silent", "--list-modified", str(source)])
+
+        assert result.exit_code != 0
+        assert result.stderr.splitlines() == [f"[yamkix] Modified: {source}"]
