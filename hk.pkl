@@ -22,8 +22,14 @@ local function precommit(hook: String, stage: String): Step = new {
 // Like pre-commit, report every failing step instead of stopping at the first
 fail_fast = false
 
+// Vendored agent skills, managed by skills-lock.json
+exclude = List(".agents/skills/**")
+
 steps {
-  ["trailing-whitespace"] = Builtins.trailing_whitespace
+  ["trailing-whitespace"] = (Builtins.trailing_whitespace) {
+    // Built and signed by the rulebook CLI: rewriting it breaks the signature
+    exclude = "rulebook/rulebook.html"
+  }
   // no hk builtin for check-yaml from https://github.com/pre-commit/pre-commit-hooks
   ["check-yaml"] = precommit("check-yaml", "pre-commit")
   // no hk builtin for check-toml from https://github.com/pre-commit/pre-commit-hooks
