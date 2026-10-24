@@ -1,0 +1,18 @@
+{
+  "formatVersion": 1,
+  "language": "en",
+  "repoUrl": "https://github.com/looztra/yamkix",
+  "hotspots": [
+    "src/yamkix/_cli.py",
+    "src/yamkix/config.py",
+    "src/yamkix/yamkix.py",
+    "src/yamkix/yaml_writer.py",
+    "src/yamkix/comments.py",
+    "src/yamkix/helpers.py",
+    "src/yamkix/args.py",
+    "src/yamkix/errors.py",
+    "tests/test_*.py",
+    "tests/data/expected/*.yml"
+  ],
+  "bin": "npx --yes rulebook-cli@0.3.0"
+}

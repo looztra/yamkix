@@ -1,5 +1,7 @@
 {
   "Exclude": [
-    "experiments"
+    "experiments",
+    "^rulebook/rulebook\\.html$",
+    "^\\.agents/skills/"
   ]
 }

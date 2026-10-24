@@ -1,9 +1,11 @@
 ---
+exclude: ^\.agents/skills/ # Vendored agent skills, managed by skills-lock.json
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace # Trims trailing whitespace
+        exclude: ^rulebook/rulebook\.html$ # Built and signed by the rulebook CLI
       - id: check-yaml # Validates YAML files
         args: [--allow-multiple-documents]
         exclude: |
