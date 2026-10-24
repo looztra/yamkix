@@ -232,7 +232,7 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 **Evidence.**
 - enforcement — src/yamkix/yamkix.py:140-141 `round_trip_and_format`
   `unchanged = written_bytes == input_bytes if input_file is not None else formatted == raw_input`
-- test — tests/test_yamkix.py:130 `TestRoundTripAndFormat::test_crlf_input_is_not_unchanged`
+- test — tests/test_yamkix.py:152 `TestRoundTripAndFormat::test_crlf_input_is_not_unchanged`
   `assert result.unchanged is False`
 - test — tests/test_cli.py:538-540 `TestCli::test_list_modified_and_summary_agree_on_crlf`
   `assert "0 unchanged" in result.stderr`
@@ -243,6 +243,7 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 **Open questions.** `test_returns_unchanged_true_when_content_not_modified` does not assert `unchanged is True`; is the positive case tested anywhere?
 
 **History.**
+- 2026-10-24 · e9e0cca · reanchored · test moved to tests/test_yamkix.py:152 after tests were added above it
 - 2026-10-24 · 823a0f3 · created
 
 ### FIL-R012 · An output counts as modified when it is created or its bytes change
@@ -257,16 +258,17 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
   `track_output = output_file is not None and not _is_special_file(Path(output_file))`
 - enforcement — src/yamkix/yamkix.py:143 `round_trip_and_format`
   `output_changed = track_output and (not previous_output_readable or written_bytes != previous_output)`
-- test — tests/test_yamkix.py:115 `TestRoundTripAndFormat::test_output_changed_for_separate_destination`
+- test — tests/test_yamkix.py:137 `TestRoundTripAndFormat::test_output_changed_for_separate_destination`
   `assert result.output_changed is expected_changed`
 
 **Edge cases.**
 - **FIL-R012.E1** Given an already formatted destination identical to the result, when an unformatted source is formatted into it, then it is not reported. — verified — tests/test_cli.py:446-447
 - **FIL-R012.E2** Given an output of `/dev/null`, when a file is formatted with `--list-modified`, then nothing is reported. — verified — tests/test_cli.py:506-507
 - **FIL-R012.E3** Given a destination that cannot be read before writing, when a file is formatted into it, then it is reported as modified. — verified — tests/test_cli.py:528-529
-- **FIL-R012.E4** Given an output on standard output, when a file is formatted, then nothing is reported. — verified — tests/test_yamkix.py:144
+- **FIL-R012.E4** Given an output on standard output, when a file is formatted, then nothing is reported. — verified — tests/test_yamkix.py:166
 
 **History.**
+- 2026-10-24 · e9e0cca · reanchored · tests moved to tests/test_yamkix.py:137 and :166 after tests were added above them
 - 2026-10-24 · 823a0f3 · created
 
 ### FIL-R013 · `--list-modified` prints one line per modified output, even when the run fails

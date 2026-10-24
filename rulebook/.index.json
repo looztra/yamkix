@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "verifiedAt": "823a0f3",
+  "verifiedAt": "e9e0cca",
   "anchors": [
     {
       "rule": "CMT-R001",
@@ -14,6 +14,32 @@
       "hash": "d5e80d8ee53f",
       "size": 1,
       "head": "d5e80d8ee53f"
+    },
+    {
+      "rule": "CMT-R001",
+      "kind": "test",
+      "path": "tests/test_yamkix.py",
+      "symbol": "TestCommentsByParsingMode::test_comments_follow_parsing_mode",
+      "lines": [
+        261,
+        261
+      ],
+      "hash": "46bf58e6adba",
+      "size": 1,
+      "head": "46bf58e6adba"
+    },
+    {
+      "rule": "CMT-R001",
+      "kind": "test",
+      "path": "tests/test_yamkix.py",
+      "symbol": "TestCommentsByParsingMode::test_safe_mode_drops_comments_but_keeps_data",
+      "lines": [
+        295,
+        296
+      ],
+      "hash": "12d21e5a25f3",
+      "size": 2,
+      "head": "6a9951d67f26"
     },
     {
       "rule": "CMT-R002",
@@ -437,8 +463,8 @@
       "path": "tests/test_yamkix.py",
       "symbol": "TestRoundTripAndFormat::test_crlf_input_is_not_unchanged",
       "lines": [
-        130,
-        130
+        152,
+        152
       ],
       "hash": "e11918dd2290",
       "size": 1,
@@ -489,8 +515,8 @@
       "path": "tests/test_yamkix.py",
       "symbol": "TestRoundTripAndFormat::test_output_changed_for_separate_destination",
       "lines": [
-        115,
-        115
+        137,
+        137
       ],
       "hash": "6d734be2de5a",
       "size": 1,
