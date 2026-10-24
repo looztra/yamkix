@@ -6,11 +6,33 @@ from textwrap import dedent
 
 import pytest
 from pytest_mock import MockerFixture
+from ruamel.yaml import YAML
 
 from yamkix.config import YamkixInputOutputConfig, get_default_yamkix_config, get_yamkix_config_from_default
 from yamkix.errors import InvalidYamlContentError
 from yamkix.yamkix import FileProcessingResult, round_trip_and_format, yamkix_dump_all
 from yamkix.yaml_writer import get_opinionated_yaml_writer
+
+# editorconfig-checker-disable
+COMMENTED_DOCUMENT = dedent("""\
+    ---
+    # top-level full-line comment
+    key: value  # map entry comment
+    url: "http://example.com/#anchor"
+    nested:
+      # nested full-line comment
+      inner: 1
+    items:
+      - first  # list item comment
+      - second
+    """)
+# editorconfig-checker-enable
+COMMENT_TEXTS = [
+    "# top-level full-line comment",
+    "# map entry comment",
+    "# nested full-line comment",
+    "# list item comment",
+]
 
 
 class TestRoundTripAndFormat:
@@ -208,6 +230,70 @@ class TestRoundTripAndFormat:
         """)
         # editorconfig-checker-enable
         assert input_file.read_text() == expected
+
+
+class TestCommentsByParsingMode:
+    """Comments survive the round-trip mode and are dropped by the safe mode (CMT-R001)."""
+
+    @pytest.mark.parametrize(
+        ("parsing_mode", "comments_kept"),
+        [
+            pytest.param("rt", True, id="rt-keeps-comments"),
+            pytest.param("safe", False, id="safe-drops-comments"),
+        ],
+    )
+    def test_comments_follow_parsing_mode(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str], parsing_mode: str, comments_kept: bool
+    ) -> None:
+        """Every end-of-line and full-line comment is kept in rt mode and dropped in safe mode."""
+        # GIVEN
+        input_file = tmp_path / "commented.yml"
+        input_file.write_text(COMMENTED_DOCUMENT)
+        config = get_yamkix_config_from_default(
+            parsing_mode=parsing_mode, io_config=YamkixInputOutputConfig(input=str(input_file), output=None)
+        )
+
+        # WHEN
+        round_trip_and_format(config)
+
+        # THEN
+        output = capsys.readouterr().out
+        assert [comment for comment in COMMENT_TEXTS if comment in output] == (COMMENT_TEXTS if comments_kept else [])
+
+    @pytest.mark.parametrize(
+        ("spaces_before_comment", "align_comments"),
+        [
+            pytest.param(None, False, id="no-comment-option"),
+            pytest.param(2, False, id="spaces-before-comment"),
+            pytest.param(None, True, id="align-comments"),
+        ],
+    )
+    def test_safe_mode_drops_comments_but_keeps_data(
+        self,
+        tmp_path: Path,
+        capsys: pytest.CaptureFixture[str],
+        spaces_before_comment: int | None,
+        align_comments: bool,
+    ) -> None:
+        """Safe mode only loses comments: the data, including a '#' inside a string, is unchanged."""
+        # GIVEN
+        input_file = tmp_path / "commented.yml"
+        input_file.write_text(COMMENTED_DOCUMENT)
+        config = get_yamkix_config_from_default(
+            parsing_mode="safe",
+            spaces_before_comment=spaces_before_comment,
+            align_comments=align_comments,
+            io_config=YamkixInputOutputConfig(input=str(input_file), output=None),
+        )
+
+        # WHEN
+        round_trip_and_format(config)
+
+        # THEN
+        output = capsys.readouterr().out
+        safe_loader = YAML(typ="safe")
+        assert safe_loader.load(output) == safe_loader.load(COMMENTED_DOCUMENT)
+        assert not any(comment in output for comment in COMMENT_TEXTS)
 
 
 class TestYamkixDumpAll:

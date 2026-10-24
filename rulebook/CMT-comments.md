@@ -10,23 +10,29 @@ How yamkix keeps, spaces and aligns the end-of-line comments of a YAML document.
 
 ### CMT-R001 · Comments are kept in round-trip mode and dropped in safe mode
 - **Kind:** rule · **Category:** derivation · **Implements:** CMT-P01
-- **Status:** active · **Confidence:** read · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Status:** active · **Confidence:** verified · **Audit:** passed
+- **Verified at:** e9e0cca (2026-10-24)
 
 **Rule.** Comments are kept only when the parsing mode is `rt` (the default); with `--typ safe` every comment is removed from the output.
 
-**Context.** The parsing mode chosen by the user is handed as is to the YAML library; the safe loader does not keep comments. The `--typ` help text warns about it. Safe mode also rewrites JSON-style collections in block style.
+**Context.** The parsing mode chosen by the user is handed as is to the YAML library; the safe loader does not keep comments. The `--typ` help text warns about it. Only comments are lost: the data is the same, including a `#` inside a quoted value. Safe mode also changes the layout (OPT-R004).
 
 **Evidence.**
 - enforcement — src/yamkix/yaml_writer.py:27 `get_opinionated_yaml_writer`
   `yaml = YAML(typ=yamkix_config.parsing_mode)`
+- test — tests/test_yamkix.py:261 `TestCommentsByParsingMode::test_comments_follow_parsing_mode`
+  `assert [comment for comment in COMMENT_TEXTS if comment in output] == (COMMENT_TEXTS if comments_kept else [])`
+- test — tests/test_yamkix.py:295-296 `TestCommentsByParsingMode::test_safe_mode_drops_comments_but_keeps_data`
+  `assert safe_loader.load(output) == safe_loader.load(COMMENTED_DOCUMENT)`
 
 **Edge cases.**
-- **CMT-R001.E1** Given a file with end-of-line and full-line comments, when it is formatted with `--typ safe`, then the output holds no comment at all. — read — src/yamkix/yaml_writer.py:27
-
-**Open questions.** No test asserts that safe mode drops comments; should one pin this documented behaviour?
+- **CMT-R001.E1** Given a document with a top-level full-line comment, a nested full-line comment and end-of-line comments on a map entry and a list item, when it is formatted in `rt` mode, then all four comments are kept. — verified — tests/test_yamkix.py:241
+- **CMT-R001.E2** Given the same document, when it is formatted in `safe` mode, then none of the four comments is left. — verified — tests/test_yamkix.py:242
+- **CMT-R001.E3** Given the same document with `url: "http://example.com/#anchor"`, when it is formatted in `safe` mode, then the loaded data is identical to the input's, `#anchor` included. — verified — tests/test_yamkix.py:266
+- **CMT-R001.E4** Given `--spaces-before-comment 2` or `--align-comments` in `safe` mode, when the document is formatted, then the comment options have nothing to act on, no error is raised and no comment is written. — verified — tests/test_yamkix.py:267-268
 
 **History.**
+- 2026-10-24 · e9e0cca · changed · confidence read → verified, tests added in tests/test_yamkix.py
 - 2026-10-24 · 823a0f3 · created
 
 ### CMT-R002 · Without a spacing option, comments keep their original column
