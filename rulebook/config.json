@@ -1,0 +1,7 @@
+{
+  "formatVersion": 1,
+  "language": "en",
+  "repoUrl": null,
+  "hotspots": [],
+  "bin": "npx --yes rulebook-cli@0.3.0"
+}
