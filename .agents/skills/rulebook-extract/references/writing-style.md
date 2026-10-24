@@ -1,0 +1,46 @@
+# Writing the cards
+
+Readers are business people first, developers second. Everything above the evidence
+line must make sense to someone who never opened the code.
+
+## The statement (`Rule.` / `Statement.`)
+- One sentence, RuleSpeak style: "must", "only if", "may not", "at most", "no later than".
+- Concrete values in the sentence: "14 days", "500 €", "5 attempts".
+- No function, class or variable names. Parameters go in `Parameters.`.
+
+| Avoid | Write |
+|---|---|
+| `canRefund()` returns false when diff > REFUND_WINDOW_DAYS | A refund can be requested only up to 14 days after delivery. |
+| Validation on password length | A password must have at least 12 characters. |
+
+## Context
+1 to 3 plain sentences: why it matters, who it affects, a common misunderstanding.
+Anything you deduced rather than read is phrased as such ("Probably…", "The code suggests…").
+
+## Evidence
+- Cite the code that **decides**, not the code that merely passes the value along.
+- Exact lines: `path:start-end`, plus the symbol when there is one — **one range and one symbol
+  per evidence line**; cite several places with several lines.
+- At most one excerpt line per evidence item, 5 lines in total per card. Point, don't copy.
+- Comments and names are never evidence on their own.
+- A test is evidence only if one of its assertions checks the rule's outcome; its excerpt is
+  that assertion. A test that only runs the code is not evidence of the rule.
+- Cite the test of **this** case, not its neighbour: tests of one rule often sit side by side
+  (accepted / refused / disabled). Read the test's name and its setup before citing it.
+
+## Edge cases
+An edge case marked `verified` points at the assertion that checks it, and uses the values that
+test uses (the same number, the same unit, or one stated conversion: "60 000 ms, soit 60 s"). A
+case whose value you chose yourself is `read`, with the line of code that decides it.
+
+`Given <situation>, when <action>, then <outcome>.` — written in the reference's language:
+in French, `Étant donné <situation>, quand <action>, alors <résultat>.` One case per bullet, plain
+words, with its own confidence and a `path:line` reference when you have one.
+
+## Open questions
+Anything a human must decide or confirm: ambiguous behaviour, contradictions,
+a value that looks accidental. Ask the question; do not answer it yourself.
+
+## Language
+Write the cards in the reference's language (`config.json` → `language`).
+Labels may be English or French (see `card-template.md`); closed vocabulary values stay English codes.
