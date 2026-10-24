@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "rulebook-edge-cases": {
+      "source": "GregoryBabonaux/rulebook",
+      "sourceType": "github",
+      "skillPath": "skills/rulebook-edge-cases/SKILL.md",
+      "computedHash": "b7e844fbcdba36aabbb344462f358a6f69655ee469289958dfde0b059588b1c1"
+    },
+    "rulebook-extract": {
+      "source": "GregoryBabonaux/rulebook",
+      "sourceType": "github",
+      "skillPath": "skills/rulebook-extract/SKILL.md",
+      "computedHash": "bf0430bb727bab33a233bf6c6be2f661a0d615a6ebfff2dd68f7b8d4388f3676"
+    },
+    "rulebook-map": {
+      "source": "GregoryBabonaux/rulebook",
+      "sourceType": "github",
+      "skillPath": "skills/rulebook-map/SKILL.md",
+      "computedHash": "583587dac45850a42af1e3d09fe828276849e689622e5ed2c4c4466800113b64"
+    },
+    "rulebook-publish": {
+      "source": "GregoryBabonaux/rulebook",
+      "sourceType": "github",
+      "skillPath": "skills/rulebook-publish/SKILL.md",
+      "computedHash": "3532fb56569459f5eaf876f9d0f33c91fe53fa329b508ecfb9167625379d5f7c"
+    },
+    "rulebook-sync": {
+      "source": "GregoryBabonaux/rulebook",
+      "sourceType": "github",
+      "skillPath": "skills/rulebook-sync/SKILL.md",
+      "computedHash": "ae23b91a99d379d409ac618cea4b4eeb55ff0633bb3e509ab88a4a49d6fb46a5"
+    }
+  }
+}
