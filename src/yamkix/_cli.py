@@ -266,10 +266,9 @@ def main(  # noqa: PLR0913, PLR0917
         for config in yamkix_configs:
             if not silent_mode:
                 print_yamkix_config(config)
-            written_outputs: list[str] = []
             try:
                 # Process the file(s)
-                result = round_trip_and_format(config, on_output_write=written_outputs.append)
+                result = round_trip_and_format(config)
                 results.append(result)
                 if list_modified_mode and result.output_changed:
                     modified_files.append(config.io_config.output_display_name)
@@ -283,11 +282,6 @@ def main(  # noqa: PLR0913, PLR0917
                         unchanged=False,
                     )
                 )
-            except BaseException:
-                # The output may be truncated or partially written: report it before propagating
-                if list_modified_mode and written_outputs:
-                    modified_files.append(config.io_config.output_display_name)
-                raise
     finally:
         for name in modified_files:
             console.print(

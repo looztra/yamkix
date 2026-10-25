@@ -50,6 +50,9 @@ Check the available options with `yamkix --help` (or see the [CLI options refere
       yolo: baz
     ```
 
+!!! Note
+    Output files are never left half-written: `yamkix` writes the result to a temporary file in the same directory, then moves it over the destination. If formatting or writing fails (for example, the disk is full), the destination keeps its previous content. The destination directory must therefore be writable. Symlinks are followed and permission bits are kept, but the replaced file belongs to the user running `yamkix` and no longer shares hard links.
+
 ## Read from STDIN
 
 - You can format the input provide through `stdin`
@@ -107,7 +110,7 @@ Check the available options with `yamkix --help` (or see the [CLI options refere
 - For in-place formatting, the reported path is the input file. With `--output`, it is the destination, even if the source was already formatted. `--stdout` and special files such as `/dev/null` are not files whose content changed and produce no modified-file line
 - Changes are detected on raw bytes, so a file whose only change is its line endings (for example CRLF converted to LF) is listed, and not counted as unchanged by `--summary`
 - Unchanged destinations and files that failed to parse are not listed; no modified-file lines appear when nothing changed. A destination that cannot be read is listed, since it cannot be compared
-- If a later file fails to open, files modified earlier in the run are still listed before the command exits with an error. A file left partially written by a failure is listed too
+- If a later file fails to open, files modified earlier in the run are still listed before the command exits with an error. A file whose write failed keeps its previous content and is not listed
 - Filenames containing control characters, or starting with a double quote, are printed between double quotes with backslash escapes (for example, a newline appears as `"a\nb.yml"`), to keep one unambiguous report per line
 
     ```shell

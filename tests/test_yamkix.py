@@ -379,6 +379,46 @@ class TestYamkixDumpAll:
         assert initial_content not in content
         assert initial_content not in sut.read_text()
 
+    @pytest.mark.skipif(sys.platform == "win32", reason="POSIX permission bits")
+    def test_existing_file_mode_is_kept(self, tmp_path: Path) -> None:
+        """Test that the replaced output file keeps its permission bits."""
+        sut = tmp_path / "sut.yml"
+        sut.write_text("key:   value\n")
+        sut.chmod(0o640)
+        yaml_parser = get_opinionated_yaml_writer(get_default_yamkix_config())
+
+        yamkix_dump_all(
+            [yaml_parser.load("key: value\n")],
+            yaml_parser,
+            dash_inwards=False,
+            output_file=str(sut),
+            spaces_before_comment=None,
+        )
+
+        assert sut.stat().st_mode & 0o777 == 0o640
+        assert sut.read_text() == "---\nkey: value\n"
+
+    @pytest.mark.skipif(sys.platform == "win32", reason="symlinks need privileges on Windows")
+    def test_symlinked_output_updates_its_target(self, tmp_path: Path) -> None:
+        """Test that a symlinked output stays a symlink and its target receives the content."""
+        target = tmp_path / "target.yml"
+        target.write_text("key:   value\n")
+        link = tmp_path / "link.yml"
+        link.symlink_to(target)
+        yaml_parser = get_opinionated_yaml_writer(get_default_yamkix_config())
+
+        yamkix_dump_all(
+            [yaml_parser.load("key: value\n")],
+            yaml_parser,
+            dash_inwards=False,
+            output_file=str(link),
+            spaces_before_comment=None,
+        )
+
+        assert link.is_symlink()
+        assert target.read_text() == "---\nkey: value\n"
+        assert sorted(path.name for path in tmp_path.iterdir()) == ["link.yml", "target.yml"]
+
     def test_write_to_stdout(self, mocker: MockerFixture) -> None:
         """Test that yamkix_dump_all writes to stdout."""
         # GIVEN
