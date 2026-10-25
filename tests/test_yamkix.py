@@ -326,6 +326,37 @@ class TestCommentsFollowingAnEndOfLineComment:
         )
 
 
+class TestBlockScalarTrailingSpaces:
+    """Trailing spaces inside block scalars are part of the value and are kept (LAY-R010)."""
+
+    # editorconfig-checker-disable
+    DOCUMENT = "---\nscript: |\n  echo a  \n  echo b\nfolded: >-\n  text  \nnext: value\n"
+    SEQUENCE_DOCUMENT = "---\n- |\n  x  \n- k: |\n    y  \n  o: z\n"
+    # editorconfig-checker-enable
+
+    @pytest.mark.parametrize("document", [pytest.param(DOCUMENT, id="map"), pytest.param(SEQUENCE_DOCUMENT, id="seq")])
+    @pytest.mark.parametrize("line_width", [pytest.param(None, id="default-width"), pytest.param(80, id="width-80")])
+    def test_block_scalar_values_are_unchanged(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str], document: str, line_width: int | None
+    ) -> None:
+        """Formatting keeps the trailing spaces of literal and folded block scalar lines."""
+        # GIVEN
+        input_file = tmp_path / "block.yml"
+        input_file.write_text(document)
+        config = get_yamkix_config_from_default(
+            line_width=line_width, io_config=YamkixInputOutputConfig(input=str(input_file), output=None)
+        )
+
+        # WHEN
+        round_trip_and_format(config)
+
+        # THEN
+        output = capsys.readouterr().out
+        safe_loader = YAML(typ="safe")
+        assert safe_loader.load(output) == safe_loader.load(document)
+        assert output == document
+
+
 class TestYamkixDumpAll:
     """Provide tests for the yamkix_dump_all function."""
 

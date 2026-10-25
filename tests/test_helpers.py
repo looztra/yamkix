@@ -115,6 +115,14 @@ def test_strip_leading_double_space_when_none() -> None:
         pytest.param("text1 ", "text1", id="no_trailing_newline"),
         pytest.param("", "", id="empty_stream"),
         pytest.param('quoted: "line one \\nline two"\n', 'quoted: "line one \\nline two"\n', id="escaped_space_kept"),
+        pytest.param("s: |\n  a  \n\n  b \nk: v \n", "s: |\n  a  \n\n  b \nk: v\n", id="literal_block_kept"),
+        pytest.param("s: >- # c\n  a  \nk: v \n", "s: >- # c\n  a  \nk: v\n", id="folded_block_with_comment_kept"),
+        pytest.param("- k: |\n    a  \n  o: v \n", "- k: |\n    a  \n  o: v\n", id="less_indented_sibling_ends_block"),
+        pytest.param(
+            "k: |2\n   a  \n  b  \nn: v \n", "k: |2\n   a  \n  b  \nn: v\n", id="explicit_indentation_block_kept"
+        ),
+        pytest.param("--- |\na  \nb  \n", "--- |\na  \nb  \n", id="root_block_kept"),
+        pytest.param("k: a |\nn: v \n", "k: a |\nn: v\n", id="plain_scalar_ending_with_pipe_is_not_a_block"),
     ],
 )
 def test_strip_trailing_spaces(stream: str, expected: str) -> None:

@@ -62,7 +62,7 @@ yamkix --input file.yml --line-width 80
 
 !!! note "Fold-point trailing spaces: fixed since 1.1.0"
 
-    The underlying `ruamel.yaml` emitter leaves a **trailing space at every fold point** when it wraps plain scalars and flow collections — and `trailing-spaces` is an **error-level** rule in both the `default` and `relaxed` presets. Since yamkix 1.1.0 this artifact is stripped from the output ([issue #437](https://github.com/looztra/yamkix/issues/437)), so wrapped output no longer trips `trailing-spaces`.
+    The underlying `ruamel.yaml` emitter leaves a **trailing space at every fold point** when it wraps plain scalars and flow collections — and `trailing-spaces` is an **error-level** rule in both the `default` and `relaxed` presets. Since yamkix 1.1.0 this artifact is stripped from the output ([issue #437](https://github.com/looztra/yamkix/issues/437)), so wrapped output no longer trips `trailing-spaces`. Trailing spaces inside literal (`|`) and folded (`>`) block scalars are part of the value, so yamkix keeps them and `trailing-spaces` can still flag them.
 
     Remaining caveats before reaching for `--line-width 80`: folded flow collections can trip the `indentation` rule (warning-level in relaxed), and non-breakable tokens (long URLs…) still exceed the width anyway (tolerated by yamllint thanks to `allow-non-breakable-words: true`). yamkix still ships with `line_width=2048` by default; if you prefer not to wrap, the yamllint side can be reconciled with the companion config below.
 
