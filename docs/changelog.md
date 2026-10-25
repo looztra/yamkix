@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.2.1](https://github.com/looztra/yamkix/compare/v1.2.0...v1.2.1) (2026-10-25)
+
+
+### Bug Fixes
+
+* **cli:** refuse --spaces-before-comment values below 1 ([caf745c](https://github.com/looztra/yamkix/commit/caf745c34b50a8a13663da09aa9d17e1a5f6941a))
+* **comments:** align list comments ([#589](https://github.com/looztra/yamkix/issues/589)) ([7813939](https://github.com/looztra/yamkix/commit/78139390c9e362ca3744fde7cc690c5c428e13db))
+* **comments:** keep lines following a repositioned end-of-line comment ([3825235](https://github.com/looztra/yamkix/commit/382523526e3c3f0e6cfbade5c53d446307fc7d20))
+* **config:** refuse an unknown parser mode in get_yamkix_config_from_default ([caf745c](https://github.com/looztra/yamkix/commit/caf745c34b50a8a13663da09aa9d17e1a5f6941a))
+* **config:** warn that --enforce-block-style has no effect with --typ safe ([caf745c](https://github.com/looztra/yamkix/commit/caf745c34b50a8a13663da09aa9d17e1a5f6941a))
+* **config:** warn that --enforce-double-quotes has no effect with --typ safe ([caf745c](https://github.com/looztra/yamkix/commit/caf745c34b50a8a13663da09aa9d17e1a5f6941a))
+* **emitter:** keep trailing spaces inside block scalars ([3825235](https://github.com/looztra/yamkix/commit/382523526e3c3f0e6cfbade5c53d446307fc7d20))
+* **io:** write output files atomically ([3825235](https://github.com/looztra/yamkix/commit/382523526e3c3f0e6cfbade5c53d446307fc7d20))
+
+
+### Documentation
+
+* **cli:** describe what --typ safe and --default-flow-style do ([caf745c](https://github.com/looztra/yamkix/commit/caf745c34b50a8a13663da09aa9d17e1a5f6941a))
+* **rulebook:** add business rulebook with audited rule cards ([#583](https://github.com/looztra/yamkix/issues/583)) ([b6f1a4f](https://github.com/looztra/yamkix/commit/b6f1a4fac815246ce0a83aaa39799b9fb86630ce))
+
 ## [1.2.0](https://github.com/looztra/yamkix/compare/v1.1.0...v1.2.0) (2026-09-27)
 
 
