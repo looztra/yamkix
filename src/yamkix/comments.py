@@ -83,20 +83,20 @@ def align_comments(data: CommentedBase, extra: int = 0) -> None:
         extra: Additional spaces to add after the maximum column position.
     """
 
-    def align_one(d: CommentedBase, extra: int = 0) -> None:
+    def align_one(d: CommentedBase, slot: int, extra: int = 0) -> None:
         if not hasattr(d, "ca") or not d.ca or not d.ca.items:
             return
-        max_col = max((comment[2].column for comment in d.ca.items.values() if comment[2] is not None), default=0)
-        for comment in d.ca.items.values():
-            if comment[2] is not None:
-                comment[2].column = max_col + extra
+        eol_comments = [comment[slot] for comment in d.ca.items.values() if comment[slot] is not None]
+        max_col = max((comment.column for comment in eol_comments), default=0)
+        for comment in eol_comments:
+            comment.column = max_col + extra
 
     if isinstance(data, CommentedMap):
-        align_one(data, extra=extra)
+        align_one(data, slot=2, extra=extra)
         for val in data.values():
             align_comments(val, extra=extra)
     elif isinstance(data, CommentedSeq):
-        align_one(data, extra=extra)
+        align_one(data, slot=0, extra=extra)
         for elem in data:
             align_comments(elem, extra=extra)
 

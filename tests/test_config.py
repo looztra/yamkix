@@ -168,6 +168,8 @@ class TestYamkixConfigFromArgs:
         assert sut.spaces_before_comment is None
         assert sut.line_width == DEFAULT_LINE_WIDTH
         assert sut.enforce_block_style is False
+        assert sut.enforce_double_quotes is False
+        assert sut.align_comments is False
         assert sut.version is False
 
     def test_get_config_from_args_with_invalid_typ(self) -> None:

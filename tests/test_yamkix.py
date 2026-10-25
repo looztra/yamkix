@@ -90,6 +90,7 @@ class TestRoundTripAndFormat:
         assert isinstance(result, FileProcessingResult)
         assert result.error is False
         assert result.input_display_name == str(input_file)
+        assert result.unchanged is True
 
     def test_returns_unchanged_false_when_content_is_modified(self, tmp_path: Path) -> None:
         """Test that round_trip_and_format returns unchanged=False when content is reformatted."""
