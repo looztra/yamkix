@@ -1,0 +1,316 @@
+{
+  "version": 1,
+  "commit": "e9e0cca",
+  "domains": {
+    "LAY": {
+      "total": 5,
+      "covered": 5,
+      "dismissed": 0,
+      "review": 0,
+      "reached": {
+        "total": 0,
+        "review": 0
+      }
+    },
+    "QUO": {
+      "total": 2,
+      "covered": 2,
+      "dismissed": 0,
+      "review": 0,
+      "reached": {
+        "total": 0,
+        "review": 0
+      }
+    },
+    "CMT": {
+      "total": 3,
+      "covered": 2,
+      "dismissed": 1,
+      "review": 0,
+      "reached": {
+        "total": 0,
+        "review": 0
+      }
+    },
+    "FIL": {
+      "total": 16,
+      "covered": 9,
+      "dismissed": 7,
+      "review": 0,
+      "reached": {
+        "total": 0,
+        "review": 0
+      }
+    },
+    "OPT": {
+      "total": 11,
+      "covered": 6,
+      "dismissed": 5,
+      "review": 0,
+      "reached": {
+        "total": 0,
+        "review": 0
+      }
+    }
+  },
+  "outside": 0,
+  "points": [
+    {
+      "key": "3d3a870ab5ec",
+      "path": "src/yamkix/_cli.py",
+      "line": 35,
+      "kind": "guard",
+      "text": "raise typer.Exit(code=0)",
+      "domains": [
+        "FIL"
+      ],
+      "status": "dismissed"
+    },
+    {
+      "key": "f391b281c274",
+      "path": "src/yamkix/_cli.py",
+      "line": 290,
+      "kind": "guard",
+      "text": "raise",
+      "domains": [
+        "FIL"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "89fab6ffdfdb",
+      "path": "src/yamkix/_cli.py",
+      "line": 312,
+      "kind": "condition",
+      "text": "if __name__ == \"__main__\":",
+      "domains": [
+        "FIL"
+      ],
+      "status": "dismissed"
+    },
+    {
+      "key": "69c5e7b8ea59",
+      "path": "src/yamkix/comments.py",
+      "line": 23,
+      "kind": "condition",
+      "text": "if comment[0] != \"#\":",
+      "domains": [
+        "CMT"
+      ],
+      "status": "dismissed"
+    },
+    {
+      "key": "739a24f1d588",
+      "path": "src/yamkix/comments.py",
+      "line": 25,
+      "kind": "condition",
+      "text": "if org_col != 0 and comment[0] == \"#\": # only do this if the specified column is not the beginning of the line",
+      "domains": [
+        "CMT"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "3bd7f7b87629",
+      "path": "src/yamkix/comments.py",
+      "line": 89,
+      "kind": "calculation",
+      "text": "max_col = max((comment[2].column for comment in d.ca.items.values() if comment[2] is not None), default=0)",
+      "domains": [
+        "CMT"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "a3719d7a3e39",
+      "path": "src/yamkix/config.py",
+      "line": 12,
+      "kind": "constant",
+      "text": "DEFAULT_LINE_WIDTH: Final = 2048",
+      "domains": [
+        "FIL",
+        "OPT"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "a83b20ba5b16",
+      "path": "src/yamkix/config.py",
+      "line": 251,
+      "kind": "condition",
+      "text": "f_input = None if (args.input is None or args.input == STDIN_DISPLAY_NAME) else args.input",
+      "domains": [
+        "FIL",
+        "OPT"
+      ],
+      "status": "dismissed"
+    },
+    {
+      "key": "d5d12512c47d",
+      "path": "src/yamkix/config.py",
+      "line": 254,
+      "kind": "condition",
+      "text": "elif args.output is not None and args.output != STDOUT_DISPLAY_NAME:",
+      "domains": [
+        "FIL",
+        "OPT"
+      ],
+      "status": "dismissed"
+    },
+    {
+      "key": "a3f848a7eecb",
+      "path": "src/yamkix/config.py",
+      "line": 256,
+      "kind": "condition",
+      "text": "elif args.output == STDOUT_DISPLAY_NAME or f_input is None:",
+      "domains": [
+        "FIL",
+        "OPT"
+      ],
+      "status": "dismissed"
+    },
+    {
+      "key": "87879186d7f1",
+      "path": "src/yamkix/config.py",
+      "line": 268,
+      "kind": "condition",
+      "text": "if args.typ not in [\"safe\", \"rt\"]:",
+      "domains": [
+        "FIL",
+        "OPT"
+      ],
+      "status": "dismissed"
+    },
+    {
+      "key": "ebd874f722b2",
+      "path": "src/yamkix/config.py",
+      "line": 269,
+      "kind": "guard",
+      "text": "raise InvalidTypValueError(args.typ)",
+      "domains": [
+        "FIL",
+        "OPT"
+      ],
+      "status": "dismissed"
+    },
+    {
+      "key": "8dd476d323b8",
+      "path": "src/yamkix/config.py",
+      "line": 379,
+      "kind": "condition",
+      "text": "if len(files) == 0:",
+      "domains": [
+        "FIL",
+        "OPT"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "741b6e505dc8",
+      "path": "src/yamkix/config.py",
+      "line": 381,
+      "kind": "guard",
+      "text": "raise ValueError(msg)",
+      "domains": [
+        "FIL",
+        "OPT"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "977657d48e2d",
+      "path": "src/yamkix/config.py",
+      "line": 391,
+      "kind": "condition",
+      "text": "f_input = None if (input_file is None or input_file.lower() == STDIN_DISPLAY_NAME.lower()) else input_file",
+      "domains": [
+        "FIL",
+        "OPT"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "1730fc96db83",
+      "path": "src/yamkix/config.py",
+      "line": 396,
+      "kind": "condition",
+      "text": "elif output_file is not None and output_file.lower() != STDOUT_DISPLAY_NAME.lower():",
+      "domains": [
+        "FIL",
+        "OPT"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "34e6c97a9bd6",
+      "path": "src/yamkix/config.py",
+      "line": 399,
+      "kind": "condition",
+      "text": "elif (output_file is not None and output_file.lower() == STDOUT_DISPLAY_NAME.lower()) or (",
+      "domains": [
+        "FIL",
+        "OPT"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "e14933ed4c9c",
+      "path": "src/yamkix/yamkix.py",
+      "line": 109,
+      "kind": "guard",
+      "text": "raise InvalidYamlContentError from parsing_error",
+      "domains": [
+        "LAY",
+        "QUO",
+        "FIL"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "eeb837080c51",
+      "path": "src/yamkix/yamkix.py",
+      "line": 258,
+      "kind": "condition",
+      "text": "if dash_inwards and type(single_item).__name__ == \"CommentedSeq\":",
+      "domains": [
+        "LAY",
+        "QUO",
+        "FIL"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "17e640ee009d",
+      "path": "src/yamkix/yaml_writer.py",
+      "line": 7,
+      "kind": "constant",
+      "text": "OPINIONATED_MAPPING_VALUE = 2",
+      "domains": [
+        "LAY"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "66096239546e",
+      "path": "src/yamkix/yaml_writer.py",
+      "line": 8,
+      "kind": "constant",
+      "text": "OPINIONATED_SEQUENCE_VALUE = 4",
+      "domains": [
+        "LAY"
+      ],
+      "status": "covered"
+    },
+    {
+      "key": "e85ff2668d3a",
+      "path": "src/yamkix/yaml_writer.py",
+      "line": 9,
+      "kind": "constant",
+      "text": "OPINIONATED_OFFSET_VALUE = 2",
+      "domains": [
+        "LAY"
+      ],
+      "status": "covered"
+    }
+  ]
+}

@@ -14,11 +14,6 @@ repos:
       - id: check-json # Validates JSON files # .vscode/ json files are actually jsonc files
         exclude: ^.vscode/.*
 
-  - repo: https://gitlab.com/bmares/check-json5
-    rev: v1.0.1
-    hooks:
-      - id: check-json5
-
   - repo: https://github.com/looztra/yamkix
     rev: v1.2.0
     hooks:

@@ -1,0 +1,27 @@
+# Business domains
+
+- **LAY** · Document layout — How yamkix lays out every YAML document it writes: document markers, indentation, collection style and line width.
+  - **Covers**: explicit start `---` and end `...` markers, dash pushed inwards (mapping 2 / sequence 4 / offset 2 indentation), default flow style, forcing block style on JSON-like collections, line width, stripping trailing spaces and the leading double space of top-level lists.
+  - **Concepts**: document, explicit start, explicit end, dash inwards, flow style, block style, empty collection, line width, round-trip (`rt`) vs `safe` parsing mode.
+  - **Code**: `src/yamkix/yaml_writer.py`, `src/yamkix/helpers.py`, `src/yamkix/yamkix.py`
+  - **To check**: the indentation values (2 / 4 / 2) are hardcoded in `yaml_writer.py` and applied only when dash inwards is on; block-style enforcement only works in `rt` mode and leaves `[]` / `{}` untouched; the trailing-space stripping is a workaround for a `ruamel.yaml` emitter quirk (issue #437), not a choice of the format.
+- **QUO** · Quoting — Whether yamkix keeps, removes or rewrites the quotes around strings.
+  - **Covers**: preserving the original quotes (default), dropping unnecessary quotes, turning remaining quotes into single quotes, forcing double quotes instead.
+  - **Concepts**: quotes preserved, single-quoted string, double-quoted string, enforce double quotes, two-pass round trip.
+  - **Code**: `src/yamkix/helpers.py`, `src/yamkix/yamkix.py`
+  - **To check**: forcing double quotes needs a second round trip per document (dump, reload with quotes preserved, convert) and must not be collapsed into one pass; it does nothing unless quotes are not preserved, and the CLI only warns about it; the legacy argparse path always sets it to off.
+- **CMT** · Comments — How end-of-line comments are kept, spaced and aligned.
+  - **Covers**: keeping comments in `rt` mode and losing them in `safe` mode, setting a fixed number of spaces before each comment, aligning the comments of one map or list on the same column.
+  - **Concepts**: end-of-line comment, spaces before comment, column, comment alignment.
+  - **Code**: `src/yamkix/comments.py`
+  - **To check**: `ruamel.yaml`'s `add_eol_comment` is monkey-patched globally on import; a column of `0` is handled apart from the others; `fix_for_issue29` drops the comment slot that follows a key without saying why; alignment uses the widest column of each map or list, with no maximum.
+- **FIL** · Files and runs — Which files yamkix reads and overwrites, and what it reports about a run.
+  - **Covers**: reading from a file or stdin, writing in place, to another file or to stdout, processing a list of files, refusing malformed YAML, detecting unchanged files and changed outputs, the per-file config line, `--silent`, `--summary` and `--list-modified`.
+  - **Concepts**: input, output, STDIN, STDOUT, in-place formatting, files argument, malformed YAML, unchanged file, modified output, special file (`/dev/null`, FIFO), summary.
+  - **Code**: `src/yamkix/_cli.py`, `src/yamkix/yamkix.py`, `src/yamkix/config.py`
+  - **To check**: a malformed file is reported but the command still exits with code 0; `-i`, `-o` and `-s` are silently ignored when files are passed as arguments (warning only); the output is truncated before dumping, so a failure mid-dump can leave a partial file; a second, case-sensitive output-resolution function (`get_input_output_config_from_args`) is dead code.
+- **OPT** · Options and defaults — The opinionated defaults and how the options combine into one formatting configuration.
+  - **Covers**: the default configuration, overriding some defaults from the Python API (used by kubesplit), validating the parser mode, what safe mode does to a document.
+  - **Concepts**: default configuration, parsing mode (`rt` / `safe`), option override, option warning, legacy argparse API, kubesplit.
+  - **Code**: `src/yamkix/config.py`, `src/yamkix/args.py`, `src/yamkix/errors.py`
+  - **To check**: the legacy argparse API (`args.py`, `get_config_from_args`, `get_spaces_before_comment_from_args`) has no caller left: nothing in the repository outside tests, and kubesplit 0.5.0 no longer imports it; `get_yamkix_config_from_default` does not validate the parser mode and declares `enforce_double_quotes: bool = False` then tests it against `None`, so that branch is dead; the `version` field is marked deprecated but still set.

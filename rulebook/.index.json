@@ -1,0 +1,1215 @@
+{
+  "version": 1,
+  "verifiedAt": "e9e0cca",
+  "anchors": [
+    {
+      "rule": "CMT-R001",
+      "kind": "enforcement",
+      "path": "src/yamkix/yaml_writer.py",
+      "symbol": "get_opinionated_yaml_writer",
+      "lines": [
+        27,
+        27
+      ],
+      "hash": "d5e80d8ee53f",
+      "size": 1,
+      "head": "d5e80d8ee53f"
+    },
+    {
+      "rule": "CMT-R001",
+      "kind": "test",
+      "path": "tests/test_yamkix.py",
+      "symbol": "TestCommentsByParsingMode::test_comments_follow_parsing_mode",
+      "lines": [
+        261,
+        261
+      ],
+      "hash": "46bf58e6adba",
+      "size": 1,
+      "head": "46bf58e6adba"
+    },
+    {
+      "rule": "CMT-R001",
+      "kind": "test",
+      "path": "tests/test_yamkix.py",
+      "symbol": "TestCommentsByParsingMode::test_safe_mode_drops_comments_but_keeps_data",
+      "lines": [
+        295,
+        296
+      ],
+      "hash": "12d21e5a25f3",
+      "size": 2,
+      "head": "6a9951d67f26"
+    },
+    {
+      "rule": "CMT-R002",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "yamkix_dump_one",
+      "lines": [
+        256,
+        257
+      ],
+      "hash": "853ccfee12b8",
+      "size": 2,
+      "head": "762444036915"
+    },
+    {
+      "rule": "CMT-R002",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "CMT-R004",
+      "kind": "enforcement",
+      "path": "src/yamkix/comments.py",
+      "symbol": "fix_for_issue29",
+      "lines": [
+        45,
+        46
+      ],
+      "hash": "519067660a18",
+      "size": 2,
+      "head": "0ccc5924888b"
+    },
+    {
+      "rule": "CMT-R004",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "CMT-R003",
+      "kind": "enforcement",
+      "path": "src/yamkix/comments.py",
+      "symbol": "yamkix_add_eol_comment",
+      "lines": [
+        25,
+        28
+      ],
+      "hash": "6a6d4339c728",
+      "size": 4,
+      "head": "dd9fff832ab6"
+    },
+    {
+      "rule": "CMT-R003",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "CMT-R005",
+      "kind": "enforcement",
+      "path": "src/yamkix/comments.py",
+      "symbol": "align_comments",
+      "lines": [
+        89,
+        92
+      ],
+      "hash": "daccebf82f5b",
+      "size": 4,
+      "head": "f16aaffd88cf"
+    },
+    {
+      "rule": "CMT-R005",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "FIL-R008",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "round_trip_and_format",
+      "lines": [
+        104,
+        109
+      ],
+      "hash": "36152576185f",
+      "size": 5,
+      "head": "ee5bcc552a95"
+    },
+    {
+      "rule": "FIL-R008",
+      "kind": "enforcement",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "main",
+      "lines": [
+        276,
+        285
+      ],
+      "hash": "b2656cfa1859",
+      "size": 10,
+      "head": "3b44b77e707d"
+    },
+    {
+      "rule": "FIL-R008",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "symbol": "TestCli::test_list_modified_precedes_summary_and_excludes_parse_errors",
+      "lines": [
+        402,
+        407
+      ],
+      "hash": "e9d62acbf788",
+      "size": 6,
+      "head": "3b44d6edd7ee"
+    },
+    {
+      "rule": "FIL-R010",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "yamkix_dump_all",
+      "lines": [
+        180,
+        182
+      ],
+      "hash": "078d6ce5e910",
+      "size": 3,
+      "head": "f2b7dbe542da"
+    },
+    {
+      "rule": "FIL-R010",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "yamkix_dump_all",
+      "lines": [
+        221,
+        221
+      ],
+      "hash": "d1ad418819b3",
+      "size": 1,
+      "head": "d1ad418819b3"
+    },
+    {
+      "rule": "FIL-R001",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "create_yamkix_config_from_typer_args",
+      "lines": [
+        391,
+        391
+      ],
+      "hash": "acee9bd84362",
+      "size": 1,
+      "head": "acee9bd84362"
+    },
+    {
+      "rule": "FIL-R001",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_explicit_stdin_as_input",
+      "lines": [
+        724,
+        725
+      ],
+      "hash": "9ce4d96e5857",
+      "size": 2,
+      "head": "4add113f4150"
+    },
+    {
+      "rule": "FIL-R002",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "create_yamkix_config_from_typer_args",
+      "lines": [
+        403,
+        404
+      ],
+      "hash": "f0913f51cbab",
+      "size": 2,
+      "head": "d96af186afc0"
+    },
+    {
+      "rule": "FIL-R002",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_input_file",
+      "lines": [
+        650,
+        651
+      ],
+      "hash": "1ace2de802f3",
+      "size": 2,
+      "head": "188152c89f91"
+    },
+    {
+      "rule": "FIL-R003",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "create_yamkix_config_from_typer_args",
+      "lines": [
+        399,
+        402
+      ],
+      "hash": "bb283ba38f9c",
+      "size": 4,
+      "head": "e76b47be9bb5"
+    },
+    {
+      "rule": "FIL-R003",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_input_none_and_output_none",
+      "lines": [
+        694,
+        695
+      ],
+      "hash": "9ce4d96e5857",
+      "size": 2,
+      "head": "4add113f4150"
+    },
+    {
+      "rule": "FIL-R003",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_output_file",
+      "lines": [
+        672,
+        673
+      ],
+      "hash": "d3740c214473",
+      "size": 2,
+      "head": "4add113f4150"
+    },
+    {
+      "rule": "FIL-R004",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "create_yamkix_config_from_typer_args",
+      "lines": [
+        393,
+        394
+      ],
+      "hash": "9d874a6fe35a",
+      "size": 2,
+      "head": "c1fc8e3bb0ae"
+    },
+    {
+      "rule": "FIL-R004",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_stdout_override",
+      "lines": [
+        573,
+        573
+      ],
+      "hash": "5a1e603a3ba8",
+      "size": 1,
+      "head": "5a1e603a3ba8"
+    },
+    {
+      "rule": "FIL-R004",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "symbol": "TestCli::test_list_modified_skips_stdout",
+      "lines": [
+        460,
+        461
+      ],
+      "hash": "26e707134b6b",
+      "size": 2,
+      "head": "559635b099bc"
+    },
+    {
+      "rule": "FIL-R005",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "create_yamkix_config_from_typer_args",
+      "lines": [
+        396,
+        402
+      ],
+      "hash": "8ec14aa31af6",
+      "size": 7,
+      "head": "ba6345b24676"
+    },
+    {
+      "rule": "FIL-R005",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_explicit_stdout_as_output",
+      "lines": [
+        754,
+        755
+      ],
+      "hash": "4a914a717a67",
+      "size": 2,
+      "head": "188152c89f91"
+    },
+    {
+      "rule": "FIL-R006",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "create_yamkix_config_from_typer_args",
+      "lines": [
+        378,
+        389
+      ],
+      "hash": "b523489997da",
+      "size": 11,
+      "head": "9b53d92f03db"
+    },
+    {
+      "rule": "FIL-R006",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "raise_input_output_warning_if_needed",
+      "lines": [
+        339,
+        339
+      ],
+      "hash": "bd01aa16e47d",
+      "size": 1,
+      "head": "bd01aa16e47d"
+    },
+    {
+      "rule": "FIL-R006",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_two_arguments",
+      "lines": [
+        800,
+        804
+      ],
+      "hash": "be7ed8913224",
+      "size": 5,
+      "head": "85735bc63765"
+    },
+    {
+      "rule": "FIL-R006",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestRaiseInputOutputWarningIfNeeded::test_warning_is_raised",
+      "lines": [
+        1017,
+        1023
+      ],
+      "hash": "9a509a712e4b",
+      "size": 7,
+      "head": "b9aba1cea8c1"
+    },
+    {
+      "rule": "FIL-R009",
+      "kind": "enforcement",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "main",
+      "lines": [
+        286,
+        290
+      ],
+      "hash": "f84d8cd2e226",
+      "size": 5,
+      "head": "01e2d25f6666"
+    },
+    {
+      "rule": "FIL-R009",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "symbol": "TestCli::test_list_modified_survives_later_failure",
+      "lines": [
+        470,
+        472
+      ],
+      "hash": "dce604ab14b9",
+      "size": 3,
+      "head": "d2b1d611df13"
+    },
+    {
+      "rule": "FIL-R011",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "round_trip_and_format",
+      "lines": [
+        140,
+        141
+      ],
+      "hash": "e16ab58cf49a",
+      "size": 2,
+      "head": "806051ed026e"
+    },
+    {
+      "rule": "FIL-R011",
+      "kind": "test",
+      "path": "tests/test_yamkix.py",
+      "symbol": "TestRoundTripAndFormat::test_crlf_input_is_not_unchanged",
+      "lines": [
+        152,
+        152
+      ],
+      "hash": "e11918dd2290",
+      "size": 1,
+      "head": "e11918dd2290"
+    },
+    {
+      "rule": "FIL-R011",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "symbol": "TestCli::test_list_modified_and_summary_agree_on_crlf",
+      "lines": [
+        538,
+        540
+      ],
+      "hash": "973079c7c695",
+      "size": 3,
+      "head": "3b44d6edd7ee"
+    },
+    {
+      "rule": "FIL-R012",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "round_trip_and_format",
+      "lines": [
+        113,
+        123
+      ],
+      "hash": "e0b8ec2013e8",
+      "size": 11,
+      "head": "5999ae26fa8c"
+    },
+    {
+      "rule": "FIL-R012",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "round_trip_and_format",
+      "lines": [
+        143,
+        143
+      ],
+      "hash": "848f71bf1e99",
+      "size": 1,
+      "head": "848f71bf1e99"
+    },
+    {
+      "rule": "FIL-R012",
+      "kind": "test",
+      "path": "tests/test_yamkix.py",
+      "symbol": "TestRoundTripAndFormat::test_output_changed_for_separate_destination",
+      "lines": [
+        137,
+        137
+      ],
+      "hash": "6d734be2de5a",
+      "size": 1,
+      "head": "6d734be2de5a"
+    },
+    {
+      "rule": "FIL-R013",
+      "kind": "enforcement",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "main",
+      "lines": [
+        274,
+        275
+      ],
+      "hash": "d4609570af6f",
+      "size": 2,
+      "head": "1d626fcdc237"
+    },
+    {
+      "rule": "FIL-R013",
+      "kind": "enforcement",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "main",
+      "lines": [
+        286,
+        300
+      ],
+      "hash": "aa336f35f8bd",
+      "size": 15,
+      "head": "01e2d25f6666"
+    },
+    {
+      "rule": "FIL-R013",
+      "kind": "enforcement",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "_format_report_name",
+      "lines": [
+        59,
+        64
+      ],
+      "hash": "a8ce1c309afa",
+      "size": 6,
+      "head": "8ee33e509137"
+    },
+    {
+      "rule": "FIL-R013",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "symbol": "TestCli::test_list_modified_reports_stdin_destination",
+      "lines": [
+        418,
+        418
+      ],
+      "hash": "2a9909f82055",
+      "size": 1,
+      "head": "2a9909f82055"
+    },
+    {
+      "rule": "FIL-R014",
+      "kind": "enforcement",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "main",
+      "lines": [
+        301,
+        309
+      ],
+      "hash": "a8bf22f0c60f",
+      "size": 9,
+      "head": "ed39bd098840"
+    },
+    {
+      "rule": "FIL-R014",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "symbol": "TestCli::test_summary_mode_counts_errors_and_unchanged",
+      "lines": [
+        378,
+        380
+      ],
+      "hash": "11d873e21216",
+      "size": 3,
+      "head": "ecc3f5bd93eb"
+    },
+    {
+      "rule": "FIL-R015",
+      "kind": "enforcement",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "main",
+      "lines": [
+        267,
+        268
+      ],
+      "hash": "49b84c6adee0",
+      "size": 2,
+      "head": "9c020206b60a"
+    },
+    {
+      "rule": "FIL-R015",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "symbol": "TestCli::test_silent_mode",
+      "lines": [
+        198,
+        198
+      ],
+      "hash": "516822c85eb6",
+      "size": 1,
+      "head": "516822c85eb6"
+    },
+    {
+      "rule": "LAY-R001",
+      "kind": "enforcement",
+      "path": "src/yamkix/yaml_writer.py",
+      "symbol": "get_opinionated_yaml_writer",
+      "lines": [
+        28,
+        28
+      ],
+      "hash": "05e154941c7d",
+      "size": 1,
+      "head": "05e154941c7d"
+    },
+    {
+      "rule": "LAY-R001",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "LAY-R002",
+      "kind": "enforcement",
+      "path": "src/yamkix/yaml_writer.py",
+      "symbol": "get_opinionated_yaml_writer",
+      "lines": [
+        29,
+        29
+      ],
+      "hash": "5e9e3eeba505",
+      "size": 1,
+      "head": "5e9e3eeba505"
+    },
+    {
+      "rule": "LAY-R002",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "LAY-R003",
+      "kind": "enforcement",
+      "path": "src/yamkix/yaml_writer.py",
+      "symbol": "get_opinionated_yaml_writer",
+      "lines": [
+        33,
+        36
+      ],
+      "hash": "89f30078ac68",
+      "size": 4,
+      "head": "93c06ca9b47c"
+    },
+    {
+      "rule": "LAY-R003",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "LAY-R003",
+      "kind": "test",
+      "path": "tests/test_yaml_writer.py",
+      "symbol": "test_dash_inwards_enabled",
+      "lines": [
+        131,
+        133
+      ],
+      "hash": "299e5c10a6ba",
+      "size": 3,
+      "head": "9a12b663f9df"
+    },
+    {
+      "rule": "LAY-R004",
+      "kind": "enforcement",
+      "path": "src/yamkix/yaml_writer.py",
+      "symbol": "get_opinionated_yaml_writer",
+      "lines": [
+        33,
+        33
+      ],
+      "hash": "93c06ca9b47c",
+      "size": 1,
+      "head": "93c06ca9b47c"
+    },
+    {
+      "rule": "LAY-R004",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "LAY-R005",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "yamkix_dump_one",
+      "lines": [
+        258,
+        259
+      ],
+      "hash": "93889cd7ddd5",
+      "size": 2,
+      "head": "b9db78d558e2"
+    },
+    {
+      "rule": "LAY-R005",
+      "kind": "enforcement",
+      "path": "src/yamkix/helpers.py",
+      "symbol": "strip_leading_double_space",
+      "lines": [
+        28,
+        29
+      ],
+      "hash": "667560bba628",
+      "size": 2,
+      "head": "f4d66a80062d"
+    },
+    {
+      "rule": "LAY-R005",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "LAY-R006",
+      "kind": "enforcement",
+      "path": "src/yamkix/yaml_writer.py",
+      "symbol": "get_opinionated_yaml_writer",
+      "lines": [
+        30,
+        30
+      ],
+      "hash": "6ba6d854ed98",
+      "size": 1,
+      "head": "6ba6d854ed98"
+    },
+    {
+      "rule": "LAY-R006",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "LAY-R007",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "yamkix_dump_all",
+      "lines": [
+        199,
+        200
+      ],
+      "hash": "0e4cf9da1b55",
+      "size": 2,
+      "head": "fcb308bf4707"
+    },
+    {
+      "rule": "LAY-R007",
+      "kind": "enforcement",
+      "path": "src/yamkix/helpers.py",
+      "symbol": "convert_flow_to_block_style",
+      "lines": [
+        129,
+        137
+      ],
+      "hash": "ee5b89709bbf",
+      "size": 9,
+      "head": "5bb45e0b82aa"
+    },
+    {
+      "rule": "LAY-R007",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "LAY-R007",
+      "kind": "test",
+      "path": "tests/test_helpers.py",
+      "symbol": "test_empty_collections_stay_flow",
+      "lines": [
+        444,
+        444
+      ],
+      "hash": "b1c1b3d92029",
+      "size": 1,
+      "head": "b1c1b3d92029"
+    },
+    {
+      "rule": "LAY-R008",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "yamkix_dump_all",
+      "lines": [
+        199,
+        200
+      ],
+      "hash": "0e4cf9da1b55",
+      "size": 2,
+      "head": "fcb308bf4707"
+    },
+    {
+      "rule": "LAY-R008",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "raise_enforce_block_style_warning_if_needed",
+      "lines": [
+        323,
+        323
+      ],
+      "hash": "e560d49a8c03",
+      "size": 1,
+      "head": "e560d49a8c03"
+    },
+    {
+      "rule": "LAY-R008",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "LAY-R009",
+      "kind": "enforcement",
+      "path": "src/yamkix/yaml_writer.py",
+      "symbol": "get_opinionated_yaml_writer",
+      "lines": [
+        32,
+        32
+      ],
+      "hash": "f0eff3bebef1",
+      "size": 1,
+      "head": "f0eff3bebef1"
+    },
+    {
+      "rule": "LAY-R009",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "LAY-R010",
+      "kind": "enforcement",
+      "path": "src/yamkix/helpers.py",
+      "symbol": "strip_trailing_spaces",
+      "lines": [
+        48,
+        48
+      ],
+      "hash": "441290fb07e9",
+      "size": 1,
+      "head": "441290fb07e9"
+    },
+    {
+      "rule": "LAY-R010",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "yamkix_dump_one",
+      "lines": [
+        258,
+        261
+      ],
+      "hash": "1b1752cf7b59",
+      "size": 4,
+      "head": "b9db78d558e2"
+    },
+    {
+      "rule": "LAY-R010",
+      "kind": "test",
+      "path": "tests/test_helpers.py",
+      "symbol": "test_strip_trailing_spaces",
+      "lines": [
+        153,
+        153
+      ],
+      "hash": "d20703fb9e2c",
+      "size": 1,
+      "head": "d20703fb9e2c"
+    },
+    {
+      "rule": "OPT-R001",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "get_default_yamkix_config",
+      "lines": [
+        135,
+        149
+      ],
+      "hash": "7e0c448c3d56",
+      "size": 15,
+      "head": "524cd13ee803"
+    },
+    {
+      "rule": "OPT-R001",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestYamkixConfigFromArgs::test_default_values",
+      "lines": [
+        162,
+        171
+      ],
+      "hash": "6e80003cd9cd",
+      "size": 10,
+      "head": "c580a4855a27"
+    },
+    {
+      "rule": "OPT-R002",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "get_yamkix_config_from_default",
+      "lines": [
+        213,
+        233
+      ],
+      "hash": "6bf5baa97a66",
+      "size": 21,
+      "head": "72767eebe395"
+    },
+    {
+      "rule": "OPT-R002",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestGetYamkixConfigFromDefault::test_get_yamkix_config_from_default_parsing_mode",
+      "lines": [
+        302,
+        311
+      ],
+      "hash": "ea2ad5a2262f",
+      "size": 10,
+      "head": "84b7aa092ce7"
+    },
+    {
+      "rule": "OPT-R003",
+      "kind": "enforcement",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "SupportedYamlParserMode",
+      "lines": [
+        39,
+        43
+      ],
+      "hash": "7a93c3a2e7a9",
+      "size": 4,
+      "head": "21a4e2a93a5b"
+    },
+    {
+      "rule": "OPT-R003",
+      "kind": "enforcement",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "main",
+      "lines": [
+        104,
+        112
+      ],
+      "hash": "35042e37758e",
+      "size": 9,
+      "head": "865b4bcc4164"
+    },
+    {
+      "rule": "OPT-R003",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "symbol": "TestCli::test_invalid_typ",
+      "lines": [
+        69,
+        71
+      ],
+      "hash": "cb4b1bb80215",
+      "size": 3,
+      "head": "d2b1d611df13"
+    },
+    {
+      "rule": "OPT-R004",
+      "kind": "enforcement",
+      "path": "src/yamkix/yaml_writer.py",
+      "symbol": "get_opinionated_yaml_writer",
+      "lines": [
+        27,
+        27
+      ],
+      "hash": "d5e80d8ee53f",
+      "size": 1,
+      "head": "d5e80d8ee53f"
+    },
+    {
+      "rule": "QUO-R002",
+      "kind": "enforcement",
+      "path": "src/yamkix/yaml_writer.py",
+      "symbol": "get_opinionated_yaml_writer",
+      "lines": [
+        31,
+        31
+      ],
+      "hash": "69223d3b5093",
+      "size": 1,
+      "head": "69223d3b5093"
+    },
+    {
+      "rule": "QUO-R002",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "QUO-R001",
+      "kind": "enforcement",
+      "path": "src/yamkix/yaml_writer.py",
+      "symbol": "get_opinionated_yaml_writer",
+      "lines": [
+        31,
+        31
+      ],
+      "hash": "69223d3b5093",
+      "size": 1,
+      "head": "69223d3b5093"
+    },
+    {
+      "rule": "QUO-R001",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "QUO-R003",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "round_trip_and_format",
+      "lines": [
+        89,
+        91
+      ],
+      "hash": "64fd032bc202",
+      "size": 3,
+      "head": "8fd2fcdd3a66"
+    },
+    {
+      "rule": "QUO-R003",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "yamkix_dump_all",
+      "lines": [
+        190,
+        195
+      ],
+      "hash": "250f18569a43",
+      "size": 6,
+      "head": "38a6ed3a5b72"
+    },
+    {
+      "rule": "QUO-R003",
+      "kind": "enforcement",
+      "path": "src/yamkix/helpers.py",
+      "symbol": "convert_single_to_double_quotes",
+      "lines": [
+        99,
+        108
+      ],
+      "hash": "1f1a89ee0f33",
+      "size": 10,
+      "head": "d67bf55b23ce"
+    },
+    {
+      "rule": "QUO-R003",
+      "kind": "test",
+      "path": "tests/test_non_regression.py",
+      "symbol": "TestNonRegression::test_config",
+      "lines": [
+        235,
+        235
+      ],
+      "hash": "73f89cbd8e6d",
+      "size": 1,
+      "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "QUO-R004",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "raise_enforce_double_quotes_warning_if_needed",
+      "lines": [
+        310,
+        310
+      ],
+      "hash": "950279e107c6",
+      "size": 1,
+      "head": "950279e107c6"
+    },
+    {
+      "rule": "QUO-R004",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "round_trip_and_format",
+      "lines": [
+        89,
+        89
+      ],
+      "hash": "8fd2fcdd3a66",
+      "size": 1,
+      "head": "8fd2fcdd3a66"
+    },
+    {
+      "rule": "QUO-R004",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestRaiseEnforceDoubleQuotesWarning::test_warning_is_raised",
+      "lines": [
+        906,
+        909
+      ],
+      "hash": "1a34615588ff",
+      "size": 4,
+      "head": "15fb8fbdd1ac"
+    }
+  ]
+}

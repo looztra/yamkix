@@ -102,3 +102,12 @@ This project uses `poethepoet` for task management. Common tasks:
 2. **Verify Often**: Run tests and linters frequently (e.g., after every significant edit).
 3. **Be Explicit**: In PR descriptions and commit messages, explaining *why* a change was made is as important as *what* changed.
 4. **Use `uv`**: Ensure you are using the `uv` managed environment (e.g., `.venv/bin/python` or `uv run`).
+
+<!-- rulebook:start -->
+<!-- rulebook 0.3.0 -->
+## Business rules (rulebook)
+
+This project keeps its business rules in `rulebook/`. After you change validation, permissions,
+calculations, states or deadlines, run `npx --yes rulebook-cli@0.3.0 check` and mention its output to the user.
+Do not edit `rulebook/` cards by hand: use the rulebook skills.
+<!-- rulebook:end -->

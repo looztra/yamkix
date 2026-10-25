@@ -5,3 +5,5 @@ globs:
   - '!**/.tox/**/*.md'
   - '!**/.pytest_cache'
   - '!docs/changelog.md'
+  - '!rulebook/**' # Card layout is fixed by the rulebook CLI parser
+  - '!.agents/skills/**' # Vendored agent skills, managed by skills-lock.json
