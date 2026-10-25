@@ -1,9 +1,9 @@
 ---
+# Kept only as the hook source for `prek`, driven by hk.pkl (hooks without an hk builtin).
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-      - id: trailing-whitespace # Trims trailing whitespace
       - id: check-yaml # Validates YAML files
         args: [--allow-multiple-documents]
         exclude: |
@@ -13,40 +13,11 @@ repos:
       - id: check-toml # Validates TOML files
       - id: check-json # Validates JSON files # .vscode/ json files are actually jsonc files
         exclude: ^.vscode/.*
-      - id: check-xml # Validates XML files
-      - id: check-added-large-files # Checks for files that are added to the repository that are larger than a threshold
-      - id: check-case-conflict # Checks for files that would conflict in case-insensitive filesystems
-      - id: check-merge-conflict # Checks for files that contain merge conflict strings
-      - id: detect-private-key # Check for the existence of private keys
-      - id: check-executables-have-shebangs # Checks that executables have shebangs
-      - id: end-of-file-fixer # Makes sure files end in a newline and only a newline
 
   - repo: https://gitlab.com/bmares/check-json5
     rev: v1.0.1
     hooks:
       - id: check-json5
-
-  - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.23.3
-    hooks:
-      - id: markdownlint-cli2
-        pass_filenames: false
-
-  - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: 3.0.0
-    hooks:
-      - id: shellcheck # Shell scripts conform to shellcheck
-      - id: shfmt # Check shell style with shfmt
-
-  - repo: https://github.com/adrienverge/yamllint
-    rev: v1.38.0
-    hooks:
-      - id: yamllint
-        args: [--config-data, relaxed, --no-warnings]
-        exclude: |
-          (?x)^(
-              tests/data/.*
-          )$
 
   - repo: https://github.com/looztra/yamkix
     rev: v1.2.0
@@ -58,29 +29,3 @@ repos:
               tests/data/.*|
               tests/integration/test_cli_subprocess/.*
           )$
-
-  - repo: local
-    hooks:
-      - id: editorconfig
-        name: Check .editorconfig rules
-        entry: editorconfig-checker
-        types: [text]
-        language: system
-        pass_filenames: false
-      - id: taplo
-        name: Check TOML files are formatted with 'taplo'
-        entry: taplo format --config .taplo.toml
-        types: [text]
-        language: system
-        pass_filenames: false
-      - id: ruff-format
-        name: Check that files are formatted as expected with 'ruff format --check'
-        entry: uv run --frozen ruff format --check
-        language: system
-        pass_filenames: false
-      - id: ruff-check
-        name: Lint files with 'ruff check'
-        entry: uv run --frozen ruff check
-        require_serial: true
-        language: system
-        pass_filenames: false

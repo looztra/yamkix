@@ -41,7 +41,7 @@ This document provides context and instructions for AI agents working on this re
 - **Tools**:
   - **Linting**: `ruff check` (or `poe ruff:lint`)
   - **Formatting**: `ruff format` (or `poe ruff:fmt:run`)
-  - **Markdown Linting**: `pre-commit run --all-files markdownlint-cli2` or `poe lint:all` (if configured)
+  - **Markdown Linting**: `hk check --all --step markdownlint-cli2` or `poe lint:all` (if configured)
   - **Type Checking**: `pyright` & `ty`
 - **Pre-check**: always run `poe lint:all` before submitting changes.
 
@@ -74,7 +74,7 @@ This project uses `poethepoet` for task management. Common tasks:
 
 ## CI/CD
 
-- **`.github/workflows/code_checks.yml`**: pre-commit checks, Python lint+test (`mise run lint` / `mise run test`), distribution build check, mkdocs build check, integration tests, and release-please-driven publish to (Test)PyPI on release runs.
+- **`.github/workflows/code_checks.yml`**: hk hooks, Python lint+test (`mise run lint` / `mise run test`), distribution build check, mkdocs build check, integration tests, and release-please-driven publish to (Test)PyPI on release runs.
 - **`.github/workflows/release_please.yml`**: drives `docs/changelog.md`, `version.txt`, and `.release-please-manifest.json` via conventional-commit history — never edit these by hand.
 - **`.github/workflows/lint_pr_titles.yml`**: enforces conventional-commit PR titles (scope required, matching this file's commit convention).
 - **`.github/workflows/codeql.yml`** and **`workflows_checks.yml`**: security/workflow linting (CodeQL, `zizmor`, `actionlint`).

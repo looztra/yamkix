@@ -9,7 +9,8 @@
 ### Optional
 
 - [mise](https://mise.jdx.dev/)
-- [Pre-Commit](https://pre-commit.com/#install)
+- [hk](https://hk.jdx.dev/)
+- [prek](https://prek.j178.dev/)
 - [shfmt](https://github.com/mvdan/sh)
 - [shellcheck](https://github.com/mvdan/sh)
 - [editorconfig-checker](https://github.com/editorconfig-checker/editorconfig-checker)
@@ -35,10 +36,10 @@ Run `make upgrade-dependencies`, this is the same as `uv sync --upgrade`
 - run `make tests` to launch unit tests (same as `uv run poe test:cov)
 - run `make lint` to launch linters (same as `uv run poe lint:all`)
 
-### Pre-Commit
+### Git hooks (hk)
 
-- If you want to run pre-commit before each commit, run once `make precommit-install`
-- If you don't want to configure a pre-commit hook (your choice, pre-commit is run by the CICD anyway), you can run it when you want, use `make precommit-run`
+- To run the hooks before each commit, run `make hk-install` once
+- To run them on demand instead (CI runs them anyway), use `make hk-check`, or `make hk-fix` to apply the fixes
 
 ### Configure your editor
 

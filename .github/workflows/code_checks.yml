@@ -35,8 +35,8 @@ env:
   # - MISE_CACHE_KEY_PREFIX: prefix used for cache keys so different workflows can share/segregate caches
 
 jobs:
-  pre-commit:
-    name: Pre-commit
+  hk:
+    name: hk hooks
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -86,21 +86,16 @@ jobs:
       - name: Minimize uv cache
         run: uv cache prune --ci
 
-      - name: Detect Python version
-        id: detect-python-version
-        run: |
-          echo "python_version=$(python --version | cut -d " " -f2 | cut -d . -f1-2)" >> "${GITHUB_OUTPUT}"
-
-      - name: Restore pre-commit cache
+      - name: Restore prek cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: ~/.cache/pre-commit
-          key: pre-commit|${{ steps.detect-python-version.outputs.python_version }}|${{ hashFiles('.pre-commit-config.yaml') }}
+          path: ~/.cache/prek
+          key: prek-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
 
-      - name: Run pre-commit checks
+      - name: Run hk hooks
         run: |
-          echo "::group::Run pre-commit checks"
-          mise run precommit:run
+          echo "::group::Run hk hooks"
+          mise run hk:check
           echo "::endgroup::"
 
   python-checks:
@@ -340,7 +335,7 @@ jobs:
     if: always()
     runs-on: Ubuntu-latest
     needs:
-      - pre-commit
+      - hk
       - python-checks
       - mkdocs
       - integration-tests
