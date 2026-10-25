@@ -58,7 +58,7 @@ Whether yamkix keeps, removes or rewrites the quotes around string values. By de
 ### QUO-R003 · `--enforce-double-quotes` turns the remaining single quotes into double quotes
 - **Kind:** rule · **Category:** calculation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Verified at:** 01d0951 (2026-10-25)
 
 **Rule.** With both `--no-quotes-preserved` and `--enforce-double-quotes` in round-trip mode, every value still quoted after quote removal is written with double quotes instead of single quotes, including list items.
 
@@ -67,10 +67,10 @@ Whether yamkix keeps, removes or rewrites the quotes around string values. By de
 **Parameters.** `--enforce-double-quotes` / `-E` — src/yamkix/_cli.py:137-145 (off by default)
 
 **Evidence.**
-- enforcement — src/yamkix/yamkix.py:89-91 `round_trip_and_format`
+- enforcement — src/yamkix/yamkix.py:118-120 `round_trip_and_format`
   `if yamkix_config.quotes_preserved is False and yamkix_config.enforce_double_quotes:`
-- enforcement — src/yamkix/yamkix.py:190-195 `yamkix_dump_all`
-- enforcement — src/yamkix/helpers.py:99-108 `convert_single_to_double_quotes`
+- enforcement — src/yamkix/yamkix.py:216-221 `yamkix_dump_all`
+- enforcement — src/yamkix/helpers.py:137-146 `convert_single_to_double_quotes`
   `return DoubleQuotedScalarString(str(obj))`
 - test — tests/test_non_regression.py:235 `TestNonRegression::test_config`
   `assert filecmp.cmp(expected_output_file, actual_output_file, shallow=True)`
@@ -78,25 +78,26 @@ Whether yamkix keeps, removes or rewrites the quotes around string values. By de
 **Edge cases.**
 - **QUO-R003.E1** Given the `no-start-no-end` file, when it is formatted with `--no-quotes-preserved --enforce-double-quotes`, then `"1.722"` and `"true"` stay double-quoted and plain strings lose their quotes. — verified — tests/test_non_regression.py:57
 - **QUO-R003.E2** Given `quoted_in_flow: ['123', "456"]`, when it is formatted with `--no-quotes-preserved --enforce-double-quotes --enforce-block-style`, then both items are written `"123"` and `"456"`. — verified — tests/test_non_regression.py:189
-- **QUO-R003.E3** Given `n: 'true'`, when it is formatted with `--typ safe --no-quotes-preserved --enforce-double-quotes`, then it stays `n: 'true'`. — read — src/yamkix/helpers.py:105
-- **QUO-R003.E4** Given a quoted key such as `'123': a`, when it is formatted with `--no-quotes-preserved --enforce-double-quotes`, then the key stays single-quoted: only values and list items are converted. — read — src/yamkix/helpers.py:100-101
+- **QUO-R003.E3** Given `n: 'true'`, when it is formatted with `--typ safe --no-quotes-preserved --enforce-double-quotes`, then it stays `n: 'true'`. — read — src/yamkix/helpers.py:143
+- **QUO-R003.E4** Given a quoted key such as `'123': a`, when it is formatted with `--no-quotes-preserved --enforce-double-quotes`, then the key stays single-quoted: only values and list items are converted. — read — src/yamkix/helpers.py:138-139
 
 **Open questions.** In safe mode the option is silently ignored; should it warn, as it does without `--no-quotes-preserved`? Should quoted keys also be converted to double quotes?
 
 **History.**
+- 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-24 · 823a0f3 · created
 
 ### QUO-R004 · `--enforce-double-quotes` alone has no effect and triggers a warning
 - **Kind:** rule · **Category:** validation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** dc86185 (2026-10-25)
+- **Verified at:** 01d0951 (2026-10-25)
 
 **Rule.** When `--enforce-double-quotes` is given without `--no-quotes-preserved`, quotes are kept as written and a warning says the option is useless; the run continues.
 
 **Evidence.**
 - enforcement — src/yamkix/config.py:310 `raise_enforce_double_quotes_warning_if_needed`
   `if no_quotes_preserved is False and enforce_double_quotes is True:`
-- enforcement — src/yamkix/yamkix.py:89 `round_trip_and_format`
+- enforcement — src/yamkix/yamkix.py:118 `round_trip_and_format`
 - test — tests/test_config.py:908-911 `TestRaiseEnforceDoubleQuotesWarning::test_warning_is_raised`
   `"WARNING: Option '--enforce-double-quotes' is useless unless '--no-quotes-preserved' is also set."`
 
@@ -104,5 +105,6 @@ Whether yamkix keeps, removes or rewrites the quotes around string values. By de
 - **QUO-R004.E1** Given both options set, when the configuration is built, then no warning is printed. — verified — tests/test_config.py:917
 
 **History.**
+- 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-25 · dc86185 · reanchored · test lines shifted by added tests and imports (uncommitted)
 - 2026-10-24 · 823a0f3 · created

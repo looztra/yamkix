@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "verifiedAt": "dc86185",
+  "verifiedAt": "01d0951",
   "anchors": [
     {
       "rule": "CMT-R001",
@@ -47,8 +47,8 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "yamkix_dump_one",
       "lines": [
-        256,
-        257
+        278,
+        279
       ],
       "hash": "853ccfee12b8",
       "size": 2,
@@ -73,8 +73,8 @@
       "path": "src/yamkix/comments.py",
       "symbol": "fix_for_issue29",
       "lines": [
-        45,
-        46
+        48,
+        49
       ],
       "hash": "519067660a18",
       "size": 2,
@@ -108,6 +108,32 @@
     },
     {
       "rule": "CMT-R003",
+      "kind": "enforcement",
+      "path": "src/yamkix/comments.py",
+      "symbol": "process_single_comment",
+      "lines": [
+        37,
+        43
+      ],
+      "hash": "ccf22a2ad356",
+      "size": 6,
+      "head": "c5500e8d1d74"
+    },
+    {
+      "rule": "CMT-R003",
+      "kind": "test",
+      "path": "tests/test_yamkix.py",
+      "symbol": "TestCommentsFollowingAnEndOfLineComment::test_full_line_comments_and_blank_lines_are_kept",
+      "lines": [
+        323,
+        323
+      ],
+      "hash": "aed9886b7ec7",
+      "size": 1,
+      "head": "aed9886b7ec7"
+    },
+    {
+      "rule": "CMT-R003",
       "kind": "test",
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
@@ -125,8 +151,8 @@
       "path": "src/yamkix/comments.py",
       "symbol": "align_comments",
       "lines": [
-        86,
-        101
+        89,
+        104
       ],
       "hash": "013315a23ce2",
       "size": 15,
@@ -151,8 +177,8 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "round_trip_and_format",
       "lines": [
-        104,
-        109
+        133,
+        138
       ],
       "hash": "36152576185f",
       "size": 5,
@@ -164,8 +190,8 @@
       "path": "src/yamkix/_cli.py",
       "symbol": "main",
       "lines": [
-        276,
-        285
+        275,
+        284
       ],
       "hash": "b2656cfa1859",
       "size": 10,
@@ -188,14 +214,14 @@
       "rule": "FIL-R010",
       "kind": "enforcement",
       "path": "src/yamkix/yamkix.py",
-      "symbol": "yamkix_dump_all",
+      "symbol": "_write_output_file",
       "lines": [
-        180,
-        182
+        71,
+        100
       ],
-      "hash": "078d6ce5e910",
-      "size": 3,
-      "head": "f2b7dbe542da"
+      "hash": "a66ca7f38331",
+      "size": 28,
+      "head": "8a2823bffe63"
     },
     {
       "rule": "FIL-R010",
@@ -203,12 +229,38 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "yamkix_dump_all",
       "lines": [
-        221,
-        221
+        207,
+        208
       ],
-      "hash": "d1ad418819b3",
-      "size": 1,
-      "head": "d1ad418819b3"
+      "hash": "93119b1c8331",
+      "size": 2,
+      "head": "27e4c9db3574"
+    },
+    {
+      "rule": "FIL-R010",
+      "kind": "enforcement",
+      "path": "src/yamkix/yamkix.py",
+      "symbol": "yamkix_dump_all",
+      "lines": [
+        254,
+        258
+      ],
+      "hash": "24e56f5f6689",
+      "size": 5,
+      "head": "9ea5d3073daf"
+    },
+    {
+      "rule": "FIL-R010",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "symbol": "TestCli::test_failed_write_leaves_file_untouched_and_unlisted",
+      "lines": [
+        608,
+        611
+      ],
+      "hash": "b204aaa2e4ab",
+      "size": 4,
+      "head": "d2b1d611df13"
     },
     {
       "rule": "FIL-R001",
@@ -424,12 +476,12 @@
       "path": "src/yamkix/_cli.py",
       "symbol": "main",
       "lines": [
-        286,
-        290
+        269,
+        284
       ],
-      "hash": "f84d8cd2e226",
-      "size": 5,
-      "head": "01e2d25f6666"
+      "hash": "128eb3de6eba",
+      "size": 16,
+      "head": "ee5bcc552a95"
     },
     {
       "rule": "FIL-R009",
@@ -450,8 +502,8 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "round_trip_and_format",
       "lines": [
-        140,
-        141
+        168,
+        169
       ],
       "hash": "e16ab58cf49a",
       "size": 2,
@@ -502,12 +554,12 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "round_trip_and_format",
       "lines": [
-        113,
-        123
+        141,
+        152
       ],
-      "hash": "e0b8ec2013e8",
-      "size": 11,
-      "head": "5999ae26fa8c"
+      "hash": "621a940fa2bf",
+      "size": 12,
+      "head": "3b3746b1bd60"
     },
     {
       "rule": "FIL-R012",
@@ -515,8 +567,8 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "round_trip_and_format",
       "lines": [
-        143,
-        143
+        171,
+        171
       ],
       "hash": "848f71bf1e99",
       "size": 1,
@@ -541,8 +593,8 @@
       "path": "src/yamkix/_cli.py",
       "symbol": "main",
       "lines": [
-        274,
-        275
+        273,
+        274
       ],
       "hash": "d4609570af6f",
       "size": 2,
@@ -554,12 +606,12 @@
       "path": "src/yamkix/_cli.py",
       "symbol": "main",
       "lines": [
-        286,
-        300
+        285,
+        294
       ],
-      "hash": "aa336f35f8bd",
-      "size": 15,
-      "head": "01e2d25f6666"
+      "hash": "749157810f23",
+      "size": 10,
+      "head": "68c55b6015a3"
     },
     {
       "rule": "FIL-R013",
@@ -593,8 +645,8 @@
       "path": "src/yamkix/_cli.py",
       "symbol": "main",
       "lines": [
-        301,
-        309
+        295,
+        304
       ],
       "hash": "a8bf22f0c60f",
       "size": 9,
@@ -762,8 +814,8 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "yamkix_dump_one",
       "lines": [
-        258,
-        259
+        280,
+        281
       ],
       "hash": "93889cd7ddd5",
       "size": 2,
@@ -827,8 +879,8 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "yamkix_dump_all",
       "lines": [
-        199,
-        200
+        225,
+        226
       ],
       "hash": "0e4cf9da1b55",
       "size": 2,
@@ -840,8 +892,8 @@
       "path": "src/yamkix/helpers.py",
       "symbol": "convert_flow_to_block_style",
       "lines": [
-        129,
-        137
+        167,
+        175
       ],
       "hash": "ee5b89709bbf",
       "size": 9,
@@ -869,9 +921,9 @@
         444,
         444
       ],
-      "hash": "b1c1b3d92029",
+      "hash": "eee894e8c281",
       "size": 1,
-      "head": "b1c1b3d92029"
+      "head": "eee894e8c281"
     },
     {
       "rule": "LAY-R008",
@@ -879,8 +931,8 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "yamkix_dump_all",
       "lines": [
-        199,
-        200
+        225,
+        226
       ],
       "hash": "0e4cf9da1b55",
       "size": 2,
@@ -942,14 +994,27 @@
       "rule": "LAY-R010",
       "kind": "enforcement",
       "path": "src/yamkix/helpers.py",
+      "symbol": "_BLOCK_SCALAR_HEADER",
+      "lines": [
+        16,
+        18
+      ],
+      "hash": "9f38d769267b",
+      "size": 3,
+      "head": "9bf1fcc647ee"
+    },
+    {
+      "rule": "LAY-R010",
+      "kind": "enforcement",
+      "path": "src/yamkix/helpers.py",
       "symbol": "strip_trailing_spaces",
       "lines": [
-        48,
-        48
+        37,
+        86
       ],
-      "hash": "441290fb07e9",
-      "size": 1,
-      "head": "441290fb07e9"
+      "hash": "9baa34b407bf",
+      "size": 46,
+      "head": "7afc891a7bcd"
     },
     {
       "rule": "LAY-R010",
@@ -957,8 +1022,8 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "yamkix_dump_one",
       "lines": [
-        258,
-        261
+        280,
+        283
       ],
       "hash": "1b1752cf7b59",
       "size": 4,
@@ -970,12 +1035,25 @@
       "path": "tests/test_helpers.py",
       "symbol": "test_strip_trailing_spaces",
       "lines": [
-        153,
-        153
+        130,
+        130
       ],
       "hash": "d20703fb9e2c",
       "size": 1,
       "head": "d20703fb9e2c"
+    },
+    {
+      "rule": "LAY-R010",
+      "kind": "test",
+      "path": "tests/test_yamkix.py",
+      "symbol": "TestBlockScalarTrailingSpaces::test_block_scalar_values_are_unchanged",
+      "lines": [
+        356,
+        357
+      ],
+      "hash": "49ac42e7f694",
+      "size": 2,
+      "head": "10190c8f359f"
     },
     {
       "rule": "OPT-R001",
@@ -1139,8 +1217,8 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "round_trip_and_format",
       "lines": [
-        89,
-        91
+        118,
+        120
       ],
       "hash": "64fd032bc202",
       "size": 3,
@@ -1152,8 +1230,8 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "yamkix_dump_all",
       "lines": [
-        190,
-        195
+        216,
+        221
       ],
       "hash": "250f18569a43",
       "size": 6,
@@ -1165,8 +1243,8 @@
       "path": "src/yamkix/helpers.py",
       "symbol": "convert_single_to_double_quotes",
       "lines": [
-        99,
-        108
+        137,
+        146
       ],
       "hash": "1f1a89ee0f33",
       "size": 10,
@@ -1204,8 +1282,8 @@
       "path": "src/yamkix/yamkix.py",
       "symbol": "round_trip_and_format",
       "lines": [
-        89,
-        89
+        118,
+        118
       ],
       "hash": "8fd2fcdd3a66",
       "size": 1,
