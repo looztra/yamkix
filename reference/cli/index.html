@@ -1185,7 +1185,7 @@
 <td><code>-t</code></td>
 <td><code>safe</code>|<code>rt</code></td>
 <td><code>rt</code></td>
-<td>the yaml parser mode. Using <code>safe</code> will remove all comments.</td>
+<td>the yaml parser mode. Using <code>safe</code> re-emits the data only: comments, original quotes and collection styles are lost, and map keys are sorted.</td>
 </tr>
 <tr>
 <td><code>--no-explicit-start</code></td>
@@ -1213,21 +1213,21 @@
 <td><code>-E</code></td>
 <td>flag</td>
 <td>off</td>
-<td>enforce double quotes when <code>--no-quotes-preserved</code> is activated (by default, you get single quotes which is the recommended behavior).</td>
+<td>enforce double quotes when <code>--no-quotes-preserved</code> is activated (by default, you get single quotes which is the recommended behavior). Has no effect with <code>--typ safe</code> (a warning is printed).</td>
 </tr>
 <tr>
 <td><code>--default-flow-style</code></td>
 <td><code>-f</code></td>
 <td>flag</td>
 <td>off</td>
-<td>enable the default flow style, 'Off' by default. In default flow style (with <code>--typ rt</code>), maps and lists are written like json.</td>
+<td>enable the default flow style, 'Off' by default. With <code>--typ rt</code>, only collections without a style of their own are affected, so collections read from the input keep their style. With <code>--typ safe</code>, the whole document is written like json.</td>
 </tr>
 <tr>
 <td><code>--enforce-block-style</code></td>
 <td><code>-B</code></td>
 <td>flag</td>
 <td>off</td>
-<td>convert flow-style (JSON-like) maps and lists to block style. Overrides <code>--default-flow-style</code>. Empty collections (<code>[]</code> and <code>{}</code>) are kept as-is.</td>
+<td>convert flow-style (JSON-like) maps and lists to block style. Overrides <code>--default-flow-style</code>. Empty collections (<code>[]</code> and <code>{}</code>) are kept as-is. Has no effect with <code>--typ safe</code> (a warning is printed).</td>
 </tr>
 <tr>
 <td><code>--no-dash-inwards</code></td>
@@ -1239,9 +1239,9 @@
 <tr>
 <td><code>--spaces-before-comment</code></td>
 <td><code>-c</code></td>
-<td>INTEGER</td>
+<td>INTEGER (≥ 1)</td>
 <td><code>None</code></td>
-<td>specify the number of spaces between comments and content. If not specified, comments are left as is.</td>
+<td>specify the number of spaces between comments and content (at least 1). If not specified, comments are left as is.</td>
 </tr>
 <tr>
 <td><code>--align-comments</code></td>
@@ -1382,7 +1382,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="September 27, 2026 19:34:03 UTC">2026-09-27 19:34:03</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_datetime" title="October 25, 2026 18:14:47 UTC">2026-10-25 18:14:47</span>
   </span>
 
     
