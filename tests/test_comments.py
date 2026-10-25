@@ -1,9 +1,10 @@
 """Test the comments management."""
 
-import pytest
+from io import StringIO
+
 from pytest_mock import MockerFixture
 from ruamel.yaml import YAML
-from ruamel.yaml.comments import CommentedMap, CommentedSeq
+from ruamel.yaml.comments import CommentedMap
 
 from yamkix.comments import align_comments, fix_for_issue29
 
@@ -63,41 +64,13 @@ def test_align_comments_with_no_comments() -> None:
     align_comments(code)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="CMT-R005: align_one reads the map comment slot [2]; list items keep their EOL comment in slot [0]",
-)
 def test_align_comments_with_sequence() -> None:
-    """Test align_comments aligns the EOL comments of a real CommentedSeq on its rightmost comment."""
+    """Test align_comments aligns the EOL comments of a list on its rightmost comment, skipping uncommented items."""
     yaml = YAML()
-    code = yaml.load("items:\n- a # c1\n- longer_value # c2\n")
-    items = code["items"]
+    code = yaml.load("items:\n- a # c1\n- longer_value # c2\n- b\n")
 
     align_comments(code)
 
-    assert items.ca.items[0][0].column == items.ca.items[1][0].column
-
-
-def test_align_comments_with_some_null_comments(mocker: MockerFixture) -> None:
-    """Test align_comments when some comments have comment[2] as None.
-
-    This covers line 91 (the guard 'if comment[2] is not None').
-    """
-    comment_mock_1 = mocker.Mock(column=3)
-    comment_mock_2 = mocker.Mock(column=5)
-
-    mock_seq_ca = mocker.Mock(
-        spec=CommentedSeq,
-        items={
-            0: [None, None, comment_mock_1],
-            1: [None, None, comment_mock_2],
-            2: [None, None, None],  # comment[2] is None - exercises line 91
-        },
-    )
-    mock_seq = mocker.Mock(spec=CommentedSeq, ca=mock_seq_ca)
-    mock_seq.__iter__ = mocker.Mock(return_value=iter([]))
-
-    align_comments(mock_seq)
-
-    assert comment_mock_1.column == 5
-    assert comment_mock_2.column == 5
+    output = StringIO()
+    yaml.dump(code, output)
+    assert output.getvalue() == "items:\n- a            # c1\n- longer_value # c2\n- b\n"
