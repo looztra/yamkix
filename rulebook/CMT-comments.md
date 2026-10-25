@@ -39,7 +39,7 @@ How yamkix keeps, spaces and aligns the end-of-line comments of a YAML document.
 ### CMT-R002 · Without a spacing option, comments keep their original column
 - **Kind:** rule · **Category:** derivation · **Implements:** CMT-P01
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 01d0951 (2026-10-25)
+- **Verified at:** 3825235 (2026-10-25)
 
 **Rule.** When `--spaces-before-comment` is not given, end-of-line comments are written at the same column as in the input, so the gap before a comment grows or shrinks when the value before it is reformatted.
 
@@ -48,21 +48,22 @@ How yamkix keeps, spaces and aligns the end-of-line comments of a YAML document.
 **Evidence.**
 - enforcement — src/yamkix/yamkix.py:278-279 `yamkix_dump_one`
   `if spaces_before_comment is not None:`
-- test — tests/test_non_regression.py:235 `TestNonRegression::test_config`
+- test — tests/test_non_regression.py:229 `TestNonRegression::test_config`
   `assert filecmp.cmp(expected_output_file, actual_output_file, shallow=True)`
 
 **Edge cases.**
-- **CMT-R002.E1** Given the `issue-259-01` file with comments one space after their value, when it is formatted with no option, then the comments stay one space after their value. — verified — tests/test_non_regression.py:165
+- **CMT-R002.E1** Given the `issue-259-01` file with comments one space after their value, when it is formatted with no option, then the comments stay one space after their value. — verified — tests/test_non_regression.py:159
 - **CMT-R002.E2** Given `a:   1 # c1` (three spaces before the value, one before the comment), when it is formatted with no option, then the value is written `a: 1` and the comment keeps its column, three spaces after the value. — read — src/yamkix/yamkix.py:278
 
 **History.**
+- 2026-10-25 · 3825235 · reanchored · lines shifted by the parser-mode, safe-mode warning and spacing fixes (uncommitted)
 - 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-24 · 823a0f3 · created
 
 ### CMT-R004 · A comment on a key that opens a nested list stays on that key's line
 - **Kind:** rule · **Category:** derivation · **Implements:** CMT-P01
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 01d0951 (2026-10-25)
+- **Verified at:** 3825235 (2026-10-25)
 
 **Rule.** When `--spaces-before-comment` is used, a comment written after a key whose value is a nested list (`list: # comment`) stays on the key line and the list items are not lost or moved.
 
@@ -71,72 +72,78 @@ How yamkix keeps, spaces and aligns the end-of-line comments of a YAML document.
 **Evidence.**
 - enforcement — src/yamkix/comments.py:48-49 `fix_for_issue29`
   `data.ca.items[key][3] = None`
-- test — tests/test_non_regression.py:235 `TestNonRegression::test_config`
+- test — tests/test_non_regression.py:229 `TestNonRegression::test_config`
   `assert filecmp.cmp(expected_output_file, actual_output_file, shallow=True)`
 
 **Edge cases.**
-- **CMT-R004.E1** Given `list: # this is a comment that kills it` followed by three items, when it is formatted with `--spaces-before-comment 1`, then the comment stays on the `list:` line with one space before it and the three items follow. — verified — tests/test_non_regression.py:147
+- **CMT-R004.E1** Given `list: # this is a comment that kills it` followed by three items, when it is formatted with `--spaces-before-comment 1`, then the comment stays on the `list:` line with one space before it and the three items follow. — verified — tests/test_non_regression.py:141
 
 **History.**
+- 2026-10-25 · 3825235 · reanchored · lines shifted by the parser-mode, safe-mode warning and spacing fixes (uncommitted)
 - 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-24 · 823a0f3 · created
 
 ## Other operating rules
 
-### CMT-R003 · A fixed number of spaces is put before every end-of-line comment
+### CMT-R003 · A fixed number of spaces, at least one, is put before every end-of-line comment
 - **Kind:** rule · **Category:** calculation
 - **Status:** changed · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 01d0951 (2026-10-25)
+- **Verified at:** 3825235 (2026-10-25)
 
-**Rule.** With `--spaces-before-comment N`, every end-of-line comment of a map or a list is written exactly N spaces after its content; a value of 0 gives one space.
+**Rule.** With `--spaces-before-comment N`, every end-of-line comment of a map or a list is written exactly N spaces after its content; the command line refuses a value below 1 before any file is processed, with exit code 2.
 
-**Context.** The comment is re-added with N − 1 extra spaces in front of it, at column 0; for 0 nothing is added and the library still writes one separating space. Full-line comments are not re-spaced: the full-line comments and blank lines that follow an end-of-line comment are carried in the same comment token and are kept on their own lines.
+**Context.** The comment is re-added with N − 1 extra spaces in front of it, at column 0. The Python API does not check the value: a `spaces_before_comment` of 0 adds nothing and the library still writes one separating space. Full-line comments are not re-spaced: the full-line comments and blank lines that follow an end-of-line comment are carried in the same comment token and are kept on their own lines.
 
-**Parameters.** `--spaces-before-comment` / `-c` — src/yamkix/_cli.py:179-188 (no default: comments left as is)
+**Parameters.** `--spaces-before-comment` / `-c` — src/yamkix/_cli.py:182-193 (no default: comments left as is; minimum 1)
 
 **Evidence.**
+- enforcement — src/yamkix/_cli.py:191 `main`
+  `min=1,`
+- test — tests/test_cli.py:75-86 `TestCli::test_spaces_before_comment_below_one_is_refused`
+  `assert "x>=1" in result.output`
 - enforcement — src/yamkix/comments.py:25-28 `yamkix_add_eol_comment`
   `additional_spaces = 1 if org_col is None else org_col - 1`
 - enforcement — src/yamkix/comments.py:37-43 `process_single_comment`
   `data.yaml_add_eol_comment(comment, key, column=column)`
 - test — tests/test_yamkix.py:323 `TestCommentsFollowingAnEndOfLineComment::test_full_line_comments_and_blank_lines_are_kept`
-- test — tests/test_non_regression.py:235 `TestNonRegression::test_config`
+- test — tests/test_non_regression.py:229 `TestNonRegression::test_config`
   `assert filecmp.cmp(expected_output_file, actual_output_file, shallow=True)`
 
 **Edge cases.**
 - **CMT-R003.E1** Given the `issue-11` file with comments one to four spaces after their value, when it is formatted with `--spaces-before-comment 2`, then every comment is two spaces after its value. — verified — tests/test_non_regression.py:93
-- **CMT-R003.E2** Given the same file, when it is formatted with `--spaces-before-comment 0`, then every comment is one space after its value, as with 1. — verified — tests/test_non_regression.py:105
+- **CMT-R003.E2** Given `--spaces-before-comment 0` or `-1`, when the command runs, then it stops with exit code 2 and a "not in the range x>=1" message, and no file is processed. — verified — tests/test_cli.py:75
 - **CMT-R003.E3** Given a commented line followed by a full-line comment and blank lines (`b: 22 # c2` then `# full line`), when it is formatted with `--spaces-before-comment 1` or `3`, then the end-of-line comment is re-spaced and the full-line comment and blank lines stay on their own lines. — verified — tests/test_yamkix.py:323
 - **CMT-R003.E4** Given both `--align-comments` and `--spaces-before-comment 1`, when a file is formatted, then the fixed spacing wins and comments are not aligned. — read — src/yamkix/yamkix.py:279
-
-**Open questions.** Should a value of 0 mean "no space" or be refused rather than behave as 1?
+- **CMT-R003.E5** Given `spaces_before_comment=0` passed to the Python API, when a file is formatted, then every comment is one space after its value, as with 1. — read — src/yamkix/comments.py:25
 
 **History.**
+- 2026-10-25 · 3825235 · changed · 0 gives one space → the command line refuses values below 1; E2 rewritten, E5 added for the API, open question resolved (uncommitted)
 - 2026-10-25 · 01d0951 · changed · E3: following full-line comments and blank lines are kept instead of glued; read → verified, open question resolved
 - 2026-10-24 · 823a0f3 · created
 
 ### CMT-R005 · Comments of a map or a list are aligned on their rightmost comment
 - **Kind:** rule · **Category:** calculation
 - **Status:** changed · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 01d0951 (2026-10-25)
+- **Verified at:** 3825235 (2026-10-25)
 
 **Rule.** With `--align-comments`, the end-of-line comments of each map and of each list are moved to the column of the rightmost comment of that same map or list; each map and each list is aligned on its own.
 
 **Context.** The target column is the rightmost comment already present, not "longest value plus one space": a comment pushed far right in the input pulls the others with it. Maps keep their end-of-line comments in slot `[2]` of their comment items, lists in slot `[0]`; items without a comment are skipped.
 
-**Parameters.** `--align-comments` / `-a` — src/yamkix/_cli.py:189-196 (off by default)
+**Parameters.** `--align-comments` / `-a` — src/yamkix/_cli.py:194-201 (off by default)
 
 **Evidence.**
 - enforcement — src/yamkix/comments.py:89-104 `align_comments`
   `eol_comments = [comment[slot] for comment in d.ca.items.values() if comment[slot] is not None]`
-- test — tests/test_non_regression.py:235 `TestNonRegression::test_config`
+- test — tests/test_non_regression.py:229 `TestNonRegression::test_config`
   `assert filecmp.cmp(expected_output_file, actual_output_file, shallow=True)`
 
 **Edge cases.**
-- **CMT-R005.E1** Given two maps `sub_key1` and `sub_key2` with comments one space after values of different lengths, when the file is formatted with `--align-comments`, then each map's comments line up on their own column, different for the two maps. — verified — tests/test_non_regression.py:159
+- **CMT-R005.E1** Given two maps `sub_key1` and `sub_key2` with comments one space after values of different lengths, when the file is formatted with `--align-comments`, then each map's comments line up on their own column, different for the two maps. — verified — tests/test_non_regression.py:153
 - **CMT-R005.E2** Given a list whose items `a # c1` and `longer_value # c2` carry comments at different columns and a third item without a comment, when it is formatted with `--align-comments`, then both comments line up after `longer_value` and the third item is left as is. — verified — tests/test_comments.py:76
 
 **History.**
+- 2026-10-25 · 3825235 · reanchored · lines shifted by the parser-mode, safe-mode warning and spacing fixes (uncommitted)
 - 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-25 · dc86185 · changed · map comments only → map and list comments aligned (uncommitted)
 - 2026-10-25 · b6f1a4f · changed · E2 read → verified, mocked sequence test replaced by a strict xfail on a real list (uncommitted)

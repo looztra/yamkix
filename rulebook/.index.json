@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "verifiedAt": "01d0951",
+  "verifiedAt": "3825235",
   "anchors": [
     {
       "rule": "CMT-R001",
@@ -60,8 +60,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -86,12 +86,38 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
       "head": "73f89cbd8e6d"
+    },
+    {
+      "rule": "CMT-R003",
+      "kind": "enforcement",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "main",
+      "lines": [
+        191,
+        191
+      ],
+      "hash": "3d15f03c95de",
+      "size": 1,
+      "head": "3d15f03c95de"
+    },
+    {
+      "rule": "CMT-R003",
+      "kind": "test",
+      "path": "tests/test_cli.py",
+      "symbol": "TestCli::test_spaces_before_comment_below_one_is_refused",
+      "lines": [
+        75,
+        86
+      ],
+      "hash": "c903aeebb2af",
+      "size": 10,
+      "head": "227f3777edaf"
     },
     {
       "rule": "CMT-R003",
@@ -138,8 +164,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -164,8 +190,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -190,8 +216,8 @@
       "path": "src/yamkix/_cli.py",
       "symbol": "main",
       "lines": [
-        275,
-        284
+        280,
+        289
       ],
       "hash": "b2656cfa1859",
       "size": 10,
@@ -203,8 +229,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_list_modified_precedes_summary_and_excludes_parse_errors",
       "lines": [
-        403,
-        408
+        417,
+        422
       ],
       "hash": "e9d62acbf788",
       "size": 6,
@@ -255,8 +281,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_failed_write_leaves_file_untouched_and_unlisted",
       "lines": [
-        608,
-        611
+        622,
+        625
       ],
       "hash": "b204aaa2e4ab",
       "size": 4,
@@ -268,8 +294,8 @@
       "path": "src/yamkix/config.py",
       "symbol": "create_yamkix_config_from_typer_args",
       "lines": [
-        391,
-        391
+        413,
+        413
       ],
       "hash": "acee9bd84362",
       "size": 1,
@@ -281,8 +307,8 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_explicit_stdin_as_input",
       "lines": [
-        726,
-        727
+        732,
+        733
       ],
       "hash": "9ce4d96e5857",
       "size": 2,
@@ -294,8 +320,8 @@
       "path": "src/yamkix/config.py",
       "symbol": "create_yamkix_config_from_typer_args",
       "lines": [
-        403,
-        404
+        425,
+        426
       ],
       "hash": "f0913f51cbab",
       "size": 2,
@@ -307,8 +333,8 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_input_file",
       "lines": [
-        652,
-        653
+        658,
+        659
       ],
       "hash": "1ace2de802f3",
       "size": 2,
@@ -320,8 +346,8 @@
       "path": "src/yamkix/config.py",
       "symbol": "create_yamkix_config_from_typer_args",
       "lines": [
-        399,
-        402
+        421,
+        424
       ],
       "hash": "bb283ba38f9c",
       "size": 4,
@@ -333,8 +359,8 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_input_none_and_output_none",
       "lines": [
-        696,
-        697
+        702,
+        703
       ],
       "hash": "9ce4d96e5857",
       "size": 2,
@@ -346,8 +372,8 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_output_file",
       "lines": [
-        674,
-        675
+        680,
+        681
       ],
       "hash": "d3740c214473",
       "size": 2,
@@ -359,8 +385,8 @@
       "path": "src/yamkix/config.py",
       "symbol": "create_yamkix_config_from_typer_args",
       "lines": [
-        393,
-        394
+        415,
+        416
       ],
       "hash": "9d874a6fe35a",
       "size": 2,
@@ -372,8 +398,8 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_stdout_override",
       "lines": [
-        575,
-        575
+        581,
+        581
       ],
       "hash": "5a1e603a3ba8",
       "size": 1,
@@ -385,8 +411,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_list_modified_skips_stdout",
       "lines": [
-        461,
-        462
+        475,
+        476
       ],
       "hash": "26e707134b6b",
       "size": 2,
@@ -398,8 +424,8 @@
       "path": "src/yamkix/config.py",
       "symbol": "create_yamkix_config_from_typer_args",
       "lines": [
-        396,
-        402
+        418,
+        424
       ],
       "hash": "8ec14aa31af6",
       "size": 7,
@@ -411,8 +437,8 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_explicit_stdout_as_output",
       "lines": [
-        756,
-        757
+        762,
+        763
       ],
       "hash": "4a914a717a67",
       "size": 2,
@@ -424,8 +450,8 @@
       "path": "src/yamkix/config.py",
       "symbol": "create_yamkix_config_from_typer_args",
       "lines": [
-        378,
-        389
+        400,
+        411
       ],
       "hash": "b523489997da",
       "size": 11,
@@ -437,8 +463,8 @@
       "path": "src/yamkix/config.py",
       "symbol": "raise_input_output_warning_if_needed",
       "lines": [
-        339,
-        339
+        361,
+        361
       ],
       "hash": "bd01aa16e47d",
       "size": 1,
@@ -450,8 +476,8 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_two_arguments",
       "lines": [
-        802,
-        806
+        808,
+        812
       ],
       "hash": "be7ed8913224",
       "size": 5,
@@ -463,8 +489,8 @@
       "path": "tests/test_config.py",
       "symbol": "TestRaiseInputOutputWarningIfNeeded::test_warning_is_raised",
       "lines": [
-        1019,
-        1025
+        1078,
+        1084
       ],
       "hash": "9a509a712e4b",
       "size": 7,
@@ -476,8 +502,8 @@
       "path": "src/yamkix/_cli.py",
       "symbol": "main",
       "lines": [
-        269,
-        284
+        274,
+        289
       ],
       "hash": "128eb3de6eba",
       "size": 16,
@@ -489,8 +515,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_list_modified_survives_later_failure",
       "lines": [
-        471,
-        473
+        485,
+        487
       ],
       "hash": "dce604ab14b9",
       "size": 3,
@@ -541,8 +567,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_list_modified_and_summary_agree_on_crlf",
       "lines": [
-        569,
-        571
+        583,
+        585
       ],
       "hash": "973079c7c695",
       "size": 3,
@@ -593,8 +619,8 @@
       "path": "src/yamkix/_cli.py",
       "symbol": "main",
       "lines": [
-        273,
-        274
+        278,
+        279
       ],
       "hash": "d4609570af6f",
       "size": 2,
@@ -606,8 +632,8 @@
       "path": "src/yamkix/_cli.py",
       "symbol": "main",
       "lines": [
-        285,
-        294
+        290,
+        299
       ],
       "hash": "749157810f23",
       "size": 10,
@@ -632,8 +658,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_list_modified_reports_stdin_destination",
       "lines": [
-        419,
-        419
+        433,
+        433
       ],
       "hash": "2a9909f82055",
       "size": 1,
@@ -645,8 +671,8 @@
       "path": "src/yamkix/_cli.py",
       "symbol": "main",
       "lines": [
-        295,
-        304
+        300,
+        309
       ],
       "hash": "a8bf22f0c60f",
       "size": 9,
@@ -658,8 +684,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_summary_mode_counts_errors_and_unchanged",
       "lines": [
-        379,
-        381
+        393,
+        395
       ],
       "hash": "11d873e21216",
       "size": 3,
@@ -671,8 +697,8 @@
       "path": "src/yamkix/_cli.py",
       "symbol": "main",
       "lines": [
-        267,
-        268
+        272,
+        273
       ],
       "hash": "49b84c6adee0",
       "size": 2,
@@ -684,8 +710,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_silent_mode",
       "lines": [
-        199,
-        199
+        213,
+        213
       ],
       "hash": "516822c85eb6",
       "size": 1,
@@ -710,8 +736,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -736,8 +762,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -762,8 +788,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -801,8 +827,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -840,8 +866,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -862,12 +888,25 @@
     },
     {
       "rule": "LAY-R006",
+      "kind": "doc",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "main",
+      "lines": [
+        152,
+        157
+      ],
+      "hash": "adb6879d33a4",
+      "size": 6,
+      "head": "0aaae3486c1b"
+    },
+    {
+      "rule": "LAY-R006",
       "kind": "test",
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -905,8 +944,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -944,12 +983,25 @@
       "path": "src/yamkix/config.py",
       "symbol": "raise_enforce_block_style_warning_if_needed",
       "lines": [
-        323,
-        323
+        337,
+        350
       ],
-      "hash": "e560d49a8c03",
-      "size": 1,
-      "head": "e560d49a8c03"
+      "hash": "e2aef4140a54",
+      "size": 14,
+      "head": "cdf30c2ddccc"
+    },
+    {
+      "rule": "LAY-R008",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestRaiseEnforceBlockStyleWarning::test_warning_is_raised",
+      "lines": [
+        970,
+        986
+      ],
+      "hash": "c1301d73739c",
+      "size": 15,
+      "head": "1269227c7e82"
     },
     {
       "rule": "LAY-R008",
@@ -957,8 +1009,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -983,8 +1035,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -1056,13 +1108,39 @@
       "head": "10190c8f359f"
     },
     {
+      "rule": "LAY-R011",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "raise_enforce_block_style_warning_if_needed",
+      "lines": [
+        340,
+        344
+      ],
+      "hash": "3d7ea57ffe49",
+      "size": 5,
+      "head": "a8f6e55a8159"
+    },
+    {
+      "rule": "LAY-R011",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestRaiseEnforceBlockStyleWarning::test_warning_is_raised_in_safe_mode",
+      "lines": [
+        988,
+        1015
+      ],
+      "hash": "97d73c599188",
+      "size": 26,
+      "head": "0868a2dfd811"
+    },
+    {
       "rule": "OPT-R001",
       "kind": "enforcement",
       "path": "src/yamkix/config.py",
       "symbol": "get_default_yamkix_config",
       "lines": [
-        135,
-        149
+        136,
+        150
       ],
       "hash": "7e0c448c3d56",
       "size": 15,
@@ -1083,16 +1161,42 @@
     },
     {
       "rule": "OPT-R002",
+      "kind": "config",
+      "path": "src/yamkix/config.py",
+      "symbol": "SUPPORTED_PARSING_MODES",
+      "lines": [
+        15,
+        15
+      ],
+      "hash": "6eca57edb221",
+      "size": 1,
+      "head": "6eca57edb221"
+    },
+    {
+      "rule": "OPT-R002",
       "kind": "enforcement",
       "path": "src/yamkix/config.py",
       "symbol": "get_yamkix_config_from_default",
       "lines": [
-        213,
-        233
+        217,
+        219
       ],
-      "hash": "6bf5baa97a66",
-      "size": 21,
+      "hash": "c2d2d190375e",
+      "size": 3,
       "head": "72767eebe395"
+    },
+    {
+      "rule": "OPT-R002",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "get_yamkix_config_from_default",
+      "lines": [
+        220,
+        240
+      ],
+      "hash": "d43e0fb30b22",
+      "size": 21,
+      "head": "524cd13ee803"
     },
     {
       "rule": "OPT-R002",
@@ -1100,12 +1204,25 @@
       "path": "tests/test_config.py",
       "symbol": "TestGetYamkixConfigFromDefault::test_get_yamkix_config_from_default_parsing_mode",
       "lines": [
-        304,
+        297,
         313
       ],
-      "hash": "ea2ad5a2262f",
-      "size": 10,
-      "head": "84b7aa092ce7"
+      "hash": "84debbd6bbad",
+      "size": 16,
+      "head": "e129f4aa5d15"
+    },
+    {
+      "rule": "OPT-R002",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestGetYamkixConfigFromDefault::test_get_yamkix_config_from_default_refuses_invalid_parsing_mode",
+      "lines": [
+        315,
+        319
+      ],
+      "hash": "2c9af27fbec3",
+      "size": 5,
+      "head": "ef233d96ece8"
     },
     {
       "rule": "OPT-R003",
@@ -1127,10 +1244,10 @@
       "symbol": "main",
       "lines": [
         104,
-        112
+        113
       ],
-      "hash": "35042e37758e",
-      "size": 9,
+      "hash": "d967be08e3a7",
+      "size": 10,
       "head": "865b4bcc4164"
     },
     {
@@ -1160,6 +1277,19 @@
       "head": "d5e80d8ee53f"
     },
     {
+      "rule": "OPT-R004",
+      "kind": "doc",
+      "path": "src/yamkix/_cli.py",
+      "symbol": "main",
+      "lines": [
+        109,
+        110
+      ],
+      "hash": "c217c1e0a454",
+      "size": 2,
+      "head": "4765220f2b71"
+    },
+    {
       "rule": "QUO-R002",
       "kind": "enforcement",
       "path": "src/yamkix/yaml_writer.py",
@@ -1178,8 +1308,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -1204,8 +1334,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -1256,8 +1386,8 @@
       "path": "tests/test_non_regression.py",
       "symbol": "TestNonRegression::test_config",
       "lines": [
-        235,
-        235
+        229,
+        229
       ],
       "hash": "73f89cbd8e6d",
       "size": 1,
@@ -1269,12 +1399,12 @@
       "path": "src/yamkix/config.py",
       "symbol": "raise_enforce_double_quotes_warning_if_needed",
       "lines": [
-        310,
-        310
+        316,
+        323
       ],
-      "hash": "950279e107c6",
-      "size": 1,
-      "head": "950279e107c6"
+      "hash": "0e3c4633c367",
+      "size": 8,
+      "head": "3682b1785da5"
     },
     {
       "rule": "QUO-R004",
@@ -1295,12 +1425,38 @@
       "path": "tests/test_config.py",
       "symbol": "TestRaiseEnforceDoubleQuotesWarning::test_warning_is_raised",
       "lines": [
-        908,
-        911
+        915,
+        918
       ],
       "hash": "1a34615588ff",
       "size": 4,
       "head": "15fb8fbdd1ac"
+    },
+    {
+      "rule": "QUO-R005",
+      "kind": "enforcement",
+      "path": "src/yamkix/config.py",
+      "symbol": "raise_enforce_double_quotes_warning_if_needed",
+      "lines": [
+        324,
+        328
+      ],
+      "hash": "e6dd7c3e55d4",
+      "size": 5,
+      "head": "20c6b988fe80"
+    },
+    {
+      "rule": "QUO-R005",
+      "kind": "test",
+      "path": "tests/test_config.py",
+      "symbol": "TestRaiseEnforceDoubleQuotesWarning::test_warning_is_raised_in_safe_mode",
+      "lines": [
+        921,
+        937
+      ],
+      "hash": "799cb39e3e31",
+      "size": 15,
+      "head": "415b567437d4"
     }
   ]
 }
