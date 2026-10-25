@@ -13,11 +13,6 @@ from yamkix.__version__ import __version__
 StreamType = Any  # Copied from ruamel.yaml compat.py line 58
 
 
-def remove_all_linebreaks(comment: StreamType) -> StreamType:
-    """Remove trailing linebreak."""
-    return comment.replace("\n", "")
-
-
 def string_is_comment(a_string: str) -> bool:
     """Is it a comment starting with a #."""
     return a_string[0] == "#"

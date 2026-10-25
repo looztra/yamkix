@@ -297,6 +297,35 @@ class TestCommentsByParsingMode:
         assert not any(comment in output for comment in COMMENT_TEXTS)
 
 
+class TestCommentsFollowingAnEndOfLineComment:
+    """Repositioning an end-of-line comment keeps the lines that follow it (CMT-R003)."""
+
+    @pytest.mark.parametrize("spaces_before_comment", [pytest.param(1, id="one-space"), pytest.param(3, id="three")])
+    def test_full_line_comments_and_blank_lines_are_kept(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str], spaces_before_comment: int
+    ) -> None:
+        """Full-line comments and blank lines after a commented line stay on their own lines."""
+        # GIVEN
+        input_file = tmp_path / "commented.yml"
+        input_file.write_text(
+            "---\na: 1 # c\n\nb: 22 # c2\n# full line\nc:\n  - x # c3\n  # full in list\n  - y\nd: 3 # c4\n\n\ne: 4\n"
+        )
+        config = get_yamkix_config_from_default(
+            spaces_before_comment=spaces_before_comment,
+            io_config=YamkixInputOutputConfig(input=str(input_file), output=None),
+        )
+
+        # WHEN
+        round_trip_and_format(config)
+
+        # THEN
+        gap = " " * spaces_before_comment
+        assert capsys.readouterr().out == (
+            f"---\na: 1{gap}# c\n\nb: 22{gap}# c2\n# full line\nc:\n  - x{gap}# c3\n  # full in list\n  - y\n"
+            f"d: 3{gap}# c4\n\n\ne: 4\n"
+        )
+
+
 class TestYamkixDumpAll:
     """Provide tests for the yamkix_dump_all function."""
 

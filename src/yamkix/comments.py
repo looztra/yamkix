@@ -4,7 +4,7 @@ from ruamel.yaml.comments import CommentedBase, CommentedMap, CommentedSeq, NotN
 from ruamel.yaml.error import CommentMark
 from ruamel.yaml.tokens import CommentToken
 
-from yamkix.helpers import remove_all_linebreaks, string_is_comment
+from yamkix.helpers import string_is_comment
 
 
 def yamkix_add_eol_comment(self, comment: str, key=NotNone, column: int | None = None) -> None:  # noqa: ANN001
@@ -35,8 +35,11 @@ CommentedBase.yaml_add_eol_comment = yamkix_add_eol_comment  # pyright: ignore[r
 
 
 def process_single_comment(data: CommentedBase, comment: str, key: str, column: int | None) -> None:
-    """Process a single comment."""
-    comment = remove_all_linebreaks(comment)
+    """Process a single comment.
+
+    The comment token also holds the full-line comments and blank lines that follow it,
+    separated by line breaks: they are kept so that only the end-of-line comment moves.
+    """
     data.yaml_add_eol_comment(comment, key, column=column)
 
 

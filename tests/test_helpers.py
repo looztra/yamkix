@@ -11,42 +11,11 @@ from yamkix.helpers import (
     convert_flow_to_block_style,
     convert_single_to_double_quotes,
     get_yamkix_version,
-    remove_all_linebreaks,
     string_is_comment,
     strip_leading_double_space,
     strip_leading_double_space_and_trailing_spaces,
     strip_trailing_spaces,
 )
-
-
-def test_remove_all_linebreaks() -> None:
-    """Test remove_all_linebreaks.
-
-    when there is a trailing linebreak
-    """
-    s_input = "yolo\n"
-    sut = remove_all_linebreaks(s_input)
-    assert sut == "yolo"
-
-
-def test_remove_all_linebreaks_no_linebreak() -> None:
-    """Test remove_all_linebreaks.
-
-    when there is no trailing linebreak
-    """
-    s_input = "yolo"
-    sut = remove_all_linebreaks(s_input)
-    assert sut == "yolo"
-
-
-def test_remove_all_linebreaks_more_than_one() -> None:
-    """Test remove_all_linebreaks.
-
-    when there is more than one linebreak
-    """
-    s_input = "line1\nline2\n"
-    sut = remove_all_linebreaks(s_input)
-    assert sut == "line1line2"
 
 
 def test_string_is_comment() -> None:
