@@ -9,7 +9,7 @@
   - **Covers**: preserving the original quotes (default), dropping unnecessary quotes, turning remaining quotes into single quotes, forcing double quotes instead.
   - **Concepts**: quotes preserved, single-quoted string, double-quoted string, enforce double quotes, two-pass round trip.
   - **Code**: `src/yamkix/helpers.py`, `src/yamkix/yamkix.py`
-  - **To check**: forcing double quotes needs a second round trip per document (dump, reload with quotes preserved, convert) and must not be collapsed into one pass; it does nothing unless quotes are not preserved, and the CLI only warns about it; the legacy argparse path always sets it to off.
+  - **To check**: forcing double quotes needs a second round trip per document (dump, reload with quotes preserved, convert) and must not be collapsed into one pass; it does nothing unless quotes are not preserved, nor in `safe` mode, and the CLI only warns about it; the legacy argparse path always sets it to off.
 - **CMT** · Comments — How end-of-line comments are kept, spaced and aligned.
   - **Covers**: keeping comments in `rt` mode and losing them in `safe` mode, setting a fixed number of spaces before each comment, aligning the comments of one map or list on the same column.
   - **Concepts**: end-of-line comment, spaces before comment, column, comment alignment.
@@ -24,4 +24,4 @@
   - **Covers**: the default configuration, overriding some defaults from the Python API (used by kubesplit), validating the parser mode, what safe mode does to a document.
   - **Concepts**: default configuration, parsing mode (`rt` / `safe`), option override, option warning, legacy argparse API, kubesplit.
   - **Code**: `src/yamkix/config.py`, `src/yamkix/args.py`, `src/yamkix/errors.py`
-  - **To check**: the legacy argparse API (`args.py`, `get_config_from_args`, `get_spaces_before_comment_from_args`) has no caller left: nothing in the repository outside tests, and kubesplit 0.5.0 no longer imports it; `get_yamkix_config_from_default` does not validate the parser mode and declares `enforce_double_quotes: bool = False` then tests it against `None`, so that branch is dead; the `version` field is marked deprecated but still set.
+  - **To check**: the legacy argparse API (`args.py`, `get_config_from_args`, `get_spaces_before_comment_from_args`) has no caller left: nothing in the repository outside tests, and kubesplit 0.5.0 no longer imports it; `get_yamkix_config_from_default` checks the parser mode case-sensitively, unlike the CLI, and declares `enforce_double_quotes: bool = False` then tests it against `None`, so that branch is dead; the `version` field is marked deprecated but still set.

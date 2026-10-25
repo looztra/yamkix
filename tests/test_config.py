@@ -294,13 +294,13 @@ class TestYamkixConfigFromArgs:
 class TestGetYamkixConfigFromDefault:
     """Provide unit tests for get_yamkix_config_from_default."""
 
-    def test_get_yamkix_config_from_default_parsing_mode(self, faker: Faker) -> None:
+    @pytest.mark.parametrize("new_val", [pytest.param("rt", id="rt"), pytest.param("safe", id="safe")])
+    def test_get_yamkix_config_from_default_parsing_mode(self, new_val: str) -> None:
         """Test get_yamkix_config_from_default.
 
         change parsing_mode
         """
         reference = get_yamkix_config_from_default()
-        new_val = faker.word()
         sut = get_yamkix_config_from_default(parsing_mode=new_val)
         assert sut.parsing_mode == new_val
         assert sut.explicit_start == reference.explicit_start
@@ -311,6 +311,12 @@ class TestGetYamkixConfigFromDefault:
         assert sut.spaces_before_comment == reference.spaces_before_comment
         assert sut.line_width == reference.line_width
         assert sut.io_config == reference.io_config
+
+    @pytest.mark.parametrize("parsing_mode", [pytest.param("yolo", id="unknown"), pytest.param("RT", id="upper")])
+    def test_get_yamkix_config_from_default_refuses_invalid_parsing_mode(self, parsing_mode: str) -> None:
+        """An unknown parser mode is refused when the configuration is built."""
+        with pytest.raises(InvalidTypValueError):
+            get_yamkix_config_from_default(parsing_mode=parsing_mode)
 
     def test_get_yamkix_config_from_default_explicit_start(self) -> None:
         """Test get_yamkix_config_from_default.
@@ -901,6 +907,7 @@ class TestRaiseEnforceDoubleQuotesWarning:
         raise_enforce_double_quotes_warning_if_needed(
             enforce_double_quotes=True,
             no_quotes_preserved=False,
+            typ="rt",
         )
 
         # THEN
@@ -911,16 +918,35 @@ class TestRaiseEnforceDoubleQuotesWarning:
             in args[0]
         )
 
+    def test_warning_is_raised_in_safe_mode(self, mocker: MockerFixture) -> None:
+        """Safe mode keeps no quote kind, so the option is reported as having no effect."""
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
+        mock_console = mocker.Mock()
+        mock_get_stderr_console.return_value = mock_console
+
+        # WHEN
+        raise_enforce_double_quotes_warning_if_needed(
+            enforce_double_quotes=True,
+            no_quotes_preserved=True,
+            typ="safe",
+        )
+
+        # THEN
+        mock_console.print.assert_called_once()
+        args, _ = mock_console.print.call_args
+        assert "WARNING: Option '--enforce-double-quotes' has no effect with '--typ safe'." in args[0]
+
     @pytest.mark.parametrize(
-        ("enforce_double_quotes", "no_quotes_preserved"),
+        ("enforce_double_quotes", "no_quotes_preserved", "typ"),
         [
-            pytest.param(True, True, id="both_set"),  # Both options set
-            pytest.param(False, False, id="neither_set"),  # Neither option set
-            pytest.param(False, True, id="only_no_quotes_set"),  # Only no_quotes_preserved set
+            pytest.param(True, True, "rt", id="both_set"),
+            pytest.param(False, False, "rt", id="neither_set"),
+            pytest.param(False, True, "rt", id="only_no_quotes_set"),
+            pytest.param(False, True, "safe", id="only_no_quotes_set_safe"),
         ],
     )
     def test_no_warning_is_raised(
-        self, mocker: MockerFixture, enforce_double_quotes: bool, no_quotes_preserved: bool
+        self, mocker: MockerFixture, enforce_double_quotes: bool, no_quotes_preserved: bool, typ: str
     ) -> None:
         """Test that no warning is raised when not needed."""
         mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
@@ -931,6 +957,7 @@ class TestRaiseEnforceDoubleQuotesWarning:
         raise_enforce_double_quotes_warning_if_needed(
             enforce_double_quotes=enforce_double_quotes,
             no_quotes_preserved=no_quotes_preserved,
+            typ=typ,
         )
 
         # THEN
@@ -950,6 +977,7 @@ class TestRaiseEnforceBlockStyleWarning:
         raise_enforce_block_style_warning_if_needed(
             enforce_block_style=True,
             default_flow_style=True,
+            typ="rt",
         )
 
         # THEN
@@ -958,15 +986,45 @@ class TestRaiseEnforceBlockStyleWarning:
         assert "WARNING: Option '--enforce-block-style' overrides '--default-flow-style'" in args[0]
 
     @pytest.mark.parametrize(
-        ("enforce_block_style", "default_flow_style"),
+        ("default_flow_style", "expected"),
         [
-            pytest.param(False, False, id="neither_set"),
-            pytest.param(True, False, id="only_enforce_block_style_set"),
-            pytest.param(False, True, id="only_default_flow_style_set"),
+            pytest.param(False, "no effect with '--typ safe'.", id="alone"),
+            pytest.param(True, "dumped in flow style because of '--default-flow-style'", id="with_default_flow_style"),
+        ],
+    )
+    def test_warning_is_raised_in_safe_mode(
+        self, mocker: MockerFixture, default_flow_style: bool, expected: str
+    ) -> None:
+        """Safe mode ignores the option, and the warning says what the output will be."""
+        mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
+        mock_console = mocker.Mock()
+        mock_get_stderr_console.return_value = mock_console
+
+        # WHEN
+        raise_enforce_block_style_warning_if_needed(
+            enforce_block_style=True,
+            default_flow_style=default_flow_style,
+            typ="safe",
+        )
+
+        # THEN
+        mock_console.print.assert_called_once()
+        args, _ = mock_console.print.call_args
+        assert "WARNING: Option '--enforce-block-style' has no effect with '--typ safe'." in args[0]
+        assert expected in args[0]
+        assert "overrides" not in args[0]
+
+    @pytest.mark.parametrize(
+        ("enforce_block_style", "default_flow_style", "typ"),
+        [
+            pytest.param(False, False, "rt", id="neither_set"),
+            pytest.param(True, False, "rt", id="only_enforce_block_style_set"),
+            pytest.param(False, True, "rt", id="only_default_flow_style_set"),
+            pytest.param(False, True, "safe", id="only_default_flow_style_set_safe"),
         ],
     )
     def test_no_warning_is_raised(
-        self, mocker: MockerFixture, enforce_block_style: bool, default_flow_style: bool
+        self, mocker: MockerFixture, enforce_block_style: bool, default_flow_style: bool, typ: str
     ) -> None:
         """Test that no warning is raised when not needed."""
         mock_get_stderr_console = mocker.patch("yamkix.config.get_stderr_console")
@@ -977,6 +1035,7 @@ class TestRaiseEnforceBlockStyleWarning:
         raise_enforce_block_style_warning_if_needed(
             enforce_block_style=enforce_block_style,
             default_flow_style=default_flow_style,
+            typ=typ,
         )
 
         # THEN

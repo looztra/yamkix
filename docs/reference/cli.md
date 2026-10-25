@@ -21,15 +21,15 @@ yamkix [OPTIONS] [FILES]...
 | `--input` | `-i` | TEXT | `None` (STDIN) | the single file to parse or `STDIN`. Cannot be used if the list of files to process is specified using arguments. |
 | `--output` | `-o` | TEXT | `None` | the name of the file to generate (can be `STDOUT`). Will be the same as input file if not specified, and `STDOUT` if `STDIN` was specified as input. |
 | `--stdout` | `-s` | flag | off | output is `STDOUT` whatever the value for input (`-i/--input`) and output (`-o/--output`). |
-| `--typ` | `-t` | `safe`\|`rt` | `rt` | the yaml parser mode. Using `safe` will remove all comments. |
+| `--typ` | `-t` | `safe`\|`rt` | `rt` | the yaml parser mode. Using `safe` re-emits the data only: comments, original quotes and collection styles are lost, and map keys are sorted. |
 | `--no-explicit-start` | `-n` | flag | off | by default, explicit start of the yaml doc is 'On', you can disable it with this option. |
 | `--explicit-end` | `-e` | flag | off | by default, explicit end of the yaml doc is 'Off', you can enable it with this option. |
 | `--no-quotes-preserved` | `-q` | flag | off | by default, quotes are preserved, you can disable this with this option. |
-| `--enforce-double-quotes` | `-E` | flag | off | enforce double quotes when `--no-quotes-preserved` is activated (by default, you get single quotes which is the recommended behavior). |
-| `--default-flow-style` | `-f` | flag | off | enable the default flow style, 'Off' by default. In default flow style (with `--typ rt`), maps and lists are written like json. |
-| `--enforce-block-style` | `-B` | flag | off | convert flow-style (JSON-like) maps and lists to block style. Overrides `--default-flow-style`. Empty collections (`[]` and `{}`) are kept as-is. |
+| `--enforce-double-quotes` | `-E` | flag | off | enforce double quotes when `--no-quotes-preserved` is activated (by default, you get single quotes which is the recommended behavior). Has no effect with `--typ safe` (a warning is printed). |
+| `--default-flow-style` | `-f` | flag | off | enable the default flow style, 'Off' by default. With `--typ rt`, only collections without a style of their own are affected, so collections read from the input keep their style. With `--typ safe`, the whole document is written like json. |
+| `--enforce-block-style` | `-B` | flag | off | convert flow-style (JSON-like) maps and lists to block style. Overrides `--default-flow-style`. Empty collections (`[]` and `{}`) are kept as-is. Has no effect with `--typ safe` (a warning is printed). |
 | `--no-dash-inwards` | `-d` | flag | off | by default, dash are pushed inwards. Use `--no-dash-inwards` to have the dash start at the sequence level. |
-| `--spaces-before-comment` | `-c` | INTEGER | `None` | specify the number of spaces between comments and content. If not specified, comments are left as is. |
+| `--spaces-before-comment` | `-c` | INTEGER (≥ 1) | `None` | specify the number of spaces between comments and content (at least 1). If not specified, comments are left as is. |
 | `--align-comments` | `-a` | flag | off | align EOL comments within each dict/list to the maximum column. |
 | `--line-width` | `-w` | INTEGER | `2048` | specify the maximum line width. |
 | `--silent` | `-S` | flag | off | silent mode, don't print config when processing file(s). |
