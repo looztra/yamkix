@@ -255,13 +255,13 @@ How yamkix lays out every YAML document it writes: the start and end markers, ho
 - enforcement — src/yamkix/yamkix.py:280-283 `yamkix_dump_one`
 - test — tests/test_helpers.py:130 `test_strip_trailing_spaces`
   `assert strip_trailing_spaces(stream) == expected`
-- test — tests/test_yamkix.py:356-357 `TestBlockScalarTrailingSpaces::test_block_scalar_values_are_unchanged`
+- test — tests/test_yamkix.py:372-373 `TestBlockScalarTrailingSpaces::test_block_scalar_values_are_unchanged`
   `assert output == document`
 
 **Edge cases.**
 - **LAY-R010.E1** Given the `issue-437` file, when it is formatted with `--line-width 80`, then the folded lines have no trailing space. — verified — tests/test_non_regression.py:207
 - **LAY-R010.E2** Given `quoted: "line one \nline two"` with an escaped line break after a space, when the trailing spaces are stripped, then the value is unchanged. — verified — tests/test_helpers.py:117
-- **LAY-R010.E3** Given a literal block `s: |` whose first line is `a` followed by two spaces, when it is formatted, then the two spaces are kept and the loaded value stays `"a  \nb\n"`. — verified — tests/test_yamkix.py:356
+- **LAY-R010.E3** Given a literal block `s: |` whose first line is `a` followed by two spaces, when it is formatted, then the two spaces are kept and the loaded value stays `"a  \nb\n"`. — verified — tests/test_yamkix.py:372
 - **LAY-R010.E4** Given a plain value ending with ` |` (`k: a |`) followed by a line with a trailing space, when the trailing spaces are stripped, then the next line is still stripped and no value changes. — verified — tests/test_helpers.py:125
 
 **History.**

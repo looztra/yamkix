@@ -325,6 +325,22 @@ class TestCommentsFollowingAnEndOfLineComment:
             f"d: 3{gap}# c4\n\n\ne: 4\n"
         )
 
+    def test_zero_spaces_from_the_api_gives_one(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+        """The Python API does not refuse 0: comments end up one space after their value, as with 1."""
+        # GIVEN
+        input_file = tmp_path / "commented.yml"
+        input_file.write_text("---\na: 1    # c\nb:\n  - x   # c2\n")
+        config = get_yamkix_config_from_default(
+            spaces_before_comment=0,
+            io_config=YamkixInputOutputConfig(input=str(input_file), output=None),
+        )
+
+        # WHEN
+        round_trip_and_format(config)
+
+        # THEN
+        assert capsys.readouterr().out == "---\na: 1 # c\nb:\n  - x # c2\n"
+
 
 class TestBlockScalarTrailingSpaces:
     """Trailing spaces inside block scalars are part of the value and are kept (LAY-R010)."""

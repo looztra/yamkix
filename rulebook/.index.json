@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "verifiedAt": "3825235",
+  "verifiedAt": "3dd0e4c",
   "anchors": [
     {
       "rule": "CMT-R001",
@@ -1100,8 +1100,8 @@
       "path": "tests/test_yamkix.py",
       "symbol": "TestBlockScalarTrailingSpaces::test_block_scalar_values_are_unchanged",
       "lines": [
-        356,
-        357
+        372,
+        373
       ],
       "hash": "49ac42e7f694",
       "size": 2,

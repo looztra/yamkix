@@ -57,8 +57,8 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 
 **Edge cases.**
 - **FIL-R010.E1** Given a file whose write fails with "no space left on device", when it is formatted in place, then it keeps its previous content and no temporary file is left. — verified — tests/test_cli.py:624
-- **FIL-R010.E2** Given an existing output file with mode `0640`, when it is rewritten, then it keeps mode `0640`. — verified — tests/test_yamkix.py:398
-- **FIL-R010.E3** Given an output path that is a symlink, when it is rewritten, then it stays a symlink and its target receives the content. — verified — tests/test_yamkix.py:418
+- **FIL-R010.E2** Given an existing output file with mode `0640`, when it is rewritten, then it keeps mode `0640`. — verified — tests/test_yamkix.py:414
+- **FIL-R010.E3** Given an output path that is a symlink, when it is rewritten, then it stays a symlink and its target receives the content. — verified — tests/test_yamkix.py:434
 
 **Open questions.** Should the owner and the hard links of a replaced file be preserved?
 

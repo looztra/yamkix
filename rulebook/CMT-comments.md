@@ -114,10 +114,10 @@ How yamkix keeps, spaces and aligns the end-of-line comments of a YAML document.
 - **CMT-R003.E2** Given `--spaces-before-comment 0` or `-1`, when the command runs, then it stops with exit code 2 and a "not in the range x>=1" message, and no file is processed. — verified — tests/test_cli.py:75
 - **CMT-R003.E3** Given a commented line followed by a full-line comment and blank lines (`b: 22 # c2` then `# full line`), when it is formatted with `--spaces-before-comment 1` or `3`, then the end-of-line comment is re-spaced and the full-line comment and blank lines stay on their own lines. — verified — tests/test_yamkix.py:323
 - **CMT-R003.E4** Given both `--align-comments` and `--spaces-before-comment 1`, when a file is formatted, then the fixed spacing wins and comments are not aligned. — read — src/yamkix/yamkix.py:279
-- **CMT-R003.E5** Given `spaces_before_comment=0` passed to the Python API, when a file is formatted, then every comment is one space after its value, as with 1. — read — src/yamkix/comments.py:25
+- **CMT-R003.E5** Given `spaces_before_comment=0` passed to the Python API, when a file is formatted, then every comment is one space after its value, as with 1. — verified — tests/test_yamkix.py:328
 
 **History.**
-- 2026-10-25 · 3825235 · changed · 0 gives one space → the command line refuses values below 1; E2 rewritten, E5 added for the API, open question resolved (uncommitted)
+- 2026-10-25 · 3825235 · changed · 0 gives one space → the command line refuses values below 1; E2 rewritten, E5 added for the API and pinned by a test, open question resolved (uncommitted)
 - 2026-10-25 · 01d0951 · changed · E3: following full-line comments and blank lines are kept instead of glued; read → verified, open question resolved
 - 2026-10-24 · 823a0f3 · created
 
