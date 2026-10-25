@@ -11,7 +11,7 @@ How yamkix keeps, spaces and aligns the end-of-line comments of a YAML document.
 ### CMT-R001 · Comments are kept in round-trip mode and dropped in safe mode
 - **Kind:** rule · **Category:** derivation · **Implements:** CMT-P01
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** e9e0cca (2026-10-24)
+- **Verified at:** dc86185 (2026-10-25)
 
 **Rule.** Comments are kept only when the parsing mode is `rt` (the default); with `--typ safe` every comment is removed from the output.
 
@@ -20,18 +20,19 @@ How yamkix keeps, spaces and aligns the end-of-line comments of a YAML document.
 **Evidence.**
 - enforcement — src/yamkix/yaml_writer.py:27 `get_opinionated_yaml_writer`
   `yaml = YAML(typ=yamkix_config.parsing_mode)`
-- test — tests/test_yamkix.py:261 `TestCommentsByParsingMode::test_comments_follow_parsing_mode`
+- test — tests/test_yamkix.py:262 `TestCommentsByParsingMode::test_comments_follow_parsing_mode`
   `assert [comment for comment in COMMENT_TEXTS if comment in output] == (COMMENT_TEXTS if comments_kept else [])`
-- test — tests/test_yamkix.py:295-296 `TestCommentsByParsingMode::test_safe_mode_drops_comments_but_keeps_data`
+- test — tests/test_yamkix.py:296-297 `TestCommentsByParsingMode::test_safe_mode_drops_comments_but_keeps_data`
   `assert safe_loader.load(output) == safe_loader.load(COMMENTED_DOCUMENT)`
 
 **Edge cases.**
-- **CMT-R001.E1** Given a document with a top-level full-line comment, a nested full-line comment and end-of-line comments on a map entry and a list item, when it is formatted in `rt` mode, then all four comments are kept. — verified — tests/test_yamkix.py:241
-- **CMT-R001.E2** Given the same document, when it is formatted in `safe` mode, then none of the four comments is left. — verified — tests/test_yamkix.py:242
-- **CMT-R001.E3** Given the same document with `url: "http://example.com/#anchor"`, when it is formatted in `safe` mode, then the loaded data is identical to the input's, `#anchor` included. — verified — tests/test_yamkix.py:266
-- **CMT-R001.E4** Given `--spaces-before-comment 2` or `--align-comments` in `safe` mode, when the document is formatted, then the comment options have nothing to act on, no error is raised and no comment is written. — verified — tests/test_yamkix.py:267-268
+- **CMT-R001.E1** Given a document with a top-level full-line comment, a nested full-line comment and end-of-line comments on a map entry and a list item, when it is formatted in `rt` mode, then all four comments are kept. — verified — tests/test_yamkix.py:242
+- **CMT-R001.E2** Given the same document, when it is formatted in `safe` mode, then none of the four comments is left. — verified — tests/test_yamkix.py:243
+- **CMT-R001.E3** Given the same document with `url: "http://example.com/#anchor"`, when it is formatted in `safe` mode, then the loaded data is identical to the input's, `#anchor` included. — verified — tests/test_yamkix.py:267
+- **CMT-R001.E4** Given `--spaces-before-comment 2` or `--align-comments` in `safe` mode, when the document is formatted, then the comment options have nothing to act on, no error is raised and no comment is written. — verified — tests/test_yamkix.py:268-269
 
 **History.**
+- 2026-10-25 · dc86185 · reanchored · test lines shifted by added tests and imports (uncommitted)
 - 2026-10-24 · e9e0cca · changed · confidence read → verified, tests added in tests/test_yamkix.py
 - 2026-10-24 · 823a0f3 · created
 
@@ -108,29 +109,28 @@ How yamkix keeps, spaces and aligns the end-of-line comments of a YAML document.
 **History.**
 - 2026-10-24 · 823a0f3 · created
 
-### CMT-R005 · Comments of a map are aligned on its rightmost comment
+### CMT-R005 · Comments of a map or a list are aligned on their rightmost comment
 - **Kind:** rule · **Category:** calculation
-- **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** b6f1a4f (2026-10-25)
+- **Status:** changed · **Confidence:** verified · **Audit:** passed
+- **Verified at:** dc86185 (2026-10-25)
 
-**Rule.** With `--align-comments`, the end-of-line comments of each map are moved to the column of the rightmost comment of that same map; each map is aligned on its own.
+**Rule.** With `--align-comments`, the end-of-line comments of each map and of each list are moved to the column of the rightmost comment of that same map or list; each map and each list is aligned on its own.
 
-**Context.** The target column is the rightmost comment already present, not "longest value plus one space": a comment pushed far right in the input pulls the others with it. List items are not aligned in practice (E2).
+**Context.** The target column is the rightmost comment already present, not "longest value plus one space": a comment pushed far right in the input pulls the others with it. Maps keep their end-of-line comments in slot `[2]` of their comment items, lists in slot `[0]`; items without a comment are skipped.
 
 **Parameters.** `--align-comments` / `-a` — src/yamkix/_cli.py:189-196 (off by default)
 
 **Evidence.**
-- enforcement — src/yamkix/comments.py:89-92 `align_comments`
-  `max_col = max((comment[2].column for comment in d.ca.items.values() if comment[2] is not None), default=0)`
+- enforcement — src/yamkix/comments.py:86-101 `align_comments`
+  `eol_comments = [comment[slot] for comment in d.ca.items.values() if comment[slot] is not None]`
 - test — tests/test_non_regression.py:235 `TestNonRegression::test_config`
   `assert filecmp.cmp(expected_output_file, actual_output_file, shallow=True)`
 
 **Edge cases.**
 - **CMT-R005.E1** Given two maps `sub_key1` and `sub_key2` with comments one space after values of different lengths, when the file is formatted with `--align-comments`, then each map's comments line up on their own column, different for the two maps. — verified — tests/test_non_regression.py:159
-- **CMT-R005.E2** Given a list whose items carry comments at different columns, when it is formatted with `--align-comments`, then the list items' comments are left where they were. — verified — tests/test_comments.py:78
-
-**Open questions.** Alignment reads the comment slot used by maps (`[2]`); list items keep their comment in slot `[0]`, so lists are never aligned although the option's help says "each dict/list". `test_align_comments_with_sequence` asserts the aligned behaviour on a real list and is marked `xfail(strict=True)`: it pins the current non-alignment and will fail as soon as lists are aligned. Should lists be aligned?
+- **CMT-R005.E2** Given a list whose items `a # c1` and `longer_value # c2` carry comments at different columns and a third item without a comment, when it is formatted with `--align-comments`, then both comments line up after `longer_value` and the third item is left as is. — verified — tests/test_comments.py:76
 
 **History.**
+- 2026-10-25 · dc86185 · changed · map comments only → map and list comments aligned (uncommitted)
 - 2026-10-25 · b6f1a4f · changed · E2 read → verified, mocked sequence test replaced by a strict xfail on a real list (uncommitted)
 - 2026-10-24 · 823a0f3 · created

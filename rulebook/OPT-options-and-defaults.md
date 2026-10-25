@@ -26,7 +26,7 @@ The opinionated defaults of yamkix and how options are turned into one formattin
 ### OPT-R002 · The Python API overrides only the values it is given
 - **Kind:** rule · **Category:** derivation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Verified at:** dc86185 (2026-10-25)
 
 **Rule.** `get_yamkix_config_from_default` builds a configuration where every value not given (left to `None`) takes its default from OPT-R001, and input and output default to STDIN and STDOUT.
 
@@ -35,7 +35,7 @@ The opinionated defaults of yamkix and how options are turned into one formattin
 **Evidence.**
 - enforcement — src/yamkix/config.py:213-233 `get_yamkix_config_from_default`
   `parsing_mode=parsing_mode if parsing_mode is not None else default_config.parsing_mode,`
-- test — tests/test_config.py:302-311 `TestGetYamkixConfigFromDefault::test_get_yamkix_config_from_default_parsing_mode`
+- test — tests/test_config.py:304-313 `TestGetYamkixConfigFromDefault::test_get_yamkix_config_from_default_parsing_mode`
   `assert sut.explicit_start == reference.explicit_start`
 
 **Edge cases.**
@@ -44,12 +44,13 @@ The opinionated defaults of yamkix and how options are turned into one formattin
 **Open questions.** Should the Python API refuse an unknown parser mode, as the dead argparse path does (`config.py:268`)?
 
 **History.**
+- 2026-10-25 · dc86185 · reanchored · test lines shifted by added tests and imports (uncommitted)
 - 2026-10-24 · 823a0f3 · created
 
 ### OPT-R003 · The command line accepts only the `rt` and `safe` parser modes, in any letter case
 - **Kind:** rule · **Category:** validation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Verified at:** dc86185 (2026-10-25)
 
 **Rule.** `--typ` must be `rt` or `safe`, in any letter case; any other value is refused before any file is processed, with a non-zero exit code.
 
@@ -59,10 +60,11 @@ The opinionated defaults of yamkix and how options are turned into one formattin
 - enforcement — src/yamkix/_cli.py:39-43 `SupportedYamlParserMode`
 - enforcement — src/yamkix/_cli.py:104-112 `main`
   `case_sensitive=False,`
-- test — tests/test_cli.py:69-71 `TestCli::test_invalid_typ`
+- test — tests/test_cli.py:70-72 `TestCli::test_invalid_typ`
   `assert "'safe', 'rt'" in result.output`
 
 **History.**
+- 2026-10-25 · dc86185 · reanchored · test lines shifted by added tests and imports (uncommitted)
 - 2026-10-24 · 823a0f3 · created
 
 ### OPT-R004 · Safe mode re-emits the data, not the document

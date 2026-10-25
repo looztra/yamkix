@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "verifiedAt": "b6f1a4f",
+  "verifiedAt": "dc86185",
   "anchors": [
     {
       "rule": "CMT-R001",
@@ -21,12 +21,12 @@
       "path": "tests/test_yamkix.py",
       "symbol": "TestCommentsByParsingMode::test_comments_follow_parsing_mode",
       "lines": [
-        261,
-        261
+        262,
+        262
       ],
-      "hash": "0ddd0ed9366e",
+      "hash": "46bf58e6adba",
       "size": 1,
-      "head": "0ddd0ed9366e"
+      "head": "46bf58e6adba"
     },
     {
       "rule": "CMT-R001",
@@ -34,12 +34,12 @@
       "path": "tests/test_yamkix.py",
       "symbol": "TestCommentsByParsingMode::test_safe_mode_drops_comments_but_keeps_data",
       "lines": [
-        295,
-        296
+        296,
+        297
       ],
-      "hash": "3e43d7b28a4f",
+      "hash": "12d21e5a25f3",
       "size": 2,
-      "head": "b7e29f67d341"
+      "head": "6a9951d67f26"
     },
     {
       "rule": "CMT-R002",
@@ -125,12 +125,12 @@
       "path": "src/yamkix/comments.py",
       "symbol": "align_comments",
       "lines": [
-        89,
-        92
+        86,
+        101
       ],
-      "hash": "daccebf82f5b",
-      "size": 4,
-      "head": "f16aaffd88cf"
+      "hash": "013315a23ce2",
+      "size": 15,
+      "head": "61b5d89b0f20"
     },
     {
       "rule": "CMT-R005",
@@ -177,8 +177,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_list_modified_precedes_summary_and_excludes_parse_errors",
       "lines": [
-        402,
-        407
+        403,
+        408
       ],
       "hash": "e9d62acbf788",
       "size": 6,
@@ -229,12 +229,12 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_explicit_stdin_as_input",
       "lines": [
-        724,
-        725
+        726,
+        727
       ],
-      "hash": "06371e457957",
+      "hash": "9ce4d96e5857",
       "size": 2,
-      "head": "dee23948841a"
+      "head": "4add113f4150"
     },
     {
       "rule": "FIL-R002",
@@ -255,12 +255,12 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_input_file",
       "lines": [
-        650,
-        651
+        652,
+        653
       ],
-      "hash": "06371e457957",
+      "hash": "1ace2de802f3",
       "size": 2,
-      "head": "dee23948841a"
+      "head": "188152c89f91"
     },
     {
       "rule": "FIL-R003",
@@ -281,12 +281,12 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_input_none_and_output_none",
       "lines": [
-        694,
-        695
+        696,
+        697
       ],
-      "hash": "06371e457957",
+      "hash": "9ce4d96e5857",
       "size": 2,
-      "head": "dee23948841a"
+      "head": "4add113f4150"
     },
     {
       "rule": "FIL-R003",
@@ -294,12 +294,12 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_output_file",
       "lines": [
-        672,
-        673
+        674,
+        675
       ],
-      "hash": "06371e457957",
+      "hash": "d3740c214473",
       "size": 2,
-      "head": "dee23948841a"
+      "head": "4add113f4150"
     },
     {
       "rule": "FIL-R004",
@@ -320,12 +320,12 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_stdout_override",
       "lines": [
-        573,
-        573
+        575,
+        575
       ],
-      "hash": "02a1bc5ad9fc",
+      "hash": "5a1e603a3ba8",
       "size": 1,
-      "head": "02a1bc5ad9fc"
+      "head": "5a1e603a3ba8"
     },
     {
       "rule": "FIL-R004",
@@ -333,8 +333,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_list_modified_skips_stdout",
       "lines": [
-        460,
-        461
+        461,
+        462
       ],
       "hash": "26e707134b6b",
       "size": 2,
@@ -359,12 +359,12 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_explicit_stdout_as_output",
       "lines": [
-        754,
-        755
+        756,
+        757
       ],
-      "hash": "06371e457957",
+      "hash": "4a914a717a67",
       "size": 2,
-      "head": "dee23948841a"
+      "head": "188152c89f91"
     },
     {
       "rule": "FIL-R006",
@@ -398,12 +398,12 @@
       "path": "tests/test_config.py",
       "symbol": "TestCreateYamkixConfigFromTyperArgs::test_create_yamkix_config_io_logic_with_two_arguments",
       "lines": [
-        800,
-        804
+        802,
+        806
       ],
-      "hash": "fe4f92348e0b",
+      "hash": "be7ed8913224",
       "size": 5,
-      "head": "fbba1a38eb7c"
+      "head": "85735bc63765"
     },
     {
       "rule": "FIL-R006",
@@ -411,12 +411,12 @@
       "path": "tests/test_config.py",
       "symbol": "TestRaiseInputOutputWarningIfNeeded::test_warning_is_raised",
       "lines": [
-        1017,
-        1023
+        1019,
+        1025
       ],
-      "hash": "8d313e3e9381",
-      "size": 6,
-      "head": "5fd55aead25a"
+      "hash": "9a509a712e4b",
+      "size": 7,
+      "head": "b9aba1cea8c1"
     },
     {
       "rule": "FIL-R009",
@@ -437,8 +437,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_list_modified_survives_later_failure",
       "lines": [
-        470,
-        472
+        471,
+        473
       ],
       "hash": "dce604ab14b9",
       "size": 3,
@@ -463,12 +463,25 @@
       "path": "tests/test_yamkix.py",
       "symbol": "TestRoundTripAndFormat::test_crlf_input_is_not_unchanged",
       "lines": [
-        152,
-        152
+        153,
+        153
       ],
-      "hash": "5fd55aead25a",
+      "hash": "e11918dd2290",
       "size": 1,
-      "head": "5fd55aead25a"
+      "head": "e11918dd2290"
+    },
+    {
+      "rule": "FIL-R011",
+      "kind": "test",
+      "path": "tests/test_yamkix.py",
+      "symbol": "TestRoundTripAndFormat::test_returns_unchanged_true_when_content_not_modified",
+      "lines": [
+        93,
+        93
+      ],
+      "hash": "c45910b7eb0e",
+      "size": 1,
+      "head": "c45910b7eb0e"
     },
     {
       "rule": "FIL-R011",
@@ -476,8 +489,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_list_modified_and_summary_agree_on_crlf",
       "lines": [
-        538,
-        540
+        569,
+        571
       ],
       "hash": "973079c7c695",
       "size": 3,
@@ -515,12 +528,12 @@
       "path": "tests/test_yamkix.py",
       "symbol": "TestRoundTripAndFormat::test_output_changed_for_separate_destination",
       "lines": [
-        137,
-        137
+        138,
+        138
       ],
-      "hash": "e11918dd2290",
+      "hash": "6d734be2de5a",
       "size": 1,
-      "head": "e11918dd2290"
+      "head": "6d734be2de5a"
     },
     {
       "rule": "FIL-R013",
@@ -567,8 +580,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_list_modified_reports_stdin_destination",
       "lines": [
-        418,
-        418
+        419,
+        419
       ],
       "hash": "2a9909f82055",
       "size": 1,
@@ -593,8 +606,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_summary_mode_counts_errors_and_unchanged",
       "lines": [
-        378,
-        380
+        379,
+        381
       ],
       "hash": "11d873e21216",
       "size": 3,
@@ -619,8 +632,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_silent_mode",
       "lines": [
-        198,
-        198
+        199,
+        199
       ],
       "hash": "516822c85eb6",
       "size": 1,
@@ -1009,12 +1022,12 @@
       "path": "tests/test_config.py",
       "symbol": "TestGetYamkixConfigFromDefault::test_get_yamkix_config_from_default_parsing_mode",
       "lines": [
-        302,
-        311
+        304,
+        313
       ],
-      "hash": "a52f5d4f9753",
+      "hash": "ea2ad5a2262f",
       "size": 10,
-      "head": "50124abc2cbd"
+      "head": "84b7aa092ce7"
     },
     {
       "rule": "OPT-R003",
@@ -1048,8 +1061,8 @@
       "path": "tests/test_cli.py",
       "symbol": "TestCli::test_invalid_typ",
       "lines": [
-        69,
-        71
+        70,
+        72
       ],
       "hash": "cb4b1bb80215",
       "size": 3,
@@ -1204,12 +1217,12 @@
       "path": "tests/test_config.py",
       "symbol": "TestRaiseEnforceDoubleQuotesWarning::test_warning_is_raised",
       "lines": [
-        906,
-        909
+        908,
+        911
       ],
-      "hash": "78659742bd0f",
+      "hash": "1a34615588ff",
       "size": 4,
-      "head": "5fd55aead25a"
+      "head": "15fb8fbdd1ac"
     }
   ]
 }

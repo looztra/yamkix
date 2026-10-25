@@ -89,7 +89,7 @@ Whether yamkix keeps, removes or rewrites the quotes around string values. By de
 ### QUO-R004 · `--enforce-double-quotes` alone has no effect and triggers a warning
 - **Kind:** rule · **Category:** validation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Verified at:** dc86185 (2026-10-25)
 
 **Rule.** When `--enforce-double-quotes` is given without `--no-quotes-preserved`, quotes are kept as written and a warning says the option is useless; the run continues.
 
@@ -97,11 +97,12 @@ Whether yamkix keeps, removes or rewrites the quotes around string values. By de
 - enforcement — src/yamkix/config.py:310 `raise_enforce_double_quotes_warning_if_needed`
   `if no_quotes_preserved is False and enforce_double_quotes is True:`
 - enforcement — src/yamkix/yamkix.py:89 `round_trip_and_format`
-- test — tests/test_config.py:906-909 `TestRaiseEnforceDoubleQuotesWarning::test_warning_is_raised`
+- test — tests/test_config.py:908-911 `TestRaiseEnforceDoubleQuotesWarning::test_warning_is_raised`
   `"WARNING: Option '--enforce-double-quotes' is useless unless '--no-quotes-preserved' is also set."`
 
 **Edge cases.**
-- **QUO-R004.E1** Given both options set, when the configuration is built, then no warning is printed. — verified — tests/test_config.py:915
+- **QUO-R004.E1** Given both options set, when the configuration is built, then no warning is printed. — verified — tests/test_config.py:917
 
 **History.**
+- 2026-10-25 · dc86185 · reanchored · test lines shifted by added tests and imports (uncommitted)
 - 2026-10-24 · 823a0f3 · created
