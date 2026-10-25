@@ -12,6 +12,7 @@ from yamkix.helpers import get_stderr_console
 DEFAULT_LINE_WIDTH: Final = 2048
 STDIN_DISPLAY_NAME: Final = "STDIN"
 STDOUT_DISPLAY_NAME: Final = "STDOUT"
+SUPPORTED_PARSING_MODES: Final = ("rt", "safe")
 
 
 @dataclass
@@ -203,6 +204,9 @@ def get_yamkix_config_from_default(  # noqa: PLR0913, PLR0917
     Returns:
         yamkix_config: A `YamkixConfig` object with the specified overrides.
 
+    Raises:
+        InvalidTypValueError: If `parsing_mode` is neither `rt` nor `safe`.
+
     Tip:
         Use this function when you want to create a custom configuration that just overrides
         some of the default values.
@@ -211,6 +215,8 @@ def get_yamkix_config_from_default(  # noqa: PLR0913, PLR0917
         If you want to create a configuration from scratch, build a `YamkixConfig` object directly.
     """
     default_config = get_default_yamkix_config()
+    if parsing_mode is not None and parsing_mode not in SUPPORTED_PARSING_MODES:
+        raise InvalidTypValueError(parsing_mode)
     return YamkixConfig(
         parsing_mode=parsing_mode if parsing_mode is not None else default_config.parsing_mode,
         explicit_start=explicit_start if explicit_start is not None else default_config.explicit_start,
@@ -265,7 +271,7 @@ def get_input_output_config_from_args(
 
 def get_config_from_args(args: Namespace, inc_io_config: bool = True) -> YamkixConfig:
     """Build a YamkixConfig object from parsed args."""
-    if args.typ not in ["safe", "rt"]:
+    if args.typ not in SUPPORTED_PARSING_MODES:
         raise InvalidTypValueError(args.typ)
     if inc_io_config:
         yamkix_input_output_config = get_input_output_config_from_args(args)
@@ -304,12 +310,20 @@ def get_spaces_before_comment_from_args(args: Namespace) -> int | None:
 def raise_enforce_double_quotes_warning_if_needed(
     enforce_double_quotes: bool,
     no_quotes_preserved: bool,
+    typ: str,
 ) -> None:
     """Raise a warning if needed based on the config."""
+    if enforce_double_quotes is not True:
+        return
     stderr_console = get_stderr_console()
-    if no_quotes_preserved is False and enforce_double_quotes is True:
+    if no_quotes_preserved is False:
         stderr_console.print(
             "WARNING: Option '--enforce-double-quotes' is useless unless '--no-quotes-preserved' is also set.",
+            style="warning",
+        )
+    elif typ == "safe":
+        stderr_console.print(
+            "WARNING: Option '--enforce-double-quotes' has no effect with '--typ safe'.",
             style="warning",
         )
 
@@ -317,10 +331,18 @@ def raise_enforce_double_quotes_warning_if_needed(
 def raise_enforce_block_style_warning_if_needed(
     enforce_block_style: bool,
     default_flow_style: bool,
+    typ: str,
 ) -> None:
     """Raise a warning if needed based on the config."""
+    if enforce_block_style is not True:
+        return
     stderr_console = get_stderr_console()
-    if enforce_block_style is True and default_flow_style is True:
+    if typ == "safe":
+        message = "WARNING: Option '--enforce-block-style' has no effect with '--typ safe'."
+        if default_flow_style is True:
+            message += " All collections will be dumped in flow style because of '--default-flow-style'."
+        stderr_console.print(message, style="warning")
+    elif default_flow_style is True:
         stderr_console.print(
             "WARNING: Option '--enforce-block-style' overrides '--default-flow-style': "
             "all collections will be dumped in block style.",
@@ -369,10 +391,10 @@ def create_yamkix_config_from_typer_args(  # noqa: PLR0913, PLR0917
         If `files` is `None`, a single `YamkixConfig` will be created using the provided arguments.
     """
     raise_enforce_double_quotes_warning_if_needed(
-        enforce_double_quotes=enforce_double_quotes, no_quotes_preserved=no_quotes_preserved
+        enforce_double_quotes=enforce_double_quotes, no_quotes_preserved=no_quotes_preserved, typ=typ
     )
     raise_enforce_block_style_warning_if_needed(
-        enforce_block_style=enforce_block_style, default_flow_style=default_flow_style
+        enforce_block_style=enforce_block_style, default_flow_style=default_flow_style, typ=typ
     )
     raise_input_output_warning_if_needed(files=files, input_file=input_file, output_file=output_file, stdout=stdout)
     if files is not None:

@@ -99,12 +99,6 @@ class TestNonRegression:
                 id="issue_11_spaces_before_comment_1",
             ),
             pytest.param(
-                "issue-11",
-                "spaces-before-comment-0",
-                ["--spaces-before-comment", "0"],
-                id="issue_11_spaces_before_comment_0",
-            ),
-            pytest.param(
                 "issue-11-ruamel-318",
                 "spaces-before-comment-2",
                 ["--spaces-before-comment", "2"],

@@ -71,6 +71,20 @@ class TestCli:
         assert "'invalid' is not one of" in result.output
         assert "'safe', 'rt'" in result.output
 
+    @pytest.mark.parametrize("value", [pytest.param("0", id="zero"), pytest.param("-1", id="negative")])
+    def test_spaces_before_comment_below_one_is_refused(self, mocker: MockerFixture, value: str) -> None:
+        """A spacing below 1 is refused before any file is processed."""
+        # GIVEN
+        mock_round_trip = mocker.patch("yamkix._cli.round_trip_and_format")
+
+        # WHEN
+        result = runner.invoke(app, ["--spaces-before-comment", value])
+
+        # THEN
+        assert result.exit_code == 2
+        assert "x>=1" in result.output
+        mock_round_trip.assert_not_called()
+
     def test_default_values_with_dash_input(self, mocker: MockerFixture, shared_datadir: Path) -> None:
         """Test running the CLI without any parameters uses default values."""
         # GIVEN

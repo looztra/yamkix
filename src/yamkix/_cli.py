@@ -106,7 +106,8 @@ def main(  # noqa: PLR0913, PLR0917
         typer.Option(
             "-t",
             "--typ",
-            help="the yaml parser mode. Can be 'safe' or 'rt'. Using 'safe' will remove all comments.",
+            help="the yaml parser mode. Can be 'safe' or 'rt'. Using 'safe' re-emits the data only: "
+            "comments, original quotes and collection styles are lost, and map keys are sorted.",
             case_sensitive=False,
         ),
     ] = SupportedYamlParserMode.RT,
@@ -150,7 +151,9 @@ def main(  # noqa: PLR0913, PLR0917
             "--default-flow-style",
             help=(
                 "enable the default flow style 'Off' by default. "
-                "In default flow style (with --typ 'rt'), maps and lists are written like json."
+                "With --typ 'rt', only collections without a style of their own are affected, "
+                "so collections read from the input keep their style. "
+                "With --typ 'safe', the whole document is written like json."
             ),
         ),
     ] = False,
@@ -182,8 +185,10 @@ def main(  # noqa: PLR0913, PLR0917
             "-c",
             "--spaces-before-comment",
             help=(
-                "specify the number of spaces between comments and content. If not specified, comments are left as is."
+                "specify the number of spaces between comments and content (at least 1). "
+                "If not specified, comments are left as is."
             ),
+            min=1,
         ),
     ] = None,
     align_comments: Annotated[

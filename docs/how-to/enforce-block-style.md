@@ -98,9 +98,9 @@ a_list:        # eol comment
 ## Interactions with other options
 
 !!! warning "`--enforce-block-style` overrides `--default-flow-style`"
-    If both options are set, block style wins for the whole document and a warning is printed to stderr.
+    In `rt` mode, if both options are set, block style wins for the whole document and a warning is printed to stderr.
 
-- With `--typ safe`, the option is a no-op: the `safe` parsing mode does not preserve per-node styles, and its output is already block style.
+- With `--typ safe`, the option has no effect and a warning is printed: the `safe` parsing mode does not preserve per-node styles, so the writer default decides. The output is block style, or flow style for the whole document if `--default-flow-style` is also set.
 - Works fine together with `--no-quotes-preserved` / `--enforce-double-quotes`.
 
 To understand *why* flow-style collections are normally preserved and what this option changes under the hood, read [Flow style vs block style](../explanation/formatting-rules.md#flow-style-vs-block-style).
