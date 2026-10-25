@@ -1,5 +1,6 @@
 """Useful (I guess) helpers."""
 
+import re
 from functools import lru_cache
 from typing import Any
 
@@ -12,10 +13,9 @@ from yamkix.__version__ import __version__
 
 StreamType = Any  # Copied from ruamel.yaml compat.py line 58
 
-
-def remove_all_linebreaks(comment: StreamType) -> StreamType:
-    """Remove trailing linebreak."""
-    return comment.replace("\n", "")
+# Ends the header line of a literal (`|`) or folded (`>`) block scalar, with its optional
+# indentation/chomping indicators and comment.
+_BLOCK_SCALAR_HEADER = re.compile(r"(?:^| )[|>](?P<indicators>[1-9][+-]?|[+-][1-9]?)?(?: +#.*)?$")
 
 
 def string_is_comment(a_string: str) -> bool:
@@ -29,23 +29,61 @@ def strip_leading_double_space(stream: StreamType) -> StreamType:
     return stream.replace("\n  ", "\n")
 
 
+def _indentation(line: str) -> int:
+    """Return the number of leading spaces of a line."""
+    return len(line) - len(line.lstrip(" "))
+
+
 def strip_trailing_spaces(stream: StreamType) -> StreamType:
     """Strip the spaces the emitter leaves at line-fold points.
 
     Works around the `ruamel.yaml` emitter writing a space before deciding to
     break a line (when the configured line width forces wrapping of plain
-    scalars or flow collections). Safe to apply to the whole emitted stream:
-    the emitter never puts a semantic space at end-of-line (scalars containing
-    a space followed by a line break are always emitted double-quoted with
-    escapes). See https://github.com/looztra/yamkix/issues/437.
+    scalars or flow collections). See https://github.com/looztra/yamkix/issues/437.
+
+    The content lines of literal (`|`) and folded (`>`) block scalars are left untouched:
+    their trailing spaces are part of the value. A block scalar runs from its header line
+    up to the first non-blank line indented less than its content. A line wrongly taken
+    for a header only leaves fold-point spaces in place, it never changes a value.
 
     Args:
         stream: The emitted YAML document as a string.
 
     Returns:
-        The stream with trailing spaces removed from every line.
+        The stream with trailing spaces removed from every line outside block scalars.
     """
-    return "\n".join(line.rstrip(" ") for line in stream.split("\n"))
+    lines: list[str] = []
+    # Minimum indentation of the lines of the current block scalar, None outside block scalars
+    block_floor: int | None = None
+    # Whether the block scalar indentation is still to be read from its first content line
+    detect_floor = False
+    for line in stream.split("\n"):
+        if block_floor is not None:
+            if not line.strip(" "):
+                lines.append(line)
+                continue
+            indent = _indentation(line)
+            if indent >= block_floor:
+                if detect_floor:
+                    block_floor = indent
+                    detect_floor = False
+                lines.append(line)
+                continue
+            block_floor = None
+        stripped = line.rstrip(" ")
+        lines.append(stripped)
+        header = _BLOCK_SCALAR_HEADER.search(stripped)
+        if header is None:
+            continue
+        if stripped.startswith("---"):
+            # A root block scalar is written at column 0 and runs to the end of the document
+            block_floor = 0
+            detect_floor = False
+        else:
+            block_floor = _indentation(stripped) + 1
+            # With an explicit indentation indicator the first line may start with extra spaces
+            detect_floor = not any(char.isdigit() for char in header.group("indicators") or "")
+    return "\n".join(lines)
 
 
 def strip_leading_double_space_and_trailing_spaces(stream: StreamType) -> StreamType:

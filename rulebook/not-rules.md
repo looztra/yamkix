@@ -1,8 +1,8 @@
 # Not rules
 - 69c5e7b8ea59 · src/yamkix/comments.py:23 · Adds "# " to a comment text without one; unreachable from yamkix itself, whose callers only pass texts starting with "#" (comments.py:56, comments.py:69); only serves library callers of the patched `yaml_add_eol_comment`
-- e14933ed4c9c · src/yamkix/yamkix.py:109 · Refuses malformed YAML input; belongs to domain FIL (reading the input, not laying out the output)
+- e14933ed4c9c · src/yamkix/yamkix.py:138 · Refuses malformed YAML input; belongs to domain FIL (reading the input, not laying out the output)
 - 3d3a870ab5ec · src/yamkix/_cli.py:35 · `--version` prints the version and exits before any processing; CLI plumbing, no business decision
-- 89fab6ffdfdb · src/yamkix/_cli.py:312 · Python module entry point guard; technical
+- 89fab6ffdfdb · src/yamkix/_cli.py:306 · Python module entry point guard; technical
 - 87879186d7f1 · src/yamkix/config.py:268 · Refuses a parser mode other than `safe`/`rt` on the legacy argparse path (`get_config_from_args`); dead code: no caller in the repository outside tests, and kubesplit 0.5.0 no longer imports it
 - ebd874f722b2 · src/yamkix/config.py:269 · Raises the error for an invalid parser mode on the legacy argparse path (`get_config_from_args`); dead code: no caller in the repository outside tests, and kubesplit 0.5.0 no longer imports it
 - 8dd476d323b8 · src/yamkix/config.py:379 · Refuses an empty `files` list; unreachable from the CLI, where Typer passes None when no file argument is given (no-argument runs read STDIN), so it only guards direct callers of this internal function

@@ -1,8 +1,9 @@
 """Load a yaml file and save it formatted according to some rules."""
 
 import os
+import secrets
+import shutil
 import sys
-from collections.abc import Callable
 from copy import deepcopy
 from dataclasses import dataclass
 from io import BytesIO, StringIO, TextIOWrapper
@@ -67,15 +68,43 @@ def _is_special_file(path: Path) -> bool:
     return path.exists() and not path.is_file()
 
 
-def round_trip_and_format(
-    yamkix_config: YamkixConfig, on_output_write: Callable[[str], None] | None = None
-) -> FileProcessingResult:
+def _write_output_file(path: Path, content: str) -> None:
+    """Write the formatted content to an output file without ever leaving it half-written.
+
+    The content is written to a temporary file next to the destination, then moved over it,
+    so a failure leaves the previous content in place. Symlinks are followed, like opening the
+    path would. Special files (`/dev/null`, FIFO...) cannot be replaced and are written directly.
+
+    Args:
+        path: The output file.
+        content: The formatted YAML stream.
+    """
+    if _is_special_file(path):
+        with path.open(mode="w", encoding="UTF-8") as out:
+            out.write(content)
+        return
+    target = path.resolve()
+    temporary = target.with_name(f".{target.name}.{secrets.token_hex(8)}.yamkix.tmp")
+    # Created like open() would create the destination: mode 0o666 filtered by the umask
+    fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_BINARY", 0), 0o666)
+    try:
+        with os.fdopen(fd, mode="w", encoding="UTF-8") as out:
+            out.write(content)
+            out.flush()
+            os.fsync(out.fileno())
+        if target.exists():
+            shutil.copymode(target, temporary)
+        temporary.replace(target)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        raise
+
+
+def round_trip_and_format(yamkix_config: YamkixConfig) -> FileProcessingResult:
     """Load a file and save it formatted.
 
     Arguments:
         yamkix_config: The configuration for the Yamkix processing.
-        on_output_write: Optional callback invoked with the output path right before an output file
-            is truncated or created. It lets callers know a file may be partially written if dumping fails.
 
     Returns:
         A FileProcessingResult describing whether an error occurred and whether
@@ -121,8 +150,7 @@ def round_trip_and_format(
                 previous_output = _read_regular_file(Path(output_file))
             except OSError:
                 previous_output_readable = False
-        if on_output_write is not None:
-            on_output_write(output_file)
+
     output_buffer = StringIO()
     yamkix_dump_all(
         one_or_more_items=ready_for_dump,
@@ -176,10 +204,8 @@ def yamkix_dump_all(  # noqa: PLR0913, PLR0917
         enforce_block_style_flag: Whether to convert flow-style (JSON-like) collections to block style.
 
     """
-    # Clear the output file if it is a file and it exists
-    if output_file is not None and (output_file_path := Path(output_file)).is_file():  # Walrus baby
-        with output_file_path.open(mode="w", encoding="UTF-8") as _:
-            pass
+    # Output files are only written once every document is formatted, see `_write_output_file`
+    rendered = StringIO()
     for doc in one_or_more_items:
         # If we have a double_quotes_yaml instance, then proceed to an extra roundtrip
         # the first one, using the `yaml` instance, will remove unnecessary quotes
@@ -218,22 +244,18 @@ def yamkix_dump_all(  # noqa: PLR0913, PLR0917
                     spaces_before_comment=spaces_before_comment,
                 )
         else:
-            with Path(output_file).open(mode="a", encoding="UTF-8") as out:
-                yamkix_dump_one(
-                    single_item=single_item,
-                    yaml=yaml_instance,
-                    dash_inwards=dash_inwards,
-                    out=out,
-                    spaces_before_comment=spaces_before_comment,
-                )
-            if capture_buffer is not None:
-                yamkix_dump_one(
-                    single_item=single_item,
-                    yaml=yaml_instance,
-                    dash_inwards=dash_inwards,
-                    out=capture_buffer,
-                    spaces_before_comment=spaces_before_comment,
-                )
+            yamkix_dump_one(
+                single_item=single_item,
+                yaml=yaml_instance,
+                dash_inwards=dash_inwards,
+                out=rendered,
+                spaces_before_comment=spaces_before_comment,
+            )
+    if output_file is not None:
+        content = rendered.getvalue()
+        _write_output_file(Path(output_file), content)
+        if capture_buffer is not None:
+            capture_buffer.write(content)
 
 
 def yamkix_dump_one(

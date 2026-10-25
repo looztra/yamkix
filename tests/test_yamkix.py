@@ -297,6 +297,66 @@ class TestCommentsByParsingMode:
         assert not any(comment in output for comment in COMMENT_TEXTS)
 
 
+class TestCommentsFollowingAnEndOfLineComment:
+    """Repositioning an end-of-line comment keeps the lines that follow it (CMT-R003)."""
+
+    @pytest.mark.parametrize("spaces_before_comment", [pytest.param(1, id="one-space"), pytest.param(3, id="three")])
+    def test_full_line_comments_and_blank_lines_are_kept(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str], spaces_before_comment: int
+    ) -> None:
+        """Full-line comments and blank lines after a commented line stay on their own lines."""
+        # GIVEN
+        input_file = tmp_path / "commented.yml"
+        input_file.write_text(
+            "---\na: 1 # c\n\nb: 22 # c2\n# full line\nc:\n  - x # c3\n  # full in list\n  - y\nd: 3 # c4\n\n\ne: 4\n"
+        )
+        config = get_yamkix_config_from_default(
+            spaces_before_comment=spaces_before_comment,
+            io_config=YamkixInputOutputConfig(input=str(input_file), output=None),
+        )
+
+        # WHEN
+        round_trip_and_format(config)
+
+        # THEN
+        gap = " " * spaces_before_comment
+        assert capsys.readouterr().out == (
+            f"---\na: 1{gap}# c\n\nb: 22{gap}# c2\n# full line\nc:\n  - x{gap}# c3\n  # full in list\n  - y\n"
+            f"d: 3{gap}# c4\n\n\ne: 4\n"
+        )
+
+
+class TestBlockScalarTrailingSpaces:
+    """Trailing spaces inside block scalars are part of the value and are kept (LAY-R010)."""
+
+    # editorconfig-checker-disable
+    DOCUMENT = "---\nscript: |\n  echo a  \n  echo b\nfolded: >-\n  text  \nnext: value\n"
+    SEQUENCE_DOCUMENT = "---\n- |\n  x  \n- k: |\n    y  \n  o: z\n"
+    # editorconfig-checker-enable
+
+    @pytest.mark.parametrize("document", [pytest.param(DOCUMENT, id="map"), pytest.param(SEQUENCE_DOCUMENT, id="seq")])
+    @pytest.mark.parametrize("line_width", [pytest.param(None, id="default-width"), pytest.param(80, id="width-80")])
+    def test_block_scalar_values_are_unchanged(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str], document: str, line_width: int | None
+    ) -> None:
+        """Formatting keeps the trailing spaces of literal and folded block scalar lines."""
+        # GIVEN
+        input_file = tmp_path / "block.yml"
+        input_file.write_text(document)
+        config = get_yamkix_config_from_default(
+            line_width=line_width, io_config=YamkixInputOutputConfig(input=str(input_file), output=None)
+        )
+
+        # WHEN
+        round_trip_and_format(config)
+
+        # THEN
+        output = capsys.readouterr().out
+        safe_loader = YAML(typ="safe")
+        assert safe_loader.load(output) == safe_loader.load(document)
+        assert output == document
+
+
 class TestYamkixDumpAll:
     """Provide tests for the yamkix_dump_all function."""
 
@@ -318,6 +378,46 @@ class TestYamkixDumpAll:
         )
         assert initial_content not in content
         assert initial_content not in sut.read_text()
+
+    @pytest.mark.skipif(sys.platform == "win32", reason="POSIX permission bits")
+    def test_existing_file_mode_is_kept(self, tmp_path: Path) -> None:
+        """Test that the replaced output file keeps its permission bits."""
+        sut = tmp_path / "sut.yml"
+        sut.write_text("key:   value\n")
+        sut.chmod(0o640)
+        yaml_parser = get_opinionated_yaml_writer(get_default_yamkix_config())
+
+        yamkix_dump_all(
+            [yaml_parser.load("key: value\n")],
+            yaml_parser,
+            dash_inwards=False,
+            output_file=str(sut),
+            spaces_before_comment=None,
+        )
+
+        assert sut.stat().st_mode & 0o777 == 0o640
+        assert sut.read_text() == "---\nkey: value\n"
+
+    @pytest.mark.skipif(sys.platform == "win32", reason="symlinks need privileges on Windows")
+    def test_symlinked_output_updates_its_target(self, tmp_path: Path) -> None:
+        """Test that a symlinked output stays a symlink and its target receives the content."""
+        target = tmp_path / "target.yml"
+        target.write_text("key:   value\n")
+        link = tmp_path / "link.yml"
+        link.symlink_to(target)
+        yaml_parser = get_opinionated_yaml_writer(get_default_yamkix_config())
+
+        yamkix_dump_all(
+            [yaml_parser.load("key: value\n")],
+            yaml_parser,
+            dash_inwards=False,
+            output_file=str(link),
+            spaces_before_comment=None,
+        )
+
+        assert link.is_symlink()
+        assert target.read_text() == "---\nkey: value\n"
+        assert sorted(path.name for path in tmp_path.iterdir()) == ["link.yml", "target.yml"]
 
     def test_write_to_stdout(self, mocker: MockerFixture) -> None:
         """Test that yamkix_dump_all writes to stdout."""

@@ -104,7 +104,7 @@ class TestCli:
             files=None,
         )
         mock_print_config.assert_called_once_with(mock_config)
-        mock_round_trip.assert_called_once_with(mock_config, on_output_write=mocker.ANY)
+        mock_round_trip.assert_called_once_with(mock_config)
 
     def test_default_values_with_one_argument(self, mocker: MockerFixture, shared_datadir: Path) -> None:
         """Test running the CLI without any parameters uses default values."""
@@ -139,7 +139,7 @@ class TestCli:
             files=[test_file],
         )
         mock_print_config.assert_called_once_with(mock_config)
-        mock_round_trip.assert_called_once_with(mock_config, on_output_write=mocker.ANY)
+        mock_round_trip.assert_called_once_with(mock_config)
 
     def test_default_values_with_two_arguments(self, mocker: MockerFixture, shared_datadir: Path) -> None:
         """Test running the CLI without any parameters uses default values."""
@@ -596,18 +596,16 @@ class TestCli:
             f'[yamkix] Modified: "{tmp_path}/a\\nb.yml"',
         ]
 
-    def test_list_modified_reports_partially_written_output(self, tmp_path: Path, mocker: MockerFixture) -> None:
-        """An output truncated by a failure during dumping is still reported."""
+    def test_failed_write_leaves_file_untouched_and_unlisted(self, tmp_path: Path, mocker: MockerFixture) -> None:
+        """A write failure (disk full) keeps the original file and does not report it as modified."""
         source = tmp_path / "source.yml"
-        source.write_text("---\nkey: value\n")
-
-        def failing_dump(**kwargs: object) -> None:
-            Path(str(kwargs["output_file"])).write_text("")
-            raise OSError(errno.ENOSPC, os.strerror(errno.ENOSPC))
-
-        mocker.patch("yamkix.yamkix.yamkix_dump_all", side_effect=failing_dump)
+        original = "key:   value\n"
+        source.write_text(original)
+        mocker.patch("yamkix.yamkix.os.fsync", side_effect=OSError(errno.ENOSPC, os.strerror(errno.ENOSPC)))
 
         result = runner.invoke(app, ["--silent", "--list-modified", str(source)])
 
         assert result.exit_code != 0
-        assert result.stderr.splitlines() == [f"[yamkix] Modified: {source}"]
+        assert result.stderr.splitlines() == []
+        assert source.read_text() == original
+        assert list(tmp_path.iterdir()) == [source]

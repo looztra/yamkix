@@ -11,16 +11,16 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 ### FIL-R008 · A file with a YAML syntax error is reported, left untouched, and the run goes on
 - **Kind:** rule · **Category:** validation · **Implements:** FIL-P01
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** dc86185 (2026-10-25)
+- **Verified at:** 01d0951 (2026-10-25)
 
 **Rule.** When a file has a YAML syntax error (scanner or parser error), yamkix prints an error naming it, does not write its output, counts it as an error, goes on with the next file, and still ends with exit code 0.
 
 **Context.** The whole input is parsed before the output is opened, so a syntax error can never truncate the file. Other invalid YAML, such as a duplicate key or an undefined alias, is not caught here and stops the run (FIL-R009).
 
 **Evidence.**
-- enforcement — src/yamkix/yamkix.py:104-109 `round_trip_and_format`
+- enforcement — src/yamkix/yamkix.py:133-138 `round_trip_and_format`
   `raise InvalidYamlContentError from parsing_error`
-- enforcement — src/yamkix/_cli.py:276-285 `main`
+- enforcement — src/yamkix/_cli.py:275-284 `main`
 - test — tests/test_cli.py:403-408 `TestCli::test_list_modified_precedes_summary_and_excludes_parse_errors`
   `assert invalid.read_text() == "key: [\n"`
 
@@ -31,30 +31,38 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 **Open questions.** Should a malformed file make the run exit with a non-zero code, so CI and pre-commit hooks fail on it?
 
 **History.**
+- 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-25 · dc86185 · changed · E2 read → verified, CLI test added (uncommitted)
 - 2026-10-24 · 823a0f3 · created
 
-### FIL-R010 · The output file is emptied before it is rewritten
+### FIL-R010 · An output file is replaced only once its new content is fully written
 - **Kind:** rule · **Category:** state-transition · **Implements:** FIL-P01
-- **Status:** active · **Confidence:** read · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Status:** changed · **Confidence:** verified · **Audit:** passed
+- **Verified at:** 01d0951 (2026-10-25)
 
-**Rule.** Once the input is parsed, an existing output file is emptied, then each document is appended to it one by one; if writing fails halfway, the file is left partly written.
+**Rule.** Once every document is formatted, the output is written to a temporary file next to the destination, flushed to disk, then moved over the destination; if anything fails before the move, the destination keeps its previous content and the temporary file is removed. Symlinks are followed and permission bits are kept; special files such as `/dev/null` or a FIFO are written directly.
 
-**Context.** There is no temporary file and no backup: an in-place run that fails after the truncation (disk full, permission change) loses the original content. `--list-modified` still reports such a file (FIL-R013).
+**Context.** Standard output is still written document by document. The destination directory must be writable, the replaced file belongs to the user running yamkix, and hard links are not preserved.
 
 **Evidence.**
-- enforcement — src/yamkix/yamkix.py:180-182 `yamkix_dump_all`
-  `with output_file_path.open(mode="w", encoding="UTF-8") as _:`
-- enforcement — src/yamkix/yamkix.py:221 `yamkix_dump_all`
-  `with Path(output_file).open(mode="a", encoding="UTF-8") as out:`
+- enforcement — src/yamkix/yamkix.py:71-100 `_write_output_file`
+  `temporary.replace(target)`
+- enforcement — src/yamkix/yamkix.py:207-208 `yamkix_dump_all`
+  `rendered = StringIO()`
+- enforcement — src/yamkix/yamkix.py:254-258 `yamkix_dump_all`
+  `_write_output_file(Path(output_file), content)`
+- test — tests/test_cli.py:608-611 `TestCli::test_failed_write_leaves_file_untouched_and_unlisted`
+  `assert source.read_text() == original`
 
 **Edge cases.**
-- **FIL-R010.E1** Given a file whose dump fails with "no space left on device" after the file was emptied, when it is formatted in place, then the file is left empty or partly written. — read — src/yamkix/yamkix.py:180
+- **FIL-R010.E1** Given a file whose write fails with "no space left on device", when it is formatted in place, then it keeps its previous content and no temporary file is left. — verified — tests/test_cli.py:610
+- **FIL-R010.E2** Given an existing output file with mode `0640`, when it is rewritten, then it keeps mode `0640`. — verified — tests/test_yamkix.py:398
+- **FIL-R010.E3** Given an output path that is a symlink, when it is rewritten, then it stays a symlink and its target receives the content. — verified — tests/test_yamkix.py:418
 
-**Open questions.** Should the output be written to a temporary file and moved into place, so a failure cannot leave a truncated file? No test makes the real dump fail after the truncation; should one pin this behaviour?
+**Open questions.** Should the owner and the hard links of a replaced file be preserved?
 
 **History.**
+- 2026-10-25 · 01d0951 · changed · emptied then appended → written to a temporary file and moved into place; E1 read → verified, E2 and E3 added
 - 2026-10-24 · 823a0f3 · created
 
 ## Other operating rules
@@ -209,13 +217,13 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 ### FIL-R009 · Any other failure stops the whole run
 - **Kind:** rule · **Category:** validation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** dc86185 (2026-10-25)
+- **Verified at:** 01d0951 (2026-10-25)
 
 **Rule.** A failure other than malformed YAML (missing file, unreadable file, write error) stops the run immediately with a non-zero exit code and a traceback; the following files are not processed and no summary is printed.
 
 **Evidence.**
-- enforcement — src/yamkix/_cli.py:286-290 `main`
-  `raise`
+- enforcement — src/yamkix/_cli.py:269-284 `main`
+  `except InvalidYamlContentError as e:`
 - test — tests/test_cli.py:471-473 `TestCli::test_list_modified_survives_later_failure`
   `assert result.exit_code != 0`
 
@@ -225,20 +233,21 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 **Open questions.** Should a missing file be reported like a malformed one and the run continue with the other files?
 
 **History.**
+- 2026-10-25 · 01d0951 · reanchored · only malformed YAML is caught; the explicit re-raise was removed
 - 2026-10-25 · dc86185 · changed · E1 read → verified, CLI test added (uncommitted)
 - 2026-10-24 · 823a0f3 · created
 
 ### FIL-R011 · A file is "unchanged" only if the output bytes equal the input bytes
 - **Kind:** rule · **Category:** derivation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** dc86185 (2026-10-25)
+- **Verified at:** 01d0951 (2026-10-25)
 
 **Rule.** A file counts as unchanged in the summary only when the bytes yamkix would write, with the platform's line endings, are identical to the input bytes; for STDIN the text is compared.
 
 **Context.** Output is written with the platform line separator, so on Linux a CRLF file is always rewritten and never counts as unchanged.
 
 **Evidence.**
-- enforcement — src/yamkix/yamkix.py:140-141 `round_trip_and_format`
+- enforcement — src/yamkix/yamkix.py:168-169 `round_trip_and_format`
   `unchanged = written_bytes == input_bytes if input_file is not None else formatted == raw_input`
 - test — tests/test_yamkix.py:153 `TestRoundTripAndFormat::test_crlf_input_is_not_unchanged`
   `assert result.unchanged is False`
@@ -251,6 +260,7 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 - **FIL-R011.E1** Given `---\r\nkey: value\r\n`, when it is formatted in place, then it is rewritten as `---\nkey: value\n` and not counted as unchanged. — verified — tests/test_cli.py:569
 
 **History.**
+- 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-25 · dc86185 · reanchored · test lines shifted; positive unchanged case now asserted, open question resolved (uncommitted)
 - 2026-10-24 · e9e0cca · reanchored · test moved to tests/test_yamkix.py:152 after tests were added above it
 - 2026-10-24 · 823a0f3 · created
@@ -258,14 +268,14 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 ### FIL-R012 · An output counts as modified when it is created or its bytes change
 - **Kind:** rule · **Category:** derivation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** dc86185 (2026-10-25)
+- **Verified at:** 01d0951 (2026-10-25)
 
 **Rule.** An output file counts as modified when it did not exist, when its new bytes differ from its previous bytes, or when its previous content could not be read; standard output and special files such as `/dev/null` never count.
 
 **Evidence.**
-- enforcement — src/yamkix/yamkix.py:113-123 `round_trip_and_format`
+- enforcement — src/yamkix/yamkix.py:141-152 `round_trip_and_format`
   `track_output = output_file is not None and not _is_special_file(Path(output_file))`
-- enforcement — src/yamkix/yamkix.py:143 `round_trip_and_format`
+- enforcement — src/yamkix/yamkix.py:171 `round_trip_and_format`
   `output_changed = track_output and (not previous_output_readable or written_bytes != previous_output)`
 - test — tests/test_yamkix.py:138 `TestRoundTripAndFormat::test_output_changed_for_separate_destination`
   `assert result.output_changed is expected_changed`
@@ -277,25 +287,26 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 - **FIL-R012.E4** Given an output on standard output, when a file is formatted, then nothing is reported. — verified — tests/test_yamkix.py:167
 
 **History.**
+- 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-25 · dc86185 · reanchored · test lines shifted by added tests and imports (uncommitted)
 - 2026-10-24 · e9e0cca · reanchored · tests moved to tests/test_yamkix.py:137 and :166 after tests were added above them
 - 2026-10-24 · 823a0f3 · created
 
 ### FIL-R013 · `--list-modified` prints one line per modified output, even when the run fails
 - **Kind:** rule · **Category:** derivation
-- **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** dc86185 (2026-10-25)
+- **Status:** changed · **Confidence:** verified · **Audit:** passed
+- **Verified at:** 01d0951 (2026-10-25)
 
-**Rule.** With `--list-modified`, after processing (and before the summary), yamkix prints `[yamkix] Modified: <output name>` to standard error for each modified output (FIL-R012) and for each output it started writing before a failure; names that are not printable or start with `"` are quoted with escapes.
+**Rule.** With `--list-modified`, after processing (and before the summary), yamkix prints `[yamkix] Modified: <output name>` to standard error for each modified output (FIL-R012); names that are not printable or start with `"` are quoted with escapes.
 
-**Context.** Printing happens in a `finally` block, so files rewritten before a fatal error are still listed. Malformed inputs are never listed because their output was not opened.
+**Context.** Printing happens in a `finally` block, so files rewritten before a fatal error are still listed. Malformed inputs are never listed because their output was not written, and an output whose write failed keeps its previous content (FIL-R010), so it is not listed either.
 
 **Parameters.** `--list-modified` — src/yamkix/_cli.py:220-226 (off by default)
 
 **Evidence.**
-- enforcement — src/yamkix/_cli.py:274-275 `main`
+- enforcement — src/yamkix/_cli.py:273-274 `main`
   `if list_modified_mode and result.output_changed:`
-- enforcement — src/yamkix/_cli.py:286-300 `main`
+- enforcement — src/yamkix/_cli.py:285-294 `main`
 - enforcement — src/yamkix/_cli.py:59-64 `_format_report_name`
   `if name.isprintable() and not name.startswith('"'):`
 - test — tests/test_cli.py:419 `TestCli::test_list_modified_reports_stdin_destination`
@@ -305,15 +316,17 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 - **FIL-R013.E1** Given a file and a missing file, when both are formatted with `--list-modified`, then the run fails and the first file is still listed. — verified — tests/test_cli.py:473
 - **FIL-R013.E2** Given a file whose name contains a line break, when it is listed, then its name is printed quoted with `\n` escaped. — verified — tests/test_cli.py:515
 - **FIL-R013.E3** Given the option is not set, when a file is rewritten, then nothing is printed to standard error. — verified — tests/test_cli.py:391
+- **FIL-R013.E4** Given a file whose write fails, when it is formatted with `--list-modified`, then it is not listed. — verified — tests/test_cli.py:609
 
 **History.**
+- 2026-10-25 · 01d0951 · changed · outputs whose write failed are no longer listed (atomic write); E4 added
 - 2026-10-25 · dc86185 · reanchored · test lines shifted by added tests and imports (uncommitted)
 - 2026-10-24 · 823a0f3 · created
 
 ### FIL-R014 · `--summary` prints the counts of files, errors and unchanged files
 - **Kind:** rule · **Category:** calculation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** dc86185 (2026-10-25)
+- **Verified at:** 01d0951 (2026-10-25)
 
 **Rule.** With `--summary`, once all files are processed, yamkix prints to standard error the number of files processed, of malformed files, of unchanged files, and the elapsed time in seconds with 3 decimals.
 
@@ -322,12 +335,13 @@ Which files yamkix reads and overwrites, what happens when one of them cannot be
 **Parameters.** `--summary` — src/yamkix/_cli.py:213-219 (off by default)
 
 **Evidence.**
-- enforcement — src/yamkix/_cli.py:301-309 `main`
+- enforcement — src/yamkix/_cli.py:295-304 `main`
   `f"[yamkix] Summary: {total} file(s) processed, {errors} error(s), {unchanged} unchanged, {elapsed:.3f}s"`
 - test — tests/test_cli.py:379-381 `TestCli::test_summary_mode_counts_errors_and_unchanged`
   `assert "1 error(s)" in summary_text`
 
 **History.**
+- 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-25 · dc86185 · reanchored · test lines shifted by added tests and imports (uncommitted)
 - 2026-10-24 · 823a0f3 · created
 

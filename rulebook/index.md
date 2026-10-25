@@ -19,7 +19,7 @@
   - **Covers**: reading from a file or stdin, writing in place, to another file or to stdout, processing a list of files, refusing malformed YAML, detecting unchanged files and changed outputs, the per-file config line, `--silent`, `--summary` and `--list-modified`.
   - **Concepts**: input, output, STDIN, STDOUT, in-place formatting, files argument, malformed YAML, unchanged file, modified output, special file (`/dev/null`, FIFO), summary.
   - **Code**: `src/yamkix/_cli.py`, `src/yamkix/yamkix.py`, `src/yamkix/config.py`
-  - **To check**: a malformed file is reported but the command still exits with code 0; `-i`, `-o` and `-s` are silently ignored when files are passed as arguments (warning only); the output is truncated before dumping, so a failure mid-dump can leave a partial file; a second, case-sensitive output-resolution function (`get_input_output_config_from_args`) is dead code.
+  - **To check**: a malformed file is reported but the command still exits with code 0; `-i`, `-o` and `-s` are silently ignored when files are passed as arguments (warning only); a second, case-sensitive output-resolution function (`get_input_output_config_from_args`) is dead code.
 - **OPT** · Options and defaults — The opinionated defaults and how the options combine into one formatting configuration.
   - **Covers**: the default configuration, overriding some defaults from the Python API (used by kubesplit), validating the parser mode, what safe mode does to a document.
   - **Concepts**: default configuration, parsing mode (`rt` / `safe`), option override, option warning, legacy argparse API, kubesplit.

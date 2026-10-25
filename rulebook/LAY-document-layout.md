@@ -98,14 +98,14 @@ How yamkix lays out every YAML document it writes: the start and end markers, ho
 ### LAY-R005 · A document that is a list keeps its dashes at column 0
 - **Kind:** rule · **Category:** calculation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Verified at:** 01d0951 (2026-10-25)
 
 **Rule.** When a whole document is a list and dashes are pushed inwards, its top-level dashes are written at column 0 and the rest of the document is shifted 2 spaces left to match.
 
 **Context.** The indentation of LAY-R003 would otherwise push the top-level dashes 2 spaces in; yamkix removes the first 2 spaces of every line of such a document after dumping it. With `--no-dash-inwards` the shift is not needed and not applied.
 
 **Evidence.**
-- enforcement — src/yamkix/yamkix.py:258-259 `yamkix_dump_one`
+- enforcement — src/yamkix/yamkix.py:280-281 `yamkix_dump_one`
   `if dash_inwards and type(single_item).__name__ == "CommentedSeq":`
 - enforcement — src/yamkix/helpers.py:28-29 `strip_leading_double_space`
   `return stream.replace("\n  ", "\n")`
@@ -114,11 +114,12 @@ How yamkix lays out every YAML document it writes: the start and end markers, ho
 
 **Edge cases.**
 - **LAY-R005.E1** Given the `dash-at-col0-1` file, a list of maps at the top level, when it is formatted with no option, then its top-level dashes stay at column 0 while its nested list keeps its dash 2 spaces in. — verified — tests/test_non_regression.py:28
-- **LAY-R005.E2** Given a top-level list parsed with `--typ safe`, when it is formatted, then the shift is not applied because the document is not a round-trip list. — inferred — src/yamkix/yamkix.py:258
+- **LAY-R005.E2** Given a top-level list parsed with `--typ safe`, when it is formatted, then the shift is not applied because the document is not a round-trip list. — inferred — src/yamkix/yamkix.py:280
 
 **Open questions.** The check is on the class name `CommentedSeq`, which only round-trip mode produces; is the layout of top-level lists in safe mode what users expect?
 
 **History.**
+- 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-24 · 823a0f3 · created
 
 ### LAY-R006 · Default flow style only shapes collections that have no style of their own
@@ -151,7 +152,7 @@ How yamkix lays out every YAML document it writes: the start and end markers, ho
 ### LAY-R007 · `--enforce-block-style` turns every flow collection into block style
 - **Kind:** rule · **Category:** calculation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Verified at:** 01d0951 (2026-10-25)
 
 **Rule.** With `--enforce-block-style` in round-trip mode, every map and list of the document, at any depth, is written in block style, except empty ones, which stay `[]` and `{}`.
 
@@ -160,9 +161,9 @@ How yamkix lays out every YAML document it writes: the start and end markers, ho
 **Parameters.** `--enforce-block-style` / `-B` — src/yamkix/_cli.py:157-167 (off by default)
 
 **Evidence.**
-- enforcement — src/yamkix/yamkix.py:199-200 `yamkix_dump_all`
+- enforcement — src/yamkix/yamkix.py:225-226 `yamkix_dump_all`
   `if enforce_block_style_flag:`
-- enforcement — src/yamkix/helpers.py:129-137 `convert_flow_to_block_style`
+- enforcement — src/yamkix/helpers.py:167-175 `convert_flow_to_block_style`
   `data.fa.set_block_style()`
 - test — tests/test_non_regression.py:235 `TestNonRegression::test_config`
   `assert filecmp.cmp(expected_output_file, actual_output_file, shallow=True)`
@@ -172,22 +173,23 @@ How yamkix lays out every YAML document it writes: the start and end markers, ho
 **Edge cases.**
 - **LAY-R007.E1** Given the `flow-style-collections` file with flow lists and maps nested three levels deep, when it is formatted with `--enforce-block-style`, then all of them are in block style and `empty_list: []` and `empty_map: {}` are unchanged. — verified — tests/test_non_regression.py:177
 - **LAY-R007.E2** Given `a-json-map: {key1: value1}`, when it is formatted with `--enforce-block-style`, then it is written as a block map under `a-json-map:`. — verified — tests/test_non_regression.py:207
-- **LAY-R007.E3** Given the option with `--typ safe --default-flow-style`, when a file is formatted, then the whole document is still written in flow style. — read — src/yamkix/helpers.py:129
+- **LAY-R007.E3** Given the option with `--typ safe --default-flow-style`, when a file is formatted, then the whole document is still written in flow style. — read — src/yamkix/helpers.py:167
 
 **History.**
+- 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-24 · 823a0f3 · created
 
 ### LAY-R008 · `--enforce-block-style` wins over `--default-flow-style`
 - **Kind:** rule · **Category:** derivation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Verified at:** 01d0951 (2026-10-25)
 
 **Rule.** In round-trip mode, when both `--enforce-block-style` and `--default-flow-style` are given, every non-empty collection is written in block style, and a warning says so.
 
 **Context.** The precedence comes from the order of operations: each collection is explicitly marked block before dumping, so the default style never applies. In safe mode the warning is printed but the output is flow style (LAY-R007.E3).
 
 **Evidence.**
-- enforcement — src/yamkix/yamkix.py:199-200 `yamkix_dump_all`
+- enforcement — src/yamkix/yamkix.py:225-226 `yamkix_dump_all`
   `convert_flow_to_block_style(data=single_item)`
 - enforcement — src/yamkix/config.py:323 `raise_enforce_block_style_warning_if_needed`
   `if enforce_block_style is True and default_flow_style is True:`
@@ -200,6 +202,7 @@ How yamkix lays out every YAML document it writes: the start and end markers, ho
 **Open questions.** In safe mode the warning promises block style but the output is flow style: should the warning, or the conversion, take the parsing mode into account?
 
 **History.**
+- 2026-10-25 · 01d0951 · reanchored · source lines shifted by the block scalar, comment and atomic write fixes
 - 2026-10-24 · 823a0f3 · created
 
 ### LAY-R009 · Lines are folded at 2048 characters by default
@@ -226,28 +229,30 @@ How yamkix lays out every YAML document it writes: the start and end markers, ho
 **History.**
 - 2026-10-24 · 823a0f3 · created
 
-### LAY-R010 · No output line ends with a space
+### LAY-R010 · No output line ends with a space, except inside block scalars
 - **Kind:** rule · **Category:** calculation
-- **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Status:** changed · **Confidence:** verified · **Audit:** passed
+- **Verified at:** 01d0951 (2026-10-25)
 
-**Rule.** Every line yamkix writes has its trailing spaces removed, whatever the options.
+**Rule.** Every line yamkix writes has its trailing spaces removed, whatever the options, except the content lines of literal (`|`) and folded (`>`) block scalars, whose trailing spaces are part of the value and are kept.
 
-**Context.** Works around the YAML library leaving a space where it folds a line (issue #437). Values whose trailing space is escaped inside double quotes are safe, but the stripping also runs inside literal blocks (`|`), where trailing spaces are part of the value: there it changes the data (E3).
+**Context.** Works around the YAML library leaving a space where it folds a line (issue #437). A block scalar runs from its header line up to the first non-blank line indented less than its content. A line wrongly taken for a header (a plain value ending with ` |`) only leaves fold-point spaces in place; it never changes a value.
 
 **Evidence.**
-- enforcement — src/yamkix/helpers.py:48 `strip_trailing_spaces`
-  `return "\n".join(line.rstrip(" ") for line in stream.split("\n"))`
-- enforcement — src/yamkix/yamkix.py:258-261 `yamkix_dump_one`
-- test — tests/test_helpers.py:153 `test_strip_trailing_spaces`
+- enforcement — src/yamkix/helpers.py:16-18 `_BLOCK_SCALAR_HEADER`
+- enforcement — src/yamkix/helpers.py:37-86 `strip_trailing_spaces`
+- enforcement — src/yamkix/yamkix.py:280-283 `yamkix_dump_one`
+- test — tests/test_helpers.py:130 `test_strip_trailing_spaces`
   `assert strip_trailing_spaces(stream) == expected`
+- test — tests/test_yamkix.py:356-357 `TestBlockScalarTrailingSpaces::test_block_scalar_values_are_unchanged`
+  `assert output == document`
 
 **Edge cases.**
 - **LAY-R010.E1** Given the `issue-437` file, when it is formatted with `--line-width 80`, then the folded lines have no trailing space. — verified — tests/test_non_regression.py:213
-- **LAY-R010.E2** Given `quoted: "line one \nline two"` with an escaped line break after a space, when the trailing spaces are stripped, then the value is unchanged. — verified — tests/test_helpers.py:148
-- **LAY-R010.E3** Given a literal block `s: |` whose first line is `a` followed by two spaces, when it is formatted, then the two spaces are removed and the loaded value changes from `"a  \nb\n"` to `"a\nb\n"`. — read — src/yamkix/helpers.py:48
-
-**Open questions.** Stripping trailing spaces inside literal blocks silently changes values; should literal and folded block lines be excluded?
+- **LAY-R010.E2** Given `quoted: "line one \nline two"` with an escaped line break after a space, when the trailing spaces are stripped, then the value is unchanged. — verified — tests/test_helpers.py:117
+- **LAY-R010.E3** Given a literal block `s: |` whose first line is `a` followed by two spaces, when it is formatted, then the two spaces are kept and the loaded value stays `"a  \nb\n"`. — verified — tests/test_yamkix.py:356
+- **LAY-R010.E4** Given a plain value ending with ` |` (`k: a |`) followed by a line with a trailing space, when the trailing spaces are stripped, then the next line is still stripped and no value changes. — verified — tests/test_helpers.py:125
 
 **History.**
+- 2026-10-25 · 01d0951 · changed · trailing spaces of block scalar lines are now kept; E3 read → verified, E4 added, open question resolved
 - 2026-10-24 · 823a0f3 · created

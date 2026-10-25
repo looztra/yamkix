@@ -11,42 +11,11 @@ from yamkix.helpers import (
     convert_flow_to_block_style,
     convert_single_to_double_quotes,
     get_yamkix_version,
-    remove_all_linebreaks,
     string_is_comment,
     strip_leading_double_space,
     strip_leading_double_space_and_trailing_spaces,
     strip_trailing_spaces,
 )
-
-
-def test_remove_all_linebreaks() -> None:
-    """Test remove_all_linebreaks.
-
-    when there is a trailing linebreak
-    """
-    s_input = "yolo\n"
-    sut = remove_all_linebreaks(s_input)
-    assert sut == "yolo"
-
-
-def test_remove_all_linebreaks_no_linebreak() -> None:
-    """Test remove_all_linebreaks.
-
-    when there is no trailing linebreak
-    """
-    s_input = "yolo"
-    sut = remove_all_linebreaks(s_input)
-    assert sut == "yolo"
-
-
-def test_remove_all_linebreaks_more_than_one() -> None:
-    """Test remove_all_linebreaks.
-
-    when there is more than one linebreak
-    """
-    s_input = "line1\nline2\n"
-    sut = remove_all_linebreaks(s_input)
-    assert sut == "line1line2"
 
 
 def test_string_is_comment() -> None:
@@ -146,6 +115,14 @@ def test_strip_leading_double_space_when_none() -> None:
         pytest.param("text1 ", "text1", id="no_trailing_newline"),
         pytest.param("", "", id="empty_stream"),
         pytest.param('quoted: "line one \\nline two"\n', 'quoted: "line one \\nline two"\n', id="escaped_space_kept"),
+        pytest.param("s: |\n  a  \n\n  b \nk: v \n", "s: |\n  a  \n\n  b \nk: v\n", id="literal_block_kept"),
+        pytest.param("s: >- # c\n  a  \nk: v \n", "s: >- # c\n  a  \nk: v\n", id="folded_block_with_comment_kept"),
+        pytest.param("- k: |\n    a  \n  o: v \n", "- k: |\n    a  \n  o: v\n", id="less_indented_sibling_ends_block"),
+        pytest.param(
+            "k: |2\n   a  \n  b  \nn: v \n", "k: |2\n   a  \n  b  \nn: v\n", id="explicit_indentation_block_kept"
+        ),
+        pytest.param("--- |\na  \nb  \n", "--- |\na  \nb  \n", id="root_block_kept"),
+        pytest.param("k: a |\nn: v \n", "k: a |\nn: v\n", id="plain_scalar_ending_with_pipe_is_not_a_block"),
     ],
 )
 def test_strip_trailing_spaces(stream: str, expected: str) -> None:
