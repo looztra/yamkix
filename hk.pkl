@@ -43,8 +43,6 @@ steps {
   ["detect-private-key"] = Builtins.detect_private_key
   ["check-executables-have-shebangs"] = Builtins.check_executables_have_shebangs
   ["end-of-file-fixer"] = Builtins.newlines
-  // no hk builtin for check-json5 from https://gitlab.com/bmares/check-json5
-  ["check-json5"] = precommit("check-json5", "pre-commit")
   // markdownlint-cli2 (not Builtins.markdown_lint, which runs markdownlint v1 and ignores .markdownlint-cli2.yaml)
   ["markdownlint-cli2"] {
     glob = List("**/*.md")
