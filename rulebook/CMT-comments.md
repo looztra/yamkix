@@ -111,7 +111,7 @@ How yamkix keeps, spaces and aligns the end-of-line comments of a YAML document.
 ### CMT-R005 · Comments of a map are aligned on its rightmost comment
 - **Kind:** rule · **Category:** calculation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Verified at:** b6f1a4f (2026-10-25)
 
 **Rule.** With `--align-comments`, the end-of-line comments of each map are moved to the column of the rightmost comment of that same map; each map is aligned on its own.
 
@@ -127,9 +127,10 @@ How yamkix keeps, spaces and aligns the end-of-line comments of a YAML document.
 
 **Edge cases.**
 - **CMT-R005.E1** Given two maps `sub_key1` and `sub_key2` with comments one space after values of different lengths, when the file is formatted with `--align-comments`, then each map's comments line up on their own column, different for the two maps. — verified — tests/test_non_regression.py:159
-- **CMT-R005.E2** Given a list whose items carry comments at different columns, when it is formatted with `--align-comments`, then the list items' comments are left where they were. — read — src/yamkix/comments.py:89
+- **CMT-R005.E2** Given a list whose items carry comments at different columns, when it is formatted with `--align-comments`, then the list items' comments are left where they were. — verified — tests/test_comments.py:78
 
-**Open questions.** Alignment reads the comment slot used by maps; list items keep their comment in another slot, so lists are never aligned although the option's help says "each dict/list". The unit test `test_align_comments_with_sequence` passes because it builds a mock list with comments in the map slot. Should lists be aligned?
+**Open questions.** Alignment reads the comment slot used by maps (`[2]`); list items keep their comment in slot `[0]`, so lists are never aligned although the option's help says "each dict/list". `test_align_comments_with_sequence` asserts the aligned behaviour on a real list and is marked `xfail(strict=True)`: it pins the current non-alignment and will fail as soon as lists are aligned. Should lists be aligned?
 
 **History.**
+- 2026-10-25 · b6f1a4f · changed · E2 read → verified, mocked sequence test replaced by a strict xfail on a real list (uncommitted)
 - 2026-10-24 · 823a0f3 · created

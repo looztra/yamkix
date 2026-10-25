@@ -8,7 +8,7 @@ The opinionated defaults of yamkix and how options are turned into one formattin
 ### OPT-R001 · The default configuration
 - **Kind:** rule · **Category:** derivation
 - **Status:** active · **Confidence:** verified · **Audit:** passed
-- **Verified at:** 823a0f3 (2026-10-24)
+- **Verified at:** b6f1a4f (2026-10-25)
 
 **Rule.** Unless told otherwise, yamkix uses round-trip parsing, writes `---` but not `...`, keeps block style, pushes dashes inwards, keeps quotes, does not force double quotes nor block style, leaves comment spacing and alignment alone, and folds lines at 2048 characters.
 
@@ -16,12 +16,11 @@ The opinionated defaults of yamkix and how options are turned into one formattin
 
 **Evidence.**
 - enforcement — src/yamkix/config.py:135-149 `get_default_yamkix_config`
-- test — tests/test_config.py:162-171 `TestYamkixConfigFromArgs::test_default_values`
+- test — tests/test_config.py:162-173 `TestYamkixConfigFromArgs::test_default_values`
   `assert sut.dash_inwards is True`
 
-**Open questions.** The default `align_comments=False` and `enforce_double_quotes=False` are not asserted by this test.
-
 **History.**
+- 2026-10-25 · b6f1a4f · reanchored · test now asserts align_comments and enforce_double_quotes; open question resolved (uncommitted)
 - 2026-10-24 · 823a0f3 · created
 
 ### OPT-R002 · The Python API overrides only the values it is given

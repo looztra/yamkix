@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "verifiedAt": "e9e0cca",
+  "verifiedAt": "b6f1a4f",
   "anchors": [
     {
       "rule": "CMT-R001",
@@ -24,9 +24,9 @@
         261,
         261
       ],
-      "hash": "46bf58e6adba",
+      "hash": "0ddd0ed9366e",
       "size": 1,
-      "head": "46bf58e6adba"
+      "head": "0ddd0ed9366e"
     },
     {
       "rule": "CMT-R001",
@@ -37,9 +37,9 @@
         295,
         296
       ],
-      "hash": "12d21e5a25f3",
+      "hash": "3e43d7b28a4f",
       "size": 2,
-      "head": "6a9951d67f26"
+      "head": "b7e29f67d341"
     },
     {
       "rule": "CMT-R002",
@@ -232,9 +232,9 @@
         724,
         725
       ],
-      "hash": "9ce4d96e5857",
+      "hash": "06371e457957",
       "size": 2,
-      "head": "4add113f4150"
+      "head": "dee23948841a"
     },
     {
       "rule": "FIL-R002",
@@ -258,9 +258,9 @@
         650,
         651
       ],
-      "hash": "1ace2de802f3",
+      "hash": "06371e457957",
       "size": 2,
-      "head": "188152c89f91"
+      "head": "dee23948841a"
     },
     {
       "rule": "FIL-R003",
@@ -284,9 +284,9 @@
         694,
         695
       ],
-      "hash": "9ce4d96e5857",
+      "hash": "06371e457957",
       "size": 2,
-      "head": "4add113f4150"
+      "head": "dee23948841a"
     },
     {
       "rule": "FIL-R003",
@@ -297,9 +297,9 @@
         672,
         673
       ],
-      "hash": "d3740c214473",
+      "hash": "06371e457957",
       "size": 2,
-      "head": "4add113f4150"
+      "head": "dee23948841a"
     },
     {
       "rule": "FIL-R004",
@@ -323,9 +323,9 @@
         573,
         573
       ],
-      "hash": "5a1e603a3ba8",
+      "hash": "02a1bc5ad9fc",
       "size": 1,
-      "head": "5a1e603a3ba8"
+      "head": "02a1bc5ad9fc"
     },
     {
       "rule": "FIL-R004",
@@ -362,9 +362,9 @@
         754,
         755
       ],
-      "hash": "4a914a717a67",
+      "hash": "06371e457957",
       "size": 2,
-      "head": "188152c89f91"
+      "head": "dee23948841a"
     },
     {
       "rule": "FIL-R006",
@@ -401,9 +401,9 @@
         800,
         804
       ],
-      "hash": "be7ed8913224",
+      "hash": "fe4f92348e0b",
       "size": 5,
-      "head": "85735bc63765"
+      "head": "fbba1a38eb7c"
     },
     {
       "rule": "FIL-R006",
@@ -414,9 +414,9 @@
         1017,
         1023
       ],
-      "hash": "9a509a712e4b",
-      "size": 7,
-      "head": "b9aba1cea8c1"
+      "hash": "8d313e3e9381",
+      "size": 6,
+      "head": "5fd55aead25a"
     },
     {
       "rule": "FIL-R009",
@@ -466,9 +466,9 @@
         152,
         152
       ],
-      "hash": "e11918dd2290",
+      "hash": "5fd55aead25a",
       "size": 1,
-      "head": "e11918dd2290"
+      "head": "5fd55aead25a"
     },
     {
       "rule": "FIL-R011",
@@ -518,9 +518,9 @@
         137,
         137
       ],
-      "hash": "6d734be2de5a",
+      "hash": "e11918dd2290",
       "size": 1,
-      "head": "6d734be2de5a"
+      "head": "e11918dd2290"
     },
     {
       "rule": "FIL-R013",
@@ -984,10 +984,10 @@
       "symbol": "TestYamkixConfigFromArgs::test_default_values",
       "lines": [
         162,
-        171
+        173
       ],
-      "hash": "6e80003cd9cd",
-      "size": 10,
+      "hash": "5d0b576ebd14",
+      "size": 12,
       "head": "c580a4855a27"
     },
     {
@@ -1012,9 +1012,9 @@
         302,
         311
       ],
-      "hash": "ea2ad5a2262f",
+      "hash": "a52f5d4f9753",
       "size": 10,
-      "head": "84b7aa092ce7"
+      "head": "50124abc2cbd"
     },
     {
       "rule": "OPT-R003",
@@ -1207,9 +1207,9 @@
         906,
         909
       ],
-      "hash": "1a34615588ff",
+      "hash": "78659742bd0f",
       "size": 4,
-      "head": "15fb8fbdd1ac"
+      "head": "5fd55aead25a"
     }
   ]
 }
