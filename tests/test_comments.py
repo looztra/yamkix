@@ -1,5 +1,6 @@
 """Test the comments management."""
 
+import pytest
 from pytest_mock import MockerFixture
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap, CommentedSeq
@@ -62,35 +63,19 @@ def test_align_comments_with_no_comments() -> None:
     align_comments(code)
 
 
-def test_align_comments_with_sequence(mocker: MockerFixture) -> None:
-    """Test align_comments with a CommentedSeq containing comments.
+@pytest.mark.xfail(
+    strict=True,
+    reason="CMT-R005: align_one reads the map comment slot [2]; list items keep their EOL comment in slot [0]",
+)
+def test_align_comments_with_sequence() -> None:
+    """Test align_comments aligns the EOL comments of a real CommentedSeq on its rightmost comment."""
+    yaml = YAML()
+    code = yaml.load("items:\n- a # c1\n- longer_value # c2\n")
+    items = code["items"]
 
-    This covers lines 102-104 (the sequence handling branch).
-    """
-    comment_mock_1 = mocker.Mock(column=3)
-    comment_mock_2 = mocker.Mock(column=5)
-    comment_mock_3 = mocker.Mock(column=4)
+    align_comments(code)
 
-    mock_seq_ca = mocker.Mock(
-        spec=CommentedSeq,
-        items={
-            0: [None, None, comment_mock_1],
-            1: [None, None, comment_mock_2],
-            2: [None, None, comment_mock_3],
-        },
-    )
-    mock_inner_ca = mocker.Mock(spec=CommentedMap, items={})
-    mock_inner_data = mocker.Mock(spec=CommentedMap, ca=mock_inner_ca)
-    mock_inner_data.values.return_value = []
-
-    mock_seq = mocker.Mock(spec=CommentedSeq, ca=mock_seq_ca)
-    mock_seq.__iter__ = mocker.Mock(return_value=iter([mock_inner_data]))
-
-    align_comments(mock_seq)
-
-    assert comment_mock_1.column == 5
-    assert comment_mock_2.column == 5
-    assert comment_mock_3.column == 5
+    assert items.ca.items[0][0].column == items.ca.items[1][0].column
 
 
 def test_align_comments_with_some_null_comments(mocker: MockerFixture) -> None:
