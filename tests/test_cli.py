@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 from pytest_mock import MockerFixture
+from ruamel.yaml.constructor import DuplicateKeyError
 from typer.testing import CliRunner
 
 from yamkix._cli import app, echo_version
@@ -470,6 +471,36 @@ class TestCli:
         assert result.exit_code != 0
         assert source.read_text() == "---\nkey: value\n"
         assert f"[yamkix] Modified: {source}" in result.stderr.splitlines()
+
+    def test_duplicate_key_stops_the_run(self, tmp_path: Path) -> None:
+        """A duplicate key is not a syntax error: it stops the run and later files are left as is."""
+        duplicate = tmp_path / "duplicate.yml"
+        duplicate.write_text("a: 1\na: 2\n")
+        later = tmp_path / "later.yml"
+        later.write_text("key:   value\n")
+
+        result = runner.invoke(app, ["--silent", "--summary", str(duplicate), str(later)])
+
+        assert result.exit_code != 0
+        assert isinstance(result.exception, DuplicateKeyError)
+        assert duplicate.read_text() == "a: 1\na: 2\n"
+        assert later.read_text() == "key:   value\n"
+        assert "Summary" not in result.stderr
+
+    def test_missing_file_stops_the_run_without_summary(self, tmp_path: Path) -> None:
+        """A missing file stops the run: earlier files are rewritten, later ones are not, no summary is printed."""
+        first = tmp_path / "first.yml"
+        first.write_text("key:   value\n")
+        last = tmp_path / "last.yml"
+        last.write_text("key:   value\n")
+
+        result = runner.invoke(app, ["--silent", "--summary", str(first), str(tmp_path / "missing.yml"), str(last)])
+
+        assert result.exit_code != 0
+        assert isinstance(result.exception, FileNotFoundError)
+        assert first.read_text() == "---\nkey: value\n"
+        assert last.read_text() == "key:   value\n"
+        assert "Summary" not in result.stderr
 
     @pytest.mark.skipif(sys.platform == "win32", reason="Windows filenames cannot contain newlines")
     def test_list_modified_escapes_newline_in_filename(self, tmp_path: Path) -> None:
