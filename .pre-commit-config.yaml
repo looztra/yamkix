@@ -15,7 +15,7 @@ repos:
         exclude: ^.vscode/.*
 
   - repo: https://github.com/looztra/yamkix
-    rev: v1.2.0
+    rev: v1.2.1
     hooks:
       - id: yamkix
         args: [--no-quotes-preserved, --silent]
