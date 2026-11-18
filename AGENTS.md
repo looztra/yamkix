@@ -94,7 +94,7 @@ This project uses `poethepoet` for task management. Common tasks:
 - Don't hand-edit `version.txt` or `docs/changelog.md` — both are managed by `release-please`.
 - `enforce_double_quotes` requires a two-pass round trip (see `yamkix.py`) — don't collapse it into a single pass.
 - Integration tests are excluded from `poe test:cov` (`-m 'not integration'`); run them explicitly with `pytest -m integration` or `mise run test:integration`.
-- `.python-version` (3.14) is the dev/CI runtime; `requires-python = ">=3.10"` and the trove classifiers (3.10–3.12) define supported runtimes — they are not the same thing.
+- `.python-version` (3.14) is the dev/CI runtime; `requires-python = ">=3.10"`, the trove classifiers and the `tox.ini` envlist (3.10–3.15) define supported runtimes — they are not the same thing. Keep classifiers and the tox envlist in sync.
 
 ## General Guidelines for Agents
 
