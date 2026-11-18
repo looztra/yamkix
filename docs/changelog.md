@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/looztra/yamkix/compare/v1.2.1...v1.2.2) (2026-11-18)
+
+
+### Bug Fixes
+
+* **renovate:** remove invalid uv manager from packageRules ([#629](https://github.com/looztra/yamkix/issues/629)) ([1e9290c](https://github.com/looztra/yamkix/commit/1e9290c4947aed94d49238b18a018b047e335b9f))
+
 ## [1.2.1](https://github.com/looztra/yamkix/compare/v1.2.0...v1.2.1) (2026-10-25)
 
 
